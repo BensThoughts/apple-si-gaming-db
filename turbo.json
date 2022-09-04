@@ -25,7 +25,12 @@
     }
   },
   "globalDependencies": [
+    "$DOMAIN",
+    "$FLY_REGION",
+    "$NODE_ENV",
     "$PORT",
-    "$NODE_ENV"
+    "$PRIMARY_REGION",
+    "$SESSION_SECRET",
+    "$STEAM_API_KEY"
   ]
 }

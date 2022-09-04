@@ -14,7 +14,7 @@
     "db:push": "turbo run db:push",
     "db:seed": "turbo run db:seed",
     "dev": "turbo run dev --parallel",
-    "dev:remix": "turbo run dev --filter=remix-with-express",
+    "dev:remix": "turbo run dev --filter=remix-app",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "generate": "turbo run generate",
     "lint": "turbo run lint"
