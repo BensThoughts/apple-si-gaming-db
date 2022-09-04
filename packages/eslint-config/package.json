@@ -1,5 +1,5 @@
 {
-  "name": "@apple-si-gaming-db/eslint-config",
+  "name": "eslint-config-custom",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -7,9 +7,11 @@
     "eslint-preset.js"
   ],
   "dependencies": {
+    "@remix-run/eslint-config": "^1.7.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-turbo": "latest",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-react": "7.28.0"
   },
   "devDependencies": {

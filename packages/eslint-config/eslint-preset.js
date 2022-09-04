@@ -1,6 +1,16 @@
+/** @type {import('@types/eslint').Linter.BaseConfig} */
+
 module.exports = {
-  extends: ['turbo', 'prettier', 'google'],
+  extends: [
+    'turbo',
+    'prettier',
+    'google',
+    '@remix-run/eslint-config',
+    '@remix-run/eslint-config/node',
+  ],
+  plugins: ['import'],
   rules: {
+    'import/no-extraneous-dependencies': ['error', { 'devDependencies': true, 'optionalDependencies': true, 'peerDependencies': true }],
     'object-curly-spacing': ['error', 'always'],
     'require-jsdoc': 'off',
     'max-len': 'off',

@@ -12,9 +12,275 @@ generator client {
   previewFeatures = ["referentialIntegrity"]
 }
 
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
+model SteamUser {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  steamUserId              String  @unique
+  displayName              String?
+  communityVisibilityState Int?
+  profileState             Int?
+  personaName              String?
+  commentPermission        Int?
+  profileUrl               String?
+  avatar                   String?
+  avatarMedium             String?
+  avatarFull               String?
+  avatarHash               String?
+  lastLogoff               Int?
+  personaState             Int?
+  realName                 String?
+  primaryClanId            String?
+  timeCreated              Int?
+  personaStateFlags        Int?
+  locCountryCode           String?
+  locStateCode             String?
+  locCityId                Int?
+  // photos?: {
+  //   value: string;
+  // }[];
+
+  PerformancePosts  PerformancePost[]
+  appCount          Int?
+  ownedAppsPlaytime SteamUserOwnedAppPlaytime[]
+  ownedApps         SteamApp[]
+}
+
+model SteamUserOwnedAppPlaytime {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  steamUserId String
+  steamUser   SteamUser @relation(fields: [steamUserId], references: [steamUserId])
+
+  steamAppId             Int
+  playtimeTwoWeeks       Int
+  playtimeForever        Int
+  playtimeWindowsForever Int
+  playtimeMacForever     Int
+  playtimeLinuxForever   Int
+  rTimeLastPlayed        Int
+}
+
+model PerformancePost {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // ? What do to onDelete for steamUser?
+  steamUser   SteamUser @relation(fields: [steamUserId], references: [steamUserId])
+  steamUserId String
+  steamApp    SteamApp  @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
+  steamAppId  Int
+
+  postText String
+}
+
+model SteamApp {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name                    String
+  steamAppId              Int       @unique
+  dataDownloadAttempted   Boolean   @default(false)
+  dataDownloadAttemptedAt DateTime?
+  dataDownloaded          Boolean   @default(false)
+  dataDownloadedAt        DateTime?
+
+  type                         String?
+  requiredAge                  String?
+  isFree                       Boolean?
+  controllerSupport            String?
+  dlc                          Int[]
+  detailedDescription          String?
+  aboutTheGame                 String?
+  shortDescription             String?
+  supportedLanguages           String?
+  reviews                      String?
+  headerImage                  String?
+  website                      String?
+  pcRequirementsMinimum        String?
+  pcRequirementsRecommended    String?
+  macRequirementsMinimum       String?
+  macRequirementsRecommended   String?
+  linuxRequirementsMinimum     String?
+  linuxRequirementsRecommended String?
+  legalNotice                  String?
+  developers                   String[]
+  publishers                   String[]
+  demos                        SteamDemo[]
+  priceOverview                SteamPriceOverview?
+  packages                     Int[]
+  packageGroups                SteamPackageGroup[]
+  platformWindows              Boolean?
+  platformMac                  Boolean?
+  platformLinux                Boolean?
+  metacriticScore              Int?
+  metacriticUrl                String?
+  categories                   SteamCategory[]
+  genres                       SteamGenre[]
+  screenshots                  SteamScreenshot[]
+  movies                       SteamMovie[]
+  recommendationsTotal         Int?
+  achievementsTotal            Int?
+  achievements                 SteamAchievement[]
+  comingSoon                   Boolean?
+  releaseDate                  String?
+  supportUrl                   String?
+  supportEmail                 String?
+  background                   String?
+  backgroundRaw                String?
+  contentDescriptorIds         Int[]
+  contentDescriptorNotes       String?
+
+  performancePosts PerformancePost[]
+  usersWhoOwnApp   SteamUser[]
+
+  @@unique([steamAppId, name])
+}
+
+model SteamDemo {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  steamApp  SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
+
+  steamAppId Int
+
+  demoAppId   Int
+  description String?
+
+  @@unique([steamAppId, demoAppId])
+}
+
+model SteamPriceOverview {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  steamApp  SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
+
+  steamAppId Int @unique
+
+  currency         String?
+  initial          Int?
+  final            Int?
+  discountPercent  Int?
+  initialFormatted String?
+  finalFormatted   String?
+}
+
+model SteamPackageGroup {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  steamApp  SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
+
+  steamAppId Int
+
+  name                    String
+  title                   String?
+  description             String?
+  selectionText           String?
+  saveText                String?
+  displayType             String?
+  isRecurringSubscription String?
+  subs                    SteamPackageGroupSub[]
+
+  @@unique([steamAppId, name])
+}
+
+model SteamPackageGroupSub {
+  id                String            @id @default(cuid())
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  steamPackageGroup SteamPackageGroup @relation(fields: [steamAppId, packageGroupName], references: [steamAppId, name], onDelete: Cascade)
+
+  steamAppId       Int
+  packageGroupName String
+
+  packageId                Int
+  percentSavingsText       String?
+  percentSavings           Int?
+  optionText               String?
+  optionDescription        String?
+  canGetFreeLicense        String?
+  isFreeLicense            Boolean?
+  priceInCentsWithDiscount Int?
+
+  @@unique([steamAppId, packageGroupName, packageId])
+}
+
+model SteamCategory {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  steamApps SteamApp[]
+
+  categoryId  Int    @unique
+  description String
+}
+
+model SteamGenre {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  steamApps SteamApp[]
+
+  genreId     String @unique // Should this be an Int?
+  description String
+}
+
+model SteamScreenshot {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  steamApp  SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
+
+  steamAppId Int
+
+  screenshotId  Int
+  pathThumbnail String?
+  pathFull      String?
+
+  @@unique([steamAppId, screenshotId])
+}
+
+model SteamMovie {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  steamApp  SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
+
+  steamAppId Int
+
+  movieId        Int
+  name           String?
+  thumbnail      String?
+  webmFourEighty String?
+  webmMax        String?
+  mp4FourEighty  String?
+  mp4Max         String?
+  highlight      Boolean?
+
+  @@unique([steamAppId, movieId])
+}
+
+model SteamAchievement {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  steamApp  SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
+
+  steamAppId Int
+
+  name        String
+  path        String?
+  highlighted Boolean?
+
+  @@unique([steamAppId, name])
 }
