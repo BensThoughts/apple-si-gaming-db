@@ -1,0 +1,42 @@
+import type { MouseEventHandler, ReactNode } from 'react';
+import { Link } from '@remix-run/react';
+import AnimatedUnderline from '~/components/AnimatedUnderline';
+// import Link from '~/components/Link';
+// import AnimatedUnderline from '~/components/AnimatedUnderline';
+// import AnimatedLink from '~/components/AnimatedLink';
+
+type MenuItemsProps = {
+  href: string,
+  animatedLink?: boolean,
+  className?: string,
+  onClick?: MouseEventHandler<HTMLAnchorElement>
+  children: ReactNode,
+  key: string,
+}
+
+const MenuItem = ({
+  href = '/',
+  animatedLink = false,
+  className = '',
+  onClick,
+  children,
+  ...rest
+}: MenuItemsProps) => {
+  return (
+    <Link to={href}>
+      {animatedLink
+        ? (
+          <AnimatedUnderline className={className} onClick={onClick}>
+            {children}
+          </AnimatedUnderline>
+        ) : (
+          <span onClick={onClick} className={`text-primary ${className}`}>
+            {children}
+          </span>
+        )
+      }
+    </Link>
+  );
+};
+
+export default MenuItem;
