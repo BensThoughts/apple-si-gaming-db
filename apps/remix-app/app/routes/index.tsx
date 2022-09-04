@@ -24,7 +24,7 @@ export default function Index() {
   console.log(data);
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.4' }}>
-      <h1>Welcome to Remix With Express</h1>
+      <h1 className='text-black font-bold italic'>Welcome to Remix With Express</h1>
       <ul>
         <li>
           <a

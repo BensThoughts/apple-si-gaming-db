@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body[data-theme="light"] {
+  /* --color-bg-primary: 254, 235, 200; */
+  --color-bg-primary: 255, 255, 255;
+  --color-bg-terminal: 253, 239, 213;
+
+  --color-app-primary: 253, 233, 198;
+  --color-app-primary-highlight: 251, 216, 156;
+  --color-app-secondary: 237, 137, 54;
+  --color-app-secondary-highlight: 239, 158, 91;
+  --color-app-accent: 250, 240, 137;
+  --color-app-error: 176, 0, 32;
+
+  --color-text-primary: 39, 32, 26;
+  --color-text-secondary: 7, 105, 99;
+  --color-text-inline-code: var(--color-text-secondary);
+
+  /* --color-icon-border-primary: var(--color-app-secondary); */
+
+  --color-gradient-primary: 7, 105, 99;
+  --color-gradient-secondary: 7, 105, 99;
+
+  --color-image-overlay: var(--color-app-primary);
+
+  --statusBarAccentColor: 237, 137, 54;
+  --statusBarAccentColorText: 39, 32, 26;
+  --statusBarTextColorAccent: 39, 32, 26;
+  --statusBarBackgroundColor: 251, 211, 141;
+  --statusBarTextColor: 0, 0, 0;
+
+  --color-scroll-thumb: #ed8936;
+  --color-scroll-track: #fbd38d;
+  --color-scroll-thumb-hover: #faf089;
+
+  /* --color-gradient-primary: 83, 11, 87;
+  --color-gradient-secondary: 120, 12, 61; */
+
+  /* Neon Purple/Pink
+  --color-gradient-primary: 247, 114, 212;
+  --color-gradient-secondary: 173, 108, 246; */
+}
+
+body[data-theme="dark"] {
+  /* --color-bg-primary: 21, 35, 45; */
+  --color-bg-primary: 20, 27, 35;
+  --color-bg-terminal: 32, 39, 50;
+
+  --color-app-primary: 37, 49, 62;
+  --color-app-primary-highlight: 57, 75, 95;
+  --color-app-secondary: 49, 130, 206;
+  --color-app-secondary-highlight: 78, 147, 212;
+  --color-app-accent: 99, 179, 237;
+  --color-app-error: 207, 102, 121;
+
+  --color-text-primary: 227, 227, 227;
+  --color-text-secondary: 255, 107, 0;
+  --color-text-inline-code: var(--color-app-secondary);
+
+  /* --color-icon-border-primary: var(--color-app-accent); */
+
+  --color-gradient-primary: 255, 107, 0;
+  --color-gradient-secondary: 253, 200, 48;
+
+  --color-image-overlay: var(--color-app-secondary);
+
+  --statusBarAccentColor: 128, 149, 255;
+  --statusBarAccentColorText: 6, 24, 44;
+  --statusBarTextColorAccent: 128, 149, 255;
+  --statusBarBackgroundColor: 10, 37, 64;
+  --statusBarTextColor: 85, 113, 141;
+
+  --color-scroll-thumb: #3182ce;
+  --color-scroll-track: #4a5568;
+  --color-scroll-thumb-hover: #63b3ed;
+}
+
+body {
+  font-family: var(--font-body);
+  line-height: 1.5;
+  background-repeat: no-repeat;
+  background: rgb(var(--color-bg-base));
+  color: rgb(var(--color-text-primary));
+  min-height: 100vh;
+  min-height: calc(100vh - env(safe-area-inset-bottom));
+}
+
+.page-wrapper {
+  padding-top: 3.5rem;
+  margin-top: 0rem;
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr 4rem;
+}
+
+.content-wrap {
+  grid-row: 1 / 2;
+}
+
+.footer-wrap {
+  place-items: center;
+  grid-row: 2 / 3;
+}
