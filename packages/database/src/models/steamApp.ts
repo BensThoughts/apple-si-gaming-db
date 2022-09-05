@@ -8,8 +8,9 @@ import type {
   PrismaSteamMovie,
   PrismaSteamAchievement,
   PrismaSteamApp,
-} from '~/interfaces';
-import prisma from '~/lib/database/db.server';
+} from '../interfaces';
+import { prisma } from '../client';
+import logger from '@apple-si-gaming-db/logger';
 
 function valueExistsOrNull<T>(v: T) {
   if (v === null || v === undefined) {
@@ -77,10 +78,11 @@ export async function updateSteamAppDownloadAttempted(
     });
   } catch (err) {
     if (err instanceof Error) {
-      const error = new Error('Error in updateSteamAppDownloadAttempted', {
-        cause: err,
-      });
-      throw error;
+      logger.error('Error in updateSteamAppDownloadAttempted');
+      // const error = new Error('Error in updateSteamAppDownloadAttempted',{
+      //   cause: err,
+      // });
+      throw err;
       // logError(err, appIdData);
     } else {
       throw err;
@@ -122,10 +124,11 @@ export async function updateSteamApp(
     });
   } catch (err) {
     if (err instanceof Error) {
-      const error = new Error('Error at prisma.steamApp.update in updateSteamApp', {
-        cause: err,
-      });
-      throw error;
+      logger.error('Error at prisma.steamApp.update in updateSteamApp');
+      // const error = new Error('Error at prisma.steamApp.update in updateSteamApp', {
+      //   cause: err,
+      // });
+      throw err;
       // logError(err, appIdData);
     } else {
       throw err;
@@ -169,10 +172,11 @@ export async function updateSteamApp(
         });
       } catch (err) {
         if (err instanceof Error) {
-          const error = new Error('Error at prisma.steamPackageGroup.upsert in updateSteamApp', {
-            cause: err,
-          });
-          throw error;
+          logger.error('Error at prisma.steamPackageGroup.upsert in updateSteamApp');
+          // const error = new Error('Error at prisma.steamPackageGroup.upsert in updateSteamApp', {
+          //   cause: err,
+          // });
+          throw err;
           // logError(err, appIdData);
         } else {
           throw err;

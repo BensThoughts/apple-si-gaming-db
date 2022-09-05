@@ -117,11 +117,6 @@ app.get('/api/auth/steam/login',
 app.get('/api/auth/steam/return',
     passport.authenticate('steam', { failureRedirect: '/' }),
     async function(req, res) {
-      if (req.user) {
-        const steamUser = req.user as PassportSteamUser;
-        console.log(steamUser);
-        // await upsertPassportSteamUserToPrisma(steamUser);
-      }
       res.redirect('/');
     });
 

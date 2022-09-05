@@ -17,7 +17,7 @@ import type {
  * find operation.
  */
 
-export type PrismaSteamAppData =
+export type PrismaSteamApp =
   Partial<Omit<SteamApp, 'updatedAt' | 'createdAt' | 'id'>> &
   Pick<SteamApp, 'steamAppId' | 'dataDownloaded' | 'dataDownloadAttempted' | 'name'> & {
     demos?: PrismaSteamDemo[] | null,

@@ -1,17 +1,19 @@
 import axios from 'axios';
 import invariant from 'tiny-invariant';
 import type {
-  PrismaSteamApp,
-  PrismaSteamUser,
   SteamApiAppDetailsResponse,
   SteamApiGetOwnedGamesResponse,
-} from '~/interfaces';
+} from './interfaces';
+
+import logger from '@apple-si-gaming-db/logger';
 
 interface SteamApiResponse {
   [appid: string]: SteamApiAppDetailsResponse;
 }
 
-export async function getSteamAppDetailsRequest(steamAppId: PrismaSteamApp['steamAppId']) {
+export async function getSteamAppDetailsRequest(
+    steamAppId: number,
+): Promise<SteamApiAppDetailsResponse> {
   try {
     const response = await axios.get<SteamApiResponse>('https://store.steampowered.com/api/appdetails/', {
       params: {
@@ -24,7 +26,9 @@ export async function getSteamAppDetailsRequest(steamAppId: PrismaSteamApp['stea
     return steamApiResponse[String(steamAppId)];
   } catch (err) {
     if (err instanceof Error) {
-      throw new Error('Error in getSteamAppDetailsRequest', { cause: err });
+      logger.error('Error in getSteamAppDetailsRequest');
+      // throw new Error('Error in getSteamAppDetailsRequest', { cause: err });
+      throw err;
     }
     throw err;
   }
@@ -34,7 +38,9 @@ export async function getSteamAppDetailsRequest(steamAppId: PrismaSteamApp['stea
  * steamId is the steam users 64-bit id
  */
 
-export async function getSteamPlayerOwnedGamesRequest(steamUserId: PrismaSteamUser['steamUserId']) {
+export async function getSteamPlayerOwnedGamesRequest(
+    steamUserId: string,
+): Promise<SteamApiGetOwnedGamesResponse['response']> {
   try {
     const apiKey = process.env.STEAM_API_KEY;
     invariant(apiKey, 'No Steam API key found, check ENV vars');
@@ -50,9 +56,11 @@ export async function getSteamPlayerOwnedGamesRequest(steamUserId: PrismaSteamUs
     return response.data.response;
   } catch (err) {
     if (err instanceof Error) {
-      throw new Error('Error in getSteamPlayerOwnedGamesRequest', {
-        cause: err,
-      });
+      logger.error('Error in getSteamPlayerOwnedGamesRequest');
+      throw err;
+      // throw new Error('Error in getSteamPlayerOwnedGamesRequest', {
+      //   cause: err,
+      // });
     }
     throw err;
   }

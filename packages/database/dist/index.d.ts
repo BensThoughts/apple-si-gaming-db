@@ -1,12 +1,13 @@
 import * as _prisma_client from '.prisma/client';
 import { PrismaClient, SteamApp, SteamDemo, SteamPriceOverview, SteamPackageGroup, SteamPackageGroupSub, SteamCategory, SteamGenre, SteamScreenshot, SteamMovie, SteamAchievement, SteamUser } from '@prisma/client';
+import { SteamApiDemo, SteamApiAppData } from '@apple-si-gaming-db/steam-api';
 
 declare global {
     var prisma: PrismaClient | undefined;
 }
 declare const prisma: PrismaClient<_prisma_client.Prisma.PrismaClientOptions, never, _prisma_client.Prisma.RejectOnNotFound | _prisma_client.Prisma.RejectPerOperation | undefined>;
 
-declare type PrismaSteamAppData = Partial<Omit<SteamApp, 'updatedAt' | 'createdAt' | 'id'>> & Pick<SteamApp, 'steamAppId' | 'dataDownloaded' | 'dataDownloadAttempted' | 'name'> & {
+declare type PrismaSteamApp = Partial<Omit<SteamApp, 'updatedAt' | 'createdAt' | 'id'>> & Pick<SteamApp, 'steamAppId' | 'dataDownloaded' | 'dataDownloadAttempted' | 'name'> & {
     demos?: PrismaSteamDemo[] | null;
     priceOverview?: PrismaSteamPriceOverview | null;
     packageGroups?: PrismaSteamPackageGroup[] | null;
@@ -30,4 +31,24 @@ declare type PrismaSteamAchievement = Partial<Omit<SteamAchievement, 'id' | 'cre
 
 declare type PrismaSteamUser = Partial<Omit<SteamUser, 'id' | 'createdAt' | 'updatedAt'>> & Pick<SteamUser, 'steamUserId'>;
 
-export { PrismaSteamAchievement, PrismaSteamAppData, PrismaSteamCategory, PrismaSteamDemo, PrismaSteamGenre, PrismaSteamMovie, PrismaSteamPackageGroup, PrismaSteamPackageGroupSub, PrismaSteamPriceOverview, PrismaSteamScreenshot, PrismaSteamUser, prisma };
+declare function extractSteamApiDemos(steamAppId: number, demos: SteamApiDemo[]): PrismaSteamDemo[];
+declare function convertSteamApiDataToPrisma(app: SteamApiAppData): PrismaSteamApp;
+
+declare function searchSteamAppsByName(name: PrismaSteamApp['name']): Promise<{
+    name: string;
+    steamAppId: number;
+    headerImage: string | null;
+}[]>;
+declare function getSteamAppByAppId(steamAppId: PrismaSteamApp['steamAppId']): Promise<(_prisma_client.SteamApp & {
+    categories: _prisma_client.SteamCategory[];
+    genres: _prisma_client.SteamGenre[];
+    performancePosts: {
+        steamUser: _prisma_client.SteamUser;
+        id: string;
+        postText: string;
+    }[];
+}) | null>;
+declare function updateSteamAppDownloadAttempted(steamAppId: PrismaSteamApp['steamAppId']): Promise<void>;
+declare function updateSteamApp(steamAppId: PrismaSteamApp['steamAppId'], prismaSteamAppData: PrismaSteamApp): Promise<void>;
+
+export { PrismaSteamAchievement, PrismaSteamApp, PrismaSteamCategory, PrismaSteamDemo, PrismaSteamGenre, PrismaSteamMovie, PrismaSteamPackageGroup, PrismaSteamPackageGroupSub, PrismaSteamPriceOverview, PrismaSteamScreenshot, PrismaSteamUser, convertSteamApiDataToPrisma, extractSteamApiDemos, getSteamAppByAppId, prisma, searchSteamAppsByName, updateSteamApp, updateSteamAppDownloadAttempted };

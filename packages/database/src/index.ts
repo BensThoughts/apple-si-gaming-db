@@ -1,3 +1,4 @@
 export * from './client';
-export * from './interfaces/PrismaSteamApp';
-export * from './interfaces/PrismaSteamUser';
+export * from './interfaces';
+export * from './convert-steam-api-to-prisma';
+export * from './models/steamApp';

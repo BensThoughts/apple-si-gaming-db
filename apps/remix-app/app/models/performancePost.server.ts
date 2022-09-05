@@ -1,4 +1,4 @@
-import type { PrismaSteamAppData } from '~/interfaces';
+import type { PrismaSteamApp } from '~/interfaces';
 import prisma from '~/lib/database/db.server';
 
 export async function createPerformancePost({
@@ -19,7 +19,7 @@ export async function createPerformancePost({
   });
 };
 
-export async function getPerformancePostsByAppId(steamAppId: PrismaSteamAppData['steamAppId']) {
+export async function getPerformancePostsByAppId(steamAppId: PrismaSteamApp['steamAppId']) {
   return prisma.performancePost.findMany({
     where: {
       steamAppId,

@@ -15,7 +15,7 @@ export type {
 } from './SteamApi';
 
 export type {
-  PrismaSteamAppData,
+  PrismaSteamApp,
   PrismaSteamDemo,
   PrismaSteamPriceOverview,
   PrismaSteamPackageGroup,
