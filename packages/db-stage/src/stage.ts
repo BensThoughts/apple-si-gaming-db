@@ -51,13 +51,13 @@ async function getSteamAppDataAndUpdateDB(appIdData: AppIdData) {
     }
   } catch (err) {
     if (err instanceof Error) {
-      logger.error(err.message, err, appIdData);
+      logger.error(err.message, appIdData);
     }
     // throw err;
   }
 }
 
-async function getPageOfData(page: number) {
+async function getPageOfData(page: number, totalPages: number) {
   const appids = await prisma.steamApp.findMany({
     skip: page * BATCH_SIZE,
     take: BATCH_SIZE,
@@ -70,7 +70,7 @@ async function getPageOfData(page: number) {
     },
   });
 
-  logger.info(`Starting page ${page} of ${TOTAL_PAGES}`);
+  logger.info(`Starting page ${page} of ${totalPages}`);
   logger.info(`Page ${page} appids found in prisma: ${appids.length}`);
 
   let totalIdx = page * BATCH_SIZE;
@@ -86,7 +86,7 @@ async function getPageOfData(page: number) {
     currIdx += 1;
     totalIdx += 1;
     if (currIdx >= appids.length) {
-      logger.info(`Finished page ${page} of ${TOTAL_PAGES}`);
+      logger.info(`Finished page ${page} of ${totalPages}`);
       clearInterval(oneSecondInterval);
     }
   }, ONE_SECOND_INTERVAL);
@@ -95,23 +95,31 @@ async function getPageOfData(page: number) {
 const BATCH_SIZE = 200; // The number of apps per a "page" of data
 const ONE_SECOND_INTERVAL = (1000); // 1seconds
 const FIVE_MINUTE_INTERVAL = (5 * 60 * 1000) + 1000; // 5 minutes + 1 second
-const NUM_APPIDS = 149175; // Total num appids in PostgreSql
-const STARTING_PAGE = 0; // DB starts at page 0
+// const NUM_APPIDS = 149175; // Total num appids in PostgreSql
+const STARTING_PAGE = 7; // DB starts at page 0
 
 // const STARTING_PAGE = 153; // DB starts at page 0
-const TOTAL_PAGES = Math.ceil(NUM_APPIDS / BATCH_SIZE);
+// const TOTAL_PAGES = Math.ceil(NUM_APPIDS / BATCH_SIZE);
+
+async function getTotalPages() {
+  const aggregate = await prisma.steamApp.aggregate({ _count: true });
+  const NUM_APPIDS = aggregate._count;
+  logger.info(`Number of appids ${NUM_APPIDS}`);
+  return Math.ceil(NUM_APPIDS / BATCH_SIZE);
+}
 
 async function stage() {
   let page = STARTING_PAGE;
+  const TOTAL_PAGES = await getTotalPages();
 
-  getPageOfData(page);
+  getPageOfData(page, TOTAL_PAGES);
 
   const fiveMinuteInterval = setInterval(async () => {
     page += 1;
     if (page > TOTAL_PAGES) {
       clearInterval(fiveMinuteInterval);
     }
-    getPageOfData(page);
+    getPageOfData(page, TOTAL_PAGES);
   }, FIVE_MINUTE_INTERVAL);
 }
 

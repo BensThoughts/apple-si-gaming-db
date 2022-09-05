@@ -5,7 +5,8 @@
   "types": "./src/index.ts",
   "license": "MIT",
   "scripts": {
-    "stage": "tsx ./src/stage.ts"
+    "db:stage": "tsx ./src/stage.ts",
+    "db:updateAppIds": "tsx ./src/update-appids.ts"
   },
   "dependencies": {
     "@apple-si-gaming-db/database": "*",
