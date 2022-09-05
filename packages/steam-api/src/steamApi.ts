@@ -65,3 +65,31 @@ export async function getSteamPlayerOwnedGamesRequest(
     throw err;
   }
 }
+
+interface SteamApiAppListResponse {
+  applist: {
+    apps: {
+      name: string;
+      appid: number;
+    }[]
+  }
+}
+
+export async function getSteamAppListRequest(): Promise<SteamApiAppListResponse> {
+  try {
+    const response = await axios.get<SteamApiAppListResponse>(
+        'https://api.steampowered.com/ISteamApps/GetAppList/v2/', {
+          responseType: 'json',
+        });
+    invariant(response.status === 200, `Response status was not 200, response.status: ${response.status}`);
+    const steamApiResponse = response.data;
+    return steamApiResponse;
+  } catch (err) {
+    if (err instanceof Error) {
+      logger.error('Error in getSteamAppListRequest');
+      // throw new Error('Error in getSteamAppDetailsRequest', { cause: err });
+      throw err;
+    }
+    throw err;
+  }
+}
