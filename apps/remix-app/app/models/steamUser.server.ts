@@ -1,5 +1,4 @@
-import type { PrismaSteamUser } from '@apple-si-gaming-db/database';
-import type { PassportSteamUser } from '~/interfaces';
+import type { PassportSteamUser, PrismaSteamUser } from '~/interfaces';
 
 import prisma from '~/lib/database/db.server';
 
