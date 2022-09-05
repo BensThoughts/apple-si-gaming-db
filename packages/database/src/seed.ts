@@ -1,4 +1,4 @@
-import { prisma } from ".";
+import { prisma } from '.';
 
 import https from 'https';
 import logger from '@apple-si-gaming-db/logger';
@@ -38,6 +38,7 @@ async function seed() {
           name: apps.find((app) => app.appid === appid)!.name,
         };
       });
+      logger.error('Length with dupes: ' + apps.length);
       logger.error('Length without dupes: ' + deDupedApps.length);
 
       logger.info('Start deleting all entries in db');
