@@ -1,7 +1,7 @@
 import type { LoaderArgs } from '@remix-run/server-runtime';
 import { json } from '@remix-run/node';
 import { useLoaderData, useTransition } from '@remix-run/react';
-import { searchSteamAppsByName } from '~/models/steamApp.server';
+import { searchReleasedMacSteamAppsByName } from '~/models/steamApp.server';
 import SearchTitleCard from '~/components/Cards/SearchTitleCard';
 import LoadingComponent from '~/components/LoadingComponent';
 
@@ -11,7 +11,7 @@ export async function loader({
   const url = new URL(request.url);
   const searchQuery = url.searchParams.get('searchQuery')?.trim();
   if (searchQuery && searchQuery != '') {
-    const steamApps = await searchSteamAppsByName(searchQuery);
+    const steamApps = await searchReleasedMacSteamAppsByName(searchQuery);
     return json({ steamApps });
   }
   return json({

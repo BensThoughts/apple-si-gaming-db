@@ -26,12 +26,12 @@
   "dependencies": {
     "@apple-si-gaming-db/logger": "*",
     "@apple-si-gaming-db/steam-api": "*",
-    "@prisma/client": "^3.10.0"
+    "@prisma/client": "4.3.1"
   },
   "devDependencies": {
-    "eslint-config-custom": "*",
     "eslint": "^8.20.0",
-    "prisma": "^3.10.0",
+    "eslint-config-custom": "*",
+    "prisma": "^4.3.1",
     "rimraf": "^3.0.2",
     "tsconfig": "*",
     "tsup": "^5.11.13",

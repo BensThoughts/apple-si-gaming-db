@@ -19,52 +19,9 @@ function valueExistsOrNull<T>(v: T) {
   return v;
 }
 
-export async function searchSteamAppsByName(name: PrismaSteamApp['name']) {
-  return prisma.steamApp.findMany({
-    where: {
-      name: {
-        contains: name,
-        mode: 'insensitive',
-      },
-      platformMac: {
-        equals: true,
-      },
-      comingSoon: {
-        equals: false,
-      },
-    },
-    orderBy: {
-      name: 'asc',
-    },
-    select: {
-      name: true,
-      steamAppId: true,
-      headerImage: true,
-    },
-  });
-}
-
-export async function getSteamAppByAppId(steamAppId: PrismaSteamApp['steamAppId']) {
-  return prisma.steamApp.findUnique({
-    where: {
-      steamAppId,
-    },
-    include: {
-      genres: true,
-      categories: true,
-      performancePosts: {
-        select: {
-          steamUser: true,
-          postText: true,
-          id: true,
-        },
-      },
-    },
-  });
-}
-
 export async function updateSteamAppDownloadAttempted(
     steamAppId: PrismaSteamApp['steamAppId'],
+    dataDownloadAttempted = true,
 ) {
   try {
     await prisma.steamApp.update({
@@ -72,7 +29,7 @@ export async function updateSteamAppDownloadAttempted(
         steamAppId,
       },
       data: {
-        dataDownloadAttempted: true,
+        dataDownloadAttempted,
         dataDownloadAttemptedAt: new Date(),
       },
     });
@@ -91,10 +48,10 @@ export async function updateSteamAppDownloadAttempted(
 }
 
 export async function updateSteamApp(
-    steamAppId: PrismaSteamApp['steamAppId'],
     prismaSteamAppData: PrismaSteamApp,
 ) {
   const {
+    steamAppId,
     demos,
     priceOverview,
     packageGroups,

@@ -8,7 +8,7 @@ import type {
   PrismaSteamScreenshot,
   PrismaSteamMovie,
   PrismaSteamAchievement,
-} from './interfaces';
+} from '../interfaces';
 
 import type {
   SteamApiAppData,

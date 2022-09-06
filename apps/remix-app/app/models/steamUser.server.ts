@@ -1,23 +1,20 @@
-import type { PassportSteamUser, PrismaSteamUser } from '~/interfaces';
+import type { PassportSteamUser, PrismaSteamUser, Prisma } from '~/interfaces';
 
-import prisma from '~/lib/database/db.server';
+import {
+  findUserBySteamId,
+  createSteamUser,
+  deleteUserBySteamId,
+  updateUserOwnedApps,
+  upsertSteamUser,
+} from '@apple-si-gaming-db/database';
 
-
-export async function getUserBySteamId(steamUserId: PrismaSteamUser['steamUserId']) {
-  return prisma.steamUser.findUnique({ where: { steamUserId } });
-}
-
-export async function createSteamUser(steamUser: PrismaSteamUser) {
-  return prisma.steamUser.create({
-    data: {
-      ...steamUser,
-    },
-  });
-}
-
-export async function deleteUserBySteamId(steamUserId: PrismaSteamUser['steamUserId']) {
-  return prisma.steamUser.delete({ where: { steamUserId } });
-}
+export {
+  findUserBySteamId,
+  createSteamUser,
+  deleteUserBySteamId,
+  updateUserOwnedApps,
+  upsertSteamUser,
+};
 
 export function convertPassportSteamUserToPrismaSteamUser(passportSteamUser: PassportSteamUser): PrismaSteamUser {
   return {
@@ -44,65 +41,10 @@ export function convertPassportSteamUserToPrismaSteamUser(passportSteamUser: Pas
   };
 }
 
-export async function updateUserOwnedApps(steamAppIds: number[], steamUserId: string) {
-  return prisma.steamUser.update({
-    where: {
-      steamUserId,
-    },
-    data: {
-      ownedApps: {
-        connectOrCreate: steamAppIds.map((steamAppId) => ({
-          where: {
-            steamAppId,
-          },
-          create: {
-            steamAppId,
-            name: 'unknown',
-          },
-        })),
-      },
-    },
-    select: {
-      steamUserId: true,
-      displayName: true,
-      avatarFull: true,
-      ownedApps: {
-        select: {
-          steamAppId: true,
-          headerImage: true,
-          name: true,
-        },
-      },
-    },
-  });
-}
-
-export async function upsertPassportSteamUserToPrisma(passportSteamUser: PassportSteamUser) {
+export async function upsertPassportSteamUserToPrisma(
+    passportSteamUser: PassportSteamUser,
+    select: Prisma.SteamUserSelect,
+) {
   const prismaSteamUser = convertPassportSteamUserToPrismaSteamUser(passportSteamUser);
-  return prisma.steamUser.upsert({
-    where: {
-      steamUserId: prismaSteamUser.steamUserId,
-    },
-    update: {
-      ...prismaSteamUser,
-    },
-    create: {
-      ...prismaSteamUser,
-    },
-  });
+  return upsertSteamUser(prismaSteamUser, select);
 }
-
-export async function upsertSteamUser(steamUser: PrismaSteamUser) {
-  return prisma.steamUser.upsert({
-    where: {
-      steamUserId: steamUser.steamUserId,
-    },
-    create: {
-      ...steamUser,
-    },
-    update: {
-      ...steamUser,
-    },
-  });
-}
-

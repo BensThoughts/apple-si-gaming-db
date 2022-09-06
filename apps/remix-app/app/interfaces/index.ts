@@ -12,9 +12,10 @@ export type {
   SteamApiAchievement,
 
   SteamApiGetOwnedGamesResponse,
-} from './SteamApi';
+} from '@apple-si-gaming-db/steam-api';
 
 export type {
+  Prisma,
   PrismaSteamApp,
   PrismaSteamDemo,
   PrismaSteamPriceOverview,

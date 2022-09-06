@@ -3,7 +3,7 @@ import type { ActionArgs, LoaderArgs } from '@remix-run/server-runtime';
 import { redirect } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import invariant from 'tiny-invariant';
-import { getSteamAppByAppId } from '~/models/steamApp.server';
+import { searchSteamAppByAppId } from '~/models/steamApp.server';
 import ExternalLinks from '~/components/AppInfo/ExternalLinks';
 import AppInfoGenres from '~/components/AppInfo/Genres';
 import AppInfoCategories from '~/components/AppInfo/Categories';
@@ -19,7 +19,7 @@ export async function loader({ params, context }: LoaderArgs) {
   const steamAppId = Number(params.steamAppId);
   invariant(typeof steamAppId === 'number', 'Expected steamAppId to be a valid number');
   invariant(!isNaN(steamAppId), 'Expected steamAppId to be a valid number');
-  const steamApp = await getSteamAppByAppId(steamAppId);
+  const steamApp = await searchSteamAppByAppId(steamAppId);
   const steamUser = extractAppLoadContext(context).steamUser;
   return json({
     steamApp,
@@ -83,6 +83,11 @@ export default function AppsRoute() {
     name,
     steamAppId,
     headerImage,
+    type,
+    requiredAge,
+    controllerSupport,
+    releaseDate,
+    shortDescription,
     macRequirementsMinimum,
     macRequirementsRecommended,
     genres,
@@ -129,14 +134,14 @@ export default function AppsRoute() {
         }
         <div>
           <MainAppCard
-            type={steamApp.type}
-            requiredAge={steamApp.requiredAge}
-            controllerSupport={steamApp.controllerSupport}
-            shortDescription={steamApp.shortDescription}
-            releaseDate={steamApp.releaseDate}
+            type={type}
+            requiredAge={requiredAge}
+            controllerSupport={controllerSupport}
+            shortDescription={shortDescription}
+            releaseDate={releaseDate}
           />
         </div>
-        {performancePosts.map((perfPost) => (
+        {performancePosts.length > 0 && performancePosts.map((perfPost) => (
           <div key={perfPost.id}>
             {perfPost.postText}
           </div>

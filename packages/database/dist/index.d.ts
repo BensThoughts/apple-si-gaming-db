@@ -1,5 +1,6 @@
 import * as _prisma_client from '.prisma/client';
-import { PrismaClient, SteamApp, SteamDemo, SteamPriceOverview, SteamPackageGroup, SteamPackageGroupSub, SteamCategory, SteamGenre, SteamScreenshot, SteamMovie, SteamAchievement, SteamUser } from '@prisma/client';
+import { PrismaClient, SteamApp, SteamDemo, SteamPriceOverview, SteamPackageGroup, SteamPackageGroupSub, SteamCategory, SteamGenre, SteamScreenshot, SteamMovie, SteamAchievement, SteamUser, Prisma } from '@prisma/client';
+export { Prisma } from '@prisma/client';
 import { SteamApiDemo, SteamApiAppData } from '@apple-si-gaming-db/steam-api';
 
 declare global {
@@ -34,21 +35,20 @@ declare type PrismaSteamUser = Partial<Omit<SteamUser, 'id' | 'createdAt' | 'upd
 declare function extractSteamApiDemos(steamAppId: number, demos: SteamApiDemo[]): PrismaSteamDemo[];
 declare function convertSteamApiDataToPrisma(app: SteamApiAppData): PrismaSteamApp;
 
-declare function searchSteamAppsByName(name: PrismaSteamApp['name']): Promise<{
-    name: string;
-    steamAppId: number;
-    headerImage: string | null;
-}[]>;
-declare function getSteamAppByAppId(steamAppId: PrismaSteamApp['steamAppId']): Promise<(_prisma_client.SteamApp & {
-    categories: _prisma_client.SteamCategory[];
-    genres: _prisma_client.SteamGenre[];
-    performancePosts: {
-        steamUser: _prisma_client.SteamUser;
-        id: string;
-        postText: string;
-    }[];
-}) | null>;
-declare function updateSteamAppDownloadAttempted(steamAppId: PrismaSteamApp['steamAppId']): Promise<void>;
-declare function updateSteamApp(steamAppId: PrismaSteamApp['steamAppId'], prismaSteamAppData: PrismaSteamApp): Promise<void>;
+declare function updateSteamAppDownloadAttempted(steamAppId: PrismaSteamApp['steamAppId'], dataDownloadAttempted?: boolean): Promise<void>;
+declare function updateSteamApp(prismaSteamAppData: PrismaSteamApp): Promise<void>;
 
-export { PrismaSteamAchievement, PrismaSteamApp, PrismaSteamCategory, PrismaSteamDemo, PrismaSteamGenre, PrismaSteamMovie, PrismaSteamPackageGroup, PrismaSteamPackageGroupSub, PrismaSteamPriceOverview, PrismaSteamScreenshot, PrismaSteamUser, convertSteamApiDataToPrisma, extractSteamApiDemos, getSteamAppByAppId, prisma, searchSteamAppsByName, updateSteamApp, updateSteamAppDownloadAttempted };
+declare function createPerformancePost({ steamUserId, steamAppId, postText, }: {
+    steamUserId: string;
+    steamAppId: number;
+    postText: string;
+}): Promise<_prisma_client.PerformancePost>;
+declare function findPerformancePostsByAppId(steamAppId: PrismaSteamApp['steamAppId'], select?: Prisma.PerformancePostSelect): Promise<{}[]>;
+
+declare function findUserBySteamId(steamUserId: PrismaSteamUser['steamUserId'], select?: Prisma.SteamUserSelect): Promise<{} | null>;
+declare function createSteamUser(steamUser: PrismaSteamUser, select?: Prisma.SteamUserSelect): Promise<{}>;
+declare function deleteUserBySteamId(steamUserId: PrismaSteamUser['steamUserId'], select?: Prisma.SteamUserSelect): Promise<{}>;
+declare function updateUserOwnedApps(steamAppIds: PrismaSteamApp['steamAppId'][], steamUserId: PrismaSteamUser['steamUserId'], select?: Prisma.SteamUserSelect): Promise<{}>;
+declare function upsertSteamUser(steamUser: PrismaSteamUser, select?: Prisma.SteamUserSelect): Promise<{}>;
+
+export { PrismaSteamAchievement, PrismaSteamApp, PrismaSteamCategory, PrismaSteamDemo, PrismaSteamGenre, PrismaSteamMovie, PrismaSteamPackageGroup, PrismaSteamPackageGroupSub, PrismaSteamPriceOverview, PrismaSteamScreenshot, PrismaSteamUser, convertSteamApiDataToPrisma, createPerformancePost, createSteamUser, deleteUserBySteamId, extractSteamApiDemos, findPerformancePostsByAppId, findUserBySteamId, prisma, updateSteamApp, updateSteamAppDownloadAttempted, updateUserOwnedApps, upsertSteamUser };

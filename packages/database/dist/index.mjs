@@ -4,7 +4,10 @@ var prisma = global.prisma || new PrismaClient();
 if (process.env.NODE_ENV !== "production")
   global.prisma = prisma;
 
-// src/convert-steam-api-to-prisma.ts
+// src/interfaces/index.ts
+import { Prisma } from "@prisma/client";
+
+// src/utils/convert-steam-api-to-prisma.ts
 function extractSteamApiDemos(steamAppId, demos) {
   return demos.map((demo) => {
     return {
@@ -176,56 +179,14 @@ function valueExistsOrNull2(v) {
   }
   return v;
 }
-async function searchSteamAppsByName(name) {
-  return prisma.steamApp.findMany({
-    where: {
-      name: {
-        contains: name,
-        mode: "insensitive"
-      },
-      platformMac: {
-        equals: true
-      },
-      comingSoon: {
-        equals: false
-      }
-    },
-    orderBy: {
-      name: "asc"
-    },
-    select: {
-      name: true,
-      steamAppId: true,
-      headerImage: true
-    }
-  });
-}
-async function getSteamAppByAppId(steamAppId) {
-  return prisma.steamApp.findUnique({
-    where: {
-      steamAppId
-    },
-    include: {
-      genres: true,
-      categories: true,
-      performancePosts: {
-        select: {
-          steamUser: true,
-          postText: true,
-          id: true
-        }
-      }
-    }
-  });
-}
-async function updateSteamAppDownloadAttempted(steamAppId) {
+async function updateSteamAppDownloadAttempted(steamAppId, dataDownloadAttempted = true) {
   try {
     await prisma.steamApp.update({
       where: {
         steamAppId
       },
       data: {
-        dataDownloadAttempted: true,
+        dataDownloadAttempted,
         dataDownloadAttemptedAt: new Date()
       }
     });
@@ -238,8 +199,9 @@ async function updateSteamAppDownloadAttempted(steamAppId) {
     }
   }
 }
-async function updateSteamApp(steamAppId, prismaSteamAppData) {
+async function updateSteamApp(prismaSteamAppData) {
   const {
+    steamAppId,
     demos,
     priceOverview,
     packageGroups,
@@ -471,13 +433,99 @@ function connectOrCreateAchievements(steamAppId, achievements) {
     })
   } : void 0;
 }
+
+// src/models/performancePost.ts
+async function createPerformancePost({
+  steamUserId,
+  steamAppId,
+  postText
+}) {
+  return prisma.performancePost.create({
+    data: {
+      postText,
+      steamUserId,
+      steamAppId
+    }
+  });
+}
+async function findPerformancePostsByAppId(steamAppId, select) {
+  return prisma.performancePost.findMany({
+    where: {
+      steamAppId
+    },
+    select
+  });
+}
+
+// src/models/steamUser.ts
+async function findUserBySteamId(steamUserId, select) {
+  return prisma.steamUser.findUnique({
+    where: { steamUserId },
+    select
+  });
+}
+async function createSteamUser(steamUser, select) {
+  return prisma.steamUser.create({
+    data: {
+      ...steamUser
+    },
+    select
+  });
+}
+async function deleteUserBySteamId(steamUserId, select) {
+  return prisma.steamUser.delete({
+    where: { steamUserId },
+    select
+  });
+}
+async function updateUserOwnedApps(steamAppIds, steamUserId, select) {
+  return prisma.steamUser.update({
+    where: {
+      steamUserId
+    },
+    data: {
+      ownedApps: {
+        connectOrCreate: steamAppIds.map((steamAppId) => ({
+          where: {
+            steamAppId
+          },
+          create: {
+            steamAppId,
+            name: "UNKNOWN_APP"
+          }
+        }))
+      }
+    },
+    select
+  });
+}
+async function upsertSteamUser(steamUser, select) {
+  return prisma.steamUser.upsert({
+    where: {
+      steamUserId: steamUser.steamUserId
+    },
+    create: {
+      ...steamUser
+    },
+    update: {
+      ...steamUser
+    },
+    select
+  });
+}
 export {
+  Prisma,
   convertSteamApiDataToPrisma,
+  createPerformancePost,
+  createSteamUser,
+  deleteUserBySteamId,
   extractSteamApiDemos,
-  getSteamAppByAppId,
+  findPerformancePostsByAppId,
+  findUserBySteamId,
   prisma,
-  searchSteamAppsByName,
   updateSteamApp,
-  updateSteamAppDownloadAttempted
+  updateSteamAppDownloadAttempted,
+  updateUserOwnedApps,
+  upsertSteamUser
 };
 //# sourceMappingURL=index.mjs.map
