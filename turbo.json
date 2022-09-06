@@ -28,6 +28,7 @@
     }
   },
   "globalDependencies": [
+    "$DATABASE_URL",
     "$DOMAIN",
     "$FLY_REGION",
     "$NODE_ENV",
