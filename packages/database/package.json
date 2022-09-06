@@ -26,7 +26,8 @@
   "dependencies": {
     "@apple-si-gaming-db/logger": "*",
     "@apple-si-gaming-db/steam-api": "*",
-    "@prisma/client": "4.3.1"
+    "@prisma/client": "4.3.1",
+    "tiny-invariant": "^1.2.0"
   },
   "devDependencies": {
     "eslint": "^8.20.0",
