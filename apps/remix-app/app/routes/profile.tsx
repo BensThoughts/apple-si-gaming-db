@@ -8,18 +8,29 @@ import LoginCard from '~/components/Cards/LoginCard';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import { getSteamPlayerOwnedGamesRequest } from '~/lib/data-utils/steamApi.server';
 import { updateUserOwnedApps } from '~/models/steamUser.server';
+import logger from '~/lib/logger/logger.server';
+import { searchAllAppsByAppIds } from '~/models/steamApp.server';
 
 export async function loader({ request, context }: LoaderArgs) {
   const { steamUser } = extractAppLoadContext(context);
   if (steamUser) {
+    logger.info('Starting getSteamPlayerOwnedGamesRequest');
     const userOwnedApps = await getSteamPlayerOwnedGamesRequest(steamUser.steamUserId);
+    logger.info('Finished getSteamPlayerOwnedGamesRequest');
     const ownedAppIds = userOwnedApps.games.map((app) => app.appid);
+
+    const ownedAppsInDB = await searchAllAppsByAppIds(ownedAppIds);
+    const ownedAppIdsInDB = ownedAppsInDB.map((app) => app.steamAppId);
+
+    logger.info('Starting updateUserOwnedApps');
     const {
       steamUserId,
       displayName,
       avatarFull,
       ownedApps,
-    } = await updateUserOwnedApps(ownedAppIds, steamUser.steamUserId);
+    } = await updateUserOwnedApps(ownedAppIdsInDB, steamUser.steamUserId);
+    logger.info('Finished updateUserOwnedApps');
+
     return json({
       isLoggedIn: true,
       steamUserId,
@@ -74,13 +85,26 @@ export default function LoginPage() {
           </AsideInfoCard>
         </div>
       </div>
-      <div>
-        {ownedApps && ownedApps.map((ownedApp) => (
-          <div key={ownedApp.steamAppId}>
-            {ownedApp.steamAppId} - {ownedApp.name}
+      {ownedApps && (
+        <>
+          <div>
+            <h1>Platform Mac</h1>
+            {ownedApps.filter((app) => app.platformMac).map((ownedApp) => (
+              <div key={ownedApp.steamAppId}>
+                {ownedApp.steamAppId} - {ownedApp.name}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+          <div>
+            <h1>Other Platforms</h1>
+            {ownedApps.filter((app) => !app.platformMac).map((ownedApp) => (
+              <div key={ownedApp.steamAppId}>
+                {ownedApp.steamAppId} - {ownedApp.name}
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }
