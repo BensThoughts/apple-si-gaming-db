@@ -3,23 +3,32 @@ import type { ActionArgs, LoaderArgs } from '@remix-run/server-runtime';
 import { redirect } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import invariant from 'tiny-invariant';
-import { searchSteamAppByAppId } from '~/models/steamApp.server';
 import ExternalLinks from '~/components/AppInfo/ExternalLinks';
 import AppInfoGenres from '~/components/AppInfo/Genres';
 import AppInfoCategories from '~/components/AppInfo/Categories';
 import AppInfoRequirements from '~/components/AppInfo/Requirements';
 import MainAppCard from '~/components/Cards/MainAppCard';
 import LoadingComponent from '~/components/LoadingComponent';
-import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import RoundedButton from '~/components/RoundedButton';
+import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import { createPerformancePost } from '~/models/performancePost.server';
+import { getSteamAppDetailsRequest } from '~/lib/data-utils/steamApi.server';
+import { searchSteamAppByAppId, updateSteamApp, convertSteamApiDataToPrisma } from '~/models/steamApp.server';
 
 export async function loader({ params, context }: LoaderArgs) {
   invariant(params.steamAppId, 'Expected params.steamAppId');
   const steamAppId = Number(params.steamAppId);
   invariant(typeof steamAppId === 'number', 'Expected steamAppId to be a valid number');
   invariant(!isNaN(steamAppId), 'Expected steamAppId to be a valid number');
-  const steamApp = await searchSteamAppByAppId(steamAppId);
+  let steamApp = await searchSteamAppByAppId(steamAppId);
+  if (steamApp && (!steamApp?.dataDownloadAttempted || steamApp?.name === 'UNKNOWN_APP')) {
+    const steamApiApp = await getSteamAppDetailsRequest(steamApp.steamAppId);
+    if (steamApiApp.data) {
+      const prismaSteamApp = convertSteamApiDataToPrisma(steamApiApp.data);
+      await updateSteamApp(prismaSteamApp);
+      steamApp = await searchSteamAppByAppId(steamAppId);
+    }
+  }
   const steamUser = extractAppLoadContext(context).steamUser;
   return json({
     steamApp,
