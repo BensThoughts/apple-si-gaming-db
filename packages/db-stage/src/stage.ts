@@ -97,13 +97,14 @@ const ONE_SECOND_INTERVAL = (1000); // 1seconds
 const FIVE_MINUTE_INTERVAL = (5 * 60 * 1000) + 1000; // 5 minutes + 1 second
 
 // DB starts at page 0
-const STARTING_PAGE = 2; // fly.io current page
+const STARTING_PAGE = 3; // fly.io current page
 // const STARTING_PAGE = 7; // local current page
 
 async function getTotalPages() {
   const aggregate = await prisma.steamApp.aggregate({ _count: true });
   const NUM_APPIDS = aggregate._count;
   logger.info(`Number of appids ${NUM_APPIDS}`);
+  logger.error('Number of appids', { appid: 123 });
   return Math.ceil(NUM_APPIDS / BATCH_SIZE);
 }
 
