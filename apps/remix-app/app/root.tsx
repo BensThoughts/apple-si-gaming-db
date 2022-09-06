@@ -16,6 +16,7 @@ import {
 import { json } from '@remix-run/node';
 import Navbar from '~/components/Layout/Navbar';
 import type { ExtendedAppLoadContext } from './interfaces';
+import { loginCookie } from './lib/cookies/cookies.server';
 
 // import { getUser } from "./session.server";
 import tailwindStylesheetUrl from './styles/tailwind.css';
@@ -43,10 +44,20 @@ export const meta: MetaFunction = () => ({
 
 export async function loader({ request, context }: LoaderArgs) {
   const data = extractAppLoadContext(context);
-  if (data.steamUser) {
+  const cookieHeader = request.headers.get('Cookie');
+  const cookie = (await loginCookie.parse(cookieHeader)) || {};
+  if (data.steamUser && !cookie.isLoggedIn) {
+    cookie.isLoggedIn = true;
     await upsertSteamUser(data.steamUser);
   }
-  return json<ExtendedAppLoadContext>(data);
+  if (!data.steamUser) {
+    cookie.isLoggedIn = false;
+  }
+  return json<ExtendedAppLoadContext>(data, {
+    headers: {
+      'Set-Cookie': await loginCookie.serialize(cookie),
+    },
+  });
 }
 
 function Document({
