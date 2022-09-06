@@ -47,9 +47,18 @@ export async function updateSteamAppDownloadAttempted(
   }
 }
 
+
+/**
+ * * Sometimes the steam API returns data for another (related) appid
+ * * We need to be careful to only update the app in the data,
+ * * which may not be the appid we requested data on
+ * @param  {PrismaSteamApp} prismaSteamAppData
+ */
 export async function updateSteamApp(
+    // steamApiAppId: number,
     prismaSteamAppData: PrismaSteamApp,
 ) {
+  // const steamAppId = steamApiAppId;
   const {
     steamAppId,
     demos,

@@ -30,12 +30,12 @@ async function getSteamAppDataAndUpdateDB(appIdData: AppIdData) {
     // * Sometimes the steam API returns data for another (related) appid
     // * we don't want to clobber the data that comes in from the actual appid
     if (success === true && (data?.steam_appid === prismaSteamAppId)) {
-      const steamApiAppId = data.steam_appid;
+      // const steamApiAppId = data.steam_appid;
       const prismaSteamAppData = convertSteamApiDataToPrisma(data);
 
       logger.info('start writing to DB', appIdData);
       await updateSteamApp(
-          steamApiAppId, // * Make sure we are using appid returned from steam api
+          // steamApiAppId, // * Make sure we are using appid returned from steam api
           prismaSteamAppData,
       );
       logger.info('finished writing to DB', appIdData);
@@ -95,11 +95,10 @@ async function getPageOfData(page: number, totalPages: number) {
 const BATCH_SIZE = 200; // The number of apps per a "page" of data
 const ONE_SECOND_INTERVAL = (1000); // 1seconds
 const FIVE_MINUTE_INTERVAL = (5 * 60 * 1000) + 1000; // 5 minutes + 1 second
-// const NUM_APPIDS = 149175; // Total num appids in PostgreSql
-const STARTING_PAGE = 7; // DB starts at page 0
 
-// const STARTING_PAGE = 153; // DB starts at page 0
-// const TOTAL_PAGES = Math.ceil(NUM_APPIDS / BATCH_SIZE);
+// DB starts at page 0
+const STARTING_PAGE = 2; // fly.io current page
+// const STARTING_PAGE = 7; // local current page
 
 async function getTotalPages() {
   const aggregate = await prisma.steamApp.aggregate({ _count: true });

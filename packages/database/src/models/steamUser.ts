@@ -1,4 +1,4 @@
-import type { Prisma, PrismaSteamUser, PrismaSteamApp } from '../interfaces';
+import type { Prisma, PrismaSteamUser } from '../interfaces';
 import { prisma } from '../client';
 
 export async function findUserBySteamId(
