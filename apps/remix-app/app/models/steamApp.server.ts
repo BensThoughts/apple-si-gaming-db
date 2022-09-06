@@ -1,6 +1,7 @@
 import {
   updateSteamApp,
   updateSteamAppDownloadAttempted,
+  convertSteamApiDataToPrisma,
 } from '@apple-si-gaming-db/database';
 
 import type {
@@ -12,7 +13,23 @@ import prisma from '~/lib/database/db.server';
 export {
   updateSteamApp,
   updateSteamAppDownloadAttempted,
+  convertSteamApiDataToPrisma,
 };
+
+export async function searchAllAppsByAppIds(
+    steamAppIds: PrismaSteamApp['steamAppId'][],
+) {
+  return prisma.steamApp.findMany({
+    where: {
+      steamAppId: { in: steamAppIds },
+    },
+    select: {
+      steamAppId: true,
+      // name: true,
+      // headerImage: true,
+    },
+  });
+}
 
 export async function searchSteamAppByAppId(
     steamAppId: PrismaSteamApp['steamAppId'],
@@ -24,6 +41,8 @@ export async function searchSteamAppByAppId(
     select: {
       steamAppId: true,
       name: true,
+      dataDownloadAttempted: true,
+      dataDownloaded: true,
       headerImage: true,
       type: true,
       requiredAge: true,
