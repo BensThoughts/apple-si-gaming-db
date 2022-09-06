@@ -33,32 +33,6 @@ export async function deleteUserBySteamId(
   });
 }
 
-export async function updateUserOwnedApps(
-    steamAppIds: PrismaSteamApp['steamAppId'][],
-    steamUserId: PrismaSteamUser['steamUserId'],
-    select?: Prisma.SteamUserSelect,
-) {
-  return prisma.steamUser.update({
-    where: {
-      steamUserId,
-    },
-    data: {
-      ownedApps: {
-        connectOrCreate: steamAppIds.map((steamAppId) => ({
-          where: {
-            steamAppId,
-          },
-          create: {
-            steamAppId,
-            name: 'UNKNOWN_APP',
-          },
-        })),
-      },
-    },
-    select,
-  });
-}
-
 export async function upsertSteamUser(
     steamUser: PrismaSteamUser,
     select?: Prisma.SteamUserSelect,

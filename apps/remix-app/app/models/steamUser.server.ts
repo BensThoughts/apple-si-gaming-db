@@ -1,10 +1,16 @@
-import type { PassportSteamUser, PrismaSteamUser, Prisma } from '~/interfaces';
+import type {
+  Prisma,
+  PrismaSteamApp,
+  PrismaSteamUser,
+  PassportSteamUser,
+} from '~/interfaces';
+
+import prisma from '~/lib/database/db.server';
 
 import {
   findUserBySteamId,
   createSteamUser,
   deleteUserBySteamId,
-  updateUserOwnedApps,
   upsertSteamUser,
 } from '@apple-si-gaming-db/database';
 
@@ -12,7 +18,6 @@ export {
   findUserBySteamId,
   createSteamUser,
   deleteUserBySteamId,
-  updateUserOwnedApps,
   upsertSteamUser,
 };
 
@@ -47,4 +52,35 @@ export async function upsertPassportSteamUserToPrisma(
 ) {
   const prismaSteamUser = convertPassportSteamUserToPrismaSteamUser(passportSteamUser);
   return upsertSteamUser(prismaSteamUser, select);
+}
+
+export async function updateUserOwnedApps(
+    steamAppIds: PrismaSteamApp['steamAppId'][],
+    steamUserId: PrismaSteamUser['steamUserId'],
+) {
+  return prisma.steamUser.update({
+    where: {
+      steamUserId,
+    },
+    data: {
+      ownedApps: {
+        connect: steamAppIds.map((steamAppId) => ({
+          steamAppId,
+        })),
+      },
+    },
+    select: {
+      ownedApps: {
+        select: {
+          steamAppId: true,
+          name: true,
+          headerImage: true,
+          platformMac: true,
+        },
+      },
+      displayName: true,
+      steamUserId: true,
+      avatarFull: true,
+    },
+  });
 }
