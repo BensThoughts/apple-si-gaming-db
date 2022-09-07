@@ -77,6 +77,8 @@ export async function updateUserOwnedApps(
           name: true,
           headerImage: true,
           platformMac: true,
+          genres: true,
+          categories: true,
         },
       },
       displayName: true,
