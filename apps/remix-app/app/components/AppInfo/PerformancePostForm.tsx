@@ -14,36 +14,35 @@ export default function PerformancePostForm({
   actionData: any,
 }) {
   return (
-    <div className={`flex flex-col items-center justify-center bg-primary
-                     border-solid border-1 border-secondary p-3 rounded-lg`}>
+    <div className={`flex flex-col gap-3 items-center justify-center bg-primary
+                     border-solid border-1 border-secondary p-3 rounded-lg w-full`}>
       {steamUser ? (
-        <div>
+        <>
           {userOwnsApp ? (
-            <div>
-              Looks like you own the app, go ahead and leave a performance post.
+            <>
+              <h2 className='text-secondary text-lg'>Submit Your Own Performance Post</h2>
               <Form
                 method="post"
                 name="performancePost"
                 className="flex flex-col items-center gap-3 w-full max-w-lg"
               >
-                <label>
-              Post:
+                <label className='w-full'>
                   <textarea
                     name="postText"
-                    className="bg-primary rounded p-2 w-full"
+                    className="bg-app-bg rounded p-2 w-full h-28"
                     defaultValue={actionData?.values.postText}
                   />
                 </label>
                 <RoundedButton type="submit" className="max-w-xs">Submit</RoundedButton>
               </Form>
-            </div>
+            </>
           ): (
             <div>
               It looks like you do not own this app yet. Add it to your steam library to leave a
               performance review.
             </div>
           )}
-        </div>
+        </>
       ): (
         <div>
           You are not logged in. You must login to post a performance review for this app.
