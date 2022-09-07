@@ -14,6 +14,7 @@ import { searchSteamAppByAppId, updateSteamApp, convertSteamApiDataToPrisma } fr
 import PerformancePostLayout from '~/components/AppInfo/PerformancePostLayout';
 import AppInfoTags from '~/components/AppInfo/Tags';
 import PerformancePostForm from '~/components/AppInfo/PerformancePostForm';
+import { AppleIcon, LinuxIcon, WindowsIcon } from '~/components/Icons';
 
 export async function loader({ params, context }: LoaderArgs) {
   invariant(params.steamAppId, 'Expected params.steamAppId');
@@ -92,8 +93,11 @@ export default function AppsRoute() {
     name,
     steamAppId,
     headerImage,
-    type,
+    // type,
     requiredAge,
+    platformLinux,
+    platformMac,
+    platformWindows,
     // controllerSupport,
     releaseDate,
     shortDescription,
@@ -125,24 +129,32 @@ export default function AppsRoute() {
               height={215}
               className='rounded-md'
               onError={(e) => {
-                e.currentTarget.src = '../no-image-placeholder-2.svg';
+                e.currentTarget.src = '/no-image-placeholder.svg';
               }}
             />}
           </div>
 
           <div className='flex flex-row justify-between text-sm px-2'>
-            {(type && type.length > 1) && (
-              <span>
-                Type:&nbsp;
-                {`${type.charAt(0).toUpperCase()}${type.slice(1)}`}
-              </span>
-            )}
             {releaseDate && (
               <span>
                 Released:&nbsp;
                 <i className='italic'>{releaseDate}</i>
               </span>
             )}
+            <div className='flex gap-1'>
+              <AppleIcon
+                size={19}
+                className={platformMac ? `text-icon-secondary-highlight` : `text-icon-primary-highlight`}
+              />
+              <WindowsIcon
+                size={19}
+                className={platformWindows ? `text-icon-secondary-highlight` : `text-icon-primary-highlight`}
+              />
+              <LinuxIcon
+                size={19}
+                className={platformLinux ? `text-icon-secondary-highlight` : `text-icon-primary-highlight`}
+              />
+            </div>
           </div>
         </div>
 
@@ -184,7 +196,7 @@ export default function AppsRoute() {
                          before:translate-y-4 before:translate-x-[110%]`}>
           <h2 className='text-secondary text-xl'>Performance Posts</h2>
         </div>
-        <div>
+        <div className='w-full'>
           <PerformancePostLayout performancePosts={performancePosts} />
         </div>
         <div className='w-full'>
