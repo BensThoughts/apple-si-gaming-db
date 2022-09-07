@@ -5,9 +5,9 @@ import {
 } from '@apple-si-gaming-db/database';
 
 import type {
-  PrismaSteamApp,
-  PrismaSteamUser,
-} from '~/interfaces';
+  SteamAppWithoutMetadata,
+  SteamUserWithoutMetadata,
+} from '~/interfaces/database';
 
 import prisma from '~/lib/database/db.server';
 
@@ -18,7 +18,7 @@ export {
 };
 
 export async function searchAllAppsByAppIds(
-    steamAppIds: PrismaSteamApp['steamAppId'][],
+    steamAppIds: SteamAppWithoutMetadata['steamAppId'][],
 ) {
   return prisma.steamApp.findMany({
     where: {
@@ -33,8 +33,8 @@ export async function searchAllAppsByAppIds(
 }
 
 export async function searchSteamAppByAppId(
-    steamAppId: PrismaSteamApp['steamAppId'],
-    steamUserId?: PrismaSteamUser['steamUserId'],
+    steamAppId: SteamAppWithoutMetadata['steamAppId'],
+    steamUserId?: SteamUserWithoutMetadata['steamUserId'],
 ) {
   return prisma.steamApp.findUnique({
     where: {
@@ -57,6 +57,7 @@ export async function searchSteamAppByAppId(
       categories: true,
       performancePosts: {
         select: {
+          id: true,
           steamUser: {
             select: {
               steamUserId: true,
@@ -81,7 +82,7 @@ export async function searchSteamAppByAppId(
 }
 
 export async function searchReleasedSteamAppsByName(
-    name: PrismaSteamApp['name'],
+    name: SteamAppWithoutMetadata['name'],
 ) {
   return prisma.steamApp.findMany({
     where: {

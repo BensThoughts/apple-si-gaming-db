@@ -1,8 +1,8 @@
-import type { Prisma, PrismaSteamUser } from '../interfaces';
+import type { Prisma, SteamUserWithoutMetadata } from '../interfaces';
 import { prisma } from '../client';
 
 export async function findUserBySteamId(
-    steamUserId: PrismaSteamUser['steamUserId'],
+    steamUserId: SteamUserWithoutMetadata['steamUserId'],
     select?: Prisma.SteamUserSelect,
 ) {
   return prisma.steamUser.findUnique({
@@ -12,7 +12,7 @@ export async function findUserBySteamId(
 }
 
 export async function createSteamUser(
-    steamUser: PrismaSteamUser,
+    steamUser: SteamUserWithoutMetadata,
     select?: Prisma.SteamUserSelect,
 ) {
   return prisma.steamUser.create({
@@ -24,7 +24,7 @@ export async function createSteamUser(
 }
 
 export async function deleteUserBySteamId(
-    steamUserId: PrismaSteamUser['steamUserId'],
+    steamUserId: SteamUserWithoutMetadata['steamUserId'],
     select?: Prisma.SteamUserSelect,
 ) {
   return prisma.steamUser.delete({
@@ -34,7 +34,7 @@ export async function deleteUserBySteamId(
 }
 
 export async function upsertSteamUser(
-    steamUser: PrismaSteamUser,
+    steamUser: SteamUserWithoutMetadata,
     select?: Prisma.SteamUserSelect,
 ) {
   return prisma.steamUser.upsert({

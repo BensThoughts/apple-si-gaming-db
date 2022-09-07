@@ -1,13 +1,13 @@
 import type {
-  PrismaSteamApp,
-  PrismaSteamDemo,
-  PrismaSteamPackageGroup,
-  PrismaSteamPackageGroupSub,
-  PrismaSteamCategory,
-  PrismaSteamGenre,
-  PrismaSteamScreenshot,
-  PrismaSteamMovie,
-  PrismaSteamAchievement,
+  SteamAppWithoutMetadata,
+  SteamDemoWithoutMetadata,
+  SteamPackageGroupWithoutMetadata,
+  SteamPackageGroupSubWithoutMetadata,
+  SteamCategoryWithoutMetadata,
+  SteamGenreWithoutMetadata,
+  SteamScreenshotWithoutMetadata,
+  SteamMovieWithoutMetadata,
+  SteamAchievementWithoutMetadata,
 } from '../interfaces';
 
 import type {
@@ -25,7 +25,7 @@ import type {
 export function extractSteamApiDemos(
     steamAppId: number,
     demos: SteamApiDemo[],
-): PrismaSteamDemo[] {
+): SteamDemoWithoutMetadata[] {
   return demos.map((demo) => {
     return {
       steamAppId,
@@ -38,7 +38,7 @@ export function extractSteamApiDemos(
 function extractSteamApiPackageGroups(
     steamAppId: number,
     packageGroups: SteamApiPackageGroup[],
-): PrismaSteamPackageGroup[] {
+): SteamPackageGroupWithoutMetadata[] {
   return packageGroups.map((packageGroup) => {
     return {
       steamAppId,
@@ -58,7 +58,7 @@ function extractSteamApiPackageGroupSubs(
     steamAppId: number,
     packageGroupName: string,
     packageGroupSubs: SteamApiPackageGroupSub[],
-): PrismaSteamPackageGroupSub[] {
+): SteamPackageGroupSubWithoutMetadata[] {
   return packageGroupSubs.map((packageGroupSub) => {
     return {
       steamAppId,
@@ -75,7 +75,7 @@ function extractSteamApiPackageGroupSubs(
   });
 }
 
-function extractSteamApiCategories(categories: SteamApiCategory[]): PrismaSteamCategory[] {
+function extractSteamApiCategories(categories: SteamApiCategory[]): SteamCategoryWithoutMetadata[] {
   return categories.map((category) => {
     return {
       categoryId: category.id,
@@ -84,7 +84,7 @@ function extractSteamApiCategories(categories: SteamApiCategory[]): PrismaSteamC
   });
 }
 
-function extractSteamApiGenres(genres: SteamApiGenre[]): PrismaSteamGenre[] {
+function extractSteamApiGenres(genres: SteamApiGenre[]): SteamGenreWithoutMetadata[] {
   return genres.map((genre) => {
     return {
       genreId: genre.id,
@@ -93,7 +93,7 @@ function extractSteamApiGenres(genres: SteamApiGenre[]): PrismaSteamGenre[] {
   });
 }
 
-function extractSteamApiScreenshots(steamAppId: number, screenshots: SteamApiScreenshotData[]): PrismaSteamScreenshot[] {
+function extractSteamApiScreenshots(steamAppId: number, screenshots: SteamApiScreenshotData[]): SteamScreenshotWithoutMetadata[] {
   return screenshots.map((screenshot) => {
     return {
       steamAppId,
@@ -106,7 +106,7 @@ function extractSteamApiScreenshots(steamAppId: number, screenshots: SteamApiScr
 
 
 // TODO: Left out valueExistsOrNull because of potential complications with .['480]
-function extractSteamApiMovies(steamAppId: number, movies: SteamApiMovieData[]): PrismaSteamMovie[] {
+function extractSteamApiMovies(steamAppId: number, movies: SteamApiMovieData[]): SteamMovieWithoutMetadata[] {
   return movies.map((movie) => {
     return {
       steamAppId,
@@ -123,7 +123,7 @@ function extractSteamApiMovies(steamAppId: number, movies: SteamApiMovieData[]):
 }
 
 
-function extractSteamApiAchievements(steamAppId: number, achievements: SteamApiAchievement[]): PrismaSteamAchievement[] {
+function extractSteamApiAchievements(steamAppId: number, achievements: SteamApiAchievement[]): SteamAchievementWithoutMetadata[] {
   return achievements.map((achievement) => {
     return {
       steamAppId,
@@ -141,7 +141,7 @@ function valueExistsOrNull<T>(v: T) {
   return v;
 }
 
-export function convertSteamApiDataToPrisma(app: SteamApiAppData): PrismaSteamApp {
+export function convertSteamApiDataToPrisma(app: SteamApiAppData): SteamAppWithoutMetadata {
   return {
     name: app.name,
     steamAppId: app.steam_appid,

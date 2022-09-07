@@ -1,3 +1,7 @@
+import type {
+  SteamAppWithoutMetadata,
+  SteamUserWithoutMetadata,
+} from '~/interfaces/database';
 import prisma from '~/lib/database/db.server';
 
 export async function createPerformancePost({
@@ -5,8 +9,8 @@ export async function createPerformancePost({
   steamAppId,
   postText,
 }: {
-  steamUserId: string;
-  steamAppId: number;
+  steamUserId: SteamUserWithoutMetadata['steamUserId'];
+  steamAppId: SteamAppWithoutMetadata['steamAppId'];
   postText: string;
 }) {
   return prisma.performancePost.create({

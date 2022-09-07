@@ -1,8 +1,8 @@
 import { Link } from '@remix-run/react';
-import type { PrismaSteamApp } from '~/interfaces';
+import type { SteamApp } from '~/interfaces/database';
 
-interface SearchTitleCardProps extends Pick<PrismaSteamApp, 'name' | 'steamAppId' | 'releaseDate'> {
-  headerImageSrc: PrismaSteamApp['headerImage'];
+interface SearchTitleCardProps extends Pick<SteamApp, 'name' | 'steamAppId' | 'releaseDate'> {
+  headerImageSrc: SteamApp['headerImage'];
 }
 
 export default function SearchTitleCard({

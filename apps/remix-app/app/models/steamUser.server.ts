@@ -1,9 +1,10 @@
 import type {
   Prisma,
-  PrismaSteamApp,
-  PrismaSteamUser,
-  PassportSteamUser,
-} from '~/interfaces';
+  SteamAppWithoutMetadata,
+  SteamUserWithoutMetadata,
+} from '~/interfaces/database';
+
+import type { PassportSteamUser } from '~/interfaces';
 
 import prisma from '~/lib/database/db.server';
 
@@ -21,7 +22,7 @@ export {
   upsertSteamUser,
 };
 
-export function convertPassportSteamUserToPrismaSteamUser(passportSteamUser: PassportSteamUser): PrismaSteamUser {
+export function convertPassportSteamUserToPrismaSteamUser(passportSteamUser: PassportSteamUser): SteamUserWithoutMetadata {
   return {
     steamUserId: passportSteamUser._json.steamid,
     displayName: passportSteamUser.displayName,
@@ -55,8 +56,8 @@ export async function upsertPassportSteamUserToPrisma(
 }
 
 export async function updateUserOwnedApps(
-    steamAppIds: PrismaSteamApp['steamAppId'][],
-    steamUserId: PrismaSteamUser['steamUserId'],
+    steamAppIds: SteamAppWithoutMetadata['steamAppId'][],
+    steamUserId: SteamUserWithoutMetadata['steamUserId'],
 ) {
   return prisma.steamUser.update({
     where: {

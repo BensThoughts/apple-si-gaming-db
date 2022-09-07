@@ -1,4 +1,4 @@
-import { Form, useActionData, useLoaderData, useTransition } from '@remix-run/react';
+import { useActionData, useLoaderData, useTransition } from '@remix-run/react';
 import type { ActionArgs, LoaderArgs } from '@remix-run/server-runtime';
 import { redirect } from '@remix-run/node';
 import { json } from '@remix-run/node';
@@ -7,13 +7,13 @@ import ExternalLinks from '~/components/AppInfo/ExternalLinks';
 import AppInfoRequirements from '~/components/AppInfo/Requirements';
 import MainAppCard from '~/components/Cards/MainAppCard';
 import LoadingComponent from '~/components/LoadingComponent';
-import RoundedButton from '~/components/RoundedButton';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import { createPerformancePost } from '~/models/performancePost.server';
 import { getSteamAppDetailsRequest } from '~/lib/data-utils/steamApi.server';
 import { searchSteamAppByAppId, updateSteamApp, convertSteamApiDataToPrisma } from '~/models/steamApp.server';
 import PerformancePostLayout from '~/components/AppInfo/PerformancePostLayout';
 import AppInfoTags from '~/components/AppInfo/Tags';
+import PerformancePostForm from '~/components/AppInfo/PerformancePostForm';
 
 export async function loader({ params, context }: LoaderArgs) {
   invariant(params.steamAppId, 'Expected params.steamAppId');
@@ -41,10 +41,10 @@ export async function action({
   params,
   context,
 }: ActionArgs) {
-  invariant(params.appid, 'Expected params.appid');
-  const appid = Number(params.appid);
-  invariant(typeof appid === 'number', 'Expected appid to be a valid number');
-  invariant(!isNaN(appid), 'Expected appid to be a valid number');
+  invariant(params.steamAppId, 'Expected params.appid');
+  const steamAppId = Number(params.steamAppId);
+  invariant(typeof steamAppId === 'number', 'Expected appid to be a valid number');
+  invariant(!isNaN(steamAppId), 'Expected appid to be a valid number');
   const { steamUser } = extractAppLoadContext(context);
   invariant(steamUser, 'You must be logged into a valid Steam account to post performance reviews');
   const steamUserId = steamUser.steamUserId;
@@ -55,7 +55,7 @@ export async function action({
   try {
     await createPerformancePost({
       steamUserId,
-      steamAppId: appid,
+      steamAppId,
       postText: postText.toString(),
     });
   } catch (err) {
@@ -67,7 +67,7 @@ export async function action({
     return json({ err, values });
   }
 
-  return redirect(`/apps/${appid}`);
+  return redirect(`/apps/${steamAppId}`);
 }
 
 export default function AppsRoute() {
@@ -104,9 +104,9 @@ export default function AppsRoute() {
     performancePosts,
     usersWhoOwnApp, // This will either be 1 user (the current logged in one) or 0 users
   } = steamApp;
-  let userOwnsThisApp = false;
+  let userOwnsApp = false;
   if (steamUser) {
-    userOwnsThisApp = usersWhoOwnApp.map((user) => user.steamUserId).includes(steamUser.steamUserId);
+    userOwnsApp = usersWhoOwnApp.map((user) => user.steamUserId).includes(steamUser.steamUserId);
   }
   return (
     <div className="bg-app-bg h-full">
@@ -174,33 +174,26 @@ export default function AppsRoute() {
           />
         </div>
         }
+        <div className={`mt-4
+                         after:w-full after:h-[2px] after:block after:relative
+                         after:top-0 after:left-0 after:bg-secondary
+                         after:-translate-y-4 after:-translate-x-[110%]
+
+                         before:w-full before:h-[2px] before:block before:relative
+                         before:top-0 before:right-0 before:bg-secondary
+                         before:translate-y-4 before:translate-x-[110%]`}>
+          <h2 className='text-secondary text-xl'>Performance Posts</h2>
+        </div>
         <div>
           <PerformancePostLayout performancePosts={performancePosts} />
         </div>
-        {userOwnsThisApp && steamUser ? (
-          <div>
-            <Form
-              method="post"
-              name="performancePost"
-              className="flex flex-col items-center gap-3 w-full max-w-lg"
-            >
-              <label>
-              Post:
-                <textarea
-                  name="postText"
-                  className="bg-primary rounded p-2 w-full"
-                  defaultValue={actionData?.values.postText}
-                />
-              </label>
-              <RoundedButton type="submit" className="max-w-xs">Submit</RoundedButton>
-            </Form>
-          </div>
-        ): (
-          <div>
-            It looks like you do not own this app yet. Add it to your steam library to leave a
-            performance review.
-          </div>
-        )}
+        <div className='w-full'>
+          <PerformancePostForm
+            steamUser={steamUser}
+            userOwnsApp={userOwnsApp}
+            actionData={actionData}
+          />
+        </div>
       </div>
     </div>
   );

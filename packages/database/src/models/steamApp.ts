@@ -1,13 +1,13 @@
 import type {
-  PrismaSteamDemo,
-  PrismaSteamPriceOverview,
-  PrismaSteamPackageGroupSub,
-  PrismaSteamCategory,
-  PrismaSteamGenre,
-  PrismaSteamScreenshot,
-  PrismaSteamMovie,
-  PrismaSteamAchievement,
-  PrismaSteamApp,
+  SteamDemoWithoutMetadata,
+  SteamPriceOverviewWithoutMetadata,
+  SteamPackageGroupSubWithoutMetadata,
+  SteamCategoryWithoutMetadata,
+  SteamGenreWithoutMetadata,
+  SteamScreenshotWithoutMetadata,
+  SteamMovieWithoutMetadata,
+  SteamAchievementWithoutMetadata,
+  SteamAppWithoutMetadata,
 } from '../interfaces';
 import { prisma } from '../client';
 import logger from '@apple-si-gaming-db/logger';
@@ -20,7 +20,7 @@ function valueExistsOrNull<T>(v: T) {
 }
 
 export async function updateSteamAppDownloadAttempted(
-    steamAppId: PrismaSteamApp['steamAppId'],
+    steamAppId: SteamAppWithoutMetadata['steamAppId'],
     dataDownloadAttempted = true,
 ) {
   try {
@@ -56,7 +56,7 @@ export async function updateSteamAppDownloadAttempted(
  */
 export async function updateSteamApp(
     // steamApiAppId: number,
-    prismaSteamAppData: PrismaSteamApp,
+    prismaSteamAppData: SteamAppWithoutMetadata,
 ) {
   // const steamAppId = steamApiAppId;
   const {
@@ -154,7 +154,7 @@ export async function updateSteamApp(
 
 function connectOrCreateDemos(
     steamAppId: number,
-    demos: PrismaSteamDemo[] | null | undefined,
+    demos: SteamDemoWithoutMetadata[] | null | undefined,
 ) {
   return demos ? {
     connectOrCreate: demos.map((demo) => {
@@ -176,7 +176,7 @@ function connectOrCreateDemos(
 
 function connectOrCreatePriceOverview(
     steamAppId: number,
-    priceOverview: PrismaSteamPriceOverview | null | undefined,
+    priceOverview: SteamPriceOverviewWithoutMetadata | null | undefined,
 ) {
   return priceOverview ? {
     connectOrCreate: {
@@ -197,7 +197,7 @@ function connectOrCreatePriceOverview(
 
 function connectOrCreatePackageGroupSubs(
     steamAppId: number,
-    subs: PrismaSteamPackageGroupSub[] | null | undefined,
+    subs: SteamPackageGroupSubWithoutMetadata[] | null | undefined,
 ) {
   return subs ? {
     connectOrCreate: subs.map((sub) => {
@@ -224,7 +224,7 @@ function connectOrCreatePackageGroupSubs(
   } : undefined;
 }
 
-function connectOrCreateCategories(categories: PrismaSteamCategory[] | null | undefined) {
+function connectOrCreateCategories(categories: SteamCategoryWithoutMetadata[] | null | undefined) {
   return categories ? {
     connectOrCreate: categories.map((category) => {
       return {
@@ -240,7 +240,7 @@ function connectOrCreateCategories(categories: PrismaSteamCategory[] | null | un
   } : undefined;
 }
 
-function connectOrCreateGenres(genres: PrismaSteamGenre[] | null | undefined) {
+function connectOrCreateGenres(genres: SteamGenreWithoutMetadata[] | null | undefined) {
   return genres ? {
     connectOrCreate: genres.map((genre) => {
       return {
@@ -258,7 +258,7 @@ function connectOrCreateGenres(genres: PrismaSteamGenre[] | null | undefined) {
 
 function connectOrCreateScreenshots(
     steamAppId: number,
-    screenshots: PrismaSteamScreenshot[] | null | undefined,
+    screenshots: SteamScreenshotWithoutMetadata[] | null | undefined,
 ) {
   return screenshots ? {
     connectOrCreate: screenshots.map((screenshot) => {
@@ -281,7 +281,7 @@ function connectOrCreateScreenshots(
 
 function connectOrCreateMovies(
     steamAppId: number,
-    movies: PrismaSteamMovie[] | null | undefined,
+    movies: SteamMovieWithoutMetadata[] | null | undefined,
 ) {
   return movies ? {
     connectOrCreate: movies.map((movie) => {
@@ -309,7 +309,7 @@ function connectOrCreateMovies(
 
 function connectOrCreateAchievements(
     steamAppId: number,
-    achievements: PrismaSteamAchievement[] | null | undefined,
+    achievements: SteamAchievementWithoutMetadata[] | null | undefined,
 ) {
   return achievements ? {
     connectOrCreate: achievements.map((achievement) => {

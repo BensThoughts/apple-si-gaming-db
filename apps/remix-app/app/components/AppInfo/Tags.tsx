@@ -1,4 +1,6 @@
-import type { PrismaSteamCategory, PrismaSteamGenre } from '~/interfaces';
+import type {
+  SteamCategoryWithoutMetadata,
+  SteamGenreWithoutMetadata } from '~/interfaces/database';
 import TextPill from '~/components/TextPill';
 import AppInfoDisclosure from './AppInfoDisclosure';
 
@@ -6,8 +8,8 @@ export default function AppInfoTags({
   genres,
   categories,
 }: {
-  genres: PrismaSteamGenre[],
-  categories: PrismaSteamCategory[],
+  genres: SteamGenreWithoutMetadata[],
+  categories: SteamCategoryWithoutMetadata[],
 }) {
   return (
     <AppInfoDisclosure title="Tags">

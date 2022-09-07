@@ -1,12 +1,14 @@
-import type { PrismaPerformancePost, PrismaSteamUser } from '~/interfaces';
+import type { PerformancePost, SteamUser } from '~/interfaces/database';
+import PerformancePostDisplay from './PerformancePostDisplay';
 
 type PerformancePostLayoutProps =
 {
   performancePosts: {
-    postText: PrismaPerformancePost['postText'],
+    id: PerformancePost['id']
+    postText: PerformancePost['postText'],
     steamUser: {
-      displayName: PrismaSteamUser['displayName'],
-      avatarMedium: PrismaSteamUser['avatarMedium'],
+      displayName: SteamUser['displayName'],
+      avatarMedium: SteamUser['avatarMedium'],
     }
   }[]
 }
@@ -20,7 +22,19 @@ export default function PerformancePostLayout({
                      p-3 rounded-lg`}>
       {performancePosts.length > 0 ? (
         <div>
-          There are some posts.
+          {performancePosts.map(({
+            id,
+            steamUser,
+            postText,
+          }) => (
+            <div key={id}>
+              <PerformancePostDisplay
+                postText={postText}
+                displayName={steamUser.displayName}
+                avatarMedium={steamUser.avatarMedium}
+              />
+            </div>
+          ))}
         </div>
       ): (
         <div>
