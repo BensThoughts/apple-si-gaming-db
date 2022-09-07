@@ -1,0 +1,73 @@
+Computer Information:
+    Manufacturer:  Apple
+    Model:  MacBookAir10,1
+    Form Factor: Laptop
+    No Touch Input Detected
+
+Processor Information:
+    CPU Vendor:  VirtualApple
+    CPU Brand:  Apple M1
+    CPU Family:  0x6
+    CPU Model:  0xc
+    CPU Stepping:  0x0
+    CPU Type:  0x0
+    Speed:  2400 Mhz
+    8 logical processors
+    8 physical processors
+    HyperThreading:  Unsupported
+    FCMOV:  Unsupported
+    SSE2:  Supported
+    SSE3:  Supported
+    SSSE3:  Supported
+    SSE4a:  Unsupported
+    SSE41:  Supported
+    SSE42:  Supported
+    AES:  Supported
+    AVX:  Unsupported
+    AVX2:  Unsupported
+    AVX512F:  Unsupported
+    AVX512PF:  Unsupported
+    AVX512ER:  Unsupported
+    AVX512CD:  Unsupported
+    AVX512VNNI:  Unsupported
+    SHA:  Unsupported
+    CMPXCHG16B:  Supported
+    LAHF/SAHF:  Supported
+    PrefetchW:  Unsupported
+
+Operating System Version:
+    MacOS 12.4.0 (64 bit)
+
+Video Card:
+    Driver:  Apple M1
+    Driver Version:  190.20
+    OpenGL Version: 4.1
+    Desktop Color Depth: 32 bits per pixel
+    Monitor Refresh Rate: 60 Hz
+    VendorID:  0x106b
+    DeviceID:  0x0
+    Revision Not Detected
+    Number of Monitors:  1
+    Number of Logical Video Cards:  1
+    Primary Display Resolution:  1440 x 900
+    Desktop Resolution: 1440 x 900
+    Primary Display Size: 11.26" x 7.05" (13.27" diag)
+                                            28.6cm x 17.9cm (33.7cm diag)
+    Primary VRAM: 8192 MB
+
+Memory:
+    RAM:  8192 MB
+
+VR Hardware:
+    VR Headset: None detected
+
+Miscellaneous:
+    UI Language:  English
+    Media Type:  DVD
+    Total Hard Disk Space Available:  233752 MB
+    Largest Free Hard Disk Block:  20263 MB
+
+Storage:
+    Number of SSDs: 0
+    Number of HDDs: 0
+
