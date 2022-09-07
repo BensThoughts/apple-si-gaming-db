@@ -8,13 +8,13 @@ export default function AsideInfoCard({
   children: React.ReactNode;
 }) {
   return (
-    <aside className={`relative px-6 py-8 border-l-[3px] border-solid bg-primary border-secondary
-                       rounded-tr-[6px] rounded-tl-[3px] rounded-br-[6px] rounded-bl-[6px] mt-2`}>
-      <div className="rounded-[50%] absolute top-0 left-0 bg-app-bg w-[40px] h-[40px] -translate-x-[18.5px] -translate-y-[50%]">
-        <InformationCircleIcon className="text-icon-secondary absolute top-0 left-0 w-8 h-8" />
+    <aside className={`relative px-6 py-8 border-l-[4px] border-solid border-secondary
+                       rounded-lg mt-2 bg-primary`}>
+      <div className="rounded-[50%] absolute inset-0 bg-app-bg w-[40px] h-[40px] -translate-x-[50%] -translate-y-[50%]">
+        <InformationCircleIcon className="absolute inset-0 translate-x-[3px] translate-y-[3px] text-icon-secondary w-8 h-8" />
       </div>
       <strong className="font-bold">{title}</strong>
-      <div>{children}</div>
+      <div className=''>{children}</div>
     </aside>
   );
 }
