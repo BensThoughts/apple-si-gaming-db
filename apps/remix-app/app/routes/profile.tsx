@@ -8,28 +8,24 @@ import LoginCard from '~/components/Cards/LoginCard';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import { getSteamPlayerOwnedGamesRequest } from '~/lib/data-utils/steamApi.server';
 import { updateUserOwnedApps } from '~/models/steamUser.server';
-import logger from '~/lib/logger/logger.server';
 import { searchAllAppsByAppIds } from '~/models/steamApp.server';
+import ExternalLink from '~/components/ExternalLink';
 
 export async function loader({ request, context }: LoaderArgs) {
   const { steamUser } = extractAppLoadContext(context);
   if (steamUser) {
-    logger.info('Starting getSteamPlayerOwnedGamesRequest');
     const userOwnedApps = await getSteamPlayerOwnedGamesRequest(steamUser.steamUserId);
-    logger.info('Finished getSteamPlayerOwnedGamesRequest');
     const ownedAppIds = userOwnedApps.games.map((app) => app.appid);
 
     const ownedAppsInDB = await searchAllAppsByAppIds(ownedAppIds);
     const ownedAppIdsInDB = ownedAppsInDB.map((app) => app.steamAppId);
 
-    logger.info('Starting updateUserOwnedApps');
     const {
       steamUserId,
       displayName,
       avatarFull,
       ownedApps,
     } = await updateUserOwnedApps(ownedAppIdsInDB, steamUser.steamUserId);
-    logger.info('Finished updateUserOwnedApps');
 
     return json({
       isLoggedIn: true,
@@ -62,7 +58,7 @@ export default function LoginPage() {
     ownedApps,
   } = useLoaderData<typeof loader>();
   return (
-    <div className="flex gap-4 flex-col items-center bg-app-bg min-h-full">
+    <div className="flex gap-4 flex-col items-center min-h-full">
       <h1 className="text-2xl h-12">Steam Account</h1>
       <div className="flex flex-col md:flex-row gap-8 justify-evenly">
         <LoginCard
@@ -72,16 +68,15 @@ export default function LoginPage() {
         />
         <div className="max-w-md">
           <AsideInfoCard title="Note">
-          Within your&nbsp;
-            <a
+            Within your&nbsp;
+            <ExternalLink
               href="https://steamcommunity.com/my/edit/settings"
-              rel="noopener noreferrer"
-              target="_blank"
-              className="underline"
-            >Steam Privacy Settings</a>
-          , &apos;My profile&apos; must be set to public. &apos;Game Details&apos;
-          is not required to be public, but if it is, ownership and playtime information
-          will be sent with your contributions.
+              className='underline-offset-2'
+            >
+              Steam Privacy Settings
+            </ExternalLink>
+            , &apos;My profile&apos; must be set to public. &apos;Game Details&apos;
+            is also required to be public, so that ownership can be verified for your contributions.
           </AsideInfoCard>
         </div>
       </div>
@@ -89,19 +84,23 @@ export default function LoginPage() {
         <>
           <div>
             <h1>Platform Mac</h1>
-            {ownedApps.filter((app) => app.platformMac).map((ownedApp) => (
-              <div key={ownedApp.steamAppId}>
-                {ownedApp.steamAppId} - {ownedApp.name}
-              </div>
-            ))}
+            {ownedApps.filter((app) => app.platformMac)
+                .sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1)
+                .map((ownedApp) => (
+                  <div key={ownedApp.steamAppId}>
+                    {ownedApp.steamAppId} - {ownedApp.name}
+                  </div>
+                ))}
           </div>
           <div>
             <h1>Other Platforms</h1>
-            {ownedApps.filter((app) => !app.platformMac).map((ownedApp) => (
-              <div key={ownedApp.steamAppId}>
-                {ownedApp.steamAppId} - {ownedApp.name}
-              </div>
-            ))}
+            {ownedApps.filter((app) => !app.platformMac)
+                .sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1)
+                .map((ownedApp) => (
+                  <div key={ownedApp.steamAppId}>
+                    {ownedApp.steamAppId} - {ownedApp.name}
+                  </div>
+                ))}
           </div>
         </>
       )}
