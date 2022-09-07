@@ -5,6 +5,7 @@
 body[data-theme="light"] {
   /* --color-bg-primary: 254, 235, 200; */
   --color-bg-primary: 255, 255, 255;
+  --color-bg-secondary: 253, 233, 198;
   --color-bg-terminal: 253, 239, 213;
 
   --color-app-primary: 253, 233, 198;
@@ -13,6 +14,8 @@ body[data-theme="light"] {
   --color-app-secondary-highlight: 239, 158, 91;
   --color-app-accent: 250, 240, 137;
   --color-app-error: 176, 0, 32;
+
+  --color-app-card: 156, 194, 200;
 
   --color-text-primary: 39, 32, 26;
   --color-text-secondary: 7, 105, 99;
@@ -46,6 +49,7 @@ body[data-theme="light"] {
 body[data-theme="dark"] {
   /* --color-bg-primary: 21, 35, 45; */
   --color-bg-primary: 20, 27, 35;
+  --color-bg-secondary: 22, 40, 62;
   --color-bg-terminal: 32, 39, 50;
 
   --color-app-primary: 37, 49, 62;
@@ -54,6 +58,8 @@ body[data-theme="dark"] {
   --color-app-secondary-highlight: 78, 147, 212;
   --color-app-accent: 99, 179, 237;
   --color-app-error: 207, 102, 121;
+
+  --color-app-card: 37, 49, 62;
 
   --color-text-primary: 227, 227, 227;
   --color-text-secondary: 255, 107, 0;
