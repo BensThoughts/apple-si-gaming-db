@@ -28,7 +28,7 @@ export default function SearchTitleCard({
               className='rounded-md'
               loading='lazy'
               onError={(e) => {
-                e.currentTarget.src = '../no-image-placeholder-2.svg';
+                e.currentTarget.src = '/no-image-placeholder.svg';
               }}
             />
           </div>
