@@ -4,7 +4,7 @@ import SearchInput from '~/components/SearchInput';
 
 export default function SearchRoute() {
   return (
-    <div className="flex flex-col gap-6 items-center min-h-screen bg-app-bg w-full">
+    <div className="flex flex-col gap-6 items-center min-h-screen w-full">
       <div className="mt-2">
         <SearchInput size="large" />
       </div>
