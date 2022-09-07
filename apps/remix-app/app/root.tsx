@@ -16,7 +16,8 @@ import {
 } from '@remix-run/react';
 import { json } from '@remix-run/node';
 import Navbar from '~/components/Layout/Navbar';
-import type { ExtendedAppLoadContext, PrismaSteamUser } from './interfaces';
+import type { ExtendedAppLoadContext } from '~/interfaces';
+import type { SteamUserWithoutMetadata } from '~/interfaces/database';
 import { loginCookie } from './lib/cookies/cookies.server';
 
 // import { getUser } from "./session.server";
@@ -68,7 +69,7 @@ function Document({
 }: {
   children: React.ReactNode,
   title?: string,
-  steamUser?: PrismaSteamUser;
+  steamUser?: SteamUserWithoutMetadata;
 }) {
   const setInitialTheme = `
   (function() {
@@ -100,7 +101,7 @@ function Document({
         {title ? <title>title</title> : null}
         <Links />
       </head>
-      <body className="min-h-screen">
+      <body className="min-h-screen bg-app-bg">
         <script dangerouslySetInnerHTML={{ __html: setInitialTheme }} />
         <ClientOnly>
           <Suspense>
@@ -111,7 +112,7 @@ function Document({
                   className="h-14"
                 />
               </ThemeProvider>
-              <main className="flex flex-col items-center justify-center w-full z-0 pt-20 pb-16 px-4 min-h-screen overflow-hidden bg-app-bg">
+              <main className="flex flex-col items-center justify-center w-full z-0 pt-20 pb-16 px-4 min-h-screen overflow-hidden">
                 {children}
               </main>
             </div>
@@ -129,7 +130,7 @@ export default function App() {
   const loaderData = useLoaderData<typeof loader>();
   const steamUser = loaderData.steamUser;
   return (
-    <Document steamUser={steamUser as PrismaSteamUser}>
+    <Document steamUser={steamUser as SteamUserWithoutMetadata | undefined}>
       <Outlet />
     </Document>
   );
