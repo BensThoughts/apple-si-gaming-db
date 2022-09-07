@@ -11,6 +11,7 @@
   "scripts": {
     "build": "turbo run build",
     "build:database": "turbo run build --filter=database",
+    "build:remix": "turbo run build --filter=remix-app",
     "db:migrate:deploy": "turbo run db:migrate:deploy",
     "db:push": "turbo run db:push",
     "db:seed": "turbo run db:seed",
