@@ -51,6 +51,9 @@ export async function searchSteamAppByAppId(
       controllerSupport: true,
       shortDescription: true,
       releaseDate: true,
+      platformMac: true,
+      platformLinux: true,
+      platformWindows: true,
       macRequirementsMinimum: true,
       macRequirementsRecommended: true,
       genres: true,
@@ -95,6 +98,10 @@ export async function searchReleasedSteamAppsByName(
       // },
       comingSoon: {
         equals: false,
+      },
+      type: {
+        contains: 'game',
+        mode: 'insensitive',
       },
     },
     orderBy: {
