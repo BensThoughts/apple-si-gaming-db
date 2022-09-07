@@ -86,20 +86,3 @@ body {
   min-height: 100vh;
   min-height: calc(100vh - env(safe-area-inset-bottom));
 }
-
-.page-wrapper {
-  padding-top: 3.5rem;
-  margin-top: 0rem;
-  min-height: 100vh;
-  display: grid;
-  grid-template-rows: 1fr 4rem;
-}
-
-.content-wrap {
-  grid-row: 1 / 2;
-}
-
-.footer-wrap {
-  place-items: center;
-  grid-row: 2 / 3;
-}

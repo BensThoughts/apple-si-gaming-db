@@ -8,7 +8,7 @@ type IconProps = {
   gradient?: boolean,
 } & React.SVGAttributes<SVGElement>
 
-export default function CloudMoon({
+export default function SunIcon({
   size = 24,
   color,
   gradient,

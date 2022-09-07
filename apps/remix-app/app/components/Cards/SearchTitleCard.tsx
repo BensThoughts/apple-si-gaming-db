@@ -1,32 +1,48 @@
 import { Link } from '@remix-run/react';
-import type { PrismaSteamAppData } from '~/interfaces';
+import type { PrismaSteamApp } from '~/interfaces';
 
-interface SearchTitleCardProps extends Pick<PrismaSteamAppData, 'name' | 'steamAppId'> {
-  headerImageSrc: PrismaSteamAppData['headerImage'];
+interface SearchTitleCardProps extends Pick<PrismaSteamApp, 'name' | 'steamAppId' | 'releaseDate'> {
+  headerImageSrc: PrismaSteamApp['headerImage'];
 }
 
 export default function SearchTitleCard({
-  headerImageSrc,
-  name,
   steamAppId,
+  name,
+  headerImageSrc,
+  releaseDate,
 }: SearchTitleCardProps) {
   return (
     <Link
       to={`/apps/${steamAppId}`}
-      className="block w-full"
     >
-      <div className="w-full p-4 bg-primary hover:bg-primary-highlight flex md:flex-row flex-col justify-center items-center md:items-start rounded-md">
-        <div className="w-[292px] h-[136px]">
-          {headerImageSrc && <img
-            src={headerImageSrc}
-            alt={`Header for ${name}`}
-            // layout="fixed"
-            width={292}
-            height={136}
-          />}
-        </div>
-        <div className="w-full text-center">
-          <h1>{name}</h1>
+      <div className={`p-1 md:p-2 bg-primary hover:bg-primary-highlight rounded-lg
+                       flex flex-col gap-2 items-center max-w-[460px]
+                     `}>
+        {headerImageSrc && (
+          <div className='rounded-lg flex items-center justify-center max-w-[464px]'>
+            <img
+              src={headerImageSrc}
+              alt={`Header for ${name}`}
+              width={460}
+              height={215}
+              className='rounded-md'
+              loading='lazy'
+              onError={(e) => {
+                e.currentTarget.src = '../no-image-placeholder-2.svg';
+              }}
+            />
+          </div>
+        )}
+        <div className='flex flex-col flex-wrap justify-between w-full px-2'>
+          {releaseDate && (
+            <span className='hidden md:inline text-sm'>
+              Released:&nbsp;
+              <i className='italic'>{releaseDate}</i>
+            </span>
+          )}
+          <span>
+            {name}
+          </span>
         </div>
       </div>
     </Link>

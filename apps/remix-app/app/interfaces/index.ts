@@ -28,6 +28,7 @@ export type {
   PrismaSteamAchievement,
 
   PrismaSteamUser,
+  PrismaPerformancePost,
 } from '@apple-si-gaming-db/database';
 
 export type {

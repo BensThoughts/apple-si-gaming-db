@@ -4,8 +4,6 @@ import { redirect } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import invariant from 'tiny-invariant';
 import ExternalLinks from '~/components/AppInfo/ExternalLinks';
-import AppInfoGenres from '~/components/AppInfo/Genres';
-import AppInfoCategories from '~/components/AppInfo/Categories';
 import AppInfoRequirements from '~/components/AppInfo/Requirements';
 import MainAppCard from '~/components/Cards/MainAppCard';
 import LoadingComponent from '~/components/LoadingComponent';
@@ -14,6 +12,8 @@ import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import { createPerformancePost } from '~/models/performancePost.server';
 import { getSteamAppDetailsRequest } from '~/lib/data-utils/steamApi.server';
 import { searchSteamAppByAppId, updateSteamApp, convertSteamApiDataToPrisma } from '~/models/steamApp.server';
+import PerformancePostLayout from '~/components/AppInfo/PerformancePostLayout';
+import AppInfoTags from '~/components/AppInfo/Tags';
 
 export async function loader({ params, context }: LoaderArgs) {
   invariant(params.steamAppId, 'Expected params.steamAppId');
@@ -94,7 +94,7 @@ export default function AppsRoute() {
     headerImage,
     type,
     requiredAge,
-    controllerSupport,
+    // controllerSupport,
     releaseDate,
     shortDescription,
     macRequirementsMinimum,
@@ -102,35 +102,60 @@ export default function AppsRoute() {
     genres,
     categories,
     performancePosts,
+    usersWhoOwnApp, // This will either be 1 user (the current logged in one) or 0 users
   } = steamApp;
+  let userOwnsThisApp = false;
+  if (steamUser) {
+    userOwnsThisApp = usersWhoOwnApp.map((user) => user.steamUserId).includes(steamUser.steamUserId);
+  }
   return (
     <div className="bg-app-bg h-full">
-      <div className="flex flex-col gap-4 justify-center items-center">
+      <div className="flex flex-col gap-4 justify-center items-center max-w-2xl">
         <div>
-          <h1 className="text-4xl">
+          <h1 className="text-3xl md:text-4xl text-center text-secondary">
             {name}
           </h1>
         </div>
-        {/* <div className="w-[584px] h-[272px]"> */}
-        <div className="max-w-2xl w-[585px] h-[273px]">
-          {headerImage && <img
-            src={headerImage}
-            alt={`Header for ${name}`}
-            width={584}
-            height={273}
-          />}
+        <div className='flex flex-col gap-2'>
+          <div className="flex items-center justify-center bg-primary-highlight p-[3px] md:p-[6px] rounded-lg">
+            {headerImage && <img
+              src={headerImage}
+              alt={`Header for ${name}`}
+              width={460}
+              height={215}
+              className='rounded-md'
+              onError={(e) => {
+                e.currentTarget.src = '../no-image-placeholder-2.svg';
+              }}
+            />}
+          </div>
+
+          <div className='flex flex-row justify-between text-sm px-2'>
+            {(type && type.length > 1) && (
+              <span>
+                Type:&nbsp;
+                {`${type.charAt(0).toUpperCase()}${type.slice(1)}`}
+              </span>
+            )}
+            {releaseDate && (
+              <span>
+                Released:&nbsp;
+                <i className='italic'>{releaseDate}</i>
+              </span>
+            )}
+          </div>
         </div>
-        <div className="flex justify-center items-center gap-2 m-2">
+
+        <div className="flex w-full h-full justify-center items-center gap-2">
           <ExternalLinks steamAppId={steamAppId} />
         </div>
-        {genres &&
+
+        {((genres.length > 0) || (categories.length > 0)) &&
           <div className="w-full max-w-2xl">
-            <AppInfoGenres genres={genres} />
-          </div>
-        }
-        {categories &&
-          <div className="w-full max-w-2xl">
-            <AppInfoCategories categories={categories} />
+            <AppInfoTags
+              genres={genres}
+              categories={categories}
+            />
           </div>
         }
         {(macRequirementsMinimum || macRequirementsRecommended) &&
@@ -141,28 +166,26 @@ export default function AppsRoute() {
             />
           </div>
         }
+        {shortDescription &&
         <div>
           <MainAppCard
-            type={type}
             requiredAge={requiredAge}
-            controllerSupport={controllerSupport}
             shortDescription={shortDescription}
-            releaseDate={releaseDate}
           />
         </div>
-        {performancePosts.length > 0 && performancePosts.map((perfPost) => (
-          <div key={perfPost.id}>
-            {perfPost.postText}
-          </div>
-        ))}
-        {steamUser &&
+        }
+        <div>
+          <PerformancePostLayout performancePosts={performancePosts} />
+        </div>
+        {userOwnsThisApp && steamUser ? (
+          <div>
             <Form
               method="post"
               name="performancePost"
               className="flex flex-col items-center gap-3 w-full max-w-lg"
             >
               <label>
-                Description:
+              Post:
                 <textarea
                   name="postText"
                   className="bg-primary rounded p-2 w-full"
@@ -171,7 +194,13 @@ export default function AppsRoute() {
               </label>
               <RoundedButton type="submit" className="max-w-xs">Submit</RoundedButton>
             </Form>
-        }
+          </div>
+        ): (
+          <div>
+            It looks like you do not own this app yet. Add it to your steam library to leave a
+            performance review.
+          </div>
+        )}
       </div>
     </div>
   );

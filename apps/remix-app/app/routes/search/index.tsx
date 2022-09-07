@@ -1,7 +1,7 @@
 import type { LoaderArgs } from '@remix-run/server-runtime';
 import { json } from '@remix-run/node';
 import { useLoaderData, useTransition } from '@remix-run/react';
-import { searchReleasedMacSteamAppsByName } from '~/models/steamApp.server';
+import { searchReleasedSteamAppsByName } from '~/models/steamApp.server';
 import SearchTitleCard from '~/components/Cards/SearchTitleCard';
 import LoadingComponent from '~/components/LoadingComponent';
 
@@ -11,7 +11,7 @@ export async function loader({
   const url = new URL(request.url);
   const searchQuery = url.searchParams.get('searchQuery')?.trim();
   if (searchQuery && searchQuery != '') {
-    const steamApps = await searchReleasedMacSteamAppsByName(searchQuery);
+    const steamApps = await searchReleasedSteamAppsByName(searchQuery);
     return json({ steamApps });
   }
   return json({
@@ -38,16 +38,17 @@ export default function SearchIndexRoute() {
     );
   }
   return (
-    <div>
+    <>
       {steamApps.length > 0
         ? (
-          <div className="flex flex-col gap-3 w-full">
-            {steamApps.map(({ steamAppId, name, headerImage }) => (
-              <div key={steamAppId} className="w-full max-w-2xl">
+          <div className="flex flex-col gap-3 items-center w-full">
+            {steamApps.map(({ steamAppId, name, headerImage, releaseDate }) => (
+              <div key={steamAppId} className="">
                 <SearchTitleCard
                   name={name}
                   steamAppId={steamAppId}
                   headerImageSrc={headerImage}
+                  releaseDate={releaseDate}
                 />
               </div>
             ))}
@@ -58,6 +59,6 @@ export default function SearchIndexRoute() {
           </div>
         )
       }
-    </div>
+    </>
   );
 }

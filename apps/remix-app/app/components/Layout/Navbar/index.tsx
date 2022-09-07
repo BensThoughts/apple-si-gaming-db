@@ -9,9 +9,9 @@ import NavHider from './NavHider';
 import { menuItems } from './menuItems';
 
 import {
-  Apple,
-  Bars,
-  Steam,
+  AppleIcon,
+  BarsIcon,
+  SteamIcon,
 } from '~/components/Icons';
 import SearchInput from '~/components/SearchInput';
 import { Link } from '@remix-run/react';
@@ -55,7 +55,7 @@ export default function Navbar({
           {/* Medium+ Screens */}
           <div className="hidden md:flex md:justify-between md:items-center md:w-full md:pt-0 md:mx-3">
             <div className="flex gap-x-4 items-center">
-              <Apple size={26} className="text-icon-secondary" />
+              <AppleIcon size={26} className="text-icon-secondary" />
               <div className="flex gap-4 content-between items-center pt-0">
                 {menuItems.map((menuItem) => (
                   <MenuItem animatedLink key={menuItem.href} href={menuItem.href}>{menuItem.name}</MenuItem>
@@ -69,7 +69,7 @@ export default function Navbar({
               <span>{authState ? 'Logged In' : 'Logged Out'}</span>
               <Link to="/profile">
                 <div className="block rounded-md h-[40px] w-[40px] bg-primary hover:bg-primary-highlight p-px group">
-                  <Steam className="text-icon-secondary rounded-md w-full h-full group-hover:text-icon-secondary-highlight" />
+                  <SteamIcon className="text-icon-secondary rounded-md w-full h-full group-hover:text-icon-secondary-highlight" />
                 </div>
               </Link>
             </div>
@@ -80,7 +80,7 @@ export default function Navbar({
 
             <ThemeToggle />
             <IconButton onClick={() => setIsOpen(!isOpen)} className="mr-3 md:hidden" aria-label="navigation menu">
-              <Bars size={24} className="text-icon-primary" />
+              <BarsIcon size={24} className="text-icon-primary" />
             </IconButton>
 
           </div>

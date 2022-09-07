@@ -2,8 +2,8 @@ import { useContext } from 'react';
 import { ThemeContext } from '~/lib/context/colorMode';
 
 import {
-  CloudMoon,
-  Sun,
+  CloudMoonIcon,
+  SunIcon,
 } from '~/components/Icons';
 
 export default function ThemeToggle() {
@@ -26,8 +26,8 @@ export default function ThemeToggle() {
                     bg-secondary transition-transform
                     ${colorMode === 'dark' ? 'translate-x-[40px]' : 'translate-x-0'}`}
       />
-      <span aria-hidden="true"><CloudMoon className="text-icon-secondary" /></span>
-      <span aria-hidden="true"><Sun className="text-icon-secondary" /></span>
+      <span aria-hidden="true"><CloudMoonIcon className="text-icon-secondary" /></span>
+      <span aria-hidden="true"><SunIcon className="text-icon-secondary" /></span>
     </button>
   );
 };

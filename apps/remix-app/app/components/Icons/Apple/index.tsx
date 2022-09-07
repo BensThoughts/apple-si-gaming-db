@@ -8,7 +8,7 @@ type IconProps = {
   gradient?: boolean,
 } & React.SVGAttributes<SVGElement>
 
-export default function Apple({
+export default function AppleIcon({
   size = 24,
   color,
   gradient,

@@ -8,7 +8,7 @@ type IconProps = {
   gradient?: boolean,
 } & React.SVGAttributes<SVGElement>
 
-export default function Steam({
+export default function SteamIcon({
   size = 24,
   color,
   gradient,

@@ -104,7 +104,6 @@ async function getTotalPages() {
   const aggregate = await prisma.steamApp.aggregate({ _count: true });
   const NUM_APPIDS = aggregate._count;
   logger.info(`Number of appids ${NUM_APPIDS}`);
-  logger.error('Number of appids', { appid: 123 });
   return Math.ceil(NUM_APPIDS / BATCH_SIZE);
 }
 

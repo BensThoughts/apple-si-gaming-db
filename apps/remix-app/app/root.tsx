@@ -11,11 +11,12 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useCatch,
   useLoaderData,
 } from '@remix-run/react';
 import { json } from '@remix-run/node';
 import Navbar from '~/components/Layout/Navbar';
-import type { ExtendedAppLoadContext } from './interfaces';
+import type { ExtendedAppLoadContext, PrismaSteamUser } from './interfaces';
 import { loginCookie } from './lib/cookies/cookies.server';
 
 // import { getUser } from "./session.server";
@@ -63,31 +64,12 @@ export async function loader({ request, context }: LoaderArgs) {
 function Document({
   children,
   title = 'Apple Silicon Gaming DB',
+  steamUser,
 }: {
   children: React.ReactNode,
   title?: string,
+  steamUser?: PrismaSteamUser;
 }) {
-  return (
-    <html lang="en">
-      <head>
-        <Meta />
-        {title ? <title>title</title> : null}
-        <Links />
-      </head>
-      <body className="min-h-screen">
-        {children}
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
-      </body>
-    </html>
-  );
-}
-
-export default function App() {
-  const loaderData = useLoaderData<typeof loader>();
-  const steamUser = loaderData.steamUser;
-
   const setInitialTheme = `
   (function() {
     function getInitialColorMode() {
@@ -112,32 +94,71 @@ export default function App() {
   })()`;
 
   return (
-    <Document>
-      <script dangerouslySetInnerHTML={{ __html: setInitialTheme }} />
-      <ClientOnly>
-        <Suspense>
-          <div className="bg-app-bg px-5 md:px-10">
-            <ThemeProvider>
-              <Navbar
-                authState={steamUser ? true : false}
-                className="h-14"
-              />
-            </ThemeProvider>
-            <main className="z-0 pt-20 pb-16 px-4 min-h-screen overflow-hidden">
-              <Outlet />
-            </main>
-          </div>
-        </Suspense>
-      </ClientOnly>
+    <html lang="en">
+      <head>
+        <Meta />
+        {title ? <title>title</title> : null}
+        <Links />
+      </head>
+      <body className="min-h-screen">
+        <script dangerouslySetInnerHTML={{ __html: setInitialTheme }} />
+        <ClientOnly>
+          <Suspense>
+            <div className="bg-app-bg px-5 md:px-10">
+              <ThemeProvider>
+                <Navbar
+                  authState={steamUser ? true : false}
+                  className="h-14"
+                />
+              </ThemeProvider>
+              <main className="flex flex-col items-center justify-center w-full z-0 pt-20 pb-16 px-4 min-h-screen overflow-hidden bg-app-bg">
+                {children}
+              </main>
+            </div>
+          </Suspense>
+        </ClientOnly>
+        <ScrollRestoration />
+        <Scripts />
+        <LiveReload />
+      </body>
+    </html>
+  );
+}
+
+export default function App() {
+  const loaderData = useLoaderData<typeof loader>();
+  const steamUser = loaderData.steamUser;
+  return (
+    <Document steamUser={steamUser as PrismaSteamUser}>
+      <Outlet />
     </Document>
   );
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
-  <Document title="Error">
-    <div>
-      <h1>App Error</h1>
-      <pre>{error.message}</pre>
-    </div>
-  </Document>;
+  return (
+    <Document title="Error">
+      <div>
+        <h1>App Error</h1>
+        <pre>{error.message}</pre>
+      </div>
+    </Document>
+  );
+}
+
+export function CatchBoundary() {
+  const caught = useCatch();
+  return (
+    <Document title="Oops!">
+      <div>
+        <h1>Oops! - {caught.status} {caught.statusText}</h1>
+        {caught.status === 404 && (
+          <img
+            src='four-oh-four-error.svg'
+            alt='Four oh four error'
+          />
+        )}
+      </div>
+    </Document>
+  );
 }

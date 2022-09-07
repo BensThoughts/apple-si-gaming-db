@@ -4,7 +4,8 @@ export default function TextPill({
   children: string,
 }) {
   return (
-    <div className="flex justify-center items-center p-1 text-sm rounded-md bg-secondary">
+    <div className={`flex justify-center items-center py-1 px-2 text-xs
+                     rounded-md border-solid border-1 border-secondary`}>
       {children}
     </div>
   );

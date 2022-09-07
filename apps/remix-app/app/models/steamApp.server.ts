@@ -6,6 +6,7 @@ import {
 
 import type {
   PrismaSteamApp,
+  PrismaSteamUser,
 } from '~/interfaces';
 
 import prisma from '~/lib/database/db.server';
@@ -33,6 +34,7 @@ export async function searchAllAppsByAppIds(
 
 export async function searchSteamAppByAppId(
     steamAppId: PrismaSteamApp['steamAppId'],
+    steamUserId?: PrismaSteamUser['steamUserId'],
 ) {
   return prisma.steamApp.findUnique({
     where: {
@@ -53,12 +55,32 @@ export async function searchSteamAppByAppId(
       macRequirementsRecommended: true,
       genres: true,
       categories: true,
-      performancePosts: true,
+      performancePosts: {
+        select: {
+          steamUser: {
+            select: {
+              steamUserId: true,
+              displayName: true,
+              avatarMedium: true,
+            },
+          },
+          postText: true,
+          steamAppId: true,
+        },
+      },
+      usersWhoOwnApp: {
+        where: {
+          steamUserId,
+        },
+        select: {
+          steamUserId: true,
+        },
+      },
     },
   });
 }
 
-export async function searchReleasedMacSteamAppsByName(
+export async function searchReleasedSteamAppsByName(
     name: PrismaSteamApp['name'],
 ) {
   return prisma.steamApp.findMany({
@@ -67,9 +89,9 @@ export async function searchReleasedMacSteamAppsByName(
         contains: name,
         mode: 'insensitive',
       },
-      platformMac: {
-        equals: true,
-      },
+      // platformMac: {
+      //   equals: true,
+      // },
       comingSoon: {
         equals: false,
       },
@@ -81,6 +103,7 @@ export async function searchReleasedMacSteamAppsByName(
       steamAppId: true,
       name: true,
       headerImage: true,
+      releaseDate: true,
     },
   });
 }
