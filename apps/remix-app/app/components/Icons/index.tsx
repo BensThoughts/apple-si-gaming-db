@@ -1,5 +1,6 @@
 export { default as AppleIcon } from './Apple';
 export { default as BarsIcon } from './Bars';
+export { default as CheckIcon } from './Check';
 export { default as ChevronUpIcon } from './ChevronUp';
 export { default as CloudMoonIcon } from './CloudMoon';
 export { default as ExternalLinkIcon } from './ExternalLink';
