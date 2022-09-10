@@ -23,7 +23,12 @@ import { loginCookie } from './lib/cookies/cookies.server';
 // import { getUser } from "./session.server";
 import tailwindStylesheetUrl from './styles/tailwind.css';
 import { extractAppLoadContext } from './lib/data-utils/appLoadContext.server';
-import { upsertSteamUser } from './models/steamUser.server';
+import {
+  upsertSteamUser,
+  updateUserOwnedApps,
+} from './models/steamUser.server';
+import { searchAllAppsByAppIds } from './models/steamApp.server';
+import { getSteamPlayerOwnedGamesRequest } from './lib/data-utils/steamApi.server';
 const ThemeProvider = lazy(() => import('./lib/context/colorMode'));
 
 export function ClientOnly({ children }: { children: React.ReactNode }) {
@@ -46,20 +51,34 @@ export const meta: MetaFunction = () => ({
 
 export async function loader({ request, context }: LoaderArgs) {
   const data = extractAppLoadContext(context);
+  const { steamUser } = data;
   const cookieHeader = request.headers.get('Cookie');
   const cookie = (await loginCookie.parse(cookieHeader)) || {};
-  if (data.steamUser && !cookie.isLoggedIn) {
+  if (steamUser && !cookie.isLoggedIn) {
     cookie.isLoggedIn = true;
-    await upsertSteamUser(data.steamUser);
+    await upsertSteamUser(steamUser);
+    const userOwnedApps = await getSteamPlayerOwnedGamesRequest(steamUser.steamUserId);
+    const ownedAppIds = userOwnedApps.games.map((app) => app.appid);
+
+    const ownedAppsInDB = await searchAllAppsByAppIds(ownedAppIds);
+    const ownedAppIdsInDB = ownedAppsInDB.map((app) => app.steamAppId);
+    await updateUserOwnedApps(ownedAppIdsInDB, steamUser.steamUserId);
+
+    return json<ExtendedAppLoadContext>(data, {
+      headers: {
+        'Set-Cookie': await loginCookie.serialize(cookie),
+      },
+    });
   }
-  if (!data.steamUser) {
+  if (!steamUser) {
     cookie.isLoggedIn = false;
+    return json<ExtendedAppLoadContext>(data, {
+      headers: {
+        'Set-Cookie': await loginCookie.serialize(cookie),
+      },
+    });
   }
-  return json<ExtendedAppLoadContext>(data, {
-    headers: {
-      'Set-Cookie': await loginCookie.serialize(cookie),
-    },
-  });
+  return json<ExtendedAppLoadContext>(data);
 }
 
 function Document({
