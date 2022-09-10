@@ -13,6 +13,8 @@ import type {
 
 export {
   SteamApp,
+  SteamCategory,
+  SteamGenre,
 };
 
 /*
