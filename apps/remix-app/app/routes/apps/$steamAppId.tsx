@@ -15,6 +15,7 @@ import PerformancePostLayout from '~/components/AppInfo/PerformancePostLayout';
 import AppInfoTags from '~/components/AppInfo/Tags';
 import PerformancePostForm from '~/components/AppInfo/PerformancePostForm';
 import { AppleIcon, LinuxIcon, WindowsIcon } from '~/components/Icons';
+import Heading from '~/components/Heading';
 
 export async function loader({ params, context }: LoaderArgs) {
   invariant(params.steamAppId, 'Expected params.steamAppId');
@@ -186,16 +187,7 @@ export default function AppsRoute() {
           />
         </div>
         }
-        <div className={`mt-4
-                         after:w-full after:h-[2px] after:block after:relative
-                         after:top-0 after:left-0 after:bg-secondary
-                         after:-translate-y-4 after:-translate-x-[110%]
-
-                         before:w-full before:h-[2px] before:block before:relative
-                         before:top-0 before:right-0 before:bg-secondary
-                         before:translate-y-4 before:translate-x-[110%]`}>
-          <h2 className='text-secondary text-xl'>Performance Posts</h2>
-        </div>
+        <Heading>Performance Posts</Heading>
         <div className='w-full'>
           <PerformancePostLayout performancePosts={performancePosts} />
         </div>
