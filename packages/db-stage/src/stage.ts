@@ -107,7 +107,7 @@ async function getTotalPages() {
   return Math.ceil(NUM_APPIDS / BATCH_SIZE);
 }
 
-async function stage() {
+export default async function stage() {
   let page = STARTING_PAGE;
   const TOTAL_PAGES = await getTotalPages();
 
@@ -121,5 +121,3 @@ async function stage() {
     getPageOfData(page, TOTAL_PAGES);
   }, FIVE_MINUTE_INTERVAL);
 }
-
-stage();

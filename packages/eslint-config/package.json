@@ -1,5 +1,5 @@
 {
-  "name": "eslint-config-custom",
+  "name": "@apple-si-gaming-db/eslint-config-custom",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",

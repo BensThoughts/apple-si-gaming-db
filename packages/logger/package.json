@@ -15,10 +15,10 @@
     "winston": "^3.8.1"
   },
   "devDependencies": {
+    "@apple-si-gaming-db/eslint-config-custom": "*",
+    "@apple-si-gaming-db/tsconfig": "*",
     "eslint": "^8.20.0",
-    "eslint-config-custom": "*",
     "rimraf": "^3.0.2",
-    "tsconfig": "*",
     "tsup": "^6.2.3",
     "tsx": "^3.9.0",
     "typescript": "^4.8.2"

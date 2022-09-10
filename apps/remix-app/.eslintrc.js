@@ -4,6 +4,6 @@ module.exports = {
   'extends': [
     '@remix-run/eslint-config',
     '@remix-run/eslint-config/node',
-    'eslint-config-custom/eslint-preset',
+    '@apple-si-gaming-db/eslint-config-custom/eslint-preset',
   ],
 };

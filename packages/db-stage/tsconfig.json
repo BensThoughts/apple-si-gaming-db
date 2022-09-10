@@ -1,5 +1,5 @@
 {
-  "extends": "tsconfig/node16.json",
+  "extends": "@apple-si-gaming-db/tsconfig/node16.json",
   "include": ["**/*.ts"],
   "exclude": ["node_modules"]
 }
