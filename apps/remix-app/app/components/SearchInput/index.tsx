@@ -31,8 +31,9 @@ export default function SearchInput({
         <div>
           <FloatingLabelInput
             name="searchQuery"
+            id="searchQuery"
             label="Search Games..."
-            size={size}
+            inputSize={size}
           />
         </div>
         <RoundedButton className={`${buttonHeight} w-[89.66px]`} type="submit" disabled={transitioning}>
