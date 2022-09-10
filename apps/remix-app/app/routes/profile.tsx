@@ -6,34 +6,38 @@ import {
 import AsideInfoCard from '~/components/Cards/AsideInfoCard';
 import LoginCard from '~/components/Cards/LoginCard';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-import { getSteamPlayerOwnedGamesRequest } from '~/lib/data-utils/steamApi.server';
-import { updateUserOwnedApps } from '~/models/steamUser.server';
-import { searchAllAppsByAppIds } from '~/models/steamApp.server';
+import { findUserOwnedApps } from '~/models/steamUser.server';
 import ExternalLink from '~/components/ExternalLink';
+import OwnedApps from '~/components/UserInfo/OwnedApps';
+import Heading from '~/components/Heading';
 
 export async function loader({ request, context }: LoaderArgs) {
   const { steamUser } = extractAppLoadContext(context);
   if (steamUser) {
-    const userOwnedApps = await getSteamPlayerOwnedGamesRequest(steamUser.steamUserId);
-    const ownedAppIds = userOwnedApps.games.map((app) => app.appid);
-
-    const ownedAppsInDB = await searchAllAppsByAppIds(ownedAppIds);
-    const ownedAppIdsInDB = ownedAppsInDB.map((app) => app.steamAppId);
-
-    const {
-      steamUserId,
-      displayName,
-      avatarFull,
-      ownedApps,
-    } = await updateUserOwnedApps(ownedAppIdsInDB, steamUser.steamUserId);
-
-    return json({
-      isLoggedIn: true,
-      steamUserId,
-      displayName,
-      avatarFull,
-      ownedApps,
-    });
+    const userOwnedApps = await findUserOwnedApps(steamUser.steamUserId);
+    if (userOwnedApps) {
+      const {
+        steamUserId,
+        displayName,
+        avatarFull,
+        ownedApps,
+      } = userOwnedApps;
+      return json({
+        isLoggedIn: true,
+        steamUserId,
+        displayName,
+        avatarFull,
+        ownedApps,
+      });
+    } else {
+      return json({
+        isLoggedIn: true,
+        steamUserId: null,
+        displayName: null,
+        avatarFull: null,
+        ownedApps: null,
+      });
+    }
   }
   return json({
     isLoggedIn: false,
@@ -44,7 +48,12 @@ export async function loader({ request, context }: LoaderArgs) {
   });
 }
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({ data }) => {
+  if (data.isLoggedIn) {
+    return {
+      title: data.displayName ? `Profile - ${data.displayName}` : `Profile`,
+    };
+  }
   return {
     title: 'Login',
   };
@@ -80,29 +89,25 @@ export default function LoginPage() {
           </AsideInfoCard>
         </div>
       </div>
-      {ownedApps && (
+      <Heading>Library</Heading>
+      {(ownedApps && ownedApps.length > 0) ? (
         <>
           <div>
-            <h1>Platform Mac</h1>
-            {ownedApps.filter((app) => app.platformMac)
-                .sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1)
-                .map((ownedApp) => (
-                  <div key={ownedApp.steamAppId}>
-                    {ownedApp.steamAppId} - {ownedApp.name}
-                  </div>
-                ))}
-          </div>
-          <div>
-            <h1>Other Platforms</h1>
-            {ownedApps.filter((app) => !app.platformMac)
-                .sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1)
-                .map((ownedApp) => (
-                  <div key={ownedApp.steamAppId}>
-                    {ownedApp.steamAppId} - {ownedApp.name}
-                  </div>
-                ))}
+            <OwnedApps ownedApps={ownedApps} />
           </div>
         </>
+      ) : (
+        <div>
+          {isLoggedIn ? (
+            <div>
+              You are logged in but appear to have no apps owned
+            </div>
+          ): (
+            <div>
+              You must log in to see the apps you own
+            </div>
+          )}
+        </div>
       )}
     </div>
   );
