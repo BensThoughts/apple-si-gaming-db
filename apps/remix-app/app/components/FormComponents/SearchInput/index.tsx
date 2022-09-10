@@ -1,4 +1,4 @@
-import RoundedButton from '../RoundedButton';
+import RoundedButton from '../../RoundedButton';
 import FloatingLabelInput from './FloatingLabelInput';
 import { Form, useTransition } from '@remix-run/react';
 

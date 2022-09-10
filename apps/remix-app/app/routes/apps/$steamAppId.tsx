@@ -5,7 +5,7 @@ import { json } from '@remix-run/node';
 import invariant from 'tiny-invariant';
 import ExternalLinks from '~/components/AppInfo/ExternalLinks';
 import AppInfoRequirements from '~/components/AppInfo/Requirements';
-import MainAppCard from '~/components/Cards/MainAppCard';
+import MainAppCard from '~/components/AppInfo/MainAppCard';
 import LoadingComponent from '~/components/LoadingComponent';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import { createPerformancePost } from '~/models/performancePost.server';

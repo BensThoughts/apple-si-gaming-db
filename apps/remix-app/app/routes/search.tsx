@@ -1,5 +1,5 @@
 import { Outlet } from '@remix-run/react';
-import SearchInput from '~/components/SearchInput';
+import SearchInput from '~/components/FormComponents/SearchInput';
 
 
 export default function SearchRoute() {

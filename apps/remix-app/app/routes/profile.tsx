@@ -4,11 +4,11 @@ import {
   useLoaderData,
 } from '@remix-run/react';
 import AsideInfoCard from '~/components/Cards/AsideInfoCard';
-import LoginCard from '~/components/Cards/LoginCard';
+import LoginCard from '~/components/Profile/LoginCard';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import { findUserOwnedApps } from '~/models/steamUser.server';
 import ExternalLink from '~/components/ExternalLink';
-import OwnedApps from '~/components/UserInfo/OwnedApps';
+import OwnedApps from '~/components/Profile/OwnedApps';
 import Heading from '~/components/Heading';
 
 export async function loader({ request, context }: LoaderArgs) {

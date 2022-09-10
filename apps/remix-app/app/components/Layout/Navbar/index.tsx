@@ -13,7 +13,7 @@ import {
   BarsIcon,
   SteamIcon,
 } from '~/components/Icons';
-import SearchInput from '~/components/SearchInput';
+import SearchInput from '~/components/FormComponents/SearchInput';
 import { Link } from '@remix-run/react';
 
 // bg-app-bg shadow-lg backdrop-filter bg-opacity-70 backdrop-blur-sm

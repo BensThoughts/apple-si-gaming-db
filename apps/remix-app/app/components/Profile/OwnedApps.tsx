@@ -5,7 +5,7 @@ import type {
 } from '~/interfaces/database';
 import SelectMenu from '../FormComponents/SelectMenu';
 import ToggleSwitch from '../FormComponents/ToggleSwitch';
-import FloatingLabelInput from '../SearchInput/FloatingLabelInput';
+import FloatingLabelInput from '../FormComponents/SearchInput/FloatingLabelInput';
 import OwnedAppDisplay from './OwnedAppDisplay';
 
 
