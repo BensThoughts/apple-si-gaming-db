@@ -7,6 +7,7 @@ import SelectMenu from '../FormComponents/SelectMenu';
 import ToggleSwitch from '../FormComponents/ToggleSwitch';
 import FloatingLabelInput from '../FormComponents/SearchInput/FloatingLabelInput';
 import OwnedAppDisplay from './OwnedAppDisplay';
+import RoundedButton from '../RoundedButton';
 
 
 interface OwnedApp {
@@ -27,6 +28,11 @@ export default function OwnedApps({
   const ALL_FILTER = 'All';
   const [genreFilter, setGenreFilter] = useState(ALL_FILTER);
   const [filterAppleOnly, setFilterAppleOnly] = useState(false);
+  const [paginate, setPaginate] = useState(20);
+
+  const loadMore = () => {
+    setPaginate((prevValue) => prevValue + 20);
+  };
 
   const genreSet = new Set<string>().add(ALL_FILTER);
   ownedApps.forEach((app) => {
@@ -75,7 +81,7 @@ export default function OwnedApps({
       </div>
 
       <div className='flex flex-wrap items-center justify-center gap-3 md:gap-1 w-full'>
-        {searchNames(ownedApps).map(({
+        {searchNames(ownedApps).slice(0, paginate).map(({
           steamAppId,
           name,
           headerImage,
@@ -89,6 +95,7 @@ export default function OwnedApps({
           </div>
         ))}
       </div>
+      <RoundedButton onClick={() => loadMore()}>Load More...</RoundedButton>
     </div>
   );
 }
