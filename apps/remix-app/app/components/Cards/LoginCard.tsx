@@ -10,7 +10,10 @@ export default function LoginCard({
   displayName?: string | null;
 }) {
   return (
-    <div className="flex flex-col items-center gap-2 p-4 border-secondary-highlight border-solid border-2 w-full max-w-md rounded">
+    <div className={`flex flex-col items-center gap-2 p-4
+                     border-secondary-highlight border-solid
+                     border-y-2 md:border-x-2 w-full max-w-md
+                     rounded-lg`}>
       {isLoggedIn ? (
         <>
           <h2><strong>{displayName}</strong></h2>
