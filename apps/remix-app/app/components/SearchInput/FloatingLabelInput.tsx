@@ -1,16 +1,20 @@
-interface FloatingLabelInputProps {
+type FloatingLabelInputProps = {
+  id: string;
   name: string;
   label: string;
-  size?: 'medium' | 'large';
-}
+  placeholder?: undefined;
+  inputSize?: 'medium' | 'large';
+} & React.InputHTMLAttributes<HTMLInputElement>
 
 export default function FloatingLabelInput({
+  id,
   name,
   label,
-  size = 'large',
+  inputSize = 'large',
+  ...rest
 }: FloatingLabelInputProps) {
   let inputClassnames = 'no-outline px-3 py-3 peer bg-transparent';
-  if (size === 'medium') {
+  if (inputSize === 'medium') {
     inputClassnames = 'no-outline px-[7px] py-[7px] peer bg-opacity-0 bg-transparent';
   }
   return (
@@ -24,16 +28,21 @@ export default function FloatingLabelInput({
       </style>
       <input
         name={name}
+        id={id}
         type="text"
         className={inputClassnames}
-        placeholder=" "
+        placeholder=' '
+        {...rest}
       />
 
-      <label className={`absolute left-[9px] top-px text-sm text-primary
-                         transition-all duration-300 px-1 transform -translate-y-1/2
-                         pointer-events-none peer-placeholder-shown:top-1/2
-                         peer-placeholder-shown:text-xl group-focus-within:!top-px
-                         group-focus-within:!text-sm group-focus-within:text-icon-secondary`}>
+      <label
+        htmlFor={id}
+        className={`absolute left-[9px] top-px text-sm text-primary
+                    transition-all duration-300 px-1 transform -translate-y-1/2
+                    pointer-events-none peer-placeholder-shown:top-1/2
+                    peer-placeholder-shown:text-xl group-focus-within:!top-px
+                    group-focus-within:!text-sm group-focus-within:text-icon-secondary`}
+      >
         {label}
       </label>
 
