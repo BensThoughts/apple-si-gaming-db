@@ -1,4 +1,6 @@
 {
+  "name": "apple-si-gaming-db",
+  "version": "0.0.0",
   "private": true,
   "workspaces": [
     "apps/*",
@@ -26,5 +28,6 @@
     "prettier": "^2.5.1",
     "tsx": "^3.7.1",
     "turbo": "latest"
-  }
+  },
+  "packageManager": "yarn@3.2.3"
 }
