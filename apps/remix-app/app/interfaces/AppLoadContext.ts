@@ -1,5 +1,5 @@
-import type { PrismaSteamUser } from '@apple-si-gaming-db/database';
+import type { SteamUserWithoutMetadata } from '@apple-si-gaming-db/database';
 
 export type ExtendedAppLoadContext = {
-  'steamUser': PrismaSteamUser | null;
+  'steamUser': SteamUserWithoutMetadata | null;
 }
