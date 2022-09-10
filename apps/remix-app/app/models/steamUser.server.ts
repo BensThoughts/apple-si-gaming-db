@@ -70,7 +70,15 @@ export async function updateUserOwnedApps(
         })),
       },
     },
-    select: {
+  });
+}
+
+export async function findUserOwnedApps(steamUserId: SteamUserWithoutMetadata['steamUserId']) {
+  return prisma.steamUser.findUnique({
+    where: {
+      steamUserId,
+    },
+    include: {
       ownedApps: {
         select: {
           steamAppId: true,
@@ -78,12 +86,9 @@ export async function updateUserOwnedApps(
           headerImage: true,
           platformMac: true,
           genres: true,
-          categories: true,
+          // categories: true,
         },
       },
-      displayName: true,
-      steamUserId: true,
-      avatarFull: true,
     },
   });
 }
