@@ -1,1 +1,6 @@
-module.exports = require('@apple-si-gaming-db/eslint-config-custom/eslint-preset');
+/** @type {import('@types/eslint').Linter.BaseConfig} */
+
+module.exports = {
+  root: true,
+  extends: ['custom'],
+};

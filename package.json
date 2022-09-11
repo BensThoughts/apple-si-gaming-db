@@ -2,10 +2,12 @@
   "name": "apple-si-gaming-db",
   "version": "0.0.0",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ]
+  },
   "prisma": {
     "schema": "packages/database/prisma/schema.prisma",
     "seed": "tsx packages/database/src/seed.ts"
@@ -29,6 +31,5 @@
     "prettier": "^2.5.1",
     "tsx": "^3.7.1",
     "turbo": "latest"
-  },
-  "packageManager": "yarn@3.2.3"
+  }
 }

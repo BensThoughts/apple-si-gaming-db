@@ -18,10 +18,10 @@
     "dev": "tsup --watch",
     "format": "prisma format",
     "generate": "prisma generate",
-    "lint": "eslint **.ts**",
     "prebuild": "npm run generate",
     "predev": "npm run generate",
-    "studio": "prisma studio"
+    "studio": "prisma studio",
+    "lint": "eslint ./src/**.ts**"
   },
   "dependencies": {
     "@apple-si-gaming-db/logger": "*",
@@ -30,9 +30,9 @@
     "tiny-invariant": "^1.2.0"
   },
   "devDependencies": {
-    "@apple-si-gaming-db/eslint-config-custom": "*",
     "@apple-si-gaming-db/tsconfig": "*",
     "eslint": "^8.20.0",
+    "eslint-config-custom": "*",
     "prisma": "^4.3.1",
     "rimraf": "^3.0.2",
     "tsup": "^5.11.13",

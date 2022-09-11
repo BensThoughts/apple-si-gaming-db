@@ -1,1 +1,1 @@
-module.exports = require('./packages/eslint-config/eslint-preset.js');
+module.exports = require('./packages/eslint-config-custom/index');

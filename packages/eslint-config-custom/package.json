@@ -1,23 +1,25 @@
 {
-  "name": "@apple-si-gaming-db/eslint-config-custom",
+  "name": "eslint-config-custom",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "files": [
-    "eslint-preset.js"
+    "index.js"
   ],
-  "dependencies": {
+  "devDependencies": {
+    "eslint": "8.20.0",
     "@remix-run/eslint-config": "^1.7.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-turbo": "latest",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-react": "7.28.0"
-  },
-  "devDependencies": {
-    "eslint": "8.20.0",
+    "eslint-plugin-react": "7.28.0",
+    "eslint-plugin-turbo": "^0.0.3",
     "react": "18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^4.7.4"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

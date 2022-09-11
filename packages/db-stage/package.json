@@ -7,7 +7,8 @@
   "scripts": {
     "build": "tsup",
     "db:stage": "tsx ./src/stage.ts",
-    "db:updateAppIds": "tsx ./src/update-appids.ts"
+    "db:updateAppIds": "tsx ./src/update-appids.ts",
+    "lint": "eslint ./src/**.ts**"
   },
   "dependencies": {
     "@apple-si-gaming-db/database": "*",
@@ -15,9 +16,9 @@
     "@apple-si-gaming-db/steam-api": "*"
   },
   "devDependencies": {
-    "@apple-si-gaming-db/eslint-config-custom": "*",
     "@apple-si-gaming-db/tsconfig": "*",
     "eslint": "^8.20.0",
+    "eslint-config-custom": "*",
     "tsup": "^5.11.13",
     "tsx": "^3.9.0",
     "typescript": "^4.7.4"
