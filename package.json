@@ -27,6 +27,12 @@
     "lint": "turbo run lint"
   },
   "devDependencies": {
+    "eslint-config-custom": "*",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-turbo": "^0.0.3",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-react": "^7.31.8",
     "node-gyp": "^9.1.0",
     "prettier": "^2.5.1",
     "tsx": "^3.7.1",
