@@ -15,7 +15,7 @@
     "dev:server": "cross-env NODE_ENV=development node --inspect --require ../../node_modules/dotenv/config ./build/server.js",
     "devBACKUP:node": "cross-env NODE_ENV=development nodemon ./server.js --watch ./server.js",
     "generate:css": "tailwindcss -i ./app/styles/global.css -o ./app/styles/tailwind.css",
-    "start": "cross-env NODE_ENV=production node ./server.js",
+    "start": "cross-env NODE_ENV=production node ./build/server.js",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint ."
   },
   "dependencies": {
