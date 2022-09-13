@@ -3,12 +3,16 @@ volumes:
   database:
     driver: local
 
+networks:
+  apple-si-gaming-db-network:
 services:
   postgres:
     platform: linux/amd64
     image: postgres:latest
     restart: always
     container_name: postgres
+    networks:
+      - apple-si-gaming-db-network
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
@@ -17,6 +21,21 @@ services:
     volumes:
       - database:/var/lib/postgresql/data
       # - ./dump.sql:/docker-entrypoint-initdb.d/create_tables.sql
+
+  remix-app:
+    image: apple-si-gaming-db/remix-app:0.0.2
+    container_name: remix-app
+    # entrypoint: yarn --cwd apps/remix-app start
+    networks:
+      - apple-si-gaming-db-network
+    depends_on:
+      - postgres
+    env_file:
+      - .env.stage.env
+    ports:
+      - 8080:8080
+    links:
+      - "postgres:db"
     
   # mysql:
   #   platform: linux/amd64
