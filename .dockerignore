@@ -5,3 +5,7 @@
 **/.yarn/cache
 **/.yarn/unplugged
 **/build
+**/.cache
+**/*.log
+.DS_Store
+**/*.env
