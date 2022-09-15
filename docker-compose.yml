@@ -36,6 +36,17 @@ services:
       - 8080:8080
     links:
       - "postgres:db"
+
+  backend-ops:
+    image: apple-si-gaming-db/backend-ops:0.0.1
+    networks:
+      - apple-si-gaming-db-network
+    depends_on:
+      - postgres
+    env_file:
+      - .env.stage.env
+    links:
+      - "postgres:db"
     
   # mysql:
   #   platform: linux/amd64
