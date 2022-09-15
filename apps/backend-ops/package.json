@@ -6,14 +6,18 @@
   "license": "MIT",
   "scripts": {
     "build": "tsup",
-    "db:stage": "tsx ./src/stage.ts",
-    "db:updateAppIds": "tsx ./src/update-appids.ts",
+    "backend-ops:dev": "tsx ./src/index.ts",
+    "start:stage": "node ./dist/index.mjs stage",
+    "start:update-appids": "node ./dist/index.mjs update-appids",
     "lint": "eslint ./src/**.ts**"
   },
   "dependencies": {
     "@apple-si-gaming-db/database": "*",
     "@apple-si-gaming-db/logger": "*",
-    "@apple-si-gaming-db/steam-api": "*"
+    "@apple-si-gaming-db/steam-api": "*",
+    "chalk": "^5.0.1",
+    "commander": "^9.4.0",
+    "tiny-invariant": "^1.2.0"
   },
   "devDependencies": {
     "@apple-si-gaming-db/tsconfig": "*",
