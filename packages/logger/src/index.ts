@@ -1,3 +1,1 @@
-import logger from './winston-logger';
-
-export default logger;
+export { logger } from './winston-logger';

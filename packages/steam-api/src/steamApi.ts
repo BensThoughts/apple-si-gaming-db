@@ -5,7 +5,7 @@ import type {
   SteamApiGetOwnedGamesResponse,
 } from './interfaces';
 
-import logger from '@apple-si-gaming-db/logger';
+import { logger } from '@apple-si-gaming-db/logger';
 
 interface SteamApiResponse {
   [appid: string]: SteamApiAppDetailsResponse;
@@ -42,7 +42,7 @@ export async function getSteamPlayerOwnedGamesRequest(
     steamUserId: string,
 ): Promise<SteamApiGetOwnedGamesResponse['response']> {
   try {
-    const apiKey = process.env.STEAM_API_KEY;
+    const apiKey = process.env.ASGD_STEAM_API_KEY;
     invariant(apiKey, 'No Steam API key found, check ENV vars');
     const response = await axios.get<SteamApiGetOwnedGamesResponse>('https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/', {
       params: {

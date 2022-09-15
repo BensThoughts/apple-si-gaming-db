@@ -10,7 +10,7 @@ import type {
   SteamAppWithoutMetadata,
 } from '../interfaces';
 import { prisma } from '../client';
-import logger from '@apple-si-gaming-db/logger';
+import { logger } from '@apple-si-gaming-db/logger';
 
 function valueExistsOrNull<T>(v: T) {
   if (v === null || v === undefined) {

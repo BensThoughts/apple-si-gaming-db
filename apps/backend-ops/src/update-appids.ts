@@ -1,8 +1,8 @@
 import { prisma } from '@apple-si-gaming-db/database';
-import logger from '@apple-si-gaming-db/logger';
+import { logger } from '@apple-si-gaming-db/logger';
 import { getSteamAppListRequest } from '@apple-si-gaming-db/steam-api';
 
-async function updateAppIds() {
+export async function updateAppIds() {
   try {
     const currApps = await prisma.steamApp.findMany({ select: { steamAppId: true } });
     logger.info(`Current AppIds in DB: ${currApps.length}`);
@@ -22,8 +22,7 @@ async function updateAppIds() {
   } catch (err) {
     if (err instanceof Error) {
       logger.error(err.message);
+      // logger.error(err.message);
     }
   }
 }
-
-updateAppIds();
