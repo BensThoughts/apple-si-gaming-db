@@ -1,8 +1,8 @@
 # ** Required ENV vars on start **
 # * DATABASE_URL - For prisma
-# * SESSION_SECRET - For cookie-session
-# * STEAM_API_KEY - For steam-api
-# * DOMAIN - For passport
+# * ASGD_SESSION_SECRET - For cookie-session
+# * ASGD_STEAM_API_KEY - For steam-api
+# * ASGD_DOMAIN - For passport
 
 FROM node:slim as base
 RUN apt-get update && apt-get install -y git
