@@ -1,0 +1,21 @@
+app = "apple-si-gaming-db-backend-ops"
+
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+# [build]
+  # image = "registry.fly.io/apple-si-gaming-db-backend-ops:deployment-01GCZWKMXRHPRGS85WFNJETKSN"
+
+[env]
+  NODE_ENV = "production"
+  ASGD_INITIAL_PAGE=0
+  ASGD_BATCH_SIZE=198
+
+# [deploy]
+  # release_command = "yarn run db:push"
+  # release_command = "npx prisma migrate deploy"
+
+[experimental]
+  allowed_public_ports = []
+  auto_rollback = true
