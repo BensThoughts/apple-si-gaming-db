@@ -31,7 +31,7 @@ program.command('stage')
         ASGD_BATCH_SIZE,
       } = process.env;
       const INITIAL_PAGE = Number(ASGD_INITIAL_PAGE ? ASGD_INITIAL_PAGE : opts.page);
-      if (isNaN(INITIAL_PAGE)) {
+      if (!isFinite(INITIAL_PAGE)) {
         logger.warn('env var $ASGD_INITIAL_PAGE or option -p --page needs to be a valid number', {
           '$ASGD_INITIAL_PAGE': ASGD_INITIAL_PAGE,
           'opts.page': opts.page,
@@ -40,7 +40,7 @@ program.command('stage')
       }
 
       const BATCH_SIZE = Number(ASGD_BATCH_SIZE ? ASGD_BATCH_SIZE : opts.batchSize);
-      if (isNaN(BATCH_SIZE)) {
+      if (!isFinite(BATCH_SIZE)) {
         logger.warn('env var $ASGD_BATCH_SIZE or option -b --batch-size needs to be a valid number', {
           '$ASGD_BATCH_SIZE': ASGD_BATCH_SIZE,
           'opts.batchSize': opts.batchSize,
