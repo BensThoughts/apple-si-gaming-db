@@ -1,7 +1,7 @@
 /* eslint-disable no-var */
 import { PrismaClient } from '@prisma/client';
 import invariant from 'tiny-invariant';
-import logger from '@apple-si-gaming-db/logger';
+import { logger } from '@apple-si-gaming-db/logger';
 
 let prisma: PrismaClient;
 
@@ -28,7 +28,7 @@ function getClient() {
 
   const databaseUrl = new URL(DATABASE_URL);
 
-  const isLocalHost = process.env.IS_LOCAL_CONTAINER || databaseUrl.hostname === 'localhost';
+  const isLocalHost = process.env.ASGD_IS_LOCAL_CONTAINER || databaseUrl.hostname === 'localhost';
 
   const PRIMARY_REGION = isLocalHost ? null : process.env.PRIMARY_REGION;
   const FLY_REGION = isLocalHost ? null : process.env.FLY_REGION;

@@ -88,9 +88,9 @@ passport.deserializeUser((obj: false | Express.User | null | undefined, done) =>
 // implicitly has an 'any' type.ts(7009)
 passport.use(new SteamStrategy({
   name: 'steam',
-  returnURL: `${process.env.DOMAIN}/api/auth/steam/return`,
-  realm: `${process.env.DOMAIN}`,
-  apiKey: `${process.env.STEAM_API_KEY}`,
+  returnURL: `${process.env.ASGD_DOMAIN}/api/auth/steam/return`,
+  realm: `${process.env.ASGD_DOMAIN}`,
+  apiKey: `${process.env.ASGD_STEAM_API_KEY}`,
 },
 function(identifier: any, profile: any, done: any) {
   return done(null, profile);
@@ -101,7 +101,7 @@ const PASSPORT_COOKIE_NAME = 'passport-steam';
 
 app.use(session({
   name: PASSPORT_COOKIE_NAME,
-  secret: process.env.SESSION_SECRET,
+  secret: process.env.ASGD_SESSION_SECRET,
   maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
 }));
 

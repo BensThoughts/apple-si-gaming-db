@@ -10,7 +10,7 @@ processes = []
 [env]
   PORT = "8080"
   NODE_ENV = "production"
-  DOMAIN = "https://apple-si-gaming-db-remix-app.fly.dev"
+  ASGD_DOMAIN = "https://apple-si-gaming-db-remix-app.fly.dev"
 
 [deploy]
   release_command = "yarn run db:push"

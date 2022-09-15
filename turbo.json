@@ -28,13 +28,16 @@
     }
   },
   "globalDependencies": [
+    "$ASGD_DOMAIN",
+    "$ASGD_BATCH_SIZE",
+    "$ASGD_INITIAL_PAGE",
+    "$ASGD_IS_LOCAL_CONTAINER",
+    "$ASGD_SESSION_SECRET",
+    "$ASGD_STEAM_API_KEY",
     "$DATABASE_URL",
-    "$DOMAIN",
     "$FLY_REGION",
     "$NODE_ENV",
     "$PORT",
-    "$PRIMARY_REGION",
-    "$SESSION_SECRET",
-    "$STEAM_API_KEY"
+    "$PRIMARY_REGION"
   ]
 }
