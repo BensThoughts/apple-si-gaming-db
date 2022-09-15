@@ -16,6 +16,7 @@
     "build": "turbo run build",
     "build:database": "turbo run build --filter=@apple-si-gaming-db/database",
     "build:remix": "turbo run build --filter=@apple-si-gaming-db/remix-app",
+    "build:backend-ops": "turbo run build --filter=@apple-si-gaming-db/backend-ops",
     "db:migrate:deploy": "turbo run db:migrate:deploy",
     "db:push": "turbo run db:push",
     "db:seed": "turbo run db:seed",
