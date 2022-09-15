@@ -3,27 +3,36 @@ import type { ActionArgs, LoaderArgs } from '@remix-run/server-runtime';
 import { redirect } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import invariant from 'tiny-invariant';
-import ExternalLinks from '~/components/AppInfo/ExternalLinks';
-import AppInfoRequirements from '~/components/AppInfo/Requirements';
-import MainAppCard from '~/components/AppInfo/MainAppCard';
-import LoadingComponent from '~/components/LoadingComponent';
+
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import { createPerformancePost } from '~/models/performancePost.server';
 import { getSteamAppDetailsRequest } from '~/lib/data-utils/steamApi.server';
-import { searchSteamAppByAppId, updateSteamApp, convertSteamApiDataToPrisma } from '~/models/steamApp.server';
-import PerformancePostLayout from '~/components/AppInfo/PerformancePostLayout';
+import {
+  searchSteamAppByAppId,
+  updateSteamApp,
+  convertSteamApiDataToPrisma,
+} from '~/models/steamApp.server';
+
+import AppInfoRequirements from '~/components/AppInfo/Requirements';
 import AppInfoTags from '~/components/AppInfo/Tags';
-import PerformancePostForm from '~/components/AppInfo/PerformancePostForm';
-import { AppleIcon, LinuxIcon, WindowsIcon } from '~/components/Icons';
+import ExternalLinks from '~/components/AppInfo/ExternalLinks';
 import Heading from '~/components/Heading';
+import LoadingComponent from '~/components/LoadingComponent';
+import MainAppCard from '~/components/AppInfo/MainAppCard';
+import PerformancePostForm from '~/components/AppInfo/PerformancePostForm';
+import PerformancePostLayout from '~/components/AppInfo/PerformancePostLayout';
+import {
+  AppleIcon,
+  LinuxIcon,
+  WindowsIcon,
+} from '~/components/Icons';
 
 export async function loader({ params, context }: LoaderArgs) {
   invariant(params.steamAppId, 'Expected params.steamAppId');
   const steamAppId = Number(params.steamAppId);
-  invariant(typeof steamAppId === 'number', 'Expected steamAppId to be a valid number');
-  invariant(!isNaN(steamAppId), 'Expected steamAppId to be a valid number');
+  invariant(isFinite(steamAppId), 'Expected steamAppId to be a valid number');
   let steamApp = await searchSteamAppByAppId(steamAppId);
-  if (steamApp && (!steamApp?.dataDownloadAttempted || steamApp?.name === 'UNKNOWN_APP')) {
+  if (steamApp && (!steamApp?.dataDownloadAttempted)) {
     const steamApiApp = await getSteamAppDetailsRequest(steamApp.steamAppId);
     if (steamApiApp.data) {
       const prismaSteamApp = convertSteamApiDataToPrisma(steamApiApp.data);
@@ -45,8 +54,7 @@ export async function action({
 }: ActionArgs) {
   invariant(params.steamAppId, 'Expected params.appid');
   const steamAppId = Number(params.steamAppId);
-  invariant(typeof steamAppId === 'number', 'Expected appid to be a valid number');
-  invariant(!isNaN(steamAppId), 'Expected appid to be a valid number');
+  invariant(isFinite(steamAppId), 'Expected appid to be a valid number');
   const { steamUser } = extractAppLoadContext(context);
   invariant(steamUser, 'You must be logged into a valid Steam account to post performance reviews');
   const steamUserId = steamUser.steamUserId;
