@@ -1,5 +1,5 @@
 {
-  "name": "@apple-si-gaming-db/db-stage",
+  "name": "@apple-si-gaming-db/backend-ops",
   "version": "0.0.1",
   "main": "./src/stage.ts",
   "types": "./src/stage.ts",
