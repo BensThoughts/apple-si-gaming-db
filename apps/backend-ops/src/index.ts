@@ -30,7 +30,7 @@ program.command('stage')
         ASGD_INITIAL_PAGE,
         ASGD_BATCH_SIZE,
       } = process.env;
-      const INITIAL_PAGE = Number(ASGD_INITIAL_PAGE ? ASGD_INITIAL_PAGE : opts.age);
+      const INITIAL_PAGE = Number(ASGD_INITIAL_PAGE ? ASGD_INITIAL_PAGE : opts.page);
       if (isNaN(INITIAL_PAGE)) {
         logger.warn('env var $ASGD_INITIAL_PAGE or option -p --page needs to be a valid number', {
           '$ASGD_INITIAL_PAGE': ASGD_INITIAL_PAGE,
