@@ -1,32 +1,35 @@
-FROM node:alpine AS builder
-RUN apk update
+# ** Required ENV vars on start **
+# * DATABASE_URL - For prisma
+# * ASGD_STEAM_API_KEY - For steam-api
+# ** Non-Required ENV vars on start
+# * ASGD_BATCH_SIZE - For stage
+# * ASGD_INITIAL_PAGE - For stage
+
+FROM node:slim as base
+RUN apt-get update && apt-get install -y git
+RUN npm i -g turbo
+
+FROM base AS pruner
 WORKDIR /app
-RUN yarn global add turbo
 COPY . .
-RUN turbo prune --scope=@apple-si-gaming-db/db-stage --docker
+RUN turbo prune --scope=@apple-si-gaming-db/backend-ops --docker
 
-FROM node:slim AS installer
-RUN apt-get update
-RUN apt-get install -y openssl
+FROM base AS installer
 WORKDIR /app
-
-COPY .gitignore .gitignore
-COPY --from=builder /app/out/json/ .
-COPY --from=builder /app/out/yarn.lock ./yarn.lock
+COPY --from=pruner /app/out/json/ .
+COPY --from=pruner /app/out/yarn.lock ./yarn.lock
 RUN yarn install
 
-COPY --from=builder /app/out/full/ .
-COPY turbo.json turbo.json
-RUN yarn turbo run build --filter=@apple-si-gaming-db/db-stage
-
-FROM node:slim AS runner
-RUN apt-get update
-RUN apt-get install -y openssl
+FROM base AS builder
 WORKDIR /app
+COPY --from=pruner /app/.git ./.git
+COPY --from=pruner /app/out/full/ .
+COPY --from=installer /app/ .
+RUN turbo run build --filter=@apple-si-gaming-db/backend-ops
 
-RUN addgroup --system --gid 1001 db-stage
-RUN adduser --system --uid 1001 db-stage
+FROM builder AS runner
+# RUN addgroup --system --gid 1001 remix-app
+# RUN adduser --system --uid 1001 remix-app
 # USER db-stage
-COPY --from=installer /app .
+CMD ["yarn", "--cwd", "apps/backend-ops", "start:stage"]
 
-CMD node apps/db-stage/dist/index.js
