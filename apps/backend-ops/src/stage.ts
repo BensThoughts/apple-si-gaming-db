@@ -12,10 +12,10 @@ import {
 import { logger } from '@apple-si-gaming-db/logger';
 
 interface AppIdData {
+  name: string;
   steamAppId: number;
-  appName: string;
   index: number;
-  daysSincePrevSync: Date | null,
+  dataDownloadAttemptedAt: Date | null,
 }
 
 async function getSteamAppDataAndUpdateDB(appIdData: AppIdData) {
@@ -94,11 +94,16 @@ async function getPageOfData(
   let currIdx = 0;
 
   const oneSecondInterval = setInterval(async () => {
+    const {
+      name,
+      steamAppId,
+      dataDownloadAttemptedAt,
+    } = appIds[currIdx];
     const appIdData: AppIdData = {
-      appName: appIds[currIdx].name,
-      steamAppId: appIds[currIdx].steamAppId,
+      name,
+      steamAppId,
+      dataDownloadAttemptedAt,
       index: totalIdx,
-      daysSincePrevSync: appIds[currIdx].dataDownloadAttemptedAt,
     };
     await getSteamAppDataAndUpdateDB(appIdData); // * await just to see at end of logs
     currIdx += 1;
