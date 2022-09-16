@@ -20,7 +20,6 @@
     "db:migrate:deploy": "turbo run db:migrate:deploy",
     "db:push": "turbo run db:push",
     "db:seed": "turbo run db:seed",
-    "db:stage": "turbo run db:stage",
     "dev": "turbo run dev --parallel",
     "dev:remix": "turbo run dev --filter=@apple-si-gaming-db/remix-app",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
