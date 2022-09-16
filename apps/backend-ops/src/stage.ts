@@ -13,9 +13,9 @@ import { logger } from '@apple-si-gaming-db/logger';
 
 interface AppIdData {
   steamAppId: number;
-  appName?: string;
-  index?: number;
-  steamId?: string;
+  appName: string;
+  index: number;
+  daysSincePrevSync: Date | null,
 }
 
 async function getSteamAppDataAndUpdateDB(appIdData: AppIdData) {
@@ -57,13 +57,30 @@ async function getSteamAppDataAndUpdateDB(appIdData: AppIdData) {
   }
 }
 
-async function getPageOfData(page: number, batchSize: number, totalPages: number) {
-  const appids = await prisma.steamApp.findMany({
+async function getPageOfData(
+    page: number,
+    batchSize: number,
+    totalPages: number,
+    // whereDataDownloadAttempted?: true,
+    // daysSinceLastSync?: number,
+) {
+  // const today = new Date();
+  // const dateSinceLastSync = daysSinceLastSync
+  //   ? new Date(today.setDate(today.getDate() - daysSinceLastSync))
+  //   : undefined;
+  const appIds = await prisma.steamApp.findMany({
+    where: {
+      dataDownloadAttempted: false,
+      // dataDownloadAttemptedAt: dateSinceLastSync ? ({
+      //   lte: dateSinceLastSync,
+      // }) : undefined,
+    },
     skip: page * batchSize,
     take: batchSize,
     select: {
       steamAppId: true,
       name: true,
+      dataDownloadAttemptedAt: true,
     },
     orderBy: {
       steamAppId: 'asc',
@@ -71,21 +88,22 @@ async function getPageOfData(page: number, batchSize: number, totalPages: number
   });
 
   logger.info(`Starting page ${page} of ${totalPages}`);
-  logger.info(`Page ${page} appids found in prisma: ${appids.length}`);
+  logger.info(`Page ${page} appids found in prisma: ${appIds.length}`);
 
   let totalIdx = page * batchSize;
   let currIdx = 0;
 
   const oneSecondInterval = setInterval(async () => {
     const appIdData: AppIdData = {
-      appName: appids[currIdx].name,
-      steamAppId: appids[currIdx].steamAppId,
+      appName: appIds[currIdx].name,
+      steamAppId: appIds[currIdx].steamAppId,
       index: totalIdx,
+      daysSincePrevSync: appIds[currIdx].dataDownloadAttemptedAt,
     };
     await getSteamAppDataAndUpdateDB(appIdData); // * await just to see at end of logs
     currIdx += 1;
     totalIdx += 1;
-    if (currIdx >= appids.length) {
+    if (currIdx >= appIds.length) {
       logger.info(`Finished page ${page} of ${totalPages}`);
       clearInterval(oneSecondInterval);
     }
@@ -97,8 +115,23 @@ const FIVE_MINUTE_INTERVAL = (5 * 60 * 1000) + 1000; // 5 minutes + 1 second
 
 // DB starts at page 0
 
-async function getTotalPages(batchSize: number) {
-  const numAppIds = await prisma.steamApp.count();
+async function getTotalPages(
+    batchSize: number,
+    // whereDataDownloadAttempted?: boolean,
+    // daysSinceLastSync?: number,
+) {
+  // const today = new Date();
+  // const dateSinceLastSync = daysSinceLastSync
+  //   ? new Date(today.setDate(today.getDate() - daysSinceLastSync))
+  //   : undefined;
+  const numAppIds = await prisma.steamApp.count({
+    where: {
+      dataDownloadAttempted: false,
+      // dataDownloadAttemptedAt: dateSinceLastSync ? ({
+      //   lte: dateSinceLastSync,
+      // }) : undefined,
+    },
+  });
   logger.info(`Number of appids ${numAppIds}`);
   return Math.ceil(numAppIds / batchSize);
 }
@@ -109,8 +142,15 @@ async function getTotalPages(batchSize: number) {
  * Uses steams getAppDetails request
  * @param  {number} initialPage - The page of appids in db to start on
  * @param  {number} batchSize - The number of appids per a page
+ * @param  {number} daysSinceSync - Only update apps that have not been synced
+ * in daysSinceSync
  */
-export async function stage(initialPage: number, batchSize: number) {
+export async function stage(
+    initialPage: number,
+    batchSize: number,
+    daysSinceSync?: number,
+) {
+  // const whereDataDownloadAttempted = daysSinceSync ? true : false;
   const totalPages = await getTotalPages(batchSize);
 
   getPageOfData(initialPage, batchSize, totalPages);
