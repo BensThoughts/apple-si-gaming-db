@@ -23,12 +23,18 @@ program.command('stage')
         chalk.yellow('The number of appids to pull from steam every 5 minutes. Can also be set via env var $ASGD_BATCH_SIZE'),
         '200',
     )
+    .option(
+        '-d, --days-since-sync <number>',
+        chalk.yellow('Only update data for apps that have not been synced in -d days'),
+        '0',
+    )
     .action(async (opts) => {
       // const STARTING_PAGE = 3; // fly.io current page
       // const STARTING_PAGE = 145; // local current page
       const {
         ASGD_INITIAL_PAGE,
         ASGD_BATCH_SIZE,
+        ASGD_DAYS_SINCE_SYNC,
       } = process.env;
       const INITIAL_PAGE = Number(ASGD_INITIAL_PAGE ? ASGD_INITIAL_PAGE : opts.page);
       if (!isFinite(INITIAL_PAGE)) {
@@ -47,9 +53,23 @@ program.command('stage')
         });
         process.exit(1);
       }
+
+      const DAYS_SINCE_SYNC = Number(ASGD_DAYS_SINCE_SYNC ? ASGD_DAYS_SINCE_SYNC : opts.daysSinceSync);
+      if (!isFinite(DAYS_SINCE_SYNC)) {
+        logger.warn('env var $ASGD_DAYS_SINCE_SYNC or option -d --days-since-sync needs to be a valid number', {
+          '$ASGD_DAYS_SINCE_SYNC': ASGD_DAYS_SINCE_SYNC,
+          'opts.daysSinceSync': opts.daysSinceSync,
+        });
+        process.exit(1);
+      }
       logger.info(`Initial page set to ${INITIAL_PAGE}`);
       logger.info(`Batch size set to ${BATCH_SIZE}`);
-      stage(INITIAL_PAGE, BATCH_SIZE);
+      logger.info(`Days since sync set to ${DAYS_SINCE_SYNC}`);
+      if (DAYS_SINCE_SYNC > 0) {
+        stage(INITIAL_PAGE, BATCH_SIZE, DAYS_SINCE_SYNC);
+      } else {
+        stage(INITIAL_PAGE, BATCH_SIZE);
+      }
     });
 
 program.command('update-appids')
