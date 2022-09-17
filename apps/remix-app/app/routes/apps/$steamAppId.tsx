@@ -20,13 +20,9 @@ import LoadingComponent from '~/components/LoadingComponent';
 import MainAppCard from '~/components/AppInfo/MainAppCard';
 import PerformancePostForm from '~/components/AppInfo/PerformancePostForm';
 import PerformancePostLayout from '~/components/AppInfo/PerformancePostLayout';
-import {
-  AppleIcon,
-  LinuxIcon,
-  WindowsIcon,
-} from '~/components/Icons';
 import AppInfoTabs from '~/components/AppInfo/AppInfoTabs';
 import AppInfoDisclosure from '~/components/AppInfo/AppInfoDisclosure';
+import AppInfoHeader from '~/components/AppInfo/AppInfoHeader';
 
 export async function loader({ params, context }: LoaderArgs) {
   invariant(params.steamAppId, 'Expected params.steamAppId');
@@ -126,49 +122,14 @@ export default function AppsRoute() {
   return (
     <div className="bg-app-bg h-full">
       <div className="flex flex-col gap-4 justify-center items-center max-w-2xl">
-        <div>
-          <h1 className="text-3xl md:text-4xl text-center text-secondary">
-            {name}
-          </h1>
-        </div>
-        <div className='flex flex-col gap-2'>
-          <div className="flex items-center justify-center bg-primary-highlight p-[3px] md:p-[6px] rounded-lg">
-            {headerImage && <img
-              src={headerImage}
-              alt={`Header for ${name}`}
-              width={460}
-              height={215}
-              className='rounded-md'
-              onError={(e) => {
-                e.currentTarget.src = '/no-image-placeholder.svg';
-              }}
-            />}
-          </div>
-
-          <div className='flex flex-row justify-between text-sm px-2'>
-            {releaseDate && (
-              <span>
-                Released:&nbsp;
-                <i className='italic'>{releaseDate}</i>
-              </span>
-            )}
-            <div className='flex gap-1'>
-              <AppleIcon
-                size={19}
-                className={platformMac ? `text-icon-secondary-highlight` : `text-icon-primary-highlight`}
-              />
-              <WindowsIcon
-                size={19}
-                className={platformWindows ? `text-icon-secondary-highlight` : `text-icon-primary-highlight`}
-              />
-              <LinuxIcon
-                size={19}
-                className={platformLinux ? `text-icon-secondary-highlight` : `text-icon-primary-highlight`}
-              />
-            </div>
-          </div>
-        </div>
-
+        <AppInfoHeader
+          name={name}
+          headerImage={headerImage}
+          releaseDate={releaseDate}
+          platformMac={platformMac}
+          platformLinux={platformLinux}
+          platformWindows={platformWindows}
+        />
         <div className="flex w-full h-full justify-center items-center gap-2">
           <ExternalLinks steamAppId={steamAppId} />
         </div>
