@@ -129,17 +129,15 @@ export default function AppsRoute() {
 
         <div className='col-start-1 col-span-1'>
           <div className='flex flex-col gap-3 h-full items-center'>
-            <div className="flex flex-col w-full h-full items-center gap-2">
-              <AppInfoHeader
-                name={name}
-                headerImage={headerImage}
-                releaseDate={releaseDate}
-                platformMac={platformMac}
-                platformLinux={platformLinux}
-                platformWindows={platformWindows}
-              />
-              <ExternalLinks steamAppId={steamAppId} />
-            </div>
+            <AppInfoHeader
+              name={name}
+              headerImage={headerImage}
+              releaseDate={releaseDate}
+              platformMac={platformMac}
+              platformLinux={platformLinux}
+              platformWindows={platformWindows}
+            />
+            <ExternalLinks steamAppId={steamAppId} />
             {((genres.length > 0) || (categories.length > 0)) &&
               <div className="w-full max-w-2xl">
                 <AppInfoTags
