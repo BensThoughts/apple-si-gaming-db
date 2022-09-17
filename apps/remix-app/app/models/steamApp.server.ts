@@ -54,8 +54,9 @@ export async function searchSteamAppByAppId(
       platformMac: true,
       platformLinux: true,
       platformWindows: true,
+      pcRequirementsMinimum: true,
       macRequirementsMinimum: true,
-      macRequirementsRecommended: true,
+      linuxRequirementsMinimum: true,
       genres: true,
       categories: true,
       performancePosts: {

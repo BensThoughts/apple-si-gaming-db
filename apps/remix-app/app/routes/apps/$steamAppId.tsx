@@ -13,7 +13,6 @@ import {
   convertSteamApiDataToPrisma,
 } from '~/models/steamApp.server';
 
-import AppInfoRequirements from '~/components/AppInfo/Requirements';
 import AppInfoTags from '~/components/AppInfo/Tags';
 import ExternalLinks from '~/components/AppInfo/ExternalLinks';
 import Heading from '~/components/Heading';
@@ -26,6 +25,8 @@ import {
   LinuxIcon,
   WindowsIcon,
 } from '~/components/Icons';
+import AppInfoTabs from '~/components/AppInfo/AppInfoTabs';
+import AppInfoDisclosure from '~/components/AppInfo/AppInfoDisclosure';
 
 export async function loader({ params, context }: LoaderArgs) {
   invariant(params.steamAppId, 'Expected params.steamAppId');
@@ -110,8 +111,9 @@ export default function AppsRoute() {
     // controllerSupport,
     releaseDate,
     shortDescription,
+    pcRequirementsMinimum,
+    linuxRequirementsMinimum,
     macRequirementsMinimum,
-    macRequirementsRecommended,
     genres,
     categories,
     performancePosts,
@@ -179,14 +181,17 @@ export default function AppsRoute() {
             />
           </div>
         }
-        {(macRequirementsMinimum || macRequirementsRecommended) &&
-          <div className="w-full max-w-2xl">
-            <AppInfoRequirements
-              macRequirementsMinimum={macRequirementsMinimum}
-              macRequirementsRecommended={macRequirementsRecommended}
-            />
+        {(macRequirementsMinimum || pcRequirementsMinimum || linuxRequirementsMinimum) && (
+          <div className='w-full max-w-2xl'>
+            <AppInfoDisclosure title='Requirements'>
+              <AppInfoTabs
+                macRequirementsMinimum={macRequirementsMinimum}
+                pcRequirementsMinimum={pcRequirementsMinimum}
+                linuxRequirementsMinimum={linuxRequirementsMinimum}
+              />
+            </AppInfoDisclosure>
           </div>
-        }
+        )}
         {shortDescription &&
         <div>
           <MainAppCard
