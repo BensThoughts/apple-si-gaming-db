@@ -28,9 +28,10 @@
     }
   },
   "globalDependencies": [
+    "$ASGD_BATCH_SIZE",
+    "$ASGD_DATA_DOWNLOAD_ATTEMPTED",
     "$ASGD_DAYS_SINCE_SYNC",
     "$ASGD_DOMAIN",
-    "$ASGD_BATCH_SIZE",
     "$ASGD_INITIAL_PAGE",
     "$ASGD_IS_LOCAL_CONTAINER",
     "$ASGD_SESSION_SECRET",

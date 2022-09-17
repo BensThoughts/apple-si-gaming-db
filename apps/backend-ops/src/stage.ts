@@ -2,6 +2,8 @@ import {
   getSteamAppDetailsRequest,
 } from '@apple-si-gaming-db/steam-api';
 
+import type {
+  Prisma } from '@apple-si-gaming-db/database';
 import {
   convertSteamApiDataToPrisma,
   updateSteamApp,
@@ -15,7 +17,7 @@ interface AppIdData {
   name: string;
   steamAppId: number;
   index: number;
-  dataDownloadAttemptedAt: Date | null,
+  prevDataDownloadedAt: Date | null,
 }
 
 async function getSteamAppDataAndUpdateDB(appIdData: AppIdData) {
@@ -61,26 +63,17 @@ async function getPageOfData(
     page: number,
     batchSize: number,
     totalPages: number,
-    // whereDataDownloadAttempted?: true,
-    // daysSinceLastSync?: number,
+    dataDownloadAttempted?: boolean,
+    daysSinceLastSync?: number,
 ) {
-  // const today = new Date();
-  // const dateSinceLastSync = daysSinceLastSync
-  //   ? new Date(today.setDate(today.getDate() - daysSinceLastSync))
-  //   : undefined;
   const appIds = await prisma.steamApp.findMany({
-    where: {
-      dataDownloadAttempted: false,
-      // dataDownloadAttemptedAt: dateSinceLastSync ? ({
-      //   lte: dateSinceLastSync,
-      // }) : undefined,
-    },
+    where: getWhereInput(dataDownloadAttempted, daysSinceLastSync),
     skip: page * batchSize,
     take: batchSize,
     select: {
       steamAppId: true,
       name: true,
-      dataDownloadAttemptedAt: true,
+      dataDownloadedAt: true,
     },
     orderBy: {
       steamAppId: 'asc',
@@ -97,12 +90,12 @@ async function getPageOfData(
     const {
       name,
       steamAppId,
-      dataDownloadAttemptedAt,
+      dataDownloadedAt,
     } = appIds[currIdx];
     const appIdData: AppIdData = {
       name,
       steamAppId,
-      dataDownloadAttemptedAt,
+      prevDataDownloadedAt: dataDownloadedAt,
       index: totalIdx,
     };
     await getSteamAppDataAndUpdateDB(appIdData); // * await just to see at end of logs
@@ -115,30 +108,49 @@ async function getPageOfData(
   }, ONE_SECOND_INTERVAL);
 }
 
-const ONE_SECOND_INTERVAL = (1000); // 1seconds
+const ONE_SECOND_INTERVAL = (1100); // 1.1seconds trying to space out just a little more
 const FIVE_MINUTE_INTERVAL = (5 * 60 * 1000) + 1000; // 5 minutes + 1 second
 
 // DB starts at page 0
 
+function getWhereInput(
+    dataDownloadAttempted?: boolean,
+    daysSinceLastSync?: number,
+): Prisma.SteamAppWhereInput {
+  const today = new Date();
+  const dateSinceLastSync = daysSinceLastSync
+    ? new Date(today.setDate(today.getDate() - daysSinceLastSync))
+    : undefined;
+  return {
+    OR: ((dataDownloadAttempted !== undefined) || dateSinceLastSync) ? [
+      {
+        dataDownloadAttempted,
+      },
+      {
+        dataDownloadedAt: dateSinceLastSync ? ({
+          lte: dateSinceLastSync,
+        }) : undefined,
+      },
+    ] : undefined,
+  };
+}
+
 async function getTotalPages(
     batchSize: number,
-    // whereDataDownloadAttempted?: boolean,
-    // daysSinceLastSync?: number,
+    dataDownloadAttempted?: boolean,
+    daysSinceLastSync?: number,
 ) {
-  // const today = new Date();
-  // const dateSinceLastSync = daysSinceLastSync
-  //   ? new Date(today.setDate(today.getDate() - daysSinceLastSync))
-  //   : undefined;
   const numAppIds = await prisma.steamApp.count({
-    where: {
-      dataDownloadAttempted: false,
-      // dataDownloadAttemptedAt: dateSinceLastSync ? ({
-      //   lte: dateSinceLastSync,
-      // }) : undefined,
-    },
+    where: getWhereInput(dataDownloadAttempted, daysSinceLastSync),
   });
   logger.info(`Number of appids ${numAppIds}`);
-  return Math.ceil(numAppIds / batchSize);
+  if (numAppIds < 1) {
+    logger.info('No apps found with these settings', {
+      where: getWhereInput(dataDownloadAttempted, daysSinceLastSync),
+    });
+    process.exit(1);
+  }
+  return Math.floor(numAppIds / batchSize);
 }
 
 
@@ -147,18 +159,23 @@ async function getTotalPages(
  * Uses steams getAppDetails request
  * @param  {number} initialPage - The page of appids in db to start on
  * @param  {number} batchSize - The number of appids per a page
+ * @param  {boolean} dataDownloadAttempted - If the app has ever had an attempt
+ * to downloaded data from the steam api
  * @param  {number} daysSinceSync - Only update apps that have not been synced
  * in daysSinceSync
  */
 export async function stage(
     initialPage: number,
     batchSize: number,
+    dataDownloadAttempted?: boolean,
     daysSinceSync?: number,
 ) {
-  // const whereDataDownloadAttempted = daysSinceSync ? true : false;
-  const totalPages = await getTotalPages(batchSize);
+  logger.info('Starting db sync with settings', {
+    where: getWhereInput(dataDownloadAttempted, daysSinceSync),
+  });
+  const totalPages = await getTotalPages(batchSize, dataDownloadAttempted, daysSinceSync);
 
-  getPageOfData(initialPage, batchSize, totalPages);
+  getPageOfData(initialPage, batchSize, totalPages, dataDownloadAttempted, daysSinceSync);
 
   let currPage = initialPage;
 
@@ -167,6 +184,6 @@ export async function stage(
     if (currPage > totalPages) {
       clearInterval(fiveMinuteInterval);
     }
-    getPageOfData(currPage, batchSize, totalPages);
+    getPageOfData(currPage, batchSize, totalPages, dataDownloadAttempted, daysSinceSync);
   }, FIVE_MINUTE_INTERVAL);
 }
