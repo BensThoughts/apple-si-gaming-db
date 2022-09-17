@@ -7,5 +7,7 @@
 **/build
 **/.cache
 **/*.log
-.DS_Store
+**/.DS_Store
 **/*.env
+**/.db-backups
+**/.VSCodeCounter
