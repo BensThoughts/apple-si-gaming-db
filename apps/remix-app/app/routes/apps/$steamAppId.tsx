@@ -15,7 +15,6 @@ import {
 
 import AppInfoTags from '~/components/AppInfo/Tags';
 import ExternalLinks from '~/components/AppInfo/ExternalLinks';
-import Heading from '~/components/Heading';
 import LoadingComponent from '~/components/LoadingComponent';
 import MainAppCard from '~/components/AppInfo/MainAppCard';
 import PerformancePostForm from '~/components/AppInfo/PerformancePostForm';
@@ -121,56 +120,73 @@ export default function AppsRoute() {
   }
   return (
     <div className="bg-app-bg h-full">
-      <div className="flex flex-col gap-4 justify-center items-center max-w-2xl">
-        <AppInfoHeader
-          name={name}
-          headerImage={headerImage}
-          releaseDate={releaseDate}
-          platformMac={platformMac}
-          platformLinux={platformLinux}
-          platformWindows={platformWindows}
-        />
-        <div className="flex w-full h-full justify-center items-center gap-2">
-          <ExternalLinks steamAppId={steamAppId} />
-        </div>
+      <div className='w-full h-12 flex items-center bg-primary p-3 mb-3'>
+        <h1 className="text-3xl md:text-4xl text-left text-secondary">
+          {name}
+        </h1>
+      </div>
+      <div className='grid grid-cols-1 md:grid-cols-3 gap-4 min-h-screen'>
 
-        {((genres.length > 0) || (categories.length > 0)) &&
-          <div className="w-full max-w-2xl">
-            <AppInfoTags
-              genres={genres}
-              categories={categories}
-            />
-          </div>
-        }
-        {(macRequirementsMinimum || pcRequirementsMinimum || linuxRequirementsMinimum) && (
-          <div className='w-full max-w-2xl'>
-            <AppInfoDisclosure title='Requirements'>
-              <AppInfoTabs
-                macRequirementsMinimum={macRequirementsMinimum}
-                pcRequirementsMinimum={pcRequirementsMinimum}
-                linuxRequirementsMinimum={linuxRequirementsMinimum}
+        <div className='col-start-1 col-span-1'>
+          <div className='flex flex-col gap-3 h-full items-center'>
+            <div className="flex flex-col w-full h-full items-center gap-2">
+              <AppInfoHeader
+                name={name}
+                headerImage={headerImage}
+                releaseDate={releaseDate}
+                platformMac={platformMac}
+                platformLinux={platformLinux}
+                platformWindows={platformWindows}
               />
-            </AppInfoDisclosure>
+              <ExternalLinks steamAppId={steamAppId} />
+            </div>
+            {((genres.length > 0) || (categories.length > 0)) &&
+              <div className="w-full max-w-2xl">
+                <AppInfoTags
+                  genres={genres}
+                  categories={categories}
+                />
+              </div>
+            }
+            {(
+              (macRequirementsMinimum && platformMac) ||
+              (pcRequirementsMinimum && platformWindows) ||
+              (linuxRequirementsMinimum && platformLinux)
+            ) && (
+              <div className='w-full max-w-2xl'>
+                <AppInfoDisclosure title='Requirements'>
+                  <AppInfoTabs
+                    mac={{ platformMac, macRequirementsMinimum }}
+                    windows={{ platformWindows, pcRequirementsMinimum }}
+                    linux={{ platformLinux, linuxRequirementsMinimum }}
+                  />
+                </AppInfoDisclosure>
+              </div>
+            )}
+            {shortDescription &&
+              <div>
+                <MainAppCard
+                  requiredAge={requiredAge}
+                  shortDescription={shortDescription}
+                />
+              </div>
+            }
           </div>
-        )}
-        {shortDescription &&
-        <div>
-          <MainAppCard
-            requiredAge={requiredAge}
-            shortDescription={shortDescription}
-          />
         </div>
-        }
-        <Heading>Performance Posts</Heading>
-        <div className='w-full'>
-          <PerformancePostLayout performancePosts={performancePosts} />
-        </div>
-        <div className='w-full'>
-          <PerformancePostForm
-            steamUser={steamUser}
-            userOwnsApp={userOwnsApp}
-            actionData={actionData}
-          />
+        <div className='md:col-start-2 md:col-span-2'>
+          <div className='flex flex-col gap-3'>
+            <h2 className='text-xl'>Performance Posts</h2>
+            <div className='w-full'>
+              <PerformancePostLayout performancePosts={performancePosts} />
+            </div>
+            <div className='w-full'>
+              <PerformancePostForm
+                steamUser={steamUser}
+                userOwnsApp={userOwnsApp}
+                actionData={actionData}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

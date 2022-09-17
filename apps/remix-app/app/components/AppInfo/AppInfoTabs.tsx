@@ -5,35 +5,47 @@ function classNames(...classes: string[]) {
 }
 
 export default function AppInfoTabs({
-  macRequirementsMinimum,
-  pcRequirementsMinimum,
-  linuxRequirementsMinimum,
+  mac,
+  windows,
+  linux,
 }: {
-  macRequirementsMinimum?: string | null;
-  pcRequirementsMinimum?: string | null,
-  linuxRequirementsMinimum?: string | null,
+  mac: {
+    macRequirementsMinimum?: string | null;
+    platformMac?: boolean | null;
+  },
+  windows: {
+    pcRequirementsMinimum?: string | null;
+    platformWindows?: boolean | null;
+  },
+  linux: {
+    linuxRequirementsMinimum?: string | null;
+    platformLinux?: boolean | null;
+  }
 }) {
+  const { macRequirementsMinimum, platformMac } = mac;
+  const { pcRequirementsMinimum, platformWindows } = windows;
+  const { linuxRequirementsMinimum, platformLinux } = linux;
   return (
     <div className='w-full max-w-2xl px-2 sm:px-0'>
       <Tab.Group>
         <Tab.List className='flex space-x-1 rounded-xl bg-primary p-1'>
-          {macRequirementsMinimum && (
+          {(platformMac && macRequirementsMinimum) && (
             <Tab
               key='Apple'
               className={({ selected }) =>
                 classNames(
                     'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700',
                     'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
-                  selected
-                  ? 'bg-white shadow'
-                  : 'text-blue-100 hover:bg-white/[0.12] hover:text-white',
+                    selected
+                    ? 'bg-primary-highlight shadow'
+                    : 'text-blue-100 hover:bg-primary-highlight hover:text-secondary-highlight',
                 )
               }
             >
               Apple
             </Tab>
           )}
-          {pcRequirementsMinimum && (
+          {(platformWindows && pcRequirementsMinimum) && (
             <Tab
               key='Apple'
               className={({ selected }) =>
@@ -41,24 +53,24 @@ export default function AppInfoTabs({
                     'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700',
                     'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
                   selected
-                  ? 'bg-white shadow'
-                  : 'text-blue-100 hover:bg-white/[0.12] hover:text-white',
+                  ? 'bg-primary-highlight shadow'
+                  : 'text-blue-100 hover:bg-primary-highlight hover:text-secondary-highlight',
                 )
               }
             >
               Windows
             </Tab>
           )}
-          {linuxRequirementsMinimum && (
+          {(platformLinux && linuxRequirementsMinimum) && (
             <Tab
               key='Apple'
               className={({ selected }) =>
                 classNames(
                     'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700',
                     'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
-                  selected
-                  ? 'bg-white shadow'
-                  : 'text-blue-100 hover:bg-white/[0.12] hover:text-white',
+                    selected
+                    ? 'bg-primary-highlight shadow'
+                    : 'text-blue-100 hover:bg-primary-highlight hover:text-secondary-highlight',
                 )
               }
             >
@@ -67,7 +79,7 @@ export default function AppInfoTabs({
           )}
         </Tab.List>
         <Tab.Panels className='mt-2'>
-          {macRequirementsMinimum && (
+          {(platformMac && macRequirementsMinimum) && (
             <Tab.Panel
               className={classNames(
                   'rounded-xl bg-white p-3',
@@ -80,7 +92,7 @@ export default function AppInfoTabs({
               />
             </Tab.Panel>
           )}
-          {pcRequirementsMinimum && (
+          {(platformWindows && pcRequirementsMinimum) && (
             <Tab.Panel
               className={classNames(
                   'rounded-xl bg-white p-3',
@@ -93,7 +105,7 @@ export default function AppInfoTabs({
               />
             </Tab.Panel>
           )}
-          {linuxRequirementsMinimum && (
+          {(platformLinux && linuxRequirementsMinimum) && (
             <Tab.Panel
               className={classNames(
                   'rounded-xl bg-white p-3',

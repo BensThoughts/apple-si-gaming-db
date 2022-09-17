@@ -6,7 +6,7 @@ export default function ExternalLinks({
   steamAppId: number,
 }) {
   return (
-    <>
+    <div className='flex gap-2'>
       <ExternalLink href={`https://store.steampowered.com/app/${steamAppId}`}>
         Steam
       </ExternalLink>
@@ -16,6 +16,6 @@ export default function ExternalLinks({
       <ExternalLink href={`https://steamcharts.com/app/${steamAppId}`}>
         Steamcharts
       </ExternalLink>
-    </>
+    </div>
   );
 }

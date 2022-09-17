@@ -9,7 +9,7 @@ export default function AppInfoDisclosure({
   children: React.ReactNode;
 }) {
   return (
-    <Disclosure>
+    <Disclosure defaultOpen>
       {({ open }) => (
         <>
           <Disclosure.Button className={`flex w-full justify-between rounded-lg

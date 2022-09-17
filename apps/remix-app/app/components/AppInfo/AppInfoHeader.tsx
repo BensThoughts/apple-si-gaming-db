@@ -21,11 +21,6 @@ export default function AppInfoHeader({
 }) {
   return (
     <div className="flex flex-col gap-4 justify-center items-center max-w-2xl">
-      <div>
-        <h1 className="text-3xl md:text-4xl text-center text-secondary">
-          {name}
-        </h1>
-      </div>
       <div className='flex flex-col gap-2'>
         <div className="flex items-center justify-center bg-primary-highlight p-[3px] md:p-[6px] rounded-lg">
           {headerImage && <img
