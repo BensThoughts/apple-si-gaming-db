@@ -35,17 +35,22 @@ export default function Navbar({
   return (
     <>
       <MenuDrawer isOpen={isOpen} setIsOpen={setIsOpen} title="Menu">
-        <div className="flex flex-col justify-end content-between items-center pt-0 mt-7 w-full">
-          {menuItems.map((menuItem) => (
-            <MenuItem
-              key={menuItem.href}
-              href={menuItem.href}
-              onClick={() => setIsOpen(false)}
-              className="flex justify-center items-center w-full h-10 text-xl hover:bg-primary"
-            >
-              {menuItem.name}
-            </MenuItem>
-          ))}
+        <div className='flex flex-col items-center w-full gap-6'>
+          <div className="flex flex-col justify-end content-between items-center pt-0 mt-7 w-full">
+            {menuItems.map((menuItem) => (
+              <Link
+                key={menuItem.href}
+                to={menuItem.href}
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-center w-full h-10 text-xl text-center hover:bg-primary"
+              >
+                {menuItem.name}
+              </Link>
+            ))}
+          </div>
+          <div>
+            <ThemeToggle />
+          </div>
         </div>
       </MenuDrawer>
       <NavHider>
@@ -78,7 +83,11 @@ export default function Navbar({
           {/* Small- Screens */}
           <div className="flex justify-between items-center mx-3 w-full md:hidden">
 
-            <ThemeToggle />
+            <Link to="/profile">
+              <div className="block w-[56px] h-[40px] rounded-md bg-primary hover:bg-primary-highlight p-px group ml-3">
+                <SteamIcon className="text-icon-secondary rounded-md w-full h-full group-hover:text-icon-secondary-highlight" />
+              </div>
+            </Link>
             <IconButton onClick={() => setIsOpen(!isOpen)} className="mr-3 md:hidden" aria-label="navigation menu">
               <BarsIcon size={24} className="text-icon-primary" />
             </IconButton>

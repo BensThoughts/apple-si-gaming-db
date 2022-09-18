@@ -15,4 +15,8 @@ export const menuItems = [
     name: 'Contact',
     href: '/contact',
   },
+  {
+    name: 'Profile',
+    href: '/profile',
+  },
 ];

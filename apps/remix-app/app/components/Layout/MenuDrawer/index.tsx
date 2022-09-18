@@ -48,8 +48,8 @@ export default function MenuDrawer({
             leaveTo="-translate-x-full"
           >
             <div className="flex overflow-hidden z-50 flex-col justify-between p-6 w-full max-w-sm text-left align-middle bg-opacity-70 rounded-br-md shadow-xl backdrop-filter backdrop-blur-sm bg-app-bg">
-              <div className={`${!description ? 'self-center' : ''}`}>
-                <Dialog.Title className="text-2xl font-bold md:text-4xl text-secondary">{title}</Dialog.Title>
+              <div className={`${!description ? 'self-center w-full' : 'w-full'}`}>
+                <Dialog.Title className="text-2xl font-bold md:text-4xl text-secondary text-center">{title}</Dialog.Title>
                 {description && <Dialog.Description>{description}</Dialog.Description>}
                 {children}
               </div>
