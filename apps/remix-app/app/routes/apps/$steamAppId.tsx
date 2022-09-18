@@ -48,6 +48,7 @@ export async function action({
   params,
   context,
 }: ActionArgs) {
+  // TODO: Switch invariant to throw new Response to use catch.
   invariant(params.steamAppId, 'Expected params.appid');
   const steamAppId = Number(params.steamAppId);
   invariant(isFinite(steamAppId), 'Expected appid to be a valid number');
