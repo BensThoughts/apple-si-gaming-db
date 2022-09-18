@@ -1,25 +1,30 @@
-import { useState, Fragment } from 'react';
+import { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpIcon } from '~/components/Icons';
 
 export default function SelectMenu({
-  initialValue,
   options,
   onChange,
+  name,
+  defaultValue,
 }: {
   options: string[],
-  initialValue: string,
-  onChange(e: string): void,
+  onChange?(e: string): void,
+  name: string,
+  defaultValue: string,
 }) {
-  const [selectedValue, setSelectedValue] = useState(initialValue);
-
   function onSelectionChange(selection: string) {
-    setSelectedValue(selection);
-    onChange(selection);
+    if (onChange) {
+      onChange(selection);
+    }
   }
 
   return (
-    <Listbox value={selectedValue} onChange={onSelectionChange}>
+    <Listbox
+      defaultValue={defaultValue}
+      onChange={onSelectionChange}
+      name={name}
+    >
       <div className="w-72">
         <div className="relative">
           <Listbox.Button
@@ -30,13 +35,20 @@ export default function SelectMenu({
                         focus-visible:ring-offset-app-bg focus:outline-none sm:text-sm
                         bg-primary`}
           >
-            <span className="block truncate">{selectedValue}</span>
-            <span className="flex absolute inset-y-0 right-0 items-center pr-2 pointer-events-none">
-              <ChevronUpIcon
-                className="w-5 h-5 text-gray-400 rotate-180"
-                aria-hidden="true"
-              />
-            </span>
+            {({ value }: { value: string }) => (
+              <>
+                <span className='block truncate'>
+                  {value}
+                </span>
+                <span className="flex absolute inset-y-0 right-0 items-center pr-2 pointer-events-none">
+                  <ChevronUpIcon
+                    className="w-5 h-5 text-gray-400 rotate-180"
+                    aria-hidden="true"
+                  />
+                </span>
+              </>
+            )}
+
           </Listbox.Button>
           <Transition
             as={Fragment}
@@ -49,7 +61,7 @@ export default function SelectMenu({
             >
               {options.map((option, optionIdx) => (
                 <Listbox.Option
-                  key={optionIdx}
+                  key={`${option}-optionIdx`}
                   className={({ active }) => `${active ? 'text-neutral-lightest bg-secondary' : 'text-neutral-lighter'}
                       cursor-default select-none relative py-2 pl-10 pr-4
                   `}

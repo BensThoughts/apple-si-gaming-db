@@ -74,8 +74,9 @@ export default function OwnedApps({
           <label>Select Genre:</label>
           <SelectMenu
             options={[...genreSet]}
-            initialValue={ALL_FILTER}
             onChange={(e) => setGenreFilter(e)}
+            name='profileGenreFilter'
+            defaultValue={ALL_FILTER}
           />
         </div>
       </div>
