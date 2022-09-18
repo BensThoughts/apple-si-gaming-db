@@ -103,7 +103,8 @@ model PerformancePost {
   steamApp    SteamApp  @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
   steamAppId  Int
 
-  postText String
+  postText    String
+  ratingMedal String
 }
 
 model SteamApp {
