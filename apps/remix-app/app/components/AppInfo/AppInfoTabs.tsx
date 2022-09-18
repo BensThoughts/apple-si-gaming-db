@@ -31,7 +31,6 @@ export default function AppInfoTabs({
         <Tab.List className='flex space-x-1 rounded-xl bg-primary p-1'>
           {(platformMac && macRequirementsMinimum) && (
             <Tab
-              key='Apple'
               className={({ selected }) =>
                 classNames(
                     'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700',
@@ -47,7 +46,6 @@ export default function AppInfoTabs({
           )}
           {(platformWindows && pcRequirementsMinimum) && (
             <Tab
-              key='Apple'
               className={({ selected }) =>
                 classNames(
                     'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700',
@@ -63,7 +61,6 @@ export default function AppInfoTabs({
           )}
           {(platformLinux && linuxRequirementsMinimum) && (
             <Tab
-              key='Apple'
               className={({ selected }) =>
                 classNames(
                     'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700',
