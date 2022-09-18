@@ -12,3 +12,5 @@ export interface AppIdData {
   index?: number;
   steamId?: string;
 }
+
+export type SteamAppRating = 'Platinum' | 'Gold' | 'Silver' | 'Borked' | 'None';

@@ -56,7 +56,8 @@ export async function action({
   invariant(steamUser, 'You must be logged into a valid Steam account to post performance reviews');
   const steamUserId = steamUser.steamUserId;
   const formData = await request.formData();
-  const postText = formData.get('postText');
+  const postText = formData.get('performancePostText');
+  // const rating = formData.get('performancePostRating');
   invariant(postText, 'No text found in performance post');
 
   try {
@@ -120,7 +121,7 @@ export default function AppsRoute() {
     userOwnsApp = usersWhoOwnApp.map((user) => user.steamUserId).includes(steamUser.steamUserId);
   }
   return (
-    <div className="bg-app-bg h-full">
+    <div className="h-full">
       <div className='w-full h-12 flex items-center bg-primary py-4 px-6 mb-3'>
         <h1 className="text-3xl md:text-4xl text-left text-secondary">
           {name}
@@ -180,6 +181,7 @@ export default function AppsRoute() {
             </div>
             <div className='w-full'>
               <PerformancePostForm
+                steamAppId={steamAppId}
                 steamUser={steamUser}
                 userOwnsApp={userOwnsApp}
                 actionData={actionData}
