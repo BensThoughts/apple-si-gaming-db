@@ -28,7 +28,7 @@ export async function loader({ params, context }: LoaderArgs) {
   const steamAppId = Number(params.steamAppId);
   invariant(isFinite(steamAppId), 'Expected steamAppId to be a valid number');
   let steamApp = await searchSteamAppByAppId(steamAppId);
-  if (steamApp && (!steamApp?.dataDownloadAttempted)) {
+  if (steamApp && (!steamApp?.dataDownloadAttempted || !steamApp?.dataDownloaded)) {
     const steamApiApp = await getSteamAppDetailsRequest(steamApp.steamAppId);
     if (steamApiApp.data) {
       const prismaSteamApp = convertSteamApiDataToPrisma(steamApiApp.data);
@@ -120,7 +120,7 @@ export default function AppsRoute() {
   }
   return (
     <div className="bg-app-bg h-full">
-      <div className='w-full h-12 flex items-center bg-primary p-3 mb-3'>
+      <div className='w-full h-12 flex items-center bg-primary py-4 px-6 mb-3'>
         <h1 className="text-3xl md:text-4xl text-left text-secondary">
           {name}
         </h1>
