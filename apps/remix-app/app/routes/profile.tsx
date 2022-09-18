@@ -91,16 +91,15 @@ export default function LoginPage() {
       </div>
       <Heading>Library</Heading>
       {(ownedApps && ownedApps.length > 0) ? (
-        <>
-          <div>
-            <OwnedApps ownedApps={ownedApps} />
-          </div>
-        </>
+        <div>
+          <OwnedApps ownedApps={ownedApps} />
+        </div>
       ) : (
         <div>
           {isLoggedIn ? (
             <div>
-              You are logged in but appear to have no apps owned
+              You are logged in but appear to have no apps owned. Is your Steam profile
+              set to public?
             </div>
           ): (
             <div>
