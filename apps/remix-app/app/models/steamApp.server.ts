@@ -48,7 +48,6 @@ export async function searchSteamAppByAppId(
       headerImage: true,
       type: true,
       requiredAge: true,
-      controllerSupport: true,
       shortDescription: true,
       releaseDate: true,
       platformMac: true,
