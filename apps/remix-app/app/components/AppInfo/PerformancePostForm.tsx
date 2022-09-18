@@ -3,6 +3,7 @@ import type {
   SteamUserWithoutMetadata,
 } from '~/interfaces/database';
 import RoundedButton from '../RoundedButton';
+import SelectMenu from '~/components/FormComponents/SelectMenu';
 
 export default function PerformancePostForm({
   steamUser,
@@ -14,12 +15,12 @@ export default function PerformancePostForm({
   actionData: any,
 }) {
   return (
-    <div className={`flex flex-col gap-3 items-center justify-center bg-primary
+    <div className={`flex flex-col gap-3 items-center justify-center bg-app-bg
                      border-solid border-1 border-secondary p-3 rounded-lg w-full`}>
       {steamUser ? (
         <>
           {userOwnsApp ? (
-            <>
+            <div>
               <h2 className='text-secondary text-lg'>Submit Your Own Performance Post</h2>
               <Form
                 method="post"
@@ -29,13 +30,20 @@ export default function PerformancePostForm({
                 <label className='w-full'>
                   <textarea
                     name="postText"
-                    className="bg-app-bg rounded p-2 w-full h-28"
+                    className="bg-primary rounded-lg p-2 w-full h-28"
                     defaultValue={actionData?.values.postText}
+                  />
+                </label>
+                <label>
+                  <SelectMenu
+                    initialValue='None'
+                    options={['None', 'Platinum', 'Gold', 'Silver', 'Borked']}
+                    onChange={(e) => console.log(e)}
                   />
                 </label>
                 <RoundedButton type="submit" className="max-w-xs">Submit</RoundedButton>
               </Form>
-            </>
+            </div>
           ): (
             <div>
               It looks like you do not own this app yet. Add it to your steam library to leave a
