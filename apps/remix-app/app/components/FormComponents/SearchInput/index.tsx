@@ -36,7 +36,13 @@ export default function SearchInput({
             inputSize={size}
           />
         </div>
-        <RoundedButton className={`${buttonHeight} w-[89.66px]`} type="submit" disabled={transitioning}>
+        <RoundedButton
+          className={`${buttonHeight} w-[89.66px]
+                      ${transitioning ? 'bg-primary-highlight hover:bg-primary-highlight' : 'bg-secondary'}
+                    `}
+          type="submit"
+          disabled={transitioning}
+        >
           {transitioning ? 'Loading' : 'Search' }
         </RoundedButton>
       </div>
