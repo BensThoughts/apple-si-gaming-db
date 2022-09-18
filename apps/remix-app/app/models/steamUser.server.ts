@@ -80,6 +80,15 @@ export async function findUserOwnedApps(steamUserId: SteamUserWithoutMetadata['s
     },
     include: {
       ownedApps: {
+        where: {
+          comingSoon: {
+            equals: false,
+          },
+          type: {
+            contains: 'game',
+            mode: 'insensitive',
+          },
+        },
         select: {
           steamAppId: true,
           name: true,
