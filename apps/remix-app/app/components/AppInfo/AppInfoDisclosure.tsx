@@ -1,5 +1,6 @@
 import { Disclosure } from '@headlessui/react';
 import { ChevronUpIcon } from '~/components/Icons';
+import { useMedia } from 'react-use';
 
 export default function AppInfoDisclosure({
   title,
@@ -8,8 +9,9 @@ export default function AppInfoDisclosure({
   title: string;
   children: React.ReactNode;
 }) {
+  const isWide = useMedia('(min-width: 640px)');
   return (
-    <Disclosure defaultOpen>
+    <Disclosure defaultOpen={isWide}>
       {({ open }) => (
         <>
           <Disclosure.Button className={`flex w-full justify-between rounded-lg
