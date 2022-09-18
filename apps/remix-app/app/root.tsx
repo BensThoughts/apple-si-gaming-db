@@ -124,7 +124,7 @@ function Document({
         <script dangerouslySetInnerHTML={{ __html: setInitialTheme }} />
         <ClientOnly>
           <Suspense>
-            <div className="bg-app-bg px-5 md:px-10">
+            <div className="px-5 md:px-10">
               <ThemeProvider>
                 <Navbar
                   authState={steamUser ? true : false}
