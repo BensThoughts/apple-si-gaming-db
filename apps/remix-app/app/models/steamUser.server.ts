@@ -73,6 +73,31 @@ export async function updateUserOwnedApps(
   });
 }
 
+export async function doesSteamUserOwnApp(
+    steamUserId: SteamUserWithoutMetadata['steamUserId'],
+    steamAppId: SteamAppWithoutMetadata['steamAppId'],
+) {
+  const steamUser = await prisma.steamUser.findUnique({
+    where: {
+      steamUserId,
+    },
+    select: {
+      ownedApps: {
+        where: {
+          steamAppId,
+        },
+        select: {
+          steamAppId: true,
+        },
+      },
+    },
+  });
+  if (!steamUser) {
+    return false;
+  }
+  return steamUser.ownedApps.map((app) => app.steamAppId).includes(steamAppId);
+}
+
 export async function findUserOwnedApps(steamUserId: SteamUserWithoutMetadata['steamUserId']) {
   return prisma.steamUser.findUnique({
     where: {
