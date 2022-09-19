@@ -26,9 +26,9 @@ export default function AppInfoTabs({
   const { pcRequirementsMinimum, platformWindows } = windows;
   const { linuxRequirementsMinimum, platformLinux } = linux;
   return (
-    <div className='w-full max-w-2xl px-2 sm:px-0'>
+    <div className="w-full max-w-2xl px-2 sm:px-0">
       <Tab.Group>
-        <Tab.List className='flex space-x-1 rounded-xl bg-primary p-1'>
+        <Tab.List className="flex space-x-1 rounded-xl bg-primary p-1">
           {(platformMac && macRequirementsMinimum) && (
             <Tab
               className={({ selected }) =>
@@ -75,7 +75,7 @@ export default function AppInfoTabs({
             </Tab>
           )}
         </Tab.List>
-        <Tab.Panels className='mt-2'>
+        <Tab.Panels className="mt-2">
           {(platformMac && macRequirementsMinimum) && (
             <Tab.Panel
               className={classNames(
@@ -85,7 +85,7 @@ export default function AppInfoTabs({
             >
               <div
                 dangerouslySetInnerHTML={{ __html: macRequirementsMinimum }}
-                className='text-sm'
+                className="text-sm"
               />
             </Tab.Panel>
           )}
@@ -98,7 +98,7 @@ export default function AppInfoTabs({
             >
               <div
                 dangerouslySetInnerHTML={{ __html: pcRequirementsMinimum }}
-                className='text-sm'
+                className="text-sm"
               />
             </Tab.Panel>
           )}
@@ -111,7 +111,7 @@ export default function AppInfoTabs({
             >
               <div
                 dangerouslySetInnerHTML={{ __html: linuxRequirementsMinimum }}
-                className='text-sm'
+                className="text-sm"
               />
             </Tab.Panel>
           )}

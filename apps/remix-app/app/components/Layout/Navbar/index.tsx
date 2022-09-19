@@ -35,7 +35,7 @@ export default function Navbar({
   return (
     <>
       <MenuDrawer isOpen={isOpen} setIsOpen={setIsOpen} title="Menu">
-        <div className='flex flex-col items-center w-full gap-6'>
+        <div className="flex flex-col items-center w-full gap-6">
           <div className="flex flex-col justify-end content-between items-center pt-0 mt-7 w-full">
             {menuItems.map((menuItem) => (
               <Link

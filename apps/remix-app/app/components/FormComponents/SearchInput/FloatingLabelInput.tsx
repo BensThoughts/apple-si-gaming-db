@@ -31,7 +31,7 @@ export default function FloatingLabelInput({
         id={id}
         type="text"
         className={inputClassnames}
-        placeholder=' '
+        placeholder=" "
         {...rest}
       />
 

@@ -27,7 +27,7 @@ export default function SearchInput({
       method="get"
       action="/search"
     >
-      <div className='flex justify-center items-center gap-2'>
+      <div className="flex justify-center items-center gap-2">
         <div>
           <FloatingLabelInput
             name="searchQuery"

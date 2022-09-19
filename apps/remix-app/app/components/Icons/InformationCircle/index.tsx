@@ -23,7 +23,7 @@ export default function InformationCircle({
       strokeWidth={strokeWidth}
       strokeLinecap={strokeLinecap}
       strokeLinejoin={strokeLinejoin}
-      viewBox='0 0 24 24'
+      viewBox="0 0 24 24"
       {...rest}
     >
       <circle cx="12" cy="12" r="10"></circle>

@@ -1,4 +1,4 @@
-import AnimatedUnderline from '../AnimatedUnderline';
+import AnimatedUnderline from '~/components/AnimatedUnderline';
 
 export default function LoginCard({
   isLoggedIn,
@@ -22,7 +22,7 @@ export default function LoginCard({
             alt={`User Profile`}
           />}
           <a
-            href='/api/auth/steam/logout'
+            href="/api/auth/steam/logout"
           >
             <AnimatedUnderline>Logout</AnimatedUnderline>
           </a>
@@ -33,11 +33,11 @@ export default function LoginCard({
           Apple Silicon on Steam requires Steam authentication to verify that user reports are
           written by people that own the game. Signing in with this method accesses only information
           that you have intentionally set to be publicly visible.
-          <a href='/api/auth/steam/login' className="block w-[114px] h-[43px]">
-            <div className='w-[114px] h-[43px]'>
+          <a href="/api/auth/steam/login" className="block w-[114px] h-[43px]">
+            <div className="w-[114px] h-[43px]">
               <img
-                src='steam_sign_in.png'
-                alt='sign in with steam'
+                src="steam_sign_in.png"
+                alt="sign in with steam"
                 width={114}
                 height={43}
               />

@@ -12,7 +12,7 @@ export default function Heading({
     before:w-full before:h-[2px] before:block before:relative
     before:top-0 before:right-0 before:bg-secondary
     before:translate-y-4 before:translate-x-[110%]`}>
-      <h2 className='text-secondary text-xl'>{children}</h2>
+      <h2 className="text-secondary text-xl">{children}</h2>
     </div>
   );
 }

@@ -17,7 +17,7 @@ export default function AsideInfoCard({
         <InformationCircleIcon className="absolute inset-0 translate-x-[3px] translate-y-[3px] text-icon-secondary w-8 h-8" />
       </div>
       <strong className="font-bold">{title}</strong>
-      <div className=''>{children}</div>
+      <div>{children}</div>
     </aside>
   );
 }

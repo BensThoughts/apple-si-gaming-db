@@ -54,34 +54,34 @@ export default function OwnedApps({
   }
 
   return (
-    <div className='flex flex-col items-center gap-8 w-full'>
-      <div className='flex flex-col md:flex-row items-center justify-center gap-3 w-full'>
+    <div className="flex flex-col items-center gap-8 w-full">
+      <div className="flex flex-col md:flex-row items-center justify-center gap-3 w-full">
         <div>
           <FloatingLabelInput
-            id='profileSearch'
-            name='profileSearch'
-            label='Search by name...'
-            inputSize='large'
-            aria-label='Search games by name'
+            id="profileSearch"
+            name="profileSearch"
+            label="Search by name..."
+            inputSize="large"
+            aria-label="Search games by name"
             onChange={(e) => setNameQuery(e.target.value)}
           />
         </div>
-        <div className='flex flex-col md:flex-row items-center justify-center gap-2'>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-2">
           <label>Apple:</label>
           <ToggleSwitch enabled={filterAppleOnly} onChange={setFilterAppleOnly} />
         </div>
-        <div className='flex flex-col md:flex-row items-center justify-center gap-2'>
-          <label>Select Genre:</label>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-2">
           <SelectMenu
             options={[...genreSet]}
             onChange={(e) => setGenreFilter(e)}
-            name='profileGenreFilter'
+            name="profileGenreFilter"
+            label="Select Genre:"
             defaultValue={ALL_FILTER}
           />
         </div>
       </div>
 
-      <div className='flex flex-wrap items-center justify-center gap-3 md:gap-1 w-full'>
+      <div className="flex flex-wrap items-center justify-center gap-3 md:gap-1 w-full">
         {searchNames(ownedApps).slice(0, paginate).map(({
           steamAppId,
           name,
