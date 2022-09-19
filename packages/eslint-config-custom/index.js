@@ -18,5 +18,6 @@ module.exports = {
     'max-len': 'off',
     'operator-linebreak': ['error', 'after', { 'overrides': { '?': 'before', ':': 'before' } }],
     'react/react-in-jsx-scope': 'off',
+    'jsx-quotes': ['error', 'prefer-double'],
   },
 };
