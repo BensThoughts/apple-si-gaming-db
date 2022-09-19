@@ -21,7 +21,7 @@ export default function PerformancePostForm({
 }) {
   const ratingOptions: SteamAppRatingMedal[] = ['None', 'Platinum', 'Gold', 'Silver', 'Borked'];
   return (
-    <div className={`flex flex-col gap-3 items-center justify-center bg-app-bg
+    <div className={`flex flex-col gap-3 items-center justify-center bg-tertiary
                      border-solid border-1 border-secondary p-3 rounded-lg w-full`}>
       {steamUserIsLoggedIn ? (
         <>

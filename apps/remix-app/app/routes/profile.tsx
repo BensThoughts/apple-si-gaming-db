@@ -76,11 +76,11 @@ export default function LoginPage() {
           avatarFull={avatarFull}
         />
         <div className="max-w-md">
-          <AsideInfoCard title="Note">
+          <AsideInfoCard title="Note" iconBackground="secondary">
             Within your&nbsp;
             <ExternalLink
               href="https://steamcommunity.com/my/edit/settings"
-              className='underline-offset-2'
+              className="underline-offset-2"
             >
               Steam Privacy Settings
             </ExternalLink>

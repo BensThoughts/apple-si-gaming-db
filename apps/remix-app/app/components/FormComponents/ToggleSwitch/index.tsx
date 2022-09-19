@@ -25,7 +25,7 @@ export default function ToggleSwitch({
           aria-hidden="true"
           className={`${enabled ? 'translate-x-[38px]' : 'translate-x-[4px]'}
             pointer-events-none inline-block h-[30px] w-[30px] transform rounded-full
-            bg-primary-text shadow-lg ring-0 transition duration-200 ease-in-out`}
+            bg-primary-text-faded shadow-lg ring-0 transition duration-200 ease-in-out`}
         />
       </Switch>
     </div>

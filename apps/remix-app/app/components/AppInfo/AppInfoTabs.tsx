@@ -79,7 +79,7 @@ export default function AppInfoTabs({
           {(platformMac && macRequirementsMinimum) && (
             <Tab.Panel
               className={classNames(
-                  'rounded-xl bg-white p-3',
+                  'rounded-xl p-3',
                   'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
               )}
             >
@@ -92,7 +92,7 @@ export default function AppInfoTabs({
           {(platformWindows && pcRequirementsMinimum) && (
             <Tab.Panel
               className={classNames(
-                  'rounded-xl bg-white p-3',
+                  'rounded-xl p-3',
                   'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
               )}
             >
@@ -105,7 +105,7 @@ export default function AppInfoTabs({
           {(platformLinux && linuxRequirementsMinimum) && (
             <Tab.Panel
               className={classNames(
-                  'rounded-xl bg-white p-3',
+                  'rounded-xl p-3',
                   'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
               )}
             >

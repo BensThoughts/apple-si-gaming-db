@@ -13,41 +13,34 @@ export default function FloatingLabelInput({
   inputSize = 'large',
   ...rest
 }: FloatingLabelInputProps) {
-  let inputClassnames = 'no-outline px-3 py-3 peer bg-transparent';
+  let inputSizeClassnames = 'px-3 py-3';
   if (inputSize === 'medium') {
-    inputClassnames = 'no-outline px-[7px] py-[7px] peer bg-opacity-0 bg-transparent';
+    inputSizeClassnames = 'px-[7px] py-[7px]';
   }
   return (
-    <div className="relative max-w-[fit-content] bg-primary group rounded">
-      <style>
-        {`
-          .no-outline {
-            outline: none;
-          }
-        `}
-      </style>
+    <div className="relative max-w-[fit-content] group rounded bg-primary">
       <input
         name={name}
         id={id}
         type="text"
-        className={inputClassnames}
+        className={`outline-none peer bg-transparent ${inputSizeClassnames}`}
         placeholder=" "
         {...rest}
       />
 
       <label
         htmlFor={id}
-        className={`absolute left-[9px] top-px text-sm text-primary
+        className={`absolute left-[9px] -top-[1px] text-sm text-primary
                     transition-all duration-300 px-1 transform -translate-y-1/2
                     pointer-events-none peer-placeholder-shown:top-1/2
-                    peer-placeholder-shown:text-xl group-focus-within:!top-px
+                    peer-placeholder-shown:text-xl group-focus-within:!-top-[1px]
                     group-focus-within:!text-sm group-focus-within:text-icon-secondary`}
       >
         {label}
       </label>
 
       {/* This fieldset+legend is used for the the border and notch transition */}
-      <fieldset className={`inset-0 absolute border border-primary rounded
+      <fieldset className={`inset-0 absolute border border-secondary-highlight rounded
                         pointer-events-none mt-[-9px] invisible peer-placeholder-shown:visible
                       group-focus-within:!border-secondary group-focus-within:border-2
                       group-hover:border-secondary`}>
@@ -66,6 +59,7 @@ export default function FloatingLabelInput({
           {label}
         </legend>
       </fieldset>
+
     </div>
   );
 }

@@ -54,8 +54,8 @@ export default function Navbar({
         </div>
       </MenuDrawer>
       <NavHider>
-        <nav {...rest} className={`bg-opacity-70 shadow-lg bg-app-bg z-[49]
-                                   flex items-center justify-between w-full p-0 transition-colors ${className}`}>
+        <nav {...rest} className={`bg-opacity-70 bg-app-bg-secondary shadow-lg z-[49] flex items-center
+                                   justify-between w-full p-0 transition-colors ${className}`}>
 
           {/* Medium+ Screens */}
           <div className="hidden md:flex md:justify-between md:items-center md:w-full md:pt-0 md:mx-3">

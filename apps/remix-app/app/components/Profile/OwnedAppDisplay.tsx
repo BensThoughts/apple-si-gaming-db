@@ -20,7 +20,8 @@ export default function OwnedAppDisplay({
                   ${className}`}
     >
       <div
-        className="w-[276px] md:w-[184px] whitespace-nowrap overflow-hidden text-ellipsis"
+        className={`w-[276px] md:w-[184px] whitespace-nowrap overflow-hidden
+                    text-ellipsis text-primary-highlight`}
         aria-label={name}
       >
         {name}

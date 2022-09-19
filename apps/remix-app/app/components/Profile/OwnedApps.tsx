@@ -49,7 +49,7 @@ export default function OwnedApps({
           (filterAppleOnly
           ? app.platformMac
           : app) &&
-          (app.name.toString().toLowerCase().includes(nameQuery)))
+          (app.name.toString().toLowerCase().includes(nameQuery.toLowerCase())))
         .sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
   }
 
@@ -71,11 +71,12 @@ export default function OwnedApps({
           <ToggleSwitch enabled={filterAppleOnly} onChange={setFilterAppleOnly} />
         </div>
         <div className="flex flex-col md:flex-row items-center justify-center gap-2">
+          <label>Select Genre:</label>
           <SelectMenu
             options={[...genreSet]}
             onChange={(e) => setGenreFilter(e)}
             name="profileGenreFilter"
-            label="Select Genre:"
+            // label="Select Genre"
             defaultValue={ALL_FILTER}
           />
         </div>

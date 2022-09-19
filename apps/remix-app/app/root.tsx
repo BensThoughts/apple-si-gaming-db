@@ -20,7 +20,6 @@ import type { ExtendedAppLoadContext } from '~/interfaces';
 import type { SteamUserWithoutMetadata } from '~/interfaces/database';
 import { loginCookie } from './lib/cookies/cookies.server';
 
-// import { getUser } from "./session.server";
 import tailwindStylesheetUrl from './styles/tailwind.css';
 import { extractAppLoadContext } from './lib/data-utils/appLoadContext.server';
 import {
@@ -124,14 +123,14 @@ function Document({
         <script dangerouslySetInnerHTML={{ __html: setInitialTheme }} />
         <ClientOnly>
           <Suspense>
-            <div className="px-5 md:px-10">
-              <ThemeProvider>
-                <Navbar
-                  authState={steamUser ? true : false}
-                  className="h-14"
-                />
-              </ThemeProvider>
-              <main className="flex flex-col items-center justify-center w-full z-0 pt-20 pb-16 px-4 min-h-screen overflow-hidden">
+            <ThemeProvider>
+              <Navbar
+                authState={steamUser ? true : false}
+                className="h-14"
+              />
+            </ThemeProvider>
+            <div className="relative inset-0 h-[450px] bg-app-bg-secondary z-0">
+              <main className="relative top-20 flex flex-col items-center justify-center w-full z-[1] pb-16  min-h-screen overflow-hidden px-4 md:px-10">
                 {children}
               </main>
             </div>

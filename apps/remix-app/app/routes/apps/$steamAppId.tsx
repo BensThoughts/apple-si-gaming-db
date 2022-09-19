@@ -68,7 +68,7 @@ export default function AppsRoute() {
   } = steamApp;
   return (
     <div className="h-full">
-      <div className="w-full h-12 flex items-center bg-primary py-4 px-6 mb-3">
+      <div className="w-full h-12 flex items-center bg-primary rounded-lg py-4 px-6 mb-3">
         <h1 className="text-3xl md:text-4xl text-left text-secondary">
           {name}
         </h1>

@@ -17,8 +17,7 @@ export default function ThemeToggle() {
       onClick={() => setColorMode(inactiveColorMode)}
       className={`relative flex items-center justify-around text-[1.5rem] leading-none
                   w-[78px] h-[38px] p-[3px] border-0 rounded-[39px] cursor-pointer
-                  bg-accent transition-colors focus:outline-offset-[5px]
-                  
+                  bg-accent transition-colors outline-offset-[5px]
                   hover:outline hover:outline-secondary`}
     >
       <span

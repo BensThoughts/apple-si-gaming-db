@@ -9,7 +9,7 @@ export default function MainAppCard({
 }: MainAppCardProps) {
   return (
     <div className={`flex flex-col items-center gap-2 justify-center p-3
-                     bg-primary border-secondary border-solid border-1
+                     bg-tertiary border-secondary border-solid border-1
                      rounded-lg max-w-2xl`}>
       {requiredAge &&
         <div>
