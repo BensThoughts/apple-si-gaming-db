@@ -78,7 +78,6 @@ export default function AppsRoute() {
         <div className="col-start-1 col-span-1">
           <div className="flex flex-col gap-3 h-full items-center">
             <AppInfoHeader
-              name={name}
               headerImage={headerImage}
               releaseDate={releaseDate}
               platformMac={platformMac}

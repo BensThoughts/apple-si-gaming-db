@@ -5,14 +5,12 @@ import {
 } from '~/components/Icons';
 
 export default function AppInfoHeader({
-  name,
   headerImage,
   releaseDate,
   platformMac,
   platformLinux,
   platformWindows,
 }: {
-  name: string;
   headerImage?: string | null;
   releaseDate?: string | null;
   platformMac?: boolean | null;
