@@ -12,13 +12,13 @@ export default function PerformancePostDisplay({
   ...rest
 }: PerformancePostProps) {
   return (
-    <div className='flex flex-row w-full gap-[1px]' {...rest}>
-      <div className='flex flex-col items-center justify-center pr-3 border-r-2 border-r-secondary'>
+    <div className="flex flex-row w-full gap-[1px]" {...rest}>
+      <div className="flex flex-col items-center justify-center pr-3 border-r-2 border-r-secondary">
         {avatarMedium && (
           <div>
             <img
               src={avatarMedium}
-              alt='avatar'
+              alt="avatar"
               width={64}
               height={64}
               onError={(e) => {
@@ -27,9 +27,9 @@ export default function PerformancePostDisplay({
             />
           </div>
         )}
-        <span className='text-sm'>{displayName}</span>
+        <span className="text-sm">{displayName}</span>
       </div>
-      <div className='border-l-1 border-l-secondary-highlight pl-3'>
+      <div className="border-l-1 border-l-secondary-highlight pl-3">
         {postText}
       </div>
     </div>

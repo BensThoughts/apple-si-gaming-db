@@ -21,7 +21,7 @@ export default function PerformancePostLayout({
                      bg-primary border-solid border-2 border-secondary
                      p-3 rounded-lg`}>
       {performancePosts.length > 0 ? (
-        <div className='flex flex-col gap-6 w-full'>
+        <div className="flex flex-col gap-6 w-full">
           {performancePosts.map(({
             id,
             steamUser,
@@ -34,7 +34,7 @@ export default function PerformancePostLayout({
                 avatarMedium={steamUser.avatarMedium}
               />
               {(performancePosts.length - 1 > idx) &&
-                <hr className='text-secondary' />
+                <hr className="text-secondary" />
               }
             </div>
           ))}

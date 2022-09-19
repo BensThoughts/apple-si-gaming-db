@@ -1,11 +1,11 @@
-import { useActionData, useLoaderData, useTransition } from '@remix-run/react';
-import type { ActionArgs, LoaderArgs } from '@remix-run/server-runtime';
-import { redirect } from '@remix-run/node';
+import { Outlet, useLoaderData } from '@remix-run/react';
+import type { LoaderArgs } from '@remix-run/server-runtime';
+// import { redirect } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import invariant from 'tiny-invariant';
 
-import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-import { createPerformancePost } from '~/models/performancePost.server';
+// import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
+// import { createPerformancePost } from '~/models/performancePost.server';
 import { getSteamAppDetailsRequest } from '~/lib/data-utils/steamApi.server';
 import {
   searchSteamAppByAppId,
@@ -15,15 +15,13 @@ import {
 
 import AppInfoTags from '~/components/AppInfo/Tags';
 import ExternalLinks from '~/components/AppInfo/ExternalLinks';
-import LoadingComponent from '~/components/LoadingComponent';
+// import LoadingComponent from '~/components/LoadingComponent';
 import MainAppCard from '~/components/AppInfo/MainAppCard';
-import PerformancePostForm from '~/components/AppInfo/PerformancePostForm';
-import PerformancePostLayout from '~/components/AppInfo/PerformancePostLayout';
 import AppInfoTabs from '~/components/AppInfo/AppInfoTabs';
 import AppInfoDisclosure from '~/components/AppInfo/AppInfoDisclosure';
 import AppInfoHeader from '~/components/AppInfo/AppInfoHeader';
 
-export async function loader({ params, context }: LoaderArgs) {
+export async function loader({ params }: LoaderArgs) {
   invariant(params.steamAppId, 'Expected params.steamAppId');
   const steamAppId = Number(params.steamAppId);
   invariant(isFinite(steamAppId), 'Expected steamAppId to be a valid number');
@@ -36,58 +34,13 @@ export async function loader({ params, context }: LoaderArgs) {
       steamApp = await searchSteamAppByAppId(steamAppId);
     }
   }
-  const steamUser = extractAppLoadContext(context).steamUser;
   return json({
     steamApp,
-    steamUser,
   });
 }
 
-export async function action({
-  request,
-  params,
-  context,
-}: ActionArgs) {
-  // TODO: Switch invariant to throw new Response to use catch.
-  invariant(params.steamAppId, 'Expected params.appid');
-  const steamAppId = Number(params.steamAppId);
-  invariant(isFinite(steamAppId), 'Expected appid to be a valid number');
-  const { steamUser } = extractAppLoadContext(context);
-  invariant(steamUser, 'You must be logged into a valid Steam account to post performance reviews');
-  const steamUserId = steamUser.steamUserId;
-  const formData = await request.formData();
-  const postText = formData.get('performancePostText');
-  // const rating = formData.get('performancePostRating');
-  invariant(postText, 'No text found in performance post');
-
-  try {
-    await createPerformancePost({
-      steamUserId,
-      steamAppId,
-      postText: postText.toString(),
-    });
-  } catch (err) {
-    if (err instanceof Error) {
-      console.error(err);
-      throw new Error('(Error in createPerformancePost', { cause: err });
-    }
-    const values = Object.fromEntries(formData);
-    return json({ err, values });
-  }
-
-  return redirect(`/apps/${steamAppId}`);
-}
-
 export default function AppsRoute() {
-  const { steamApp, steamUser } = useLoaderData<typeof loader>();
-  const actionData = useActionData();
-  const transition = useTransition();
-
-  if (transition.state === 'loading' || transition.state === 'submitting') {
-    return (
-      <LoadingComponent />
-    );
-  }
+  const { steamApp } = useLoaderData<typeof loader>();
 
   if (!steamApp) {
     return (
@@ -100,7 +53,6 @@ export default function AppsRoute() {
     name,
     steamAppId,
     headerImage,
-    // type,
     requiredAge,
     platformLinux,
     platformMac,
@@ -113,24 +65,18 @@ export default function AppsRoute() {
     macRequirementsMinimum,
     genres,
     categories,
-    performancePosts,
-    usersWhoOwnApp, // This will either be 1 user (the current logged in one) or 0 users
   } = steamApp;
-  let userOwnsApp = false;
-  if (steamUser) {
-    userOwnsApp = usersWhoOwnApp.map((user) => user.steamUserId).includes(steamUser.steamUserId);
-  }
   return (
     <div className="h-full">
-      <div className='w-full h-12 flex items-center bg-primary py-4 px-6 mb-3'>
+      <div className="w-full h-12 flex items-center bg-primary py-4 px-6 mb-3">
         <h1 className="text-3xl md:text-4xl text-left text-secondary">
           {name}
         </h1>
       </div>
-      <div className='grid grid-cols-1 md:grid-cols-3 gap-4 min-h-screen'>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 min-h-screen">
 
-        <div className='col-start-1 col-span-1'>
-          <div className='flex flex-col gap-3 h-full items-center'>
+        <div className="col-start-1 col-span-1">
+          <div className="flex flex-col gap-3 h-full items-center">
             <AppInfoHeader
               name={name}
               headerImage={headerImage}
@@ -153,8 +99,8 @@ export default function AppsRoute() {
               (pcRequirementsMinimum && platformWindows) ||
               (linuxRequirementsMinimum && platformLinux)
             ) && (
-              <div className='w-full max-w-2xl'>
-                <AppInfoDisclosure title='Requirements'>
+              <div className="w-full max-w-2xl">
+                <AppInfoDisclosure title="Requirements">
                   <AppInfoTabs
                     mac={{ platformMac, macRequirementsMinimum }}
                     windows={{ platformWindows, pcRequirementsMinimum }}
@@ -173,21 +119,8 @@ export default function AppsRoute() {
             }
           </div>
         </div>
-        <div className='md:col-start-2 md:col-span-2'>
-          <div className='flex flex-col gap-3'>
-            <h2 className='text-xl'>Performance Posts</h2>
-            <div className='w-full'>
-              <PerformancePostLayout performancePosts={performancePosts} />
-            </div>
-            <div className='w-full'>
-              <PerformancePostForm
-                steamAppId={steamAppId}
-                steamUser={steamUser}
-                userOwnsApp={userOwnsApp}
-                actionData={actionData}
-              />
-            </div>
-          </div>
+        <div className="md:col-start-2 md:col-span-2">
+          <Outlet />
         </div>
       </div>
     </div>
@@ -197,8 +130,8 @@ export default function AppsRoute() {
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
     <div>
-      <h1>Error in /search route</h1>
-      <pre>{error.message}</pre>
+      <h1>Error in /apps route</h1>
+      <div>{error.message}</div>
     </div>
   );
 }
