@@ -7,11 +7,15 @@ export default function SelectMenu({
   onChange,
   name,
   defaultValue,
+  label,
+  errorMessage,
 }: {
-  options: string[],
-  onChange?(e: string): void,
-  name: string,
-  defaultValue: string,
+  options: string[];
+  onChange?(e: string): void;
+  name: string;
+  defaultValue: string;
+  label: string;
+  errorMessage?: string;
 }) {
   function onSelectionChange(selection: string) {
     if (onChange) {
@@ -26,6 +30,7 @@ export default function SelectMenu({
       name={name}
     >
       <div className="w-72">
+        <Listbox.Label>{label}{`: `}{errorMessage ? <span className="text-color-error">{errorMessage}</span> : null}</Listbox.Label>
         <div className="relative">
           <Listbox.Button
             className={`relative py-2 pr-10 pl-3 w-full text-left rounded-lg
@@ -37,7 +42,7 @@ export default function SelectMenu({
           >
             {({ value }: { value: string }) => (
               <>
-                <span className='block truncate'>
+                <span className="block truncate">
                   {value}
                 </span>
                 <span className="flex absolute inset-y-0 right-0 items-center pr-2 pointer-events-none">
