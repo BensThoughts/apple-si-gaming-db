@@ -24,6 +24,7 @@ module.exports = {
       'terminal': generateColorClass('color-bg-terminal'),
       'primary-text': generateColorClass('color-text-primary'),
       'secondary-text': generateColorClass('color-text-secondary'),
+      'color-error': generateColorClass('color-app-error'),
       'black': colors.black,
       'current': colors.current,
       'transparent': colors.transparent,
