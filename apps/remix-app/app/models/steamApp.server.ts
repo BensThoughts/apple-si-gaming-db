@@ -58,28 +58,6 @@ export async function searchSteamAppByAppId(
       linuxRequirementsMinimum: true,
       genres: true,
       categories: true,
-      performancePosts: {
-        select: {
-          id: true,
-          steamUser: {
-            select: {
-              steamUserId: true,
-              displayName: true,
-              avatarMedium: true,
-            },
-          },
-          postText: true,
-          steamAppId: true,
-        },
-      },
-      usersWhoOwnApp: {
-        where: {
-          steamUserId,
-        },
-        select: {
-          steamUserId: true,
-        },
-      },
     },
   });
 }
