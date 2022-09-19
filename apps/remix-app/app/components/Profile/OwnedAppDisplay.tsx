@@ -14,13 +14,13 @@ export default function OwnedAppDisplay({
 }) {
   return (
     <Link
-      to={`/apps/${steamAppId}`}
+      to={`/apps/${steamAppId}/performance-posts`}
       className={`flex flex-col justify-center items-center gap-1 bg-primary p-2
                   hover:bg-primary-highlight rounded-lg w-full md:max-w-[210px]
                   ${className}`}
     >
       <div
-        className='w-[276px] md:w-[184px] whitespace-nowrap overflow-hidden text-ellipsis'
+        className="w-[276px] md:w-[184px] whitespace-nowrap overflow-hidden text-ellipsis"
         aria-label={name}
       >
         {name}
@@ -34,8 +34,8 @@ export default function OwnedAppDisplay({
             alt={`Header for ${name}`}
             width={460}
             height={215}
-            className='rounded-md'
-            loading='lazy'
+            className="rounded-md"
+            loading="lazy"
             onError={(e) => {
               e.currentTarget.src = '/no-image-placeholder.svg';
             }}
@@ -46,12 +46,12 @@ export default function OwnedAppDisplay({
                          w-[276px] md:w-[184px] h-[129px] md:h-[86px]
                          max-w-[464px]`}>
           <img
-            src='/no-image-placeholder.svg'
+            src="/no-image-placeholder.svg"
             alt={`Header for ${name}`}
             width={460}
             height={215}
-            className='rounded-md'
-            loading='lazy'
+            className="rounded-md"
+            loading="lazy"
             onError={(e) => {
               e.currentTarget.src = '/no-image-placeholder.svg';
             }}
