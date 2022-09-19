@@ -174,7 +174,7 @@ export function CatchBoundary() {
         <h1>Oops! - {caught.status} {caught.statusText}</h1>
         {caught.status === 404 && (
           <img
-            src='four-oh-four-error.svg'
+            src='/four-oh-four-error.svg'
             alt='Four oh four error'
           />
         )}
