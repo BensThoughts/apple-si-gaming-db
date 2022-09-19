@@ -13,4 +13,4 @@ export interface AppIdData {
   steamId?: string;
 }
 
-export type SteamAppRating = 'Platinum' | 'Gold' | 'Silver' | 'Borked' | 'None';
+export type SteamAppRatingMedal = 'Platinum' | 'Gold' | 'Silver' | 'Borked' | 'None';
