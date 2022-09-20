@@ -11,9 +11,9 @@ interface SearchInputProps {
 export default function SearchInput({
   size = 'large',
 }: SearchInputProps) {
-  let buttonHeight = 'h-[46px]';
+  let buttonHeight = 'max-h-[46px]';
   if (size === 'medium') {
-    buttonHeight = 'h-[38px]';
+    buttonHeight = 'max-h-[38px]';
   }
 
   const transition = useTransition();
@@ -37,7 +37,7 @@ export default function SearchInput({
           />
         </div>
         <RoundedButton
-          className={`${buttonHeight} w-[89.66px]
+          className={`${buttonHeight} max-w-[89.66px]
                       ${transitioning ? 'bg-primary-highlight hover:bg-primary-highlight' : 'bg-secondary'}
                     `}
           type="submit"
