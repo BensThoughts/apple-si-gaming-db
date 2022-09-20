@@ -9,17 +9,20 @@ export default function TailwindDisclosure({
   title: string;
   children: React.ReactNode;
 }) {
-  const isWide = useMedia('(min-width: 640px)');
+  const isWide = useMedia('(min-width: 768px)');
   return (
     <Disclosure defaultOpen={isWide}>
       {({ open }) => (
         <>
-          <Disclosure.Button className={`flex w-full justify-between rounded-lg
+          <Disclosure.Button className={`flex w-full justify-between
                                       px-4 py-2 text-left text-sm
                                       font-medium focus:outline-none
                                       focus-visible:ring focus-visible:ring-secondary
                                       focus-visible:ring-opacity-70 transition-colors
-                                      bg-primary hover:bg-primary-highlight`}>
+                                      bg-primary hover:bg-primary-highlight
+                                      ${open ? `rounded-t-lg border-t-secondary border-x-secondary
+                                                border-x-1 border-t-1`
+                                             : 'rounded-lg border-secondary border-1'}`}>
             <span>{title}</span>
             <ChevronUpIcon
               className={`${
@@ -27,7 +30,7 @@ export default function TailwindDisclosure({
               } h-5 w-5 text-primary`}
             />
           </Disclosure.Button>
-          <Disclosure.Panel className="border-primary border-solid border-x-2 border-b-2 p-3 rounded-md bg-tertiary">
+          <Disclosure.Panel className={`border-secondary border-x-1 border-b-1 p-3 bg-tertiary rounded-b-md`}>
             {children}
           </Disclosure.Panel>
         </>
