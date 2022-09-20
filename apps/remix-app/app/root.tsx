@@ -129,7 +129,7 @@ function Document({
                 className="h-14"
               />
             </ThemeProvider>
-            <div className="relative inset-0 h-[450px] bg-app-bg-secondary z-0">
+            <div className="relative inset-0 max-h-[450px] md:max-h-[450px] bg-app-bg-secondary z-0">
               <div className="relative top-20">
                 {children}
               </div>
