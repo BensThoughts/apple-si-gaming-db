@@ -17,8 +17,8 @@ export default function PerformancePostLayout({
   performancePosts,
 }: PerformancePostLayoutProps) {
   return (
-    <div className={`flex flex-col items-center justify-center w-full
-                     bg-primary border-solid border-2 border-secondary
+    <div className={`grid grid-cols-1 w-full
+                     bg-tertiary border-solid border-2 border-secondary
                      p-3 rounded-lg`}>
       {performancePosts.length > 0 ? (
         <div className="flex flex-col gap-6 w-full">
