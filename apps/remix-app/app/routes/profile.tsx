@@ -3,13 +3,14 @@ import { json } from '@remix-run/node';
 import {
   useLoaderData,
 } from '@remix-run/react';
-import AsideInfoCard from '~/components/Cards/AsideInfoCard';
+import AsideCard from '~/components/Cards/AsideCard';
 import LoginCard from '~/components/Profile/LoginCard';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import { findUserOwnedApps } from '~/models/steamUser.server';
 import ExternalLink from '~/components/ExternalLink';
 import OwnedApps from '~/components/Profile/OwnedApps';
 import Heading from '~/components/Heading';
+import Main from '~/components/Layout/Main';
 
 export async function loader({ request, context }: LoaderArgs) {
   const { steamUser } = extractAppLoadContext(context);
@@ -67,7 +68,7 @@ export default function LoginPage() {
     ownedApps,
   } = useLoaderData<typeof loader>();
   return (
-    <div className="flex gap-4 flex-col items-center min-h-full">
+    <Main className="flex gap-4 flex-col items-center min-h-full w-full">
       <h1 className="text-2xl h-12">Steam Account</h1>
       <div className="flex flex-col md:flex-row gap-8 justify-evenly">
         <LoginCard
@@ -76,7 +77,7 @@ export default function LoginPage() {
           avatarFull={avatarFull}
         />
         <div className="max-w-md">
-          <AsideInfoCard title="Note" iconBackground="secondary">
+          <AsideCard title="Note" iconBackground="secondary">
             Within your&nbsp;
             <ExternalLink
               href="https://steamcommunity.com/my/edit/settings"
@@ -86,7 +87,7 @@ export default function LoginPage() {
             </ExternalLink>
             , &apos;My profile&apos; must be set to public. &apos;Game Details&apos;
             is also required to be public, so that ownership can be verified for your contributions.
-          </AsideInfoCard>
+          </AsideCard>
         </div>
       </div>
       <Heading>Library</Heading>
@@ -108,7 +109,7 @@ export default function LoginPage() {
           )}
         </div>
       )}
-    </div>
+    </Main>
   );
 }
 

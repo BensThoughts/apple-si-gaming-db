@@ -1,6 +1,6 @@
 import ExternalLink from '~/components/ExternalLink';
 
-export default function ExternalLinks({
+export default function AppInfoExternalLinks({
   steamAppId,
 }: {
   steamAppId: number,

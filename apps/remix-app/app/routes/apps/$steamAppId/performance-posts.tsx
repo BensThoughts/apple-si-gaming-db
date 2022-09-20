@@ -37,10 +37,10 @@ function validatePostRatingMedal(ratingMedal: string) {
 
 function validatePostText(postText: string) {
   if (postText.length < 3) {
-    return `The performance posts text is too short`;
+    return `The performance posts text is too short (3 character minimum)`;
   }
   if (postText.length > 500) {
-    return `The performance posts text is too long`;
+    return `The performance posts text is too long (500 character maximum)`;
   }
 }
 
@@ -111,13 +111,12 @@ export async function action({
   return redirect(`/apps/${steamAppId}/performance-posts`);
 }
 
-
 export default function PostsRoute() {
   const { performancePosts, steamUserOwnsApp, steamUserIsLoggedIn, steamAppId } = useLoaderData<typeof loader>();
   const actionData = useActionData<CreatePostActionData>();
   return (
     <div className="flex flex-col gap-3">
-      <h2 className="text-xl">Performance Posts</h2>
+      <h2 className="text-xl text-primary-highlight">Performance Posts</h2>
       <div className="w-full">
         <PerformancePostLayout performancePosts={performancePosts} />
       </div>

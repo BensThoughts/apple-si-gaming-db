@@ -13,13 +13,12 @@ import {
   convertSteamApiDataToPrisma,
 } from '~/models/steamApp.server';
 
-import AppInfoTags from '~/components/AppInfo/Tags';
-import ExternalLinks from '~/components/AppInfo/ExternalLinks';
+import AppInfoTags from '~/components/AppInfo/AppInfoTags';
+import AppInfoExternalLinks from '~/components/AppInfo/AppInfoExternalLinks';
 // import LoadingComponent from '~/components/LoadingComponent';
-import MainAppCard from '~/components/AppInfo/MainAppCard';
-import AppInfoTabs from '~/components/AppInfo/AppInfoTabs';
-import AppInfoDisclosure from '~/components/AppInfo/AppInfoDisclosure';
+import AppInfoMainAppCard from '~/components/AppInfo/AppInfoMainAppCard';
 import AppInfoHeader from '~/components/AppInfo/AppInfoHeader';
+import AppInfoRequirements from '~/components/AppInfo/AppInfoRequirements';
 
 export async function loader({ params }: LoaderArgs) {
   invariant(params.steamAppId, 'Expected params.steamAppId');
@@ -84,37 +83,29 @@ export default function AppsRoute() {
               platformLinux={platformLinux}
               platformWindows={platformWindows}
             />
-            <ExternalLinks steamAppId={steamAppId} />
+            <AppInfoExternalLinks steamAppId={steamAppId} />
             {((genres.length > 0) || (categories.length > 0)) &&
-              <div className="w-full max-w-2xl">
                 <AppInfoTags
                   genres={genres}
                   categories={categories}
                 />
-              </div>
             }
             {(
               (macRequirementsMinimum && platformMac) ||
               (pcRequirementsMinimum && platformWindows) ||
               (linuxRequirementsMinimum && platformLinux)
             ) && (
-              <div className="w-full max-w-2xl">
-                <AppInfoDisclosure title="Requirements">
-                  <AppInfoTabs
-                    mac={{ platformMac, macRequirementsMinimum }}
-                    windows={{ platformWindows, pcRequirementsMinimum }}
-                    linux={{ platformLinux, linuxRequirementsMinimum }}
-                  />
-                </AppInfoDisclosure>
-              </div>
+              <AppInfoRequirements
+                mac={{ platformMac, macRequirementsMinimum }}
+                windows={{ platformWindows, pcRequirementsMinimum }}
+                linux={{ platformLinux, linuxRequirementsMinimum }}
+              />
             )}
             {shortDescription &&
-              <div>
-                <MainAppCard
+                <AppInfoMainAppCard
                   requiredAge={requiredAge}
                   shortDescription={shortDescription}
                 />
-              </div>
             }
           </div>
         </div>

@@ -3,7 +3,7 @@ interface MainAppCardProps {
   shortDescription?: string | null;
 }
 
-export default function MainAppCard({
+export default function AppInfoMainAppCard({
   requiredAge,
   shortDescription,
 }: MainAppCardProps) {

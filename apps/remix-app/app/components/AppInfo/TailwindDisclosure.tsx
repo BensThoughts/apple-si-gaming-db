@@ -2,7 +2,7 @@ import { Disclosure } from '@headlessui/react';
 import { ChevronUpIcon } from '~/components/Icons';
 import { useMedia } from 'react-use';
 
-export default function AppInfoDisclosure({
+export default function TailwindDisclosure({
   title,
   children,
 }: {
@@ -27,7 +27,7 @@ export default function AppInfoDisclosure({
               } h-5 w-5 text-primary`}
             />
           </Disclosure.Button>
-          <Disclosure.Panel className="border-primary border-solid border-x-2 border-b-2 p-3 rounded-b-md bg-tertiary">
+          <Disclosure.Panel className="border-primary border-solid border-x-2 border-b-2 p-3 rounded-md bg-tertiary">
             {children}
           </Disclosure.Panel>
         </>

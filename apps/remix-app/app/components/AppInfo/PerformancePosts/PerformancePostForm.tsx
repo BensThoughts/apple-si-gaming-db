@@ -26,7 +26,7 @@ export default function PerformancePostForm({
       {steamUserIsLoggedIn ? (
         <>
           {steamUserOwnsApp ? (
-            <div>
+            <>
               <h2 className="text-secondary text-lg">Submit Your Own Performance Post</h2>
               <Form
                 method="post"
@@ -46,6 +46,9 @@ export default function PerformancePostForm({
                     name="performancePostText"
                     className="bg-primary rounded-lg p-2 w-full h-28"
                     defaultValue={fields?.postText ? fields.postText : ''}
+                    required
+                    minLength={3}
+                    maxLength={500}
                   />
                 </label>
                 <SelectMenu
@@ -57,7 +60,7 @@ export default function PerformancePostForm({
                 />
                 <RoundedButton type="submit" className="max-w-xs">Submit</RoundedButton>
               </Form>
-            </div>
+            </>
           ): (
             <div>
               It looks like you do not own this app yet. Add it to your steam library to leave a

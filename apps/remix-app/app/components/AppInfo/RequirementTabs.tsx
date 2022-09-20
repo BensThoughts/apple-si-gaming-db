@@ -4,7 +4,7 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function AppInfoTabs({
+export default function RequirementTabs({
   mac,
   windows,
   linux,

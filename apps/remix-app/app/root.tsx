@@ -130,9 +130,11 @@ function Document({
               />
             </ThemeProvider>
             <div className="relative inset-0 h-[450px] bg-app-bg-secondary z-0">
-              <main className="relative top-20 flex flex-col items-center justify-center w-full z-[1] pb-16  min-h-screen overflow-hidden px-4 md:px-10">
+              <div className="relative top-20">
                 {children}
-              </main>
+              </div>
+              {/* <main className="relative top-20 flex flex-col items-center justify-center w-full z-[1] pb-16  min-h-screen overflow-hidden px-4 md:px-10">
+              </main> */}
             </div>
           </Suspense>
         </ClientOnly>
