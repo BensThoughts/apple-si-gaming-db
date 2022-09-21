@@ -28,7 +28,7 @@ export default function AppInfoHeader({
             height={215}
             className="rounded-md"
             onError={(e) => {
-              e.currentTarget.src = '/no-image-placeholder.svg';
+              e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
             }}
           />}
         </div>

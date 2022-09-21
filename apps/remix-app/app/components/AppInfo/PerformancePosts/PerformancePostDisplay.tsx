@@ -22,7 +22,7 @@ export default function PerformancePostDisplay({
               width={64}
               height={64}
               onError={(e) => {
-                e.currentTarget.src = '/no-image-placeholder.svg';
+                e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
               }}
             />
           </div>

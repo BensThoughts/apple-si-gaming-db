@@ -28,8 +28,8 @@ export default function OwnedAppDisplay({
       </div>
       {headerImgSrc ? (
         <div className={`rounded-lg flex items-center justify-center
-                         w-[276px] md:w-[184px] h-[129px] md:h-[86px]
-                         max-w-[464px]`}>
+                         max-w-[276px] md:max-w-[184px] max-h-[129px]
+                         md:max-h-[86px]`}>
           <img
             src={headerImgSrc}
             alt={`Header for ${name}`}
@@ -38,23 +38,23 @@ export default function OwnedAppDisplay({
             className="rounded-md"
             loading="lazy"
             onError={(e) => {
-              e.currentTarget.src = '/no-image-placeholder.svg';
+              e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
             }}
           />
         </div>
       ): (
         <div className={`rounded-lg flex items-center justify-center
-                         w-[276px] md:w-[184px] h-[129px] md:h-[86px]
-                         max-w-[464px]`}>
+                         max-w-[276px] md:max-w-[184px] max-h-[129px]
+                         md:max-h-[86px]`}>
           <img
-            src="/no-image-placeholder.svg"
+            src="/svg-images/no-image-placeholder.svg"
             alt={`Header for ${name}`}
             width={460}
             height={215}
             className="rounded-md"
             loading="lazy"
             onError={(e) => {
-              e.currentTarget.src = '/no-image-placeholder.svg';
+              e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
             }}
           />
         </div>
