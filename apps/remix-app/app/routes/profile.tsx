@@ -68,30 +68,35 @@ export default function LoginPage() {
     ownedApps,
   } = useLoaderData<typeof loader>();
   return (
-    <Main className="flex gap-4 flex-col items-center min-h-full w-full">
-      <h1 className="text-2xl h-12">Steam Account</h1>
-      <div className="flex flex-col md:flex-row gap-8 justify-evenly">
-        <LoginCard
-          isLoggedIn={isLoggedIn}
-          displayName={displayName}
-          avatarFull={avatarFull}
-        />
-        <div className="max-w-md">
-          <AsideCard title="Note" iconBackground="secondary">
+    <div>
+      <div className="w-full min-h-[2rem] bg-primary py-2 px-6 mb-4 md:mb-8">
+        <h1 className="text-2xl md:text-3xl text-center text-secondary">
+          Steam Account
+        </h1>
+      </div>
+      <Main className="flex gap-4 flex-col items-center min-h-full w-full">
+        <div className="flex flex-col md:flex-row gap-8 justify-evenly">
+          <LoginCard
+            isLoggedIn={isLoggedIn}
+            displayName={displayName}
+            avatarFull={avatarFull}
+          />
+          <div className="max-w-md">
+            <AsideCard title="Note" iconBackground="secondary">
             Within your&nbsp;
-            <ExternalLink
-              href="https://steamcommunity.com/my/edit/settings"
-              className="underline-offset-2"
-            >
+              <ExternalLink
+                href="https://steamcommunity.com/my/edit/settings"
+                className="underline-offset-2"
+              >
               Steam Privacy Settings
-            </ExternalLink>
+              </ExternalLink>
             , &apos;My profile&apos; must be set to public. &apos;Game Details&apos;
             is also required to be public, so that ownership can be verified for your contributions.
-          </AsideCard>
+            </AsideCard>
+          </div>
         </div>
-      </div>
-      <Heading>Library</Heading>
-      {(ownedApps && ownedApps.length > 0) ? (
+        <Heading>Library</Heading>
+        {(ownedApps && ownedApps.length > 0) ? (
         <div>
           <OwnedApps ownedApps={ownedApps} />
         </div>
@@ -109,7 +114,8 @@ export default function LoginPage() {
           )}
         </div>
       )}
-    </Main>
+      </Main>
+    </div>
   );
 }
 
