@@ -34,14 +34,12 @@ export default function LoginCard({
           written by people that own the game. Signing in with this method accesses only information
           that you have intentionally set to be publicly visible.
           <a href="/api/auth/steam/login" className="block w-[114px] h-[43px]">
-            <div className="w-[114px] h-[43px]">
-              <img
-                src="steam_sign_in.png"
-                alt="sign in with steam"
-                width={114}
-                height={43}
-              />
-            </div>
+            <img
+              src="steam_sign_in.png"
+              alt="sign in with steam"
+              width={114}
+              height={43}
+            />
           </a>
         </>
       )}
