@@ -1,20 +1,21 @@
 type FloatingLabelInputProps = {
-  id: string;
-  name: string;
   label: string;
-  placeholder?: undefined;
-  inputSize?: 'medium' | 'large';
+  componentSize?: 'medium' | 'large';
 } & React.InputHTMLAttributes<HTMLInputElement>
 
 export default function FloatingLabelInput({
   id,
   name,
+  defaultValue = '',
+  minLength,
+  maxLength,
+  required,
   label,
-  inputSize = 'large',
+  componentSize = 'large',
   ...rest
 }: FloatingLabelInputProps) {
   let inputSizeClassnames = 'px-3 py-3';
-  if (inputSize === 'medium') {
+  if (componentSize === 'medium') {
     inputSizeClassnames = 'px-[7px] py-[7px]';
   }
   return (
@@ -25,8 +26,13 @@ export default function FloatingLabelInput({
         type="text"
         className={`outline-none peer bg-transparent ${inputSizeClassnames}`}
         placeholder=" "
+        defaultValue={defaultValue}
+        minLength={minLength}
+        maxLength={maxLength}
+        required={required}
         {...rest}
       />
+      {}
 
       <label
         htmlFor={id}

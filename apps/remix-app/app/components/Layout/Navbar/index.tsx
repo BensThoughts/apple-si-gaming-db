@@ -65,7 +65,7 @@ export default function Navbar({
                 {menuItems.map((menuItem) => (
                   <MenuItem animatedLink key={menuItem.href} href={menuItem.href}>{menuItem.name}</MenuItem>
                 ))}
-                <SearchInput size="medium" />
+                <SearchInput componentSize="medium" />
 
               </div>
             </div>

@@ -61,7 +61,7 @@ export default function OwnedApps({
             id="profileSearch"
             name="profileSearch"
             label="Search by name..."
-            inputSize="large"
+            componentSize="large"
             aria-label="Search games by name"
             onChange={(e) => setNameQuery(e.target.value)}
           />
