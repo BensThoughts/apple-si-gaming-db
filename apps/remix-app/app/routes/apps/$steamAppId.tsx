@@ -19,6 +19,7 @@ import AppInfoExternalLinks from '~/components/AppInfo/AppInfoExternalLinks';
 import AppInfoMainAppCard from '~/components/AppInfo/AppInfoMainAppCard';
 import AppInfoHeader from '~/components/AppInfo/AppInfoHeader';
 import AppInfoRequirements from '~/components/AppInfo/AppInfoRequirements';
+import Main from '~/components/Layout/Main';
 
 export async function loader({ params }: LoaderArgs) {
   invariant(params.steamAppId, 'Expected params.steamAppId');
@@ -66,53 +67,56 @@ export default function AppsRoute() {
     categories,
   } = steamApp;
   return (
-    <div className="h-full">
-      <div className="w-full h-12 flex items-center bg-primary rounded-lg py-4 px-6 mb-3">
-        <h1 className="text-3xl md:text-4xl text-left text-secondary">
+    <div>
+      <div className="w-full min-h-[2rem] bg-primary py-2 px-6 mb-4 md:mb-8">
+        <h1 className="text-2xl md:text-3xl text-left text-secondary">
           {name}
         </h1>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 min-h-screen">
+      <Main>
 
-        <div className="col-start-1 col-span-1">
-          <div className="flex flex-col gap-3 h-full items-center">
-            <AppInfoHeader
-              headerImage={headerImage}
-              releaseDate={releaseDate}
-              platformMac={platformMac}
-              platformLinux={platformLinux}
-              platformWindows={platformWindows}
-            />
-            <AppInfoExternalLinks steamAppId={steamAppId} />
-            {((genres.length > 0) || (categories.length > 0)) &&
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 min-h-screen">
+
+          <div className="col-start-1 col-span-1">
+            <div className="flex flex-col gap-3 h-full items-center">
+              <AppInfoHeader
+                headerImage={headerImage}
+                releaseDate={releaseDate}
+                platformMac={platformMac}
+                platformLinux={platformLinux}
+                platformWindows={platformWindows}
+              />
+              <AppInfoExternalLinks steamAppId={steamAppId} />
+              {((genres.length > 0) || (categories.length > 0)) &&
                 <AppInfoTags
                   genres={genres}
                   categories={categories}
                 />
-            }
-            {(
-              (macRequirementsMinimum && platformMac) ||
+              }
+              {(
+                (macRequirementsMinimum && platformMac) ||
               (pcRequirementsMinimum && platformWindows) ||
               (linuxRequirementsMinimum && platformLinux)
-            ) && (
-              <AppInfoRequirements
-                mac={{ platformMac, macRequirementsMinimum }}
-                windows={{ platformWindows, pcRequirementsMinimum }}
-                linux={{ platformLinux, linuxRequirementsMinimum }}
-              />
-            )}
-            {shortDescription &&
+              ) && (
+                <AppInfoRequirements
+                  mac={{ platformMac, macRequirementsMinimum }}
+                  windows={{ platformWindows, pcRequirementsMinimum }}
+                  linux={{ platformLinux, linuxRequirementsMinimum }}
+                />
+              )}
+              {shortDescription &&
                 <AppInfoMainAppCard
                   requiredAge={requiredAge}
                   shortDescription={shortDescription}
                 />
-            }
+              }
+            </div>
+          </div>
+          <div className="md:col-start-2 md:col-span-2">
+            <Outlet />
           </div>
         </div>
-        <div className="md:col-start-2 md:col-span-2">
-          <Outlet />
-        </div>
-      </div>
+      </Main>
     </div>
   );
 }
