@@ -129,8 +129,8 @@ function Document({
                 className="h-14"
               />
             </ThemeProvider>
-            <div className="relative inset-0 max-h-[450px] md:max-h-[450px] bg-app-bg-secondary z-0">
-              <div className="relative top-20">
+            <div className="relative inset-0 min-h-[450px] max-h-[580px] md:max-h-[450px] bg-app-bg-secondary z-0">
+              <div className="relative top-14">
                 {children}
               </div>
               {/* <main className="relative top-20 flex flex-col items-center justify-center w-full z-[1] pb-16  min-h-screen overflow-hidden px-4 md:px-10">
@@ -175,7 +175,7 @@ export function CatchBoundary() {
         <h1>Oops! - {caught.status} {caught.statusText}</h1>
         {caught.status === 404 && (
           <img
-            src="/four-oh-four-error.svg"
+            src="/svg-images/four-oh-four-error.svg"
             alt="Four oh four error"
           />
         )}
