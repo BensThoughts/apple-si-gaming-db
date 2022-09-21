@@ -1,6 +1,6 @@
 import { Disclosure } from '@headlessui/react';
 import { ChevronUpIcon } from '~/components/Icons';
-import { useMedia } from 'react-use';
+import { useMediaIsWide } from '~/lib/hooks/useMedia';
 
 export default function TailwindDisclosure({
   title,
@@ -9,7 +9,7 @@ export default function TailwindDisclosure({
   title: string;
   children: React.ReactNode;
 }) {
-  const isWide = useMedia('(min-width: 768px)');
+  const { isWide } = useMediaIsWide();
   return (
     <Disclosure defaultOpen={isWide}>
       {({ open }) => (
