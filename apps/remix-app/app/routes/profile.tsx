@@ -10,8 +10,7 @@ import { findUserOwnedApps } from '~/models/steamUser.server';
 import ExternalLink from '~/components/ExternalLink';
 import OwnedApps from '~/components/Profile/OwnedApps';
 import Heading from '~/components/Heading';
-import Main from '~/components/Layout/Main';
-import PageHeader from '~/components/Layout/PageHeader';
+import PageWrapper from '~/components/Layout/PageWrapper';
 
 export async function loader({ request, context }: LoaderArgs) {
   const { steamUser } = extractAppLoadContext(context);
@@ -69,9 +68,8 @@ export default function LoginPage() {
     ownedApps,
   } = useLoaderData<typeof loader>();
   return (
-    <div>
-      <PageHeader title="Profile" titlePosition="left" />
-      <Main className="flex gap-4 flex-col items-center min-h-full w-full">
+    <PageWrapper title="Profile">
+      <div className="flex flex-col gap-4 items-center w-full">
         <div className="flex flex-col md:flex-row gap-8 justify-evenly">
           <LoginCard
             isLoggedIn={isLoggedIn}
@@ -111,8 +109,8 @@ export default function LoginPage() {
           )}
         </div>
       )}
-      </Main>
-    </div>
+      </div>
+    </PageWrapper>
   );
 }
 

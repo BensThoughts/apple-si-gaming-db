@@ -19,8 +19,7 @@ import AppInfoExternalLinks from '~/components/AppInfo/AppInfoExternalLinks';
 import AppInfoMainAppCard from '~/components/AppInfo/AppInfoMainAppCard';
 import AppInfoHeader from '~/components/AppInfo/AppInfoHeader';
 import AppInfoRequirements from '~/components/AppInfo/AppInfoRequirements';
-import Main from '~/components/Layout/Main';
-import PageHeader from '~/components/Layout/PageHeader';
+import PageWrapper from '~/components/Layout/PageWrapper';
 
 export async function loader({ params }: LoaderArgs) {
   invariant(params.steamAppId, 'Expected params.steamAppId');
@@ -68,53 +67,50 @@ export default function AppsRoute() {
     categories,
   } = steamApp;
   return (
-    <div>
-      <PageHeader title={name} titlePosition="left" />
-      <Main>
+    <PageWrapper title={name}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 min-h-screen">
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 min-h-screen">
-
-          <div className="col-start-1 col-span-1">
-            <div className="flex flex-col gap-3 h-full items-center">
-              <AppInfoHeader
-                headerImage={headerImage}
-                releaseDate={releaseDate}
-                platformMac={platformMac}
-                platformLinux={platformLinux}
-                platformWindows={platformWindows}
-              />
-              <AppInfoExternalLinks steamAppId={steamAppId} />
-              {((genres.length > 0) || (categories.length > 0)) &&
+        <div className="col-start-1 col-span-1">
+          <div className="flex flex-col gap-3 h-full items-center">
+            <AppInfoHeader
+              headerImage={headerImage}
+              releaseDate={releaseDate}
+              platformMac={platformMac}
+              platformLinux={platformLinux}
+              platformWindows={platformWindows}
+            />
+            <AppInfoExternalLinks steamAppId={steamAppId} />
+            {((genres.length > 0) || (categories.length > 0)) &&
                 <AppInfoTags
                   genres={genres}
                   categories={categories}
                 />
-              }
-              {(
-                (macRequirementsMinimum && platformMac) ||
+            }
+            {(
+              (macRequirementsMinimum && platformMac) ||
               (pcRequirementsMinimum && platformWindows) ||
               (linuxRequirementsMinimum && platformLinux)
-              ) && (
-                <AppInfoRequirements
-                  mac={{ platformMac, macRequirementsMinimum }}
-                  windows={{ platformWindows, pcRequirementsMinimum }}
-                  linux={{ platformLinux, linuxRequirementsMinimum }}
-                />
-              )}
-              {shortDescription &&
+            ) && (
+              <AppInfoRequirements
+                mac={{ platformMac, macRequirementsMinimum }}
+                windows={{ platformWindows, pcRequirementsMinimum }}
+                linux={{ platformLinux, linuxRequirementsMinimum }}
+              />
+            )}
+            {shortDescription &&
                 <AppInfoMainAppCard
                   requiredAge={requiredAge}
                   shortDescription={shortDescription}
                 />
-              }
-            </div>
-          </div>
-          <div className="md:col-start-2 md:col-span-2">
-            <Outlet />
+            }
           </div>
         </div>
-      </Main>
-    </div>
+        <div className="md:col-start-2 md:col-span-2">
+          <Outlet />
+        </div>
+      </div>
+
+    </PageWrapper>
   );
 }
 

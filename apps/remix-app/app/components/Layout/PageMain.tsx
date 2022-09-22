@@ -2,7 +2,7 @@ import React from 'react';
 
 type MainProps = React.HTMLAttributes<HTMLDivElement>
 
-export default function Main({
+export default function PageMain({
   children,
   className,
 }: MainProps) {
