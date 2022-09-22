@@ -68,7 +68,7 @@ export async function loader({
 }
 
 export default function SearchIndexRoute() {
-  const isWide = useMediaIsWide();
+  const { isWide } = useMediaIsWide();
   const { steamApps, fields, fieldErrors } = useLoaderData<LoaderData>();
   const searchQuery = fields?.searchQuery ? fields.searchQuery : '';
   const transition = useTransition();
