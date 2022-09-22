@@ -20,6 +20,7 @@ import AppInfoMainAppCard from '~/components/AppInfo/AppInfoMainAppCard';
 import AppInfoHeader from '~/components/AppInfo/AppInfoHeader';
 import AppInfoRequirements from '~/components/AppInfo/AppInfoRequirements';
 import Main from '~/components/Layout/Main';
+import PageHeader from '~/components/Layout/PageHeader';
 
 export async function loader({ params }: LoaderArgs) {
   invariant(params.steamAppId, 'Expected params.steamAppId');
@@ -68,11 +69,7 @@ export default function AppsRoute() {
   } = steamApp;
   return (
     <div>
-      <div className="w-full min-h-[2rem] bg-primary py-2 px-6 mb-4 md:mb-8">
-        <h1 className="text-2xl md:text-3xl text-left text-secondary">
-          {name}
-        </h1>
-      </div>
+      <PageHeader title={name} titlePosition="left" />
       <Main>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 min-h-screen">

@@ -11,6 +11,7 @@ import ExternalLink from '~/components/ExternalLink';
 import OwnedApps from '~/components/Profile/OwnedApps';
 import Heading from '~/components/Heading';
 import Main from '~/components/Layout/Main';
+import PageHeader from '~/components/Layout/PageHeader';
 
 export async function loader({ request, context }: LoaderArgs) {
   const { steamUser } = extractAppLoadContext(context);
@@ -69,11 +70,7 @@ export default function LoginPage() {
   } = useLoaderData<typeof loader>();
   return (
     <div>
-      <div className="w-full min-h-[2rem] bg-primary py-2 px-6 mb-4 md:mb-8">
-        <h1 className="text-2xl md:text-3xl text-center text-secondary">
-          Steam Account
-        </h1>
-      </div>
+      <PageHeader title="Profile" titlePosition="left" />
       <Main className="flex gap-4 flex-col items-center min-h-full w-full">
         <div className="flex flex-col md:flex-row gap-8 justify-evenly">
           <LoginCard
