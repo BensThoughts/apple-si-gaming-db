@@ -53,6 +53,10 @@ export default function OwnedApps({
         .sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
   }
 
+  const steamApps = searchNames(ownedApps);
+  const paginatedSteamApps = steamApps.slice(0, paginate);
+  const lastPage = paginate >= steamApps.length;
+
   return (
     <div className="flex flex-col items-center gap-8 w-full">
       <div className="flex flex-col md:flex-row items-center justify-center gap-3 w-full">
@@ -83,7 +87,7 @@ export default function OwnedApps({
       </div>
 
       <div className="flex flex-wrap items-center justify-center gap-3 md:gap-1 w-full">
-        {searchNames(ownedApps).slice(0, paginate).map(({
+        {paginatedSteamApps.map(({
           steamAppId,
           name,
           headerImage,
@@ -97,7 +101,7 @@ export default function OwnedApps({
           </div>
         ))}
       </div>
-      <RoundedButton onClick={() => loadMore()}>Load More...</RoundedButton>
+      {!lastPage && <RoundedButton onClick={() => loadMore()}>Load More...</RoundedButton>}
     </div>
   );
 }
