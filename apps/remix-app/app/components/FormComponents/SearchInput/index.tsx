@@ -6,13 +6,15 @@ const FORM_NAME = 'game-search-form';
 
 type SearchInputProps = {
   componentSize: 'large' | 'medium';
+  fieldError?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>
 
 export default function SearchInput({
   defaultValue,
-  minLength,
-  maxLength,
-  required,
+  minLength = 1,
+  maxLength = 100,
+  required = true,
+  fieldError,
   componentSize = 'large',
 }: SearchInputProps) {
   let buttonHeight = 'h-[46px]';
@@ -49,6 +51,7 @@ export default function SearchInput({
             minLength={minLength}
             maxLength={maxLength}
             required={required}
+            fieldError={fieldError}
           />
         </div>
         <RoundedButton
@@ -61,6 +64,7 @@ export default function SearchInput({
           {transitioning ? 'Loading' : 'Search' }
         </RoundedButton>
       </div>
+      {fieldError ? <div className="text-color-error">{fieldError}</div> : null}
     </Form>
   );
 }

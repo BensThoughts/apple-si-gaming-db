@@ -69,7 +69,7 @@ export async function loader({
 
 export default function SearchIndexRoute() {
   const isWide = useMediaIsWide();
-  const { steamApps, fields } = useLoaderData<typeof loader>();
+  const { steamApps, fields, fieldErrors } = useLoaderData<LoaderData>();
   const searchQuery = fields?.searchQuery ? fields.searchQuery : '';
   const transition = useTransition();
 
@@ -79,11 +79,15 @@ export default function SearchIndexRoute() {
   ) ? true : false;
 
   return (
-    <div>
+    <div className="flex flex-col gap-6">
       <div>
         <SearchInput
           defaultValue={searchQuery}
           componentSize={isWide ? 'large' : 'medium'}
+          fieldError={fieldErrors?.searchQuery}
+          minLength={1}
+          maxLength={100}
+          required
         />
       </div>
       <div>
