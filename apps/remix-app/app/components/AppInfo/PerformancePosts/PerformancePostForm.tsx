@@ -1,9 +1,8 @@
-// import type { SteamAppRatingMedal } from '~/interfaces';
-// import type { RatingMedal } from '~/interfaces/database';
 import { Form } from '@remix-run/react';
 import RoundedButton from '~/components/RoundedButton';
 import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { CreatePostActionData } from '~/routes/apps/$steamAppId/performance-posts';
+import type { PerformancePost } from '~/interfaces/database';
 
 export default function PerformancePostForm({
   steamAppId,
@@ -20,9 +19,7 @@ export default function PerformancePostForm({
   fieldErrors: CreatePostActionData['fieldErrors'];
   formError: CreatePostActionData['formError'];
 }) {
-  // const ratingOptions: (RatingMedal | 'None')[] = ['None', 'Platinum',
-  // 'Gold', 'Silver', 'Bronze', 'Borked'];
-  const ratingOptions: string[] = ['None', 'Platinum', 'Gold', 'Silver', 'Bronze', 'Borked'];
+  const ratingOptions: (PerformancePost['ratingMedal'] | 'None')[] = ['None', 'Platinum', 'Gold', 'Silver', 'Bronze', 'Borked'];
   return (
     <div className={`flex flex-col gap-3 items-center justify-center bg-tertiary
                      border-solid border-1 border-secondary p-3 rounded-lg w-full`}>
@@ -31,6 +28,7 @@ export default function PerformancePostForm({
           {steamUserOwnsApp ? (
             <>
               <h2 className="text-secondary text-lg">Submit Your Own Performance Post</h2>
+              {formError && <div className="text-color-error">{formError}</div>}
               <Form
                 method="post"
                 name="performancePost"

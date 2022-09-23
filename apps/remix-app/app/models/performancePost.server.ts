@@ -60,15 +60,19 @@ export function convertRatingMedalStringToRatingMedal(ratingMedal: string): Rati
   }
 }
 
-// export function convertRatingMedalToNumber(ratingMedal: RatingMedal) {
-//   switch (ratingMedal) {
-//     case 'Borked':
-//       return 1;
-//     case 'Silver':
-//       return 2;
-//     case 'Gold':
-//       return 3;
-//     case 'Platinum':
-//       return 4;
-//   }
-// }
+export function convertRatingMedalToNumber(ratingMedal: RatingMedal) {
+  switch (ratingMedal) {
+    case 'Borked':
+      return 1;
+    case 'Bronze':
+      return 2;
+    case 'Silver':
+      return 3;
+    case 'Gold':
+      return 4;
+    case 'Platinum':
+      return 5;
+    default:
+      return 0;
+  }
+}
