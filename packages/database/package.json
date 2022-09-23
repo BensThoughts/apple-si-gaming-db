@@ -23,6 +23,9 @@
     "studio": "prisma studio",
     "lint": "eslint ./src/**.ts**"
   },
+  "prisma": {
+    "seed": "tsx src/seed.ts"
+  },
   "dependencies": {
     "@apple-si-gaming-db/logger": "*",
     "@apple-si-gaming-db/steam-api": "*",

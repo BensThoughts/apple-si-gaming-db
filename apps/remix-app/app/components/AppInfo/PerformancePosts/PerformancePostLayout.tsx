@@ -4,8 +4,9 @@ import PerformancePostDisplay from './PerformancePostDisplay';
 type PerformancePostLayoutProps =
 {
   performancePosts: {
-    id: PerformancePost['id']
+    id: PerformancePost['id'],
     postText: PerformancePost['postText'],
+    // ratingMedal: PerformancePost['ratingMedal'],
     steamUser: {
       displayName: SteamUser['displayName'],
       avatarMedium: SteamUser['avatarMedium'],
@@ -26,12 +27,14 @@ export default function PerformancePostLayout({
             id,
             steamUser,
             postText,
+            // ratingMedal,
           }, idx) => (
             <div key={id} className="flex flex-col gap-6">
               <PerformancePostDisplay
                 postText={postText}
                 displayName={steamUser.displayName}
                 avatarMedium={steamUser.avatarMedium}
+                // ratingMedal={ratingMedal}
               />
               {(performancePosts.length - 1 > idx) &&
                 <hr className="text-secondary" />

@@ -10,4 +10,5 @@ export type {
 
   PerformancePost,
   PerformancePostWithoutMetadata,
+  // RatingMedal,
 } from '@apple-si-gaming-db/database';

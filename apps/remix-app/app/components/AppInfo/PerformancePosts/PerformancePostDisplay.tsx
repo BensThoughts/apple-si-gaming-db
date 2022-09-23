@@ -1,6 +1,13 @@
-import type { PerformancePost, SteamUser } from '~/interfaces/database';
+// import { RatingMedalIcon } from '~/components/Icons';
+import type {
+  PerformancePost,
+  SteamUser,
+  // RatingMedal,
+} from '~/interfaces/database';
+// import { convertRatingMedalToNumber } from '~/interfaces/database';
 
 type PerformancePostProps =
+  // { ratingMedal: string } &
   Pick<PerformancePost, 'postText'> &
   Pick<SteamUser, 'avatarMedium' | 'displayName'> &
   React.HTMLAttributes<HTMLDivElement>
@@ -9,8 +16,10 @@ export default function PerformancePostDisplay({
   displayName,
   avatarMedium,
   postText,
+  // ratingMedal,
   ...rest
 }: PerformancePostProps) {
+  // const ratingNum = convertRatingMedalToNumber(ratingMedal);
   return (
     <div className="flex flex-row w-full gap-[1px]" {...rest}>
       <div className="flex flex-col items-center justify-center pr-3 border-r-2 border-r-secondary">
@@ -31,6 +40,8 @@ export default function PerformancePostDisplay({
       </div>
       <div className="border-l-1 border-l-secondary-highlight pl-3">
         {postText}
+        {/* {ratingMedal} */}
+        {/* {Array(ratingNum).fill(<RatingMedalIcon />)} */}
       </div>
     </div>
   );

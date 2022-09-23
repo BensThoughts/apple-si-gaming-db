@@ -1,4 +1,5 @@
-import type { SteamAppRatingMedal } from '~/interfaces';
+// import type { SteamAppRatingMedal } from '~/interfaces';
+// import type { RatingMedal } from '~/interfaces/database';
 import { Form } from '@remix-run/react';
 import RoundedButton from '~/components/RoundedButton';
 import SelectMenu from '~/components/FormComponents/SelectMenu';
@@ -19,7 +20,9 @@ export default function PerformancePostForm({
   fieldErrors: CreatePostActionData['fieldErrors'];
   formError: CreatePostActionData['formError'];
 }) {
-  const ratingOptions: SteamAppRatingMedal[] = ['None', 'Platinum', 'Gold', 'Silver', 'Borked'];
+  // const ratingOptions: (RatingMedal | 'None')[] = ['None', 'Platinum',
+  // 'Gold', 'Silver', 'Bronze', 'Borked'];
+  const ratingOptions: string[] = ['None', 'Platinum', 'Gold', 'Silver', 'Bronze', 'Borked'];
   return (
     <div className={`flex flex-col gap-3 items-center justify-center bg-tertiary
                      border-solid border-1 border-secondary p-3 rounded-lg w-full`}>

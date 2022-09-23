@@ -8,19 +8,6 @@ import type { PassportSteamUser } from '~/interfaces';
 
 import prisma from '~/lib/database/db.server';
 
-import {
-  findUserBySteamId,
-  createSteamUser,
-  deleteUserBySteamId,
-  upsertSteamUser,
-} from '@apple-si-gaming-db/database';
-
-export {
-  findUserBySteamId,
-  createSteamUser,
-  deleteUserBySteamId,
-  upsertSteamUser,
-};
 
 export function convertPassportSteamUserToPrismaSteamUser(passportSteamUser: PassportSteamUser): SteamUserWithoutMetadata {
   return {
@@ -126,3 +113,55 @@ export async function findUserOwnedApps(steamUserId: SteamUserWithoutMetadata['s
     },
   });
 }
+
+export async function findUserBySteamId(
+    steamUserId: SteamUserWithoutMetadata['steamUserId'],
+    select?: Prisma.SteamUserSelect,
+) {
+  return prisma.steamUser.findUnique({
+    where: { steamUserId },
+    select,
+  });
+}
+
+export async function createSteamUser(
+    steamUser: SteamUserWithoutMetadata,
+    select?: Prisma.SteamUserSelect,
+) {
+  return prisma.steamUser.create({
+    data: {
+      ...steamUser,
+    },
+    select,
+  });
+}
+
+export async function deleteUserBySteamId(
+    steamUserId: SteamUserWithoutMetadata['steamUserId'],
+    select?: Prisma.SteamUserSelect,
+) {
+  return prisma.steamUser.delete({
+    where: { steamUserId },
+    select,
+  });
+}
+
+export async function upsertSteamUser(
+    steamUser: SteamUserWithoutMetadata,
+    select?: Prisma.SteamUserSelect,
+) {
+  return prisma.steamUser.upsert({
+    where: {
+      steamUserId: steamUser.steamUserId,
+    },
+    create: {
+      ...steamUser,
+    },
+    update: {
+      ...steamUser,
+    },
+    select,
+  });
+}
+
+
