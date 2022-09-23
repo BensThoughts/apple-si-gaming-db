@@ -6,6 +6,7 @@ import PerformancePostForm from '~/components/AppInfo/PerformancePosts/Performan
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
 import { convertRatingMedalStringToRatingMedal } from '~/models/performancePost.server';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
+import type { PerformancePost } from '~/interfaces/database';
 import { createPerformancePost, findPerformancePostsByAppId } from '~/models/performancePost.server';
 import { doesSteamUserOwnApp } from '~/models/steamUser.server';
 
@@ -34,6 +35,9 @@ function validatePostRatingMedal(ratingMedal: string) {
   if (ratingMedal.toLowerCase() === 'none') {
     return `Rating cannot be None`;
   }
+  if (!isRatingMedalValid(ratingMedal)) {
+    return `${ratingMedal} is not a valid option`;
+  }
 }
 
 function validatePostText(postText: string) {
@@ -52,12 +56,25 @@ export type CreatePostActionData = {
     ratingMedal?: string | undefined;
   };
   fields?: {
-    postText: string;
-    ratingMedal: string;
+    postText: PerformancePost['postText'];
+    ratingMedal: PerformancePost['ratingMedal'];
   };
 };
 
 const badRequest = (data: CreatePostActionData) => json(data, { status: 400 });
+
+function isRatingMedalValid(ratingMedal: string): boolean {
+  if (
+    (ratingMedal === 'Borked') ||
+    (ratingMedal === 'Bronze') ||
+    (ratingMedal === 'Silver') ||
+    (ratingMedal === 'Gold') ||
+    (ratingMedal === 'Platinum')
+  ) {
+    return true;
+  }
+  return false;
+}
 
 export async function action({
   request,
@@ -89,7 +106,7 @@ export async function action({
     postText: validatePostText(postText),
     ratingMedal: validatePostRatingMedal(ratingMedal),
   };
-  const fields = { postText, ratingMedal };
+  const fields = { postText, ratingMedal: convertRatingMedalStringToRatingMedal(ratingMedal) };
 
   if (Object.values(fieldErrors).some(Boolean)) {
     return badRequest({ fieldErrors, fields });
@@ -119,7 +136,10 @@ export default function PostsRoute() {
     <div className="flex flex-col gap-3">
       <h2 className="text-xl text-primary-highlight">Performance Posts</h2>
       <div className="w-full">
-        <PerformancePostLayout performancePosts={performancePosts} />
+        <PerformancePostLayout performancePosts={performancePosts.map((post) => ({
+          ...post,
+          createdAt: new Date(post.createdAt),
+        }))} />
       </div>
       <div className="w-full">
         <PerformancePostForm
