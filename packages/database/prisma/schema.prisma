@@ -261,6 +261,8 @@ model SteamCategory {
   description String
 }
 
+// The steam api seems to always return categoryId as Int
+// and genreId as String (strange).
 model SteamGenre {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
@@ -268,7 +270,7 @@ model SteamGenre {
 
   steamApps SteamApp[]
 
-  genreId     String @unique // Should this be an Int?
+  genreId     String @unique
   description String
 }
 

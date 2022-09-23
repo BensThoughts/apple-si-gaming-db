@@ -7,7 +7,7 @@ interface AppInfoTagsProps {
     description: string
   }[];
   categories: {
-    categoryId: string;
+    categoryId: number;
     description: string;
   }[];
 }
