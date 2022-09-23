@@ -1,8 +1,10 @@
 import { Link } from '@remix-run/react';
-import type { SteamApp } from '~/interfaces/database';
 
-interface SearchTitleCardProps extends Pick<SteamApp, 'name' | 'steamAppId' | 'releaseDate'> {
-  headerImageSrc: SteamApp['headerImage'];
+interface SearchTitleCardProps {
+  name: string;
+  steamAppId: number;
+  releaseDate?: string | null;
+  headerImageSrc?: string | null;
 }
 
 export default function SearchTitleCard({

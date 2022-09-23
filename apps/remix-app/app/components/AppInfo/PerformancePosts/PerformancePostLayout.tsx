@@ -1,17 +1,18 @@
-import type { PerformancePost, SteamUser } from '~/interfaces/database';
+import type { RatingMedal } from '~/interfaces/database';
 import PerformancePostDisplay from './PerformancePostDisplay';
 
 type PerformancePostLayoutProps =
 {
-  performancePosts: (
-    PerformancePost &
-    {
-      steamUser: {
-        displayName: SteamUser['displayName'],
-        avatarMedium: SteamUser['avatarMedium'],
-      };
-    }
-  )[];
+  performancePosts: {
+    id: string;
+    postText: string;
+    createdAt: Date;
+    ratingMedal: RatingMedal;
+    steamUser: {
+      displayName: string | null,
+      avatarMedium: string | null,
+    };
+  }[];
 }
 
 export default function PerformancePostLayout({

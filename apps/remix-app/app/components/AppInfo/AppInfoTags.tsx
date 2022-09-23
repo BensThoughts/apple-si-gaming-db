@@ -1,16 +1,21 @@
-import type {
-  SteamCategoryWithoutMetadata,
-  SteamGenreWithoutMetadata } from '~/interfaces/database';
 import TextPill from '~/components/TextPill';
 import TailwindDisclosure from './TailwindDisclosure';
+
+interface AppInfoTagsProps {
+  genres: {
+    genreId: string;
+    description: string
+  }[];
+  categories: {
+    categoryId: string;
+    description: string;
+  }[];
+}
 
 export default function AppInfoTags({
   genres,
   categories,
-}: {
-  genres: SteamGenreWithoutMetadata[],
-  categories: SteamCategoryWithoutMetadata[],
-}) {
+}: AppInfoTagsProps) {
   return (
     <div className="w-full">
       <TailwindDisclosure title="Tags">

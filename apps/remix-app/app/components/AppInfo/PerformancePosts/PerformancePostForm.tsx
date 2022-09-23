@@ -2,7 +2,7 @@ import { Form } from '@remix-run/react';
 import RoundedButton from '~/components/RoundedButton';
 import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { CreatePostActionData } from '~/routes/apps/$steamAppId/performance-posts';
-import type { PerformancePost } from '~/interfaces/database';
+import type { RatingMedal } from '~/interfaces/database';
 
 export default function PerformancePostForm({
   steamAppId,
@@ -19,7 +19,7 @@ export default function PerformancePostForm({
   fieldErrors: CreatePostActionData['fieldErrors'];
   formError: CreatePostActionData['formError'];
 }) {
-  const ratingOptions: (PerformancePost['ratingMedal'] | 'None')[] = ['None', 'Platinum', 'Gold', 'Silver', 'Bronze', 'Borked'];
+  const ratingOptions: (RatingMedal | 'None')[] = ['None', 'Platinum', 'Gold', 'Silver', 'Bronze', 'Borked'];
   return (
     <div className={`flex flex-col gap-3 items-center justify-center bg-tertiary
                      border-solid border-1 border-secondary p-3 rounded-lg w-full`}>

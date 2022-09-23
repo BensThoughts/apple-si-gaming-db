@@ -1,4 +1,3 @@
-import type { SteamAppWithoutMetadata } from '~/interfaces/database';
 import { Link } from '@remix-run/react';
 
 export default function OwnedAppDisplay({
@@ -7,9 +6,9 @@ export default function OwnedAppDisplay({
   headerImgSrc,
   className = '',
 }: {
-  name: SteamAppWithoutMetadata['name'];
-  steamAppId: SteamAppWithoutMetadata['steamAppId'];
-  headerImgSrc: SteamAppWithoutMetadata['headerImage']
+  name: string;
+  steamAppId: number;
+  headerImgSrc: string | undefined | null;
   className?: string;
 }) {
   return (

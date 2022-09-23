@@ -1,8 +1,4 @@
 import { useState } from 'react';
-import type {
-  // SteamCategoryWithoutMetadata,
-  SteamGenreWithoutMetadata,
-} from '~/interfaces/database';
 import SelectMenu from '../FormComponents/SelectMenu';
 import ToggleSwitch from '../FormComponents/ToggleSwitch';
 import FloatingLabelInput from '../FormComponents/SearchInput/FloatingLabelInput';
@@ -13,10 +9,12 @@ import RoundedButton from '../RoundedButton';
 interface OwnedApp {
     steamAppId: number;
     name: string;
-    headerImage: string | null;
-    platformMac: boolean | null;
-    // categories: SteamCategoryWithoutMetadata[];
-    genres: SteamGenreWithoutMetadata[];
+    headerImage?: string | null;
+    platformMac?: boolean | null;
+    genres: {
+      genreId: string;
+      description: string;
+    }[];
 }
 
 export default function OwnedApps({

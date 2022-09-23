@@ -1,8 +1,8 @@
-import type { PerformancePost } from '~/interfaces/database';
+import type { RatingMedal } from '~/interfaces/database';
 
 interface PerformancePostMetaBarProps {
-  createdAt: PerformancePost['createdAt'];
-  ratingMedal: PerformancePost['ratingMedal'];
+  createdAt: Date;
+  ratingMedal: RatingMedal;
 }
 
 export default function PerformancePostMetaBar({

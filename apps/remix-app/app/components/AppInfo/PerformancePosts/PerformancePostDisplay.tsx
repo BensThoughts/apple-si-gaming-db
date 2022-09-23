@@ -1,16 +1,16 @@
-// import { RatingMedalIcon } from '~/components/Icons';
-import type {
-  PerformancePost,
-  SteamUser,
-} from '~/interfaces/database';
+import type { RatingMedal } from '~/interfaces/database';
 import PerformancePostMetaBar from './PerformancePostMetaBar';
 import SystemSpecsPopover from './SystemSpecsPopover';
 // import { convertRatingMedalToNumber } from '~/interfaces/database';
+// import { RatingMedalIcon } from '~/components/Icons';
 
-type PerformancePostProps =
-  Pick<PerformancePost, 'postText' | 'ratingMedal' | 'createdAt'> &
-  Pick<SteamUser, 'avatarMedium' | 'displayName'> &
-  React.HTMLAttributes<HTMLDivElement>
+type PerformancePostProps = {
+  postText: string;
+  createdAt: Date;
+  ratingMedal: RatingMedal;
+  avatarMedium: string | null;
+  displayName: string | null;
+} & React.HTMLAttributes<HTMLDivElement>
 
 export default function PerformancePostDisplay({
   displayName,
