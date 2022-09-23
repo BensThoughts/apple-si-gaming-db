@@ -103,17 +103,17 @@ model PerformancePost {
   steamApp    SteamApp  @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
   steamAppId  Int
 
-  postText String
-  // ratingMedal RatingMedal
+  postText    String
+  ratingMedal RatingMedal
 }
 
-// enum RatingMedal {
-//   Borked
-//   Bronze
-//   Silver
-//   Gold
-//   Platinum
-// }
+enum RatingMedal {
+  Borked
+  Bronze
+  Silver
+  Gold
+  Platinum
+}
 
 model SteamApp {
   id        String   @id @default(cuid())

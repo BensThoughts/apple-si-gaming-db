@@ -2,7 +2,7 @@ import type {
   PerformancePost,
   SteamAppWithoutMetadata,
   SteamUserWithoutMetadata,
-  // RatingMedal,
+  RatingMedal,
 } from '~/interfaces/database';
 import prisma from '~/lib/database/db.server';
 
@@ -10,19 +10,19 @@ export async function createPerformancePost({
   steamUserId,
   steamAppId,
   postText,
-  // ratingMedal,
+  ratingMedal,
 }: {
   steamUserId: SteamUserWithoutMetadata['steamUserId'];
   steamAppId: SteamAppWithoutMetadata['steamAppId'];
   postText: PerformancePost['postText'];
-  // ratingMedal: PerformancePost['ratingMedal'];
+  ratingMedal: PerformancePost['ratingMedal'];
 }) {
   return prisma.performancePost.create({
     data: {
       postText,
       steamUserId,
       steamAppId,
-      // ratingMedal,
+      ratingMedal,
     },
   });
 };
@@ -43,22 +43,22 @@ export async function findPerformancePostsByAppId(steamAppId: SteamAppWithoutMet
   });
 }
 
-// export function convertRatingMedalStringToRatingMedal(ratingMedal: string): RatingMedal {
-//   switch (ratingMedal.toLowerCase()) {
-//     case 'borked':
-//       return 'Borked';
-//     case 'bronze':
-//       return 'Bronze';
-//     case 'silver':
-//       return 'Silver';
-//     case 'gold':
-//       return 'Gold';
-//     case 'platinum':
-//       return 'Platinum';
-//     default:
-//       return 'Borked';
-//   }
-// }
+export function convertRatingMedalStringToRatingMedal(ratingMedal: string): RatingMedal {
+  switch (ratingMedal.toLowerCase()) {
+    case 'borked':
+      return 'Borked';
+    case 'bronze':
+      return 'Bronze';
+    case 'silver':
+      return 'Silver';
+    case 'gold':
+      return 'Gold';
+    case 'platinum':
+      return 'Platinum';
+    default:
+      return 'Borked';
+  }
+}
 
 // export function convertRatingMedalToNumber(ratingMedal: RatingMedal) {
 //   switch (ratingMedal) {

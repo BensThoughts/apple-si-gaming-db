@@ -4,7 +4,7 @@ import { useActionData, useLoaderData } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 import PerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForm';
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
-// import { convertRatingMedalStringToRatingMedal } from '~/models/performancePost.server';
+import { convertRatingMedalStringToRatingMedal } from '~/models/performancePost.server';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import { createPerformancePost, findPerformancePostsByAppId } from '~/models/performancePost.server';
 import { doesSteamUserOwnApp } from '~/models/steamUser.server';
@@ -100,7 +100,7 @@ export async function action({
       steamUserId,
       steamAppId,
       postText: postText,
-      // ratingMedal: convertRatingMedalStringToRatingMedal(ratingMedal),
+      ratingMedal: convertRatingMedalStringToRatingMedal(ratingMedal),
     });
   } catch (err) {
     if (err instanceof Error) {

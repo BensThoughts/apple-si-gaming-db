@@ -1,11 +1,11 @@
 import type {
   PerformancePost,
-  // RatingMedal,
+  RatingMedal,
 } from '@prisma/client';
 
 export {
   PerformancePost,
-  // RatingMedal,
+  RatingMedal,
 };
 
 export type PerformancePostWithoutMetadata =
