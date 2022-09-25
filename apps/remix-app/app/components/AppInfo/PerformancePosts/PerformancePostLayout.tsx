@@ -8,20 +8,16 @@ type PerformancePostLayoutProps =
     postText: string;
     createdAt: Date;
     ratingMedal: RatingMedal;
-    steamUser: {
-      displayName: string | null;
-      avatarMedium: string | null;
-    };
-    systemSpecs: {
-      manufacturer?: string | null;
-      model?: string | null;
-      osVersion?: string | null;
-      cpuBrand?: string | null;
-      videoDriver?: string | null;
-      videoDriverVersion?: string | null;
-      videoPrimaryVRAM?: string | null;
-      memoryRAM?: string | null;
-    }
+    displayName?: string | null;
+    avatarMedium?: string | null;
+    systemManufacturer?: string | null;
+    systemModel?: string | null;
+    systemOsVersion?: string | null;
+    systemCpuBrand?: string | null;
+    systemVideoDriver?: string | null;
+    systemVideoDriverVersion?: string | null;
+    systemVideoPrimaryVRAM?: string | null;
+    systemMemoryRAM?: string | null;
   }[];
 }
 
@@ -36,19 +32,35 @@ export default function PerformancePostLayout({
         <div className="flex flex-col gap-6 w-full">
           {performancePosts.map(({
             id,
-            steamUser,
             postText,
             ratingMedal,
             createdAt,
-            systemSpecs,
+            displayName,
+            avatarMedium,
+            systemManufacturer,
+            systemModel,
+            systemOsVersion,
+            systemCpuBrand,
+            systemVideoDriver,
+            systemVideoDriverVersion,
+            systemVideoPrimaryVRAM,
+            systemMemoryRAM,
           }, idx) => (
             <div key={id} className="flex flex-col gap-6">
               <PerformancePostDisplay
                 postText={postText}
-                steamUser={steamUser}
                 ratingMedal={ratingMedal}
                 createdAt={createdAt}
-                systemSpecs={systemSpecs}
+                displayName={displayName}
+                avatarMedium={avatarMedium}
+                systemManufacturer={systemManufacturer}
+                systemModel={systemModel}
+                systemOsVersion={systemOsVersion}
+                systemCpuBrand={systemCpuBrand}
+                systemVideoDriver={systemVideoDriver}
+                systemVideoDriverVersion={systemVideoDriverVersion}
+                systemVideoPrimaryVRAM={systemVideoPrimaryVRAM}
+                systemMemoryRAM={systemMemoryRAM}
               />
               {(performancePosts.length - 1 > idx) &&
                 <hr className="text-secondary" />

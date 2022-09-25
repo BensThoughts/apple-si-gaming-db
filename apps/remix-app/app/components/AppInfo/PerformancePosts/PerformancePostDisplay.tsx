@@ -8,31 +8,34 @@ type PerformancePostProps = {
   postText: string;
   createdAt: Date;
   ratingMedal: RatingMedal;
-  steamUser: {
-    avatarMedium: string | null;
-    displayName: string | null;
-  }
-  systemSpecs: {
-    manufacturer?: string | null;
-    model?: string | null;
-    osVersion?: string | null;
-    cpuBrand?: string | null;
-    videoDriver?: string | null;
-    videoDriverVersion?: string | null;
-    videoPrimaryVRAM?: string | null;
-    memoryRAM?: string | null;
-  },
+  avatarMedium?: string | null;
+  displayName?: string | null;
+  systemManufacturer?: string | null;
+  systemModel?: string | null;
+  systemOsVersion?: string | null;
+  systemCpuBrand?: string | null;
+  systemVideoDriver?: string | null;
+  systemVideoDriverVersion?: string | null;
+  systemVideoPrimaryVRAM?: string | null;
+  systemMemoryRAM?: string | null;
 } & React.HTMLAttributes<HTMLDivElement>
 
 export default function PerformancePostDisplay({
-  steamUser,
   createdAt,
   postText,
   ratingMedal,
-  systemSpecs,
+  displayName,
+  avatarMedium,
+  systemManufacturer,
+  systemModel,
+  systemOsVersion,
+  systemCpuBrand,
+  systemVideoDriver,
+  systemVideoDriverVersion,
+  systemVideoPrimaryVRAM,
+  systemMemoryRAM,
   ...rest
 }: PerformancePostProps) {
-  const { displayName, avatarMedium } = steamUser;
   // const ratingNum = convertRatingMedalToNumber(ratingMedal);
   return (
     <div className="flex flex-col w-full gap-3">
@@ -53,7 +56,16 @@ export default function PerformancePostDisplay({
             </div>
           )}
           <span className="text-sm">{displayName}</span>
-          <SystemSpecsPopover systemSpecs={systemSpecs} />
+          <SystemSpecsPopover
+            systemManufacturer={systemManufacturer}
+            systemModel={systemModel}
+            systemOsVersion={systemOsVersion}
+            systemCpuBrand={systemCpuBrand}
+            systemVideoDriver={systemVideoDriver}
+            systemVideoDriverVersion={systemVideoDriverVersion}
+            systemVideoPrimaryVRAM={systemVideoPrimaryVRAM}
+            systemMemoryRAM={systemMemoryRAM}
+          />
         </div>
         <div className="border-l-1 border-l-secondary-highlight pl-3">
           {postText}

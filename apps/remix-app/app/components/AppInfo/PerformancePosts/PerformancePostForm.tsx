@@ -4,6 +4,17 @@ import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { CreatePostActionData } from '~/routes/apps/$steamAppId/performance-posts';
 import type { RatingMedal } from '~/interfaces/database';
 
+
+interface PerformancePostFormProps {
+  steamAppId: number;
+  steamUserIsLoggedIn: boolean;
+  steamUserOwnsApp: boolean;
+  steamUserSystemNames: string[] | null;
+  fields: CreatePostActionData['fields'];
+  fieldErrors: CreatePostActionData['fieldErrors'];
+  formError: CreatePostActionData['formError'];
+}
+
 export default function PerformancePostForm({
   steamAppId,
   steamUserIsLoggedIn,
@@ -12,15 +23,7 @@ export default function PerformancePostForm({
   fields,
   formError,
   fieldErrors,
-}: {
-  steamAppId: number;
-  steamUserIsLoggedIn: boolean;
-  steamUserOwnsApp: boolean;
-  steamUserSystemNames: string[] | null;
-  fields: CreatePostActionData['fields'];
-  fieldErrors: CreatePostActionData['fieldErrors'];
-  formError: CreatePostActionData['formError'];
-}) {
+}: PerformancePostFormProps) {
   const ratingOptions: (RatingMedal | 'None')[] = ['None', 'Platinum', 'Gold', 'Silver', 'Bronze', 'Borked'];
   return (
     <div className={`flex flex-col gap-3 items-center justify-center bg-tertiary
