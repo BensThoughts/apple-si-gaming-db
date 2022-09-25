@@ -1,6 +1,6 @@
 import type { ActionArgs } from '@remix-run/node';
 import { redirect, json } from '@remix-run/node';
-import { createSystemSpecs } from '~/models/steamUser.server';
+import { createSystemSpecs } from '~/models/steamUserSystemSpecs.server';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 
 
