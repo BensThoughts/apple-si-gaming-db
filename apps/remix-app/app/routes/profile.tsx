@@ -8,9 +8,8 @@ import LoginCard from '~/components/Profile/LoginCard';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import { findUserOwnedApps } from '~/models/steamUser.server';
 import ExternalLink from '~/components/ExternalLink';
-import OwnedApps from '~/components/Profile/OwnedApps';
-import Heading from '~/components/Heading';
 import PageWrapper from '~/components/Layout/PageWrapper';
+import UserDisplay from '~/components/Profile/UserDisplay';
 
 export async function loader({ request, context }: LoaderArgs) {
   const { steamUser } = extractAppLoadContext(context);
@@ -69,7 +68,7 @@ export default function LoginPage() {
   } = useLoaderData<typeof loader>();
   return (
     <PageWrapper title="Profile">
-      <div className="flex flex-col gap-4 items-center w-full">
+      <div className="flex flex-col gap-6 items-center w-full">
         <div className="flex flex-col md:flex-row gap-8 justify-evenly">
           <LoginCard
             isLoggedIn={isLoggedIn}
@@ -90,25 +89,15 @@ export default function LoginPage() {
             </AsideCard>
           </div>
         </div>
-        <Heading>Library</Heading>
-        {(ownedApps && ownedApps.length > 0) ? (
-        <div>
-          <OwnedApps ownedApps={ownedApps} />
-        </div>
-      ) : (
-        <div>
-          {isLoggedIn ? (
-            <div>
-              You are logged in but appear to have no apps owned. Is your Steam profile
-              set to public?
-            </div>
-          ): (
-            <div>
-              You must log in to see the apps you own
-            </div>
-          )}
-        </div>
-      )}
+        {isLoggedIn ? (
+          <div>
+            <UserDisplay
+              ownedApps={ownedApps}
+            />
+          </div>
+        ) : (
+          null
+        )}
       </div>
     </PageWrapper>
   );
