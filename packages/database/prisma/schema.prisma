@@ -58,8 +58,6 @@ model SteamUserSystemSpecs {
 
   systemName String
 
-  performancePosts PerformancePost[]
-
   manufacturer       String?
   model              String?
   formFactor         String?
@@ -104,15 +102,24 @@ model PerformancePost {
   updatedAt DateTime @updatedAt
 
   // ? What do to onDelete for steamUser?
-  steamUser   SteamUser @relation(fields: [steamUserId], references: [steamUserId])
-  steamUserId String
-  steamApp    SteamApp  @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
-  steamAppId  Int
+  steamUser   SteamUser? @relation(fields: [steamUserId], references: [steamUserId], onDelete: SetNull)
+  steamUserId String?
 
-  postText    String
-  ratingMedal RatingMedal
-  systemName  String
-  systemSpecs SteamUserSystemSpecs @relation(fields: [systemName, steamUserId], references: [systemName, steamUserId])
+  steamApp   SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
+  steamAppId Int
+
+  avatarMedium             String?
+  displayName              String?
+  postText                 String
+  ratingMedal              RatingMedal
+  systemManufacturer       String?
+  systemModel              String?
+  systemOsVersion          String?
+  systemCpuBrand           String?
+  systemVideoDriver        String?
+  systemVideoDriverVersion String?
+  systemVideoPrimaryVRAM   String?
+  systemMemoryRAM          String?
 }
 
 enum RatingMedal {
