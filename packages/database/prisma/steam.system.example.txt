@@ -64,8 +64,8 @@ VR Hardware:
 Miscellaneous:
     UI Language:  English
     Media Type:  DVD
-    Total Hard Disk Space Available:  233752 MB
-    Largest Free Hard Disk Block:  20263 MB
+    Total Hard Disk Space Available:  234395 MB
+    Largest Free Hard Disk Block:  23904 MB
 
 Storage:
     Number of SSDs: 0

@@ -45,7 +45,7 @@ model SteamUser {
   appCount          Int?
   ownedAppsPlaytime SteamUserOwnedAppPlaytime[]
   ownedApps         SteamApp[]
-  systemSpecs       SteamUserSystemSpecs?
+  systemSpecs       SteamUserSystemSpecs[]
 }
 
 model SteamUserSystemSpecs {
@@ -53,26 +53,32 @@ model SteamUserSystemSpecs {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  steamUserId String    @unique
+  steamUserId String
   steamUser   SteamUser @relation(fields: [steamUserId], references: [steamUserId], onDelete: Cascade)
 
-  manufacturer       String
-  model              String
-  formFactor         String
-  cpuVendor          String
-  cpuBrand           String
-  cpuFamily          String
-  cpuModel           String
-  cpuStepping        String
-  cpuType            String
-  cpuSpeed           String
-  logicalProcessors  Int
-  physicalProcessors Int
-  osVersion          String
-  videoDriver        String
-  videoDriverVersion String
-  videoPrimaryVRAM   String
-  memoryRAM          String
+  systemName String
+
+  performancePosts PerformancePost[]
+
+  manufacturer       String?
+  model              String?
+  formFactor         String?
+  cpuVendor          String?
+  cpuBrand           String?
+  cpuFamily          String?
+  cpuModel           String?
+  cpuStepping        String?
+  cpuType            String?
+  cpuSpeed           String?
+  logicalProcessors  Int?
+  physicalProcessors Int?
+  osVersion          String?
+  videoDriver        String?
+  videoDriverVersion String?
+  videoPrimaryVRAM   String?
+  memoryRAM          String?
+
+  @@unique([systemName, steamUserId])
 }
 
 model SteamUserOwnedAppPlaytime {
@@ -105,6 +111,8 @@ model PerformancePost {
 
   postText    String
   ratingMedal RatingMedal
+  systemName  String
+  systemSpecs SteamUserSystemSpecs @relation(fields: [systemName, steamUserId], references: [systemName, steamUserId])
 }
 
 enum RatingMedal {
