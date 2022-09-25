@@ -1,84 +1,37 @@
 import type {
   Prisma,
-  SteamAppWithoutMetadata,
+  SteamApp,
   SteamUser,
-  SteamUserSystemSpecs,
-  SteamUserWithoutMetadata,
 } from '~/interfaces/database';
 
 import type { PassportSteamUser } from '~/interfaces';
 
 import prisma from '~/lib/database/db.server';
 
-function extractSystemSpecs(
-    systemData: string,
-) {
-  const manufacturerRe = /Manufacturer:\s*([^\r\n]+)/i;
-  const modelRe = /Model:\s*([^\r\n]+)/i;
-  const formFactorRe = /Form Factor:\s*([^\r\n]+)/i;
-  const cpuVendorRe = /CPU Vendor:\s*([^\r\n]+)/i;
-  const cpuBrandRe = /CPU Brand:\s*([^\r\n]+)/i;
-  const cpuFamilyRe = /CPU Family:\s*([^\r\n]+)/i;
-  const cpuModelRe = /CPU Model:\s*([^\r\n]+)/i;
-  const cpuSteppingRe = /CPU Stepping:\s*([^\r\n]+)/i;
-  const cpuTypeRe = /CPU Type:\s*([^\r\n]+)/i;
-  const cpuSpeedRe = /Speed:\s*([^\r\n]+)/i;
-  const operatingSystemVersionRe = /Operating System Version:[\r\n]+\s*([^\r\n]+)/i;
-
-  const videoDriverRe = /Driver:\s*([^\r\n]+)/i;
-  const videoDriverVersionRe = /Driver Version:\s*([^\r\n]+)/i;
-  const videoPrimaryVRAMRe = /Primary VRAM:\s*([^\r\n]+)/i;
-  const memoryRAMRe = /RAM:\s*([^\r\n]+)/i;
-
-
-  const manufacturer = systemData.match(manufacturerRe);
-  const model = systemData.match(modelRe);
-  const formFactor = systemData.match(formFactorRe);
-  const cpuVendor = systemData.match(cpuVendorRe);
-  const cpuBrand = systemData.match(cpuBrandRe);
-  const cpuFamily = systemData.match(cpuFamilyRe);
-  const cpuModel = systemData.match(cpuModelRe);
-  const cpuStepping = systemData.match(cpuSteppingRe);
-  const cpuType = systemData.match(cpuTypeRe);
-  const cpuSpeed = systemData.match(cpuSpeedRe);
-  const osVersion = systemData.match(operatingSystemVersionRe);
-  const videoDriver = systemData.match(videoDriverRe);
-  const videoDriverVersion = systemData.match(videoDriverVersionRe);
-  const videoPrimaryVRAM = systemData.match(videoPrimaryVRAMRe);
-  const memoryRAM = systemData.match(memoryRAMRe);
-
-  return {
-    manufacturer: manufacturer ? manufacturer[1] : null,
-    model: model ? model[1] : null,
-    formFactor: formFactor ? formFactor[1] : null,
-    cpuVendor: cpuVendor ? cpuVendor[1] : null,
-    cpuBrand: cpuBrand ? cpuBrand[1] : null,
-    cpuFamily: cpuFamily ? cpuFamily[1] : null,
-    cpuModel: cpuModel ? cpuModel[1] : null,
-    cpuStepping: cpuStepping ? cpuStepping[1] : null,
-    cpuType: cpuType ? cpuType[1] : null,
-    cpuSpeed: cpuSpeed ? cpuSpeed[1] : null,
-    osVersion: osVersion ? osVersion[1] : null,
-    videoDriver: videoDriver ? videoDriver[1] : null,
-    videoDriverVersion: videoDriverVersion ? videoDriverVersion[1] : null,
-    videoPrimaryVRAM: videoPrimaryVRAM ? videoPrimaryVRAM[1] : null,
-    memoryRAM: memoryRAM ? memoryRAM[1] : null,
-  };
-}
-
-export async function createSystemSpecs(
+export async function findSteamUserSystemsByUserId(
     steamUserId: SteamUser['steamUserId'],
-    systemName: SteamUserSystemSpecs['systemName'],
-    systemData: string,
 ) {
-  const sysSpecs = extractSystemSpecs(systemData);
-  return prisma.steamUserSystemSpecs.create({
-    data: {
+  const steamUserSystems = await prisma.steamUser.findUnique({
+    where: {
       steamUserId,
-      systemName,
-      ...sysSpecs,
+    },
+    select: {
+      systemSpecs: {
+        select: {
+          systemName: true,
+          manufacturer: true,
+          model: true,
+          osVersion: true,
+          cpuBrand: true,
+          videoDriver: true,
+          videoDriverVersion: true,
+          videoPrimaryVRAM: true,
+          memoryRAM: true,
+        },
+      },
     },
   });
+  return steamUserSystems ? steamUserSystems.systemSpecs : null;
 }
 
 export async function findSteamUserSystemNamesByUserId(
@@ -102,7 +55,7 @@ export async function findSteamUserSystemNamesByUserId(
 }
 
 
-export function convertPassportSteamUserToPrismaSteamUser(passportSteamUser: PassportSteamUser): SteamUserWithoutMetadata {
+export function convertPassportSteamUserToPrismaSteamUser(passportSteamUser: PassportSteamUser): Prisma.SteamUserCreateInput {
   return {
     steamUserId: passportSteamUser._json.steamid,
     displayName: passportSteamUser.displayName,
@@ -127,17 +80,9 @@ export function convertPassportSteamUserToPrismaSteamUser(passportSteamUser: Pas
   };
 }
 
-export async function upsertPassportSteamUserToPrisma(
-    passportSteamUser: PassportSteamUser,
-    select: Prisma.SteamUserSelect,
-) {
-  const prismaSteamUser = convertPassportSteamUserToPrismaSteamUser(passportSteamUser);
-  return upsertSteamUser(prismaSteamUser, select);
-}
-
 export async function updateUserOwnedApps(
-    steamAppIds: SteamAppWithoutMetadata['steamAppId'][],
-    steamUserId: SteamUserWithoutMetadata['steamUserId'],
+    steamAppIds: SteamApp['steamAppId'][],
+    steamUserId: SteamUser['steamUserId'],
 ) {
   return prisma.steamUser.update({
     where: {
@@ -154,8 +99,8 @@ export async function updateUserOwnedApps(
 }
 
 export async function doesSteamUserOwnApp(
-    steamUserId: SteamUserWithoutMetadata['steamUserId'],
-    steamAppId: SteamAppWithoutMetadata['steamAppId'],
+    steamUserId: SteamUser['steamUserId'],
+    steamAppId: SteamApp['steamAppId'],
 ) {
   const steamUser = await prisma.steamUser.findUnique({
     where: {
@@ -178,12 +123,17 @@ export async function doesSteamUserOwnApp(
   return steamUser.ownedApps.map((app) => app.steamAppId).includes(steamAppId);
 }
 
-export async function findUserOwnedApps(steamUserId: SteamUserWithoutMetadata['steamUserId']) {
+export async function findUserProfileData(steamUserId: SteamUser['steamUserId']) {
   return prisma.steamUser.findUnique({
     where: {
       steamUserId,
     },
     include: {
+      systemSpecs: {
+        select: {
+          systemName: true,
+        },
+      },
       ownedApps: {
         where: {
           comingSoon: {
@@ -207,40 +157,8 @@ export async function findUserOwnedApps(steamUserId: SteamUserWithoutMetadata['s
   });
 }
 
-export async function findUserBySteamId(
-    steamUserId: SteamUserWithoutMetadata['steamUserId'],
-    select?: Prisma.SteamUserSelect,
-) {
-  return prisma.steamUser.findUnique({
-    where: { steamUserId },
-    select,
-  });
-}
-
-export async function createSteamUser(
-    steamUser: SteamUserWithoutMetadata,
-    select?: Prisma.SteamUserSelect,
-) {
-  return prisma.steamUser.create({
-    data: {
-      ...steamUser,
-    },
-    select,
-  });
-}
-
-export async function deleteUserBySteamId(
-    steamUserId: SteamUserWithoutMetadata['steamUserId'],
-    select?: Prisma.SteamUserSelect,
-) {
-  return prisma.steamUser.delete({
-    where: { steamUserId },
-    select,
-  });
-}
-
 export async function upsertSteamUser(
-    steamUser: SteamUserWithoutMetadata,
+    steamUser: Prisma.SteamUserCreateInput,
     select?: Prisma.SteamUserSelect,
 ) {
   return prisma.steamUser.upsert({
