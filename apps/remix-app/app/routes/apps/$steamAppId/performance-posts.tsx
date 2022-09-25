@@ -6,7 +6,7 @@ import PerformancePostForm from '~/components/AppInfo/PerformancePosts/Performan
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
 import { convertRatingMedalStringToRatingMedal } from '~/models/performancePost.server';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-import type { PerformancePost } from '~/interfaces/database';
+import type { PerformancePost, SteamUserSystemSpecs } from '~/interfaces/database';
 import { createPerformancePost, findPerformancePostsByAppId } from '~/models/performancePost.server';
 import { doesSteamUserOwnApp, findSteamUserSystemNamesByUserId } from '~/models/steamUser.server';
 
@@ -24,7 +24,6 @@ export async function loader({ params, context }: LoaderArgs) {
     steamUserIsLoggedIn = true;
     steamUserOwnsApp = await doesSteamUserOwnApp(steamUser.steamUserId, steamAppId);
     steamUserSystemNames = await findSteamUserSystemNamesByUserId(steamUser.steamUserId);
-    // steamUserSystemSpecs = await findSystemSpecsByUserId(steamUser.steamUserId);
   }
   return json({
     steamAppId,
@@ -63,7 +62,7 @@ export type CreatePostActionData = {
   fields?: {
     postText: PerformancePost['postText'];
     ratingMedal: PerformancePost['ratingMedal'];
-    systemName: PerformancePost['systemName'];
+    systemName: SteamUserSystemSpecs['systemName'];
   };
 };
 
@@ -94,6 +93,8 @@ export async function action({
   const { steamUser } = extractAppLoadContext(context);
   invariant(steamUser, 'You must be logged into a valid Steam account to post performance reviews');
   const steamUserId = steamUser.steamUserId;
+  const displayName = steamUser.displayName;
+  const avatarMedium = steamUser.avatarMedium;
   const formData = await request.formData();
   const postText = formData.get('performancePostText');
   const ratingMedal = formData.get('performancePostRatingMedal');
@@ -127,6 +128,8 @@ export async function action({
   try {
     await createPerformancePost({
       steamUserId,
+      avatarMedium,
+      displayName,
       steamAppId,
       postText: postText,
       ratingMedal: convertRatingMedalStringToRatingMedal(ratingMedal),
@@ -135,7 +138,7 @@ export async function action({
   } catch (err) {
     if (err instanceof Error) {
       console.error(err);
-      throw new Error('(Error in createPerformancePost', { cause: err });
+      throw new Error('Error in createPerformancePost', { cause: err });
     }
   }
 
