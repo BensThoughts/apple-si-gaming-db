@@ -9,7 +9,7 @@ import session from 'cookie-session';
 import type { ExtendedAppLoadContext, PassportSteamUser } from '~/interfaces';
 import {
   convertPassportSteamUserToPrismaSteamUser,
-} from '~/lib/database/convertPassportToPrisma';
+} from '~/models/steamUser.server';
 
 const app = express();
 
