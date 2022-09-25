@@ -8,7 +8,7 @@ import { convertRatingMedalStringToRatingMedal } from '~/models/performancePost.
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import type { PerformancePost } from '~/interfaces/database';
 import { createPerformancePost, findPerformancePostsByAppId } from '~/models/performancePost.server';
-import { doesSteamUserOwnApp } from '~/models/steamUser.server';
+import { doesSteamUserOwnApp, findSteamUserSystemNamesByUserId } from '~/models/steamUser.server';
 
 export async function loader({ params, context }: LoaderArgs) {
   invariant(params.steamAppId, 'Expected params.steamAppId');
@@ -19,15 +19,19 @@ export async function loader({ params, context }: LoaderArgs) {
 
   let steamUserOwnsApp = false;
   let steamUserIsLoggedIn = false;
+  let steamUserSystemNames: string[] | null = null;
   if (steamUser) {
     steamUserIsLoggedIn = true;
     steamUserOwnsApp = await doesSteamUserOwnApp(steamUser.steamUserId, steamAppId);
+    steamUserSystemNames = await findSteamUserSystemNamesByUserId(steamUser.steamUserId);
+    // steamUserSystemSpecs = await findSystemSpecsByUserId(steamUser.steamUserId);
   }
   return json({
     steamAppId,
     performancePosts,
     steamUserIsLoggedIn,
     steamUserOwnsApp,
+    steamUserSystemNames,
   });
 }
 
@@ -54,10 +58,12 @@ export type CreatePostActionData = {
   fieldErrors?: {
     postText?: string | undefined;
     ratingMedal?: string | undefined;
+    // systemName?: string | undefined;
   };
   fields?: {
     postText: PerformancePost['postText'];
     ratingMedal: PerformancePost['ratingMedal'];
+    systemName: PerformancePost['systemName'];
   };
 };
 
@@ -91,11 +97,13 @@ export async function action({
   const formData = await request.formData();
   const postText = formData.get('performancePostText');
   const ratingMedal = formData.get('performancePostRatingMedal');
+  const systemName = formData.get('performancePostSystemName');
 
   // TODO: Not sure if postText/ratingMedal should be string or FormDataEntryValue
   if (
     typeof postText !== 'string' ||
-    typeof ratingMedal !== 'string'
+    typeof ratingMedal !== 'string' ||
+    typeof systemName !== 'string'
   ) {
     return badRequest({
       formError: `Form not submitted correctly.`,
@@ -106,7 +114,11 @@ export async function action({
     postText: validatePostText(postText),
     ratingMedal: validatePostRatingMedal(ratingMedal),
   };
-  const fields = { postText, ratingMedal: convertRatingMedalStringToRatingMedal(ratingMedal) };
+  const fields = {
+    postText,
+    ratingMedal: convertRatingMedalStringToRatingMedal(ratingMedal),
+    systemName,
+  };
 
   if (Object.values(fieldErrors).some(Boolean)) {
     return badRequest({ fieldErrors, fields });
@@ -118,6 +130,7 @@ export async function action({
       steamAppId,
       postText: postText,
       ratingMedal: convertRatingMedalStringToRatingMedal(ratingMedal),
+      systemName,
     });
   } catch (err) {
     if (err instanceof Error) {
@@ -130,7 +143,13 @@ export async function action({
 }
 
 export default function PostsRoute() {
-  const { performancePosts, steamUserOwnsApp, steamUserIsLoggedIn, steamAppId } = useLoaderData<typeof loader>();
+  const {
+    performancePosts,
+    steamUserOwnsApp,
+    steamUserIsLoggedIn,
+    steamAppId,
+    steamUserSystemNames,
+  } = useLoaderData<typeof loader>();
   const actionData = useActionData<CreatePostActionData>();
   return (
     <div className="flex flex-col gap-3">
@@ -146,6 +165,7 @@ export default function PostsRoute() {
           steamAppId={steamAppId}
           steamUserIsLoggedIn={steamUserIsLoggedIn}
           steamUserOwnsApp={steamUserOwnsApp}
+          steamUserSystemNames={steamUserSystemNames}
           formError={actionData?.formError}
           fieldErrors={actionData?.fieldErrors}
           fields={actionData?.fields}
