@@ -69,7 +69,7 @@ export default function SelectMenu({
             >
               {options.map((option, optionIdx) => (
                 <Listbox.Option
-                  key={`${option}-optionIdx`}
+                  key={`${option}-${optionIdx}`}
                   className={({ active }) => `${active ? 'text-neutral-lightest bg-secondary' : 'text-neutral-lighter'}
                       cursor-default select-none relative py-2 pl-10 pr-4
                   `}
