@@ -80,15 +80,6 @@ export async function createSystemSpecs(
     },
   });
 }
-function exclude<T, Key extends keyof T>(
-    user: T,
-    ...keys: Key[]
-): Omit<T, Key> {
-  for (const key of keys) {
-    delete user[key];
-  }
-  return user;
-}
 
 export async function findSteamUserSystemNamesByUserId(
     steamUserId: SteamUser['steamUserId'],
