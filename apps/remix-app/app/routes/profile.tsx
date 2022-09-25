@@ -6,7 +6,7 @@ import {
 import AsideCard from '~/components/Cards/AsideCard';
 import LoginCard from '~/components/Profile/LoginCard';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-import { findUserOwnedApps } from '~/models/steamUser.server';
+import { findUserProfileData } from '~/models/steamUser.server';
 import ExternalLink from '~/components/ExternalLink';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import UserDisplay from '~/components/Profile/UserDisplay';
@@ -14,20 +14,22 @@ import UserDisplay from '~/components/Profile/UserDisplay';
 export async function loader({ request, context }: LoaderArgs) {
   const { steamUser } = extractAppLoadContext(context);
   if (steamUser) {
-    const userOwnedApps = await findUserOwnedApps(steamUser.steamUserId);
-    if (userOwnedApps) {
+    const userProfile = await findUserProfileData(steamUser.steamUserId);
+    if (userProfile) {
       const {
         steamUserId,
         displayName,
         avatarFull,
         ownedApps,
-      } = userOwnedApps;
+        systemSpecs,
+      } = userProfile;
       return json({
         isLoggedIn: true,
         steamUserId,
         displayName,
         avatarFull,
         ownedApps,
+        systemNames: systemSpecs.map((systemSpec) => systemSpec.systemName),
       });
     } else {
       return json({
@@ -36,6 +38,7 @@ export async function loader({ request, context }: LoaderArgs) {
         displayName: null,
         avatarFull: null,
         ownedApps: null,
+        systemNames: null,
       });
     }
   }
@@ -45,6 +48,7 @@ export async function loader({ request, context }: LoaderArgs) {
     displayName: null,
     avatarFull: null,
     ownedApps: null,
+    systemNames: null,
   });
 }
 
@@ -65,6 +69,7 @@ export default function LoginPage() {
     displayName,
     avatarFull,
     ownedApps,
+    systemNames,
   } = useLoaderData<typeof loader>();
   return (
     <PageWrapper title="Profile">
@@ -93,6 +98,7 @@ export default function LoginPage() {
           <div>
             <UserDisplay
               ownedApps={ownedApps}
+              systemNames={systemNames}
             />
           </div>
         ) : (
