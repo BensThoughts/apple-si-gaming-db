@@ -8,24 +8,31 @@ type PerformancePostProps = {
   postText: string;
   createdAt: Date;
   ratingMedal: RatingMedal;
-  avatarMedium: string | null;
-  displayName: string | null;
-  osVersion?: string | null;
-  cpuModel?: string | null;
-  memoryRAM?: string | null;
+  steamUser: {
+    avatarMedium: string | null;
+    displayName: string | null;
+  }
+  systemSpecs: {
+    manufacturer?: string | null;
+    model?: string | null;
+    osVersion?: string | null;
+    cpuBrand?: string | null;
+    videoDriver?: string | null;
+    videoDriverVersion?: string | null;
+    videoPrimaryVRAM?: string | null;
+    memoryRAM?: string | null;
+  },
 } & React.HTMLAttributes<HTMLDivElement>
 
 export default function PerformancePostDisplay({
-  displayName,
-  avatarMedium,
+  steamUser,
   createdAt,
   postText,
   ratingMedal,
-  osVersion,
-  cpuModel,
-  memoryRAM,
+  systemSpecs,
   ...rest
 }: PerformancePostProps) {
+  const { displayName, avatarMedium } = steamUser;
   // const ratingNum = convertRatingMedalToNumber(ratingMedal);
   return (
     <div className="flex flex-col w-full gap-3">
@@ -46,11 +53,7 @@ export default function PerformancePostDisplay({
             </div>
           )}
           <span className="text-sm">{displayName}</span>
-          <SystemSpecsPopover
-            osVersion={osVersion}
-            cpuModel={cpuModel}
-            memoryRAM={memoryRAM}
-          />
+          <SystemSpecsPopover systemSpecs={systemSpecs} />
         </div>
         <div className="border-l-1 border-l-secondary-highlight pl-3">
           {postText}

@@ -45,9 +45,13 @@ export async function findPerformancePostsByAppId(steamAppId: SteamAppWithoutMet
       },
       systemSpecs: {
         select: {
-          systemName: true,
+          manufacturer: true,
+          model: true,
           osVersion: true,
-          cpuModel: true,
+          cpuBrand: true,
+          videoDriver: true,
+          videoDriverVersion: true,
+          videoPrimaryVRAM: true,
           memoryRAM: true,
         },
       },
