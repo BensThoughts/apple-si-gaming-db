@@ -3,6 +3,7 @@ import type {
   SteamAppWithoutMetadata,
   SteamUserWithoutMetadata,
   RatingMedal,
+  SteamUserSystemSpecs,
 } from '~/interfaces/database';
 import prisma from '~/lib/database/db.server';
 
@@ -11,11 +12,13 @@ export async function createPerformancePost({
   steamAppId,
   postText,
   ratingMedal,
+  systemName,
 }: {
   steamUserId: SteamUserWithoutMetadata['steamUserId'];
   steamAppId: SteamAppWithoutMetadata['steamAppId'];
   postText: PerformancePost['postText'];
   ratingMedal: PerformancePost['ratingMedal'];
+  systemName: SteamUserSystemSpecs['systemName'],
 }) {
   return prisma.performancePost.create({
     data: {
@@ -23,6 +26,7 @@ export async function createPerformancePost({
       steamUserId,
       steamAppId,
       ratingMedal,
+      systemName,
     },
   });
 };
@@ -37,6 +41,14 @@ export async function findPerformancePostsByAppId(steamAppId: SteamAppWithoutMet
         select: {
           displayName: true,
           avatarMedium: true,
+        },
+      },
+      systemSpecs: {
+        select: {
+          systemName: true,
+          osVersion: true,
+          cpuModel: true,
+          memoryRAM: true,
         },
       },
     },
