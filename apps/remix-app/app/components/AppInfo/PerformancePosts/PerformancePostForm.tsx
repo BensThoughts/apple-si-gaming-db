@@ -8,6 +8,7 @@ export default function PerformancePostForm({
   steamAppId,
   steamUserIsLoggedIn,
   steamUserOwnsApp,
+  steamUserSystemNames,
   fields,
   formError,
   fieldErrors,
@@ -15,6 +16,7 @@ export default function PerformancePostForm({
   steamAppId: number;
   steamUserIsLoggedIn: boolean;
   steamUserOwnsApp: boolean;
+  steamUserSystemNames: string[] | null;
   fields: CreatePostActionData['fields'];
   fieldErrors: CreatePostActionData['fieldErrors'];
   formError: CreatePostActionData['formError'];
@@ -25,7 +27,7 @@ export default function PerformancePostForm({
                      border-solid border-1 border-secondary p-3 rounded-lg w-full`}>
       {steamUserIsLoggedIn ? (
         <>
-          {steamUserOwnsApp ? (
+          {(steamUserOwnsApp && steamUserSystemNames) ? (
             <>
               <h2 className="text-secondary text-lg">Submit Your Own Performance Post</h2>
               {formError && <div className="text-color-error">{formError}</div>}
@@ -59,13 +61,20 @@ export default function PerformancePostForm({
                   label="Rating"
                   errorMessage={fieldErrors?.ratingMedal}
                 />
+                <SelectMenu
+                  name="performancePostSystemName"
+                  defaultValue={steamUserSystemNames[0]}
+                  options={steamUserSystemNames}
+                  label="Select System"
+                />
                 <RoundedButton type="submit" className="max-w-xs">Submit</RoundedButton>
               </Form>
             </>
           ): (
             <div>
               It looks like you do not own this app yet. Add it to your steam library to leave a
-              performance review.
+              performance review. (You also need to add at least 1 system to your profile to leave
+              a review)
             </div>
           )}
         </>

@@ -12,6 +12,11 @@ type PerformancePostLayoutProps =
       displayName: string | null,
       avatarMedium: string | null,
     };
+    systemSpecs: {
+      osVersion?: string | null;
+      cpuModel?: string | null;
+      memoryRAM?: string | null;
+    }
   }[];
 }
 
@@ -30,6 +35,7 @@ export default function PerformancePostLayout({
             postText,
             ratingMedal,
             createdAt,
+            systemSpecs,
           }, idx) => (
             <div key={id} className="flex flex-col gap-6">
               <PerformancePostDisplay
@@ -38,6 +44,9 @@ export default function PerformancePostLayout({
                 avatarMedium={steamUser.avatarMedium}
                 ratingMedal={ratingMedal}
                 createdAt={createdAt}
+                osVersion={systemSpecs.osVersion}
+                cpuModel={systemSpecs.cpuModel}
+                memoryRAM={systemSpecs.memoryRAM}
               />
               {(performancePosts.length - 1 > idx) &&
                 <hr className="text-secondary" />

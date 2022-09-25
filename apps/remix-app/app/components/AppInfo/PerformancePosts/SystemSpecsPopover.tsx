@@ -1,7 +1,17 @@
 import { Popover } from '@headlessui/react';
 import { useState } from 'react';
 
-export default function SystemSpecsPopover() {
+interface SystemSpecsPopoverProps {
+  osVersion?: string | null;
+  cpuModel?: string | null;
+  memoryRAM?: string | null;
+}
+
+export default function SystemSpecsPopover({
+  osVersion,
+  cpuModel,
+  memoryRAM,
+}: SystemSpecsPopoverProps) {
   const [isShowing, setIsShowing] = useState(false);
   return (
     <Popover className="relative">
@@ -26,8 +36,21 @@ export default function SystemSpecsPopover() {
               static
             >
               <div className="flex flex-col gap-1 text-sm text-primary-faded">
-                <span>CPU: Test</span>
-                <span>OS: Mac OS 14.1</span>
+                {osVersion &&
+                  <span>OS Version:&nbsp;
+                    <span className="text-primary">{osVersion}</span>
+                  </span>
+                }
+                {memoryRAM &&
+                  <span>RAM:&nbsp;
+                    <span className="text-primary">{memoryRAM}</span>
+                  </span>
+                }
+                {cpuModel &&
+                  <span>CPU Model:&nbsp;
+                    <span className="text-primary">{cpuModel}</span>
+                  </span>
+                }
               </div>
             </Popover.Panel>
           )}

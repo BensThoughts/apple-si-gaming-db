@@ -10,6 +10,9 @@ type PerformancePostProps = {
   ratingMedal: RatingMedal;
   avatarMedium: string | null;
   displayName: string | null;
+  osVersion?: string | null;
+  cpuModel?: string | null;
+  memoryRAM?: string | null;
 } & React.HTMLAttributes<HTMLDivElement>
 
 export default function PerformancePostDisplay({
@@ -18,6 +21,9 @@ export default function PerformancePostDisplay({
   createdAt,
   postText,
   ratingMedal,
+  osVersion,
+  cpuModel,
+  memoryRAM,
   ...rest
 }: PerformancePostProps) {
   // const ratingNum = convertRatingMedalToNumber(ratingMedal);
@@ -40,7 +46,11 @@ export default function PerformancePostDisplay({
             </div>
           )}
           <span className="text-sm">{displayName}</span>
-          <SystemSpecsPopover />
+          <SystemSpecsPopover
+            osVersion={osVersion}
+            cpuModel={cpuModel}
+            memoryRAM={memoryRAM}
+          />
         </div>
         <div className="border-l-1 border-l-secondary-highlight pl-3">
           {postText}
