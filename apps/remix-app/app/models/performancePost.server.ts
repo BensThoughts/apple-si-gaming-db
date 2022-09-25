@@ -9,6 +9,8 @@ import prisma from '~/lib/database/db.server';
 
 export async function createPerformancePost({
   steamUserId,
+  displayName,
+  avatarMedium,
   steamAppId,
   postText,
   ratingMedal,
@@ -18,15 +20,48 @@ export async function createPerformancePost({
   steamAppId: SteamAppWithoutMetadata['steamAppId'];
   postText: PerformancePost['postText'];
   ratingMedal: PerformancePost['ratingMedal'];
-  systemName: SteamUserSystemSpecs['systemName'],
+  avatarMedium?: PerformancePost['avatarMedium'];
+  displayName?: PerformancePost['displayName'];
+  systemName: SteamUserSystemSpecs['systemName'];
 }) {
+  const systemSpecs = await prisma.steamUserSystemSpecs.findUnique({
+    where: {
+      systemName_steamUserId: {
+        steamUserId,
+        systemName,
+      },
+    },
+    select: {
+      manufacturer: true,
+      model: true,
+      osVersion: true,
+      cpuBrand: true,
+      videoDriver: true,
+      videoDriverVersion: true,
+      videoPrimaryVRAM: true,
+      memoryRAM: true,
+    },
+  });
+  // TODO: Rather than throwing an error, maybe just let it pass
+  if (!systemSpecs) {
+    throw new Error(`System ${systemName} was not found in the database.`);
+  }
   return prisma.performancePost.create({
     data: {
-      postText,
       steamUserId,
+      displayName,
+      avatarMedium,
+      postText,
       steamAppId,
       ratingMedal,
-      systemName,
+      systemManufacturer: systemSpecs.manufacturer,
+      systemModel: systemSpecs.model,
+      systemOsVersion: systemSpecs.osVersion,
+      systemCpuBrand: systemSpecs.cpuBrand,
+      systemVideoDriver: systemSpecs.videoDriver,
+      systemVideoDriverVersion: systemSpecs.videoDriverVersion,
+      systemVideoPrimaryVRAM: systemSpecs.videoPrimaryVRAM,
+      systemMemoryRAM: systemSpecs.memoryRAM,
     },
   });
 };
@@ -36,25 +71,21 @@ export async function findPerformancePostsByAppId(steamAppId: SteamAppWithoutMet
     where: {
       steamAppId,
     },
-    include: {
-      steamUser: {
-        select: {
-          displayName: true,
-          avatarMedium: true,
-        },
-      },
-      systemSpecs: {
-        select: {
-          manufacturer: true,
-          model: true,
-          osVersion: true,
-          cpuBrand: true,
-          videoDriver: true,
-          videoDriverVersion: true,
-          videoPrimaryVRAM: true,
-          memoryRAM: true,
-        },
-      },
+    select: {
+      id: true,
+      createdAt: true,
+      avatarMedium: true,
+      displayName: true,
+      postText: true,
+      ratingMedal: true,
+      systemManufacturer: true,
+      systemModel: true,
+      systemOsVersion: true,
+      systemCpuBrand: true,
+      systemVideoDriver: true,
+      systemVideoDriverVersion: true,
+      systemVideoPrimaryVRAM: true,
+      systemMemoryRAM: true,
     },
   });
 }
