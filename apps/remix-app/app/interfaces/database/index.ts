@@ -7,6 +7,7 @@ export type {
 
   SteamUser,
   SteamUserWithoutMetadata,
+  SteamUserSystemSpecs,
 
   PerformancePost,
   PerformancePostWithoutMetadata,
