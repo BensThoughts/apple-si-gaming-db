@@ -132,6 +132,14 @@ export async function findUserProfileData(steamUserId: SteamUser['steamUserId'])
       systemSpecs: {
         select: {
           systemName: true,
+          manufacturer: true,
+          model: true,
+          osVersion: true,
+          cpuBrand: true,
+          videoDriver: true,
+          videoDriverVersion: true,
+          videoPrimaryVRAM: true,
+          memoryRAM: true,
         },
       },
       ownedApps: {
