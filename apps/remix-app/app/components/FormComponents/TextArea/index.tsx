@@ -1,13 +1,25 @@
-type TextAreaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>
+type TextAreaProps = {
+  labelText: string;
+  fieldError?: string;
+} & React.TextareaHTMLAttributes<HTMLTextAreaElement>
 
 export default function TextArea({
+  labelText,
+  fieldError,
+  id,
   className,
   ...rest
 }: TextAreaProps) {
   return (
-    <textarea
-      className={`bg-primary rounded-lg p-2 w-full h-28 ${className}`}
-      {...rest}
-    />
+    <div className="w-full max-w-lg">
+      <label htmlFor={id}>
+        {labelText}:{fieldError && <span className="text-color-error">&nbsp;{fieldError}</span>}
+      </label>
+      <textarea
+        id={id}
+        className={`bg-primary rounded-lg p-2 w-full h-screen max-h-56 ${className}`}
+        {...rest}
+      />
+    </div>
   );
 }
