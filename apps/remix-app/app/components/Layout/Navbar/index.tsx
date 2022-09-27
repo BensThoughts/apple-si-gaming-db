@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 import ThemeToggle from '~/components/ThemeToggle';
 import MenuDrawer from '~/components/Layout/MenuDrawer';
-import IconButton from '~/components/IconButton';
 import MenuItem from './MenuItem';
 import NavHider from './NavHider';
 
@@ -83,15 +82,29 @@ export default function Navbar({
           {/* Small- Screens */}
           <div className="flex justify-between items-center mx-3 w-full md:hidden">
 
-            <Link to="/profile">
-              <div className="block w-[56px] h-[40px] rounded-md bg-primary hover:bg-primary-highlight p-px group ml-3">
-                <SteamIcon className="text-icon-secondary rounded-md w-full h-full group-hover:text-icon-secondary-highlight" />
-              </div>
+            <Link
+              to="/profile"
+              className={`ml-3 text-sm text-primary-highlight inline-flex justify-center items-center
+                          border border-transparent font-medium px-4 py-2 rounded
+                          bg-secondary hover:bg-secondary-highlight focus:outline-none
+                          focus-visible:bg-secondary-highlight focus-visible:ring-2
+                          focus-visible:ring-secondary-highlight focus-visible:ring-offset-1
+                          focus-visible:ring-offset-white max-h-[40px] max-w-[58px]`}
+            >
+              <SteamIcon size={44} className="text-icon-primary" />
             </Link>
-            <IconButton onClick={() => setIsOpen(!isOpen)} className="mr-3 md:hidden" aria-label="navigation menu">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label="navigation menu"
+              className={`mr-3 text-sm text-primary-highlight inline-flex justify-center items-center
+                          border border-transparent font-medium px-4 py-2 rounded
+                          bg-secondary hover:bg-secondary-highlight focus:outline-none
+                          focus-visible:bg-secondary-highlight focus-visible:ring-2
+                          focus-visible:ring-secondary-highlight focus-visible:ring-offset-1
+                          focus-visible:ring-offset-white max-h-[40px] max-w-[58px]`}
+            >
               <BarsIcon size={24} className="text-icon-primary" />
-            </IconButton>
-
+            </button>
           </div>
         </nav>
       </NavHider>
