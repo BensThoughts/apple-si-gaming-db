@@ -1,6 +1,8 @@
-import type { LoaderArgs, MetaFunction } from '@remix-run/node';
+import type { ActionArgs, LoaderArgs, MetaFunction } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import {
+  useActionData,
   useLoaderData,
 } from '@remix-run/react';
 import AsideCard from '~/components/Cards/AsideCard';
@@ -10,6 +12,8 @@ import { findUserProfileData } from '~/models/steamUser.server';
 import ExternalLink from '~/components/ExternalLink';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import UserDisplay from '~/components/Profile/UserDisplay';
+import { createSystem } from '~/lib/form-actions/profile/create-system.server';
+import { deleteSystem } from '~/lib/form-actions/profile/delete-system.server';
 
 export async function loader({ request, context }: LoaderArgs) {
   const { steamUser } = extractAppLoadContext(context);
@@ -30,6 +34,7 @@ export async function loader({ request, context }: LoaderArgs) {
         avatarFull,
         ownedApps,
         systemNames: systemSpecs.map((systemSpec) => systemSpec.systemName),
+        systemSpecs,
       });
     } else {
       return json({
@@ -37,19 +42,55 @@ export async function loader({ request, context }: LoaderArgs) {
         steamUserId: null,
         displayName: null,
         avatarFull: null,
-        ownedApps: null,
-        systemNames: null,
+        ownedApps: [],
+        systemNames: [],
+        systemSpecs: [],
       });
     }
   }
   return json({
     isLoggedIn: false,
-    steamId: null,
+    steamUserId: null,
     displayName: null,
     avatarFull: null,
-    ownedApps: null,
-    systemNames: null,
+    ownedApps: [],
+    systemNames: [],
+    systemSpecs: [],
   });
+}
+
+export type ProfileActionData = {
+  formError?: string;
+  fieldErrors?: {
+    systemName?: string | undefined;
+    systemInfo?: string | undefined;
+  };
+  fields?: {
+    systemName: string;
+    systemInfo: string;
+  };
+};
+
+export async function action({ request, context }: ActionArgs) {
+  const { steamUser } = extractAppLoadContext(context);
+  // TODO: This should maybe return more info about the problem
+  if (!steamUser) {
+    return redirect('/profile');
+  }
+  const formData = await request.formData();
+  const action = formData.get('action');
+  console.log(action);
+  switch (action) {
+    case 'createSystem': {
+      return createSystem(steamUser.steamUserId, formData);
+    }
+    case 'deleteSystem': {
+      return deleteSystem(steamUser.steamUserId, formData);
+    }
+    default: {
+      throw new Error('Unexpected action in /profile');
+    }
+  }
 }
 
 export const meta: MetaFunction = ({ data }) => {
@@ -69,8 +110,9 @@ export default function LoginPage() {
     displayName,
     avatarFull,
     ownedApps,
-    systemNames,
+    systemSpecs,
   } = useLoaderData<typeof loader>();
+  const actionData = useActionData<ProfileActionData>();
   return (
     <PageWrapper title="Profile">
       <div className="flex flex-col gap-6 items-center w-full">
@@ -98,7 +140,8 @@ export default function LoginPage() {
           <div>
             <UserDisplay
               ownedApps={ownedApps}
-              systemNames={systemNames}
+              systemSpecs={systemSpecs}
+              actionData={actionData}
             />
           </div>
         ) : (
@@ -113,7 +156,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
   return (
     <div>
       <h1>Error in /profile route</h1>
-      <pre>{error.message}</pre>
+      <div>{error.message}</div>
     </div>
   );
 }
