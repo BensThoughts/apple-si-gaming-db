@@ -12,7 +12,7 @@ function validateSearchQuery(searchQuery: string) {
   if (searchQuery.length > 100) {
     return `The search query is too long (100 character maximum)`;
   }
-  if ((searchQuery === '') || (searchQuery.length < 1)) {
+  if (searchQuery.length < 1) {
     return `Search query must contain at least 1 character`;
   }
 }
@@ -45,9 +45,6 @@ export async function loader({
   if (searchQuery === undefined) {
     return json({ steamApps: null, fields: { searchQuery: '' } });
   }
-
-  const t = '';
-  console.log(t.length);
 
   if (typeof searchQuery !== 'string') {
     return badRequest({
