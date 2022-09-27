@@ -1,21 +1,9 @@
-// interface OwnedApp {
-//     steamAppId: number;
-//     name: string;
-//     headerImage?: string | null;
-//     platformMac?: boolean | null;
-//     genres: {
-//       genreId: string;
-//       description: string;
-//     }[];
-// }
-
-import { Form } from '@remix-run/react';
-import AsideCard from '../Cards/AsideCard';
-import FloatingLabelInput from '../FormComponents/SearchInput/FloatingLabelInput';
-import TextArea from '../FormComponents/TextArea';
-import Heading from '../Heading';
-import RoundedButton from '../RoundedButton';
+import type { ProfileActionData } from '~/routes/profile';
+import AsideCard from '~/components/Cards/AsideCard';
+import Heading from '~/components/Heading';
+import CreateSystemForm from './CreateSystemForm';
 import OwnedApps from './OwnedApps';
+import SystemSpecDisplay from './SystemSpecDisplay';
 
 interface UserDisplayProps {
   ownedApps: {
@@ -27,16 +15,35 @@ interface UserDisplayProps {
       genreId: string;
       description: string;
     }[];
-  }[] | null;
+  }[];
+  systemSpecs: {
+    systemName: string;
+    manufacturer: string | null;
+    model: string | null;
+    cpuBrand: string | null;
+    osVersion: string | null;
+    videoDriver: string | null;
+    videoDriverVersion: string | null;
+    videoPrimaryVRAM: string | null;
+    memoryRAM: string | null;
+  }[],
+  actionData?: ProfileActionData;
 }
 
 export default function UserDisplay({
   ownedApps,
+  systemSpecs,
+  actionData,
 }: UserDisplayProps) {
   return (
     <div>
       <div className="flex flex-col gap-3 items-center w-full">
         <Heading>Systems</Heading>
+        {systemSpecs &&
+          <div className="w-full">
+            <SystemSpecDisplay systemSpecs={systemSpecs} />
+          </div>
+        }
         <AsideCard title="System Information" iconBackground="primary" className="max-w-md">
           This is where you can define your system information. This is the
           information that will be linked to your performance posts. You can copy
@@ -44,19 +51,10 @@ export default function UserDisplay({
           the help menu, select System Information, right click and select copy
           all text to clipboard. Then just paste that into the text field below.
         </AsideCard>
-        <Form
-          action="/profile/update-profile"
-          method="post"
-        >
-          <FloatingLabelInput
-            name="systemInfoName"
-            label="System Name"
-          />
-          <TextArea
-            name="systemInfoData"
-          />
-          <RoundedButton type="submit">Create</RoundedButton>
-        </Form>
+        <div className="w-full flex flex-col items-center gap-3">
+          <h3 className="text-secondary">Create a New System</h3>
+          <CreateSystemForm actionData={actionData} />
+        </div>
       </div>
       <div className="flex flex-col gap-3 items-center w-full">
         <Heading>Library</Heading>
