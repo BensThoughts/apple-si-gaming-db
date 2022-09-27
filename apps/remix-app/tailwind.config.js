@@ -21,6 +21,7 @@ module.exports = {
       'accent': generateColorClass('color-app-accent'),
       'app-bg': generateColorClass('color-bg-primary'),
       'app-bg-secondary': generateColorClass('color-bg-secondary'),
+      'modal': generateColorClass('color-bg-modal'),
       'primary-text': generateColorClass('color-text-primary'),
       'primary-text-highlight': generateColorClass('color-text-primary-highlight'),
       'primary-text-faded': generateColorClass('color-text-primary-faded'),

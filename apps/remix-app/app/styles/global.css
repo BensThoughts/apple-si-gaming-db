@@ -5,6 +5,7 @@
 body[data-theme="light"] {
   --color-bg-primary: 224, 251, 253;
   --color-bg-secondary: 152, 193, 218;
+  --color-bg-modal: 243, 248, 251;
 
   --color-app-primary: 244, 229, 198;
   /* --color-app-primary: 241, 234, 222; */
@@ -28,6 +29,7 @@ body[data-theme="light"] {
 body[data-theme="dark"] {
   --color-bg-primary: 0, 0, 0;
   --color-bg-secondary: 22, 40, 62;
+  --color-bg-modal: 57, 75, 95;
 
   --color-app-primary: 37, 49, 62;
   --color-app-primary-highlight: 57, 75, 95;
