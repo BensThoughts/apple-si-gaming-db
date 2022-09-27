@@ -7,14 +7,14 @@ import RoundedButton from '../RoundedButton';
 
 
 interface OwnedApp {
-    steamAppId: number;
-    name: string;
-    headerImage?: string | null;
-    platformMac?: boolean | null;
-    genres: {
-      genreId: string;
-      description: string;
-    }[];
+  steamAppId: number;
+  name: string;
+  headerImage?: string | null;
+  platformMac?: boolean | null;
+  genres: {
+    genreId: string;
+    description: string;
+  }[];
 }
 
 export default function OwnedApps({
