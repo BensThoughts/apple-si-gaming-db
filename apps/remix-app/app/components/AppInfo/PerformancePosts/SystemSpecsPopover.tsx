@@ -1,7 +1,8 @@
 import { Popover } from '@headlessui/react';
 import { useState } from 'react';
 
-interface SystemSpecsPopoverProps {
+type SystemSpecsPopoverProps = {
+  children: React.ReactNode;
   systemManufacturer?: string | null;
   systemModel?: string | null;
   systemOsVersion?: string | null;
@@ -10,9 +11,10 @@ interface SystemSpecsPopoverProps {
   systemVideoDriverVersion?: string | null;
   systemVideoPrimaryVRAM?: string | null;
   systemMemoryRAM?: string | null;
-}
+} & React.HTMLAttributes<HTMLDivElement>
 
 export default function SystemSpecsPopover({
+  children,
   systemManufacturer,
   systemModel,
   systemOsVersion,
@@ -24,17 +26,14 @@ export default function SystemSpecsPopover({
 }: SystemSpecsPopoverProps) {
   const [isShowing, setIsShowing] = useState(false);
   return (
-    <Popover className="relative">
+    <Popover className={`relative`} as="div">
       {({ open }) => (
         <>
           <Popover.Button
             onMouseEnter={() => setIsShowing(true)}
             onMouseLeave={() => setIsShowing(false)}
           >
-            <span className="underline underline-offset-4 hover:text-icon-secondary
-                         transition-colors duration-200 text-sm">
-              System
-            </span>
+            {children}
           </Popover.Button>
 
           {(isShowing || open) && (

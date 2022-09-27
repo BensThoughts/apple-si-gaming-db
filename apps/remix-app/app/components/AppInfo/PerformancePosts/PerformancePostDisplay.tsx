@@ -65,7 +65,12 @@ export default function PerformancePostDisplay({
             systemVideoDriverVersion={systemVideoDriverVersion}
             systemVideoPrimaryVRAM={systemVideoPrimaryVRAM}
             systemMemoryRAM={systemMemoryRAM}
-          />
+          >
+            <span className="underline underline-offset-4 hover:text-icon-secondary
+                             transition-colors duration-200 text-sm">
+              System
+            </span>
+          </SystemSpecsPopover>
         </div>
         <div className="border-l-1 border-l-secondary-highlight pl-3">
           {postText}
