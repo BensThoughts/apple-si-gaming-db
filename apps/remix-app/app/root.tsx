@@ -18,7 +18,8 @@ import { json } from '@remix-run/node';
 import Navbar from '~/components/Layout/Navbar';
 import type { ExtendedAppLoadContext } from '~/interfaces';
 import type { SteamUserWithoutMetadata } from '~/interfaces/database';
-import { loginCookie } from './lib/cookies/cookies.server';
+// import { loginCookie } from './lib/sessions/cookie-sessions.server';
+import { getProfileSession, commitProfileSession } from './lib/sessions/cookie-sessions.server';
 
 import tailwindStylesheetUrl from './styles/tailwind.css';
 import { extractAppLoadContext } from './lib/data-utils/appLoadContext.server';
@@ -51,10 +52,16 @@ export const meta: MetaFunction = () => ({
 export async function loader({ request, context }: LoaderArgs) {
   const data = extractAppLoadContext(context);
   const { steamUser } = data;
-  const cookieHeader = request.headers.get('Cookie');
-  const cookie = (await loginCookie.parse(cookieHeader)) || {};
-  if (steamUser && !cookie.isLoggedIn) {
-    cookie.isLoggedIn = true;
+  const profileSession = await getProfileSession(
+      request.headers.get('Cookie'),
+  );
+
+  // TODO: May not need logic to only run get player owned games
+  // TODO: on initial login, this might only run on first page
+  // TODO: load/refresh anyways, and not not normal navigation/routing
+  if (steamUser && profileSession && !profileSession.has('isLoggedIn')) {
+    // cookie.isLoggedIn = true;
+    profileSession.set('isLoggedIn', true);
     await upsertSteamUser(steamUser);
     const userOwnedApps = await getSteamPlayerOwnedGamesRequest(steamUser.steamUserId);
     const ownedAppIds = userOwnedApps.games.map((app) => app.appid);
@@ -65,19 +72,25 @@ export async function loader({ request, context }: LoaderArgs) {
 
     return json<ExtendedAppLoadContext>(data, {
       headers: {
-        'Set-Cookie': await loginCookie.serialize(cookie),
+        'Set-Cookie': await commitProfileSession(profileSession),
       },
     });
   }
   if (!steamUser) {
-    cookie.isLoggedIn = false;
+    // cookie.isLoggedIn = false;
+    profileSession.unset('isLoggedIn');
     return json<ExtendedAppLoadContext>(data, {
       headers: {
-        'Set-Cookie': await loginCookie.serialize(cookie),
+        'Set-Cookie': await commitProfileSession(profileSession),
       },
     });
   }
-  return json<ExtendedAppLoadContext>(data);
+  // TODO: Do I need to commit the session here too?
+  return json<ExtendedAppLoadContext>(data, {
+    headers: {
+      'Set-Cookie': await commitProfileSession(profileSession),
+    },
+  });
 }
 
 function Document({
@@ -147,6 +160,8 @@ function Document({
 }
 
 export default function App() {
+  // TODO: Getting cannot use loaderData in an error boundary errors,
+  // TODO: with error being thrown on /profile, prob. because of this
   const loaderData = useLoaderData<typeof loader>();
   const steamUser = loaderData.steamUser;
   return (
