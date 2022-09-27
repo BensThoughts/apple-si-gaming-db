@@ -19,11 +19,14 @@ export async function loader({ params, context }: LoaderArgs) {
 
   let steamUserOwnsApp = false;
   let steamUserIsLoggedIn = false;
-  let steamUserSystemNames: string[] | null = null;
+  let steamUserSystemNames: string[] = [];
   if (steamUser) {
     steamUserIsLoggedIn = true;
     steamUserOwnsApp = await doesSteamUserOwnApp(steamUser.steamUserId, steamAppId);
-    steamUserSystemNames = await findSteamUserSystemNamesByUserId(steamUser.steamUserId);
+    const systemNames = await findSteamUserSystemNamesByUserId(steamUser.steamUserId);
+    if (systemNames) {
+      steamUserSystemNames = systemNames;
+    }
   }
   return json({
     steamAppId,
