@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 
-interface DeleteSystemModalProps {
+interface SystemModalProps {
   title: string,
   description?: string,
   children: React.ReactNode,
@@ -14,7 +14,7 @@ export default function SystemModal({
   children,
   isOpen,
   setIsOpen,
-}: DeleteSystemModalProps) {
+}: SystemModalProps) {
   return (
     <Transition show={isOpen} as={Fragment}>
       <Dialog
