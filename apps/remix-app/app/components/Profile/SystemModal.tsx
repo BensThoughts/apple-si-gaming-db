@@ -33,7 +33,7 @@ export default function SystemModal({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-25 z-40" />
+          <div className="fixed inset-0 bg-black bg-opacity-25 z-40" />
         </Transition.Child>
         <div className="fixed inset-0 overflow-y-auto z-50">
           <div className="flex min-h-full items-center justify-center p-4 text-center">
