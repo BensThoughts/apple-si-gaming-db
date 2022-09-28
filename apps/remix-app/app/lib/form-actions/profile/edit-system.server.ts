@@ -27,7 +27,7 @@ function validateUpdatedSystemName(updatedSystemName: string, systemNames: strin
     return `The updated system name was too long (100 character maximum)`;
   }
   if (systemNames.includes(updatedSystemName)) {
-    return `The name ${updatedSystemName} is already taken`;
+    return `The system name ${updatedSystemName} is already taken`;
   }
 }
 
