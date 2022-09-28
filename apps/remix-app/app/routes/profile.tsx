@@ -176,7 +176,9 @@ export default function LoginPage() {
             <UserDisplay
               ownedApps={ownedApps}
               systemSpecs={systemSpecs}
+              createSystemSpecActionData={actionData?.actions.createSystemSpec}
               editSystemSpecActionData={actionData?.actions.editSystemSpec}
+              deleteSystemSpecActionData={actionData?.actions.deleteSystemSpec}
             />
           </div>
         ) : (
