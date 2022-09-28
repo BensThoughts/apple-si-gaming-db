@@ -4,6 +4,8 @@ import Heading from '~/components/Heading';
 import CreateSystemForm from './CreateSystemForm';
 import OwnedApps from './OwnedApps';
 import SystemSpecDisplay from './SystemSpecDisplay';
+import RoundedButton from '../RoundedButton';
+import { errorToast } from '../Toasts';
 
 interface UserDisplayProps {
   ownedApps: {
@@ -30,15 +32,35 @@ interface UserDisplayProps {
   actionData?: ProfileActionData;
 }
 
+
 export default function UserDisplay({
   ownedApps,
   systemSpecs,
   actionData,
 }: UserDisplayProps) {
+  const notify = () => {
+    errorToast('My error example toast!');
+  };
   return (
     <div>
       <div className="flex flex-col gap-3 items-center w-full">
         <Heading>Systems</Heading>
+        <RoundedButton onClick={notify}>Snack Bar</RoundedButton>
+        {/* <Toaster
+          position="bottom-center"
+        >
+          {(t) => (
+            <ToastBar toast={t}>
+              {({ icon, message }) => (
+                <>
+                  {icon}
+                  {message}
+                  <button onClick={() => toast.dismiss(t.id)}>X</button>
+                </>
+              )}
+            </ToastBar>
+          )}
+        </Toaster> */}
         {systemSpecs &&
           <div className="w-full">
             <SystemSpecDisplay systemSpecs={systemSpecs} />

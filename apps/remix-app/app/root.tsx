@@ -15,10 +15,8 @@ import {
   useLoaderData,
 } from '@remix-run/react';
 import { json } from '@remix-run/node';
-import Navbar from '~/components/Layout/Navbar';
 import type { ExtendedAppLoadContext } from '~/interfaces';
 import type { SteamUserWithoutMetadata } from '~/interfaces/database';
-// import { loginCookie } from './lib/sessions/cookie-sessions.server';
 import { getProfileSession, commitProfileSession } from './lib/sessions/cookie-sessions.server';
 
 import tailwindStylesheetUrl from './styles/tailwind.css';
@@ -29,6 +27,9 @@ import {
 } from './models/steamUser.server';
 import { searchAllAppsByAppIds } from './models/steamApp.server';
 import { getSteamPlayerOwnedGamesRequest } from './lib/data-utils/steamApi.server';
+import Navbar from '~/components/Layout/Navbar';
+// import { LazyMotion, domAnimation } from 'framer-motion';
+import { Toaster } from 'react-hot-toast';
 const ThemeProvider = lazy(() => import('./lib/context/colorMode'));
 
 export function ClientOnly({ children }: { children: React.ReactNode }) {
@@ -134,6 +135,7 @@ function Document({
       </head>
       <body className="min-h-screen bg-app-bg">
         <script dangerouslySetInnerHTML={{ __html: setInitialTheme }} />
+        <Toaster />
         <ClientOnly>
           <Suspense>
             <ThemeProvider>
