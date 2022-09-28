@@ -43,6 +43,7 @@ module.exports = {
         'primary-highlight': generateColorClass('color-text-primary-highlight'),
         'primary-faded': generateColorClass('color-text-primary-faded'),
         'secondary': generateColorClass('color-text-secondary'),
+        'color-error': generateColorClass('color-text-error'),
         'icon-primary': generateColorClass('color-app-primary'),
         'icon-primary-highlight': generateColorClass('color-app-primary-highlight'),
         'icon-secondary': generateColorClass('color-app-secondary'),
