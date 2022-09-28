@@ -1,5 +1,5 @@
 import { redirect, json } from '@remix-run/node';
-import { createSystemSpecs } from '~/models/steamUserSystemSpecs.server';
+import { createSystemSpecs, findSystemSpecSystemNames } from '~/models/steamUserSystemSpecs.server';
 import type { SystemSpec } from '~/interfaces';
 import type { SteamUserSystemSpecs } from '@apple-si-gaming-db/database';
 import type { CreateSystemSpecActionData, ProfileActionData } from '~/routes/profile';
@@ -60,12 +60,15 @@ function validateSystemInfo(systemSpec: SystemSpec) {
   }
 }
 
-function validateSystemName(systemInfoName: string) {
-  if (systemInfoName.length < 3) {
+function validateSystemName(systemName: string, systemNames: string[]) {
+  if (systemName.length < 3) {
     return `The system name is too short (3 character minimum)`;
   }
-  if (systemInfoName.length > 100) {
+  if (systemName.length > 100) {
     return `The system name is too long (100 character maximum)`;
+  }
+  if (systemNames.includes(systemName)) {
+    return `The system name ${systemName} is already taken`;
   }
 }
 
@@ -138,8 +141,12 @@ export async function createSystem(
     return badRequest({ formError: `Form not submitted correctly.` });
   }
   const systemSpecs = extractSystemSpecs(systemInfo);
+  const systemNames = await findSystemSpecSystemNames(steamUserId);
+  if (!systemNames) {
+    return badRequest({ formError: `Could not find steam user with id ${steamUserId}` });
+  }
   const fieldErrors = {
-    systemName: validateSystemName(systemName),
+    systemName: validateSystemName(systemName, systemNames),
     systemInfo: validateSystemInfo(systemSpecs),
   };
   const fields = {
