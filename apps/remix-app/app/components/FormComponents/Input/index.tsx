@@ -1,10 +1,10 @@
-type FloatingLabelInputProps = {
+type InputProps = {
   fieldError?: string;
   label: string;
   componentSize?: 'medium' | 'large';
 } & React.InputHTMLAttributes<HTMLInputElement>
 
-export default function FloatingLabelInput({
+export default function Input({
   id,
   name,
   defaultValue = '',
@@ -15,7 +15,7 @@ export default function FloatingLabelInput({
   label,
   componentSize = 'large',
   ...rest
-}: FloatingLabelInputProps) {
+}: InputProps) {
   let inputSizeClassnames = 'px-3 py-3';
   if (componentSize === 'medium') {
     inputSizeClassnames = 'px-[7px] py-[7px]';

@@ -1,5 +1,5 @@
 import RoundedButton from '../../RoundedButton';
-import FloatingLabelInput from './FloatingLabelInput';
+import Input from '~/components/FormComponents/Input';
 import { Form, useTransition } from '@remix-run/react';
 
 const FORM_NAME = 'game-search-form';
@@ -42,7 +42,7 @@ export default function SearchInput({
     >
       <div className={`flex justify-center items-center gap-2`}>
         <div>
-          <FloatingLabelInput
+          <Input
             name="searchQuery"
             id="searchQuery"
             defaultValue={defaultValue}

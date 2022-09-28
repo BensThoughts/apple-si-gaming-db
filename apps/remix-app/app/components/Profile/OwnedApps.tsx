@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import SelectMenu from '../FormComponents/SelectMenu';
 import ToggleSwitch from '../FormComponents/ToggleSwitch';
-import FloatingLabelInput from '../FormComponents/SearchInput/FloatingLabelInput';
+import Input from '../FormComponents/Input';
 import OwnedAppDisplay from './OwnedAppDisplay';
 import RoundedButton from '../RoundedButton';
 
@@ -59,7 +59,7 @@ export default function OwnedApps({
     <div className="flex flex-col items-center gap-8 w-full">
       <div className="flex flex-col md:flex-row items-center justify-center gap-3 w-full">
         <div>
-          <FloatingLabelInput
+          <Input
             id="profileSearch"
             name="profileSearch"
             label="Search by name..."

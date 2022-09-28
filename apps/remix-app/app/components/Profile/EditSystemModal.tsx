@@ -1,6 +1,6 @@
 import { Form, useSubmit } from '@remix-run/react';
 import React from 'react';
-import FloatingLabelInput from '~/components/FormComponents/SearchInput/FloatingLabelInput';
+import Input from '~/components/FormComponents/Input';
 import RoundedButton from '~/components/RoundedButton';
 import SystemModal from './SystemModal';
 
@@ -47,7 +47,7 @@ export default function EditSystemModal({
             <input type="hidden" name="_profileAction" value="editSystem" />
             <input type="hidden" name="systemName" value={systemName} />
             <input type="hidden" name="systemNames" value={systemNames} />
-            <FloatingLabelInput
+            <Input
               name="updatedSystemName"
               label="System Name..."
             />
