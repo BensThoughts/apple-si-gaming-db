@@ -7,6 +7,7 @@ export default function TextArea({
   labelText,
   fieldError,
   id,
+  defaultValue,
   className,
   ...rest
 }: TextAreaProps) {
@@ -17,6 +18,7 @@ export default function TextArea({
       </label>
       <textarea
         id={id}
+        defaultValue={defaultValue}
         className={`bg-primary rounded-lg p-2 w-full h-screen max-h-56 ${className}`}
         {...rest}
       />

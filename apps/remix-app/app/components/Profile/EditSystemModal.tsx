@@ -44,7 +44,7 @@ export default function EditSystemModal({
           className="flex flex-col gap-4"
         >
           <div>
-            <input type="hidden" name="action" value="editSystem" />
+            <input type="hidden" name="_profileAction" value="editSystem" />
             <input type="hidden" name="systemName" value={systemName} />
             <input type="hidden" name="systemNames" value={systemNames} />
             <FloatingLabelInput

@@ -31,6 +31,7 @@ interface UserDisplayProps {
     memoryRAM: string | null;
   }[],
   createSystemSpecActionData?: CreateSystemSpecActionData;
+  isSubmittingCreateSystem: boolean;
   editSystemSpecActionData?: EditSystemSpecActionData;
   deleteSystemSpecActionData?: DeleteSystemSpecActionData;
 }
@@ -40,6 +41,7 @@ export default function UserDisplay({
   ownedApps,
   systemSpecs,
   createSystemSpecActionData,
+  isSubmittingCreateSystem,
   editSystemSpecActionData,
   deleteSystemSpecActionData,
 }: UserDisplayProps) {
@@ -64,6 +66,7 @@ export default function UserDisplay({
         <div className="w-full flex flex-col items-center gap-3">
           <h3 className="text-secondary">Create a New System</h3>
           <CreateSystemForm
+            isSubmittingCreateSystemForm={isSubmittingCreateSystem}
             createSystemSpecActionData={createSystemSpecActionData}
           />
         </div>

@@ -4,6 +4,7 @@ import { json } from '@remix-run/node';
 import {
   useActionData,
   useLoaderData,
+  useTransition,
 } from '@remix-run/react';
 import AsideCard from '~/components/Cards/AsideCard';
 import LoginCard from '~/components/Profile/LoginCard';
@@ -95,7 +96,7 @@ export type DeleteSystemSpecActionData = {
 }
 
 export type ProfileActionData = {
-  actions: {
+  _profileAction: {
     createSystemSpec?: CreateSystemSpecActionData;
     editSystemSpec?: EditSystemSpecActionData;
     deleteSystemSpec?: DeleteSystemSpecActionData;
@@ -109,8 +110,7 @@ export async function action({ request, context }: ActionArgs) {
     return redirect('/profile');
   }
   const formData = await request.formData();
-  const action = formData.get('action');
-  console.log(action);
+  const action = formData.get('_profileAction');
   switch (action) {
     case 'createSystem': {
       return createSystem(steamUser.steamUserId, formData);
@@ -147,6 +147,11 @@ export default function LoginPage() {
     systemSpecs,
   } = useLoaderData<typeof loader>();
   const actionData = useActionData<ProfileActionData>();
+  const transition = useTransition();
+
+  const isSubmittingCreateSystem =
+    transition.state === 'submitting' &&
+    transition.submission.formData.get('_profileAction') === 'createSystem';
 
   return (
     <PageWrapper title="Profile">
@@ -176,9 +181,10 @@ export default function LoginPage() {
             <UserDisplay
               ownedApps={ownedApps}
               systemSpecs={systemSpecs}
-              createSystemSpecActionData={actionData?.actions.createSystemSpec}
-              editSystemSpecActionData={actionData?.actions.editSystemSpec}
-              deleteSystemSpecActionData={actionData?.actions.deleteSystemSpec}
+              isSubmittingCreateSystem={isSubmittingCreateSystem}
+              createSystemSpecActionData={actionData?._profileAction.createSystemSpec}
+              editSystemSpecActionData={actionData?._profileAction.editSystemSpec}
+              deleteSystemSpecActionData={actionData?._profileAction.deleteSystemSpec}
             />
           </div>
         ) : (
