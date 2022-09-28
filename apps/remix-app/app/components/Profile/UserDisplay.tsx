@@ -1,12 +1,13 @@
-import type { ProfileActionData } from '~/routes/profile';
 import AsideCard from '~/components/Cards/AsideCard';
 import Heading from '~/components/Heading';
+import type {
+  CreateSystemSpecActionData,
+  DeleteSystemSpecActionData,
+  EditSystemSpecActionData,
+} from '~/routes/profile';
 import CreateSystemForm from './CreateSystemForm';
 import OwnedApps from './OwnedApps';
 import SystemSpecDisplay from './SystemSpecDisplay';
-import RoundedButton from '../RoundedButton';
-import { errorToast } from '../Toasts';
-
 interface UserDisplayProps {
   ownedApps: {
     steamAppId: number;
@@ -29,43 +30,30 @@ interface UserDisplayProps {
     videoPrimaryVRAM: string | null;
     memoryRAM: string | null;
   }[],
-  actionData?: ProfileActionData;
+  createSystemSpecActionData?: CreateSystemSpecActionData;
+  editSystemSpecActionData?: EditSystemSpecActionData;
+  deleteSystemSpecActionData?: DeleteSystemSpecActionData;
 }
 
 
 export default function UserDisplay({
   ownedApps,
   systemSpecs,
-  actionData,
+  createSystemSpecActionData,
+  editSystemSpecActionData,
+  deleteSystemSpecActionData,
 }: UserDisplayProps) {
-  const notify = () => {
-    errorToast('My error example toast!');
-  };
   return (
     <div>
-      <div className="flex flex-col gap-3 items-center w-full">
+      <div className="flex flex-col gap-6 items-center w-full">
         <Heading>Systems</Heading>
-        <RoundedButton onClick={notify}>Snack Bar</RoundedButton>
-        {/* <Toaster
-          position="bottom-center"
-        >
-          {(t) => (
-            <ToastBar toast={t}>
-              {({ icon, message }) => (
-                <>
-                  {icon}
-                  {message}
-                  <button onClick={() => toast.dismiss(t.id)}>X</button>
-                </>
-              )}
-            </ToastBar>
-          )}
-        </Toaster> */}
-        {systemSpecs &&
-          <div className="w-full">
-            <SystemSpecDisplay systemSpecs={systemSpecs} />
-          </div>
-        }
+        <div className="w-full">
+          <SystemSpecDisplay
+            systemSpecs={systemSpecs}
+            editSystemSpecActionData={editSystemSpecActionData}
+            deleteSystemSpecActionData={deleteSystemSpecActionData}
+          />
+        </div>
         <AsideCard title="System Information" iconBackground="primary" className="max-w-md">
           This is where you can define your system information. This is the
           information that will be linked to your performance posts. You can copy
@@ -75,7 +63,9 @@ export default function UserDisplay({
         </AsideCard>
         <div className="w-full flex flex-col items-center gap-3">
           <h3 className="text-secondary">Create a New System</h3>
-          <CreateSystemForm actionData={actionData} />
+          <CreateSystemForm
+            createSystemSpecActionData={createSystemSpecActionData}
+          />
         </div>
       </div>
       <div className="flex flex-col gap-3 items-center w-full">

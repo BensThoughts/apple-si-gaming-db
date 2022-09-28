@@ -6,6 +6,7 @@ import SystemModal from './SystemModal';
 
 interface DeleteSystemModalProps {
   systemName: string,
+  systemNames: string[],
   title: string,
   description?: string,
   isOpen: boolean
@@ -14,6 +15,7 @@ interface DeleteSystemModalProps {
 
 export default function EditSystemModal({
   systemName,
+  systemNames,
   title,
   isOpen,
   setIsOpen,
@@ -44,6 +46,7 @@ export default function EditSystemModal({
           <div>
             <input type="hidden" name="action" value="editSystem" />
             <input type="hidden" name="systemName" value={systemName} />
+            <input type="hidden" name="systemNames" value={systemNames} />
             <FloatingLabelInput
               name="updatedSystemName"
               label="System Name..."

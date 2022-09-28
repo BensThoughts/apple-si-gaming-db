@@ -14,6 +14,7 @@ import PageWrapper from '~/components/Layout/PageWrapper';
 import UserDisplay from '~/components/Profile/UserDisplay';
 import { createSystem } from '~/lib/form-actions/profile/create-system.server';
 import { deleteSystem } from '~/lib/form-actions/profile/delete-system.server';
+import { editSystem } from '~/lib/form-actions/profile/edit-system.server';
 
 export async function loader({ request, context }: LoaderArgs) {
   const { steamUser } = extractAppLoadContext(context);
@@ -59,17 +60,47 @@ export async function loader({ request, context }: LoaderArgs) {
   });
 }
 
-export type ProfileActionData = {
+export type CreateSystemSpecActionData = {
   formError?: string;
   fieldErrors?: {
-    systemName?: string | undefined;
-    systemInfo?: string | undefined;
+    systemName?: string;
+    systemInfo?: string;
   };
   fields?: {
     systemName: string;
     systemInfo: string;
+  }
+}
+
+export type EditSystemSpecActionData = {
+  formError?: string;
+  fieldErrors?: {
+    systemName?: string;
+    updatedSystemName?: string;
   };
-};
+  fields?: {
+    systemName: string;
+    updatedSystemName: string;
+  }
+}
+
+export type DeleteSystemSpecActionData = {
+  formError?: string;
+  fieldErrors?: {
+    systemName?: string;
+  }
+  fields?: {
+    systemName: string;
+  }
+}
+
+export type ProfileActionData = {
+  actions: {
+    createSystemSpec?: CreateSystemSpecActionData;
+    editSystemSpec?: EditSystemSpecActionData;
+    deleteSystemSpec?: DeleteSystemSpecActionData;
+  };
+}
 
 export async function action({ request, context }: ActionArgs) {
   const { steamUser } = extractAppLoadContext(context);
@@ -86,6 +117,9 @@ export async function action({ request, context }: ActionArgs) {
     }
     case 'deleteSystem': {
       return deleteSystem(steamUser.steamUserId, formData);
+    }
+    case 'editSystem': {
+      return editSystem(steamUser.steamUserId, formData);
     }
     default: {
       throw new Error('Unexpected action in /profile');
@@ -113,9 +147,10 @@ export default function LoginPage() {
     systemSpecs,
   } = useLoaderData<typeof loader>();
   const actionData = useActionData<ProfileActionData>();
+
   return (
     <PageWrapper title="Profile">
-      <div className="flex flex-col gap-6 items-center w-full">
+      <div className="flex flex-col gap-10 items-center w-full">
         <div className="flex flex-col md:flex-row gap-8 justify-evenly">
           <LoginCard
             isLoggedIn={isLoggedIn}
@@ -141,7 +176,7 @@ export default function LoginPage() {
             <UserDisplay
               ownedApps={ownedApps}
               systemSpecs={systemSpecs}
-              actionData={actionData}
+              editSystemSpecActionData={actionData?.actions.editSystemSpec}
             />
           </div>
         ) : (

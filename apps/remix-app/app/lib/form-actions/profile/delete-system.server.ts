@@ -1,9 +1,24 @@
-import type { SteamUserSystemSpecs } from '@apple-si-gaming-db/database';
+import type { SteamUserSystemSpecs } from '~/interfaces/database';
 import { json, redirect } from '@remix-run/node';
 import { deleteSystemSpecs } from '~/models/steamUserSystemSpecs.server';
-import type { ProfileActionData } from '~/routes/profile';
+import type { DeleteSystemSpecActionData, ProfileActionData } from '~/routes/profile';
 
-const badRequest = (data: ProfileActionData) => json(data, { status: 400 });
+const badRequest = (data: DeleteSystemSpecActionData) => (
+  json<ProfileActionData>({
+    actions: {
+      deleteSystemSpec: data,
+    },
+  }, { status: 400 })
+);
+
+function validateSystemName(systemInfoName: string) {
+  if (systemInfoName.length < 3) {
+    return `The system name is too short (3 character minimum)`;
+  }
+  if (systemInfoName.length > 100) {
+    return `The system name is too long (100 character maximum)`;
+  }
+}
 
 export async function deleteSystem(
     steamUserId: SteamUserSystemSpecs['steamUserId'],
@@ -11,8 +26,20 @@ export async function deleteSystem(
 ) {
   const systemName = formData.get('systemName');
   if (typeof systemName !== 'string') {
-    return badRequest({ formError: `Form not submitted correctly.` });
+    return badRequest({ formError: `Delete system form not submitted correctly.` });
   }
+
+  const fieldErrors = {
+    systemName: validateSystemName(systemName),
+  };
+  const fields = {
+    systemName,
+  };
+
+  if (Object.values(fieldErrors).some(Boolean)) {
+    return badRequest({ fieldErrors, fields });
+  }
+
   await deleteSystemSpecs(steamUserId, systemName);
   return redirect('/profile');
 }

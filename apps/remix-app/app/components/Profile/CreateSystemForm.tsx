@@ -1,15 +1,15 @@
 import { Form } from '@remix-run/react';
-import type { ProfileActionData } from '~/routes/profile';
 import FloatingLabelInput from '~/components/FormComponents/SearchInput/FloatingLabelInput';
 import TextArea from '~/components/FormComponents/TextArea';
 import RoundedButton from '~/components/RoundedButton';
+import type { CreateSystemSpecActionData } from '~/routes/profile';
 
 interface CreateSystemFormProps {
-  actionData?: ProfileActionData;
+  createSystemSpecActionData?: CreateSystemSpecActionData;
 }
 
 export default function CreateSystemForm({
-  actionData,
+  createSystemSpecActionData,
 }: CreateSystemFormProps) {
   return (
     <Form
@@ -21,13 +21,21 @@ export default function CreateSystemForm({
       <FloatingLabelInput
         name="systemName"
         label="System Name..."
-        fieldError={actionData ? actionData.fieldErrors?.systemName : undefined}
+        fieldError={
+          (createSystemSpecActionData && createSystemSpecActionData.fieldErrors)
+          ? createSystemSpecActionData.fieldErrors.systemName
+          : undefined
+        }
       />
       <TextArea
         labelText="System Info"
         name="systemInfo"
         id="systemInfo"
-        fieldError={actionData ? actionData.fieldErrors?.systemInfo : undefined}
+        fieldError={
+          (createSystemSpecActionData && createSystemSpecActionData.fieldErrors)
+          ? createSystemSpecActionData.fieldErrors.systemInfo
+          : undefined
+        }
       />
       <RoundedButton type="submit">Create</RoundedButton>
     </Form>

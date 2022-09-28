@@ -4,6 +4,8 @@ import DeleteSystemModal from './DeleteSystemModal';
 import EditSystemModal from './EditSystemModal';
 import SystemSpecsPopover from '~/components/AppInfo/PerformancePosts/SystemSpecsPopover';
 import RoundedButton from '../RoundedButton';
+import { errorToast } from '../Toasts';
+import type { DeleteSystemSpecActionData, EditSystemSpecActionData } from '~/routes/profile';
 
 interface SystemSpecDisplayProps {
   systemSpecs: {
@@ -17,6 +19,8 @@ interface SystemSpecDisplayProps {
     videoPrimaryVRAM: string | null;
     memoryRAM: string | null;
   }[];
+  editSystemSpecActionData?: EditSystemSpecActionData;
+  deleteSystemSpecActionData?: DeleteSystemSpecActionData;
 }
 
 function Wrapper({
@@ -32,6 +36,8 @@ function Wrapper({
 }
 
 export default function SystemSpecDisplay({
+  editSystemSpecActionData,
+  deleteSystemSpecActionData,
   systemSpecs,
 }: SystemSpecDisplayProps) {
   const [isDeleteModalOpen, setDeleteModalIsOpen] = useState(false);
@@ -47,15 +53,50 @@ export default function SystemSpecDisplay({
     }
   }, [systemSpecs]);
 
+  useEffect(() => {
+    if (editSystemSpecActionData) {
+      const {
+        fieldErrors,
+        formError,
+      } = editSystemSpecActionData;
+      if (formError) {
+        errorToast(formError);
+      }
+      if (fieldErrors && fieldErrors.systemName) {
+        errorToast(fieldErrors.systemName);
+      }
+      if (fieldErrors && fieldErrors.updatedSystemName) {
+        errorToast(fieldErrors.updatedSystemName);
+      }
+    }
+  }, [editSystemSpecActionData]);
+
+  useEffect(() => {
+    if (deleteSystemSpecActionData) {
+      const {
+        fieldErrors,
+        formError,
+      } = deleteSystemSpecActionData;
+      if (formError) {
+        errorToast(formError);
+      }
+      if (fieldErrors && fieldErrors.systemName) {
+        errorToast(fieldErrors.systemName);
+      }
+    }
+  }, [deleteSystemSpecActionData]);
+
   if (systemSpecs.length < 1) {
     return (
       <Wrapper>
-        <div>
+        <div className="flex items-center justify-center w-full max-w-md border-1 border-secondary-highlight rounded-md p-4">
           This is where your systems go. Try creating one with the form below.
         </div>
       </Wrapper>
     );
   }
+
+  const systemNames = systemSpecs.map((sysSpec) => sysSpec.systemName);
 
   function openDeleteModal(systemName: string) {
     setDeleteModalSystemName(systemName);
@@ -83,6 +124,7 @@ export default function SystemSpecDisplay({
               isOpen={isEditModalOpen}
               setIsOpen={setEditModalIsOpen}
               systemName={editModalSystemName}
+              systemNames={systemNames}
             />
       }
 

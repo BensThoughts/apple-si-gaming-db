@@ -2,9 +2,15 @@ import { redirect, json } from '@remix-run/node';
 import { createSystemSpecs } from '~/models/steamUserSystemSpecs.server';
 import type { SystemSpec } from '~/interfaces';
 import type { SteamUserSystemSpecs } from '@apple-si-gaming-db/database';
-import type { ProfileActionData } from '~/routes/profile';
+import type { CreateSystemSpecActionData, ProfileActionData } from '~/routes/profile';
 
-const badRequest = (data: ProfileActionData) => json(data, { status: 400 });
+const badRequest = (data: CreateSystemSpecActionData) => (
+  json<ProfileActionData>({
+    actions: {
+      createSystemSpec: data,
+    },
+  }, { status: 400 })
+);
 
 function validateSystemInfo(systemSpec: SystemSpec) {
   if (!systemSpec.manufacturer) {

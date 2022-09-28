@@ -1,5 +1,5 @@
 import toast from 'react-hot-toast';
-import RoundedButton from '../RoundedButton';
+import RoundedButton from '~/components/RoundedButton';
 
 export const errorToast = (
     message: string,

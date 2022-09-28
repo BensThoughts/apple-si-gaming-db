@@ -141,6 +141,9 @@ export async function findUserProfileData(steamUserId: SteamUser['steamUserId'])
           videoPrimaryVRAM: true,
           memoryRAM: true,
         },
+        orderBy: {
+          id: 'asc',
+        },
       },
       ownedApps: {
         where: {

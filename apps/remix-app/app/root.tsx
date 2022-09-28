@@ -28,7 +28,6 @@ import {
 import { searchAllAppsByAppIds } from './models/steamApp.server';
 import { getSteamPlayerOwnedGamesRequest } from './lib/data-utils/steamApi.server';
 import Navbar from '~/components/Layout/Navbar';
-// import { LazyMotion, domAnimation } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
 const ThemeProvider = lazy(() => import('./lib/context/colorMode'));
 
@@ -135,7 +134,6 @@ function Document({
       </head>
       <body className="min-h-screen bg-app-bg">
         <script dangerouslySetInnerHTML={{ __html: setInitialTheme }} />
-        <Toaster />
         <ClientOnly>
           <Suspense>
             <ThemeProvider>
@@ -151,6 +149,8 @@ function Document({
               {/* <main className="relative top-20 flex flex-col items-center justify-center w-full z-[1] pb-16  min-h-screen overflow-hidden px-4 md:px-10">
               </main> */}
             </div>
+            <Toaster />
+
           </Suspense>
         </ClientOnly>
         <ScrollRestoration />
