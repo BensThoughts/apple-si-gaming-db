@@ -27,15 +27,14 @@ export default function MenuDrawer({
         <div className="flex w-3/4">
           <Transition.Child
             as={Fragment}
-            enter="transition-opacity ease-in duration-300"
+            enter="ease-out duration-300"
             enterFrom="opacity-0"
-            enterTo="opacity-30"
-            entered="opacity-30"
-            leave="transition-opacity ease-out duration-300"
-            leaveFrom="opacity-30"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="fixed inset-0 z-40 bg-black" />
+            <div className="fixed inset-0 z-40 bg-black bg-opacity-25" />
           </Transition.Child>
 
           <Transition.Child
@@ -47,7 +46,7 @@ export default function MenuDrawer({
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <div className="flex overflow-hidden z-50 flex-col justify-between p-6 w-full max-w-sm text-left align-middle bg-opacity-70 rounded-br-md shadow-xl backdrop-filter backdrop-blur-sm bg-app-bg">
+            <Dialog.Panel className="flex overflow-hidden z-50 flex-col justify-between p-6 w-full max-w-sm text-left align-middle bg-opacity-70 rounded-br-md shadow-xl backdrop-filter backdrop-blur-sm bg-app-bg">
               <div className={`${!description ? 'self-center w-full' : 'w-full'}`}>
                 <Dialog.Title className="text-2xl font-bold md:text-4xl text-secondary text-center">{title}</Dialog.Title>
                 {description && <Dialog.Description>{description}</Dialog.Description>}
@@ -56,7 +55,7 @@ export default function MenuDrawer({
               <div className="self-center mt-10">
                 <RoundedButton className="bg-secondary" onClick={() => setIsOpen(!isOpen)}>Close</RoundedButton>
               </div>
-            </div>
+            </Dialog.Panel>
           </Transition.Child>
         </div>
       </Dialog>
