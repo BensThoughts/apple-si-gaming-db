@@ -1,6 +1,6 @@
 import type { LoaderArgs, ActionArgs } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
-import { useActionData, useLoaderData } from '@remix-run/react';
+import { useActionData, useLoaderData, useTransition } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 import PerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForm';
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
@@ -157,6 +157,11 @@ export default function PostsRoute() {
     steamUserSystemNames,
   } = useLoaderData<typeof loader>();
   const actionData = useActionData<CreatePostActionData>();
+  const transition = useTransition();
+  const isSubmittingPerformancePost =
+    transition.state === 'submitting' &&
+    transition.submission.formData.get('_performancePostAction') === 'createPost';
+
   return (
     <div className="flex flex-col gap-3">
       <h2 className="text-xl text-primary-highlight">Performance Posts</h2>
@@ -175,6 +180,7 @@ export default function PostsRoute() {
           formError={actionData?.formError}
           fieldErrors={actionData?.fieldErrors}
           fields={actionData?.fields}
+          isSubmittingForm={isSubmittingPerformancePost}
         />
       </div>
     </div>

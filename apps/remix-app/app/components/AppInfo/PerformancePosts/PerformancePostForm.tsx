@@ -4,7 +4,7 @@ import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { CreatePostActionData } from '~/routes/apps/$steamAppId/performance-posts';
 import type { RatingMedal } from '~/interfaces/database';
 import AnimatedUnderline from '~/components/AnimatedUnderline';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 
 interface PerformancePostFormProps {
@@ -15,6 +15,7 @@ interface PerformancePostFormProps {
   fields: CreatePostActionData['fields'];
   fieldErrors: CreatePostActionData['fieldErrors'];
   formError: CreatePostActionData['formError'];
+  isSubmittingForm: boolean;
 }
 
 function Wrapper({
@@ -36,7 +37,16 @@ export default function PerformancePostForm({
   fields,
   formError,
   fieldErrors,
+  isSubmittingForm,
 }: PerformancePostFormProps) {
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (isSubmittingForm) {
+      formRef.current?.reset();
+    }
+  }, [isSubmittingForm]);
+
   if (!steamUserIsLoggedIn) {
     return (
       <Wrapper>
@@ -78,6 +88,7 @@ export default function PerformancePostForm({
       </Wrapper>
     );
   }
+
   const ratingOptions: (RatingMedal | 'None')[] = ['None', 'Platinum', 'Gold', 'Silver', 'Bronze', 'Borked'];
   return (
     <Wrapper>
@@ -86,9 +97,11 @@ export default function PerformancePostForm({
       <Form
         method="post"
         name="performancePost"
+        ref={formRef}
         className="flex flex-col items-center gap-3 w-full max-w-lg"
         action={`/apps/${steamAppId}/performance-posts`}
       >
+        <input type="hidden" name="_performancePostAction" value="createPost" />
         <label className="w-full">
                   Post Text{`: `}
           {fieldErrors?.postText ? (
@@ -101,9 +114,9 @@ export default function PerformancePostForm({
             name="performancePostText"
             className="bg-primary rounded-lg p-2 w-full h-28"
             defaultValue={fields?.postText ? fields.postText : ''}
-            required
-            minLength={3}
-            maxLength={500}
+            // required
+            // minLength={3}
+            // maxLength={500}
           />
         </label>
         <SelectMenu
