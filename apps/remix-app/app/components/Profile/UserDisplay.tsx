@@ -44,16 +44,9 @@ export default function UserDisplay({
   deleteSystemSpecActionData,
 }: UserDisplayProps) {
   return (
-    <div>
+    <div className="flex flex-col items-center w-full gap-10">
       <div className="flex flex-col gap-6 items-center w-full">
         <Heading>Systems</Heading>
-        <div className="w-full">
-          <SystemSpecDisplay
-            systemSpecs={systemSpecs}
-            editSystemSpecActionData={editSystemSpecActionData}
-            deleteSystemSpecActionData={deleteSystemSpecActionData}
-          />
-        </div>
         <AsideCard title="System Information" iconBackground="primary" className="max-w-md">
           This is where you can define your system information. This is the
           information that will be linked to your performance posts. You can copy
@@ -61,6 +54,13 @@ export default function UserDisplay({
           the help menu, select System Information, right click and select copy
           all text to clipboard. Then just paste that into the text field below.
         </AsideCard>
+        <div className="w-full">
+          <SystemSpecDisplay
+            systemSpecs={systemSpecs}
+            editSystemSpecActionData={editSystemSpecActionData}
+            deleteSystemSpecActionData={deleteSystemSpecActionData}
+          />
+        </div>
         <div className="w-full flex flex-col items-center gap-3">
           <h3 className="text-secondary">Create a New System</h3>
           <CreateSystemForm
