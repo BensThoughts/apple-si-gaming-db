@@ -6,7 +6,7 @@ import type { CreateSystemSpecActionData, ProfileActionData } from '~/routes/pro
 
 const badRequest = (data: CreateSystemSpecActionData) => (
   json<ProfileActionData>({
-    actions: {
+    _profileAction: {
       createSystemSpec: data,
     },
   }, { status: 400 })
@@ -75,6 +75,7 @@ function validateSystemName(systemName: string, systemNames: string[]) {
 export function extractSystemSpecs(
     systemData: string,
 ) {
+  // TODO: Need to fix modelRe (it captures CPU Model:)
   const manufacturerRe = /Manufacturer:\s*([^\r\n]+)/i;
   const modelRe = /Model:\s*([^\r\n]+)/i;
   const formFactorRe = /Form Factor:\s*([^\r\n]+)/i;

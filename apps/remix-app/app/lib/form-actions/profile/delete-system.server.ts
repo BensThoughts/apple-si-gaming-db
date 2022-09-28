@@ -5,7 +5,7 @@ import type { DeleteSystemSpecActionData, ProfileActionData } from '~/routes/pro
 
 const badRequest = (data: DeleteSystemSpecActionData) => (
   json<ProfileActionData>({
-    actions: {
+    _profileAction: {
       deleteSystemSpec: data,
     },
   }, { status: 400 })

@@ -5,7 +5,7 @@ import type { EditSystemSpecActionData, ProfileActionData } from '~/routes/profi
 
 const badRequest = (data: EditSystemSpecActionData) => (
   json<ProfileActionData>({
-    actions: {
+    _profileAction: {
       editSystemSpec: data,
     },
   }, { status: 400 })
