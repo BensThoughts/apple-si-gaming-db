@@ -7,14 +7,14 @@ export const menuItems = [
     name: 'Search',
     href: '/search',
   },
-  {
-    name: 'About',
-    href: '/about',
-  },
-  {
-    name: 'Contact',
-    href: '/contact',
-  },
+  // {
+  //   name: 'About',
+  //   href: '/about',
+  // },
+  // {
+  //   name: 'Contact',
+  //   href: '/contact',
+  // },
   {
     name: 'Profile',
     href: '/profile',
