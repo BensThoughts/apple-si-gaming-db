@@ -122,7 +122,7 @@ export default function SearchIndexRoute() {
         {(isLoadingSearchResults ? <LoadingComponent /> : (
           <>
             {(steamApps && steamApps.length > 0) ? (
-              <div className="flex flex-col gap-3 items-center w-full">
+              <div className="flex flex-col gap-3 items-center w-full border-secondary border-1 rounded-md p-4 bg-primary">
                 {steamApps.map(({ steamAppId, name, headerImage, releaseDate }) => (
                   <div key={steamAppId}>
                     <SearchTitleCard
