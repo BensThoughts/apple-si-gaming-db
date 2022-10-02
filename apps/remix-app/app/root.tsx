@@ -29,6 +29,7 @@ import { searchAllAppsByAppIds } from './models/steamApp.server';
 import { getSteamPlayerOwnedGamesRequest } from './lib/data-utils/steamApi.server';
 import Navbar from '~/components/Layout/Navbar';
 import { Toaster } from 'react-hot-toast';
+
 const ThemeProvider = lazy(() => import('./lib/context/colorMode'));
 
 export function ClientOnly({ children }: { children: React.ReactNode }) {
@@ -146,11 +147,8 @@ function Document({
               <div className="relative top-14">
                 {children}
               </div>
-              {/* <main className="relative top-20 flex flex-col items-center justify-center w-full z-[1] pb-16  min-h-screen overflow-hidden px-4 md:px-10">
-              </main> */}
             </div>
             <Toaster />
-
           </Suspense>
         </ClientOnly>
         <ScrollRestoration />
