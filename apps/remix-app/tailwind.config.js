@@ -18,6 +18,7 @@ module.exports = {
       'secondary': generateColorClass('color-app-secondary'),
       'secondary-highlight': generateColorClass('color-app-secondary-highlight'),
       'tertiary': generateColorClass('color-app-tertiary'),
+      'tertiary-highlight': generateColorClass('color-app-tertiary-highlight'),
       'accent': generateColorClass('color-app-accent'),
       'app-bg': generateColorClass('color-bg-primary'),
       'app-bg-secondary': generateColorClass('color-bg-secondary'),

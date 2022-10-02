@@ -22,6 +22,7 @@ body[data-theme="light"] {
   --color-app-secondary: 80, 149, 213;
   --color-app-secondary-highlight: 49, 130, 206;
   --color-app-tertiary: 243, 248, 251;
+  --color-app-tertiary-highlight: 222, 236, 244;
   --color-app-error: 207, 102, 121;
   --color-app-accent: 241, 234, 222;
 
@@ -46,6 +47,7 @@ body[data-theme="dark"] {
   --color-app-secondary: 49, 130, 206;
   --color-app-secondary-highlight: 78, 147, 212;
   --color-app-tertiary: 3, 24, 47;
+  --color-app-tertiary-highlight: 10, 40, 74;
   --color-app-error: 176, 0, 32;
   --color-app-accent: 99, 179, 237;
 
