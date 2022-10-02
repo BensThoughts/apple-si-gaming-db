@@ -3,7 +3,7 @@ import Input from '~/components/FormComponents/Input';
 import TextArea from '~/components/FormComponents/TextArea';
 import RoundedButton from '~/components/RoundedButton';
 import type { CreateSystemSpecActionData } from '~/routes/profile';
-import { errorToast } from '~/components/Toasts';
+import { showToast } from '~/components/Toasts';
 import { useEffect, useRef } from 'react';
 
 interface CreateSystemFormProps {
@@ -22,13 +22,13 @@ export default function CreateSystemForm({
         formError,
       } = createSystemSpecActionData;
       if (formError) {
-        errorToast(formError);
+        showToast.error(formError);
       }
       if (fieldErrors && fieldErrors.systemName) {
-        errorToast(fieldErrors.systemName);
+        showToast.error(fieldErrors.systemName);
       }
       if (fieldErrors && fieldErrors.systemInfo) {
-        errorToast(fieldErrors.systemInfo);
+        showToast.error(fieldErrors.systemInfo);
       }
     }
   }, [createSystemSpecActionData]);

@@ -4,7 +4,7 @@ import DeleteSystemModal from './DeleteSystemModal';
 import EditSystemModal from './EditSystemModal';
 import SystemSpecsPopover from '~/components/AppInfo/PerformancePosts/SystemSpecsPopover';
 import RoundedButton from '../RoundedButton';
-import { errorToast } from '../Toasts';
+import { showToast } from '../Toasts';
 import type { DeleteSystemSpecActionData, EditSystemSpecActionData } from '~/routes/profile';
 
 interface SystemSpecDisplayProps {
@@ -60,13 +60,13 @@ export default function SystemSpecDisplay({
         formError,
       } = editSystemSpecActionData;
       if (formError) {
-        errorToast(formError);
+        showToast.error(formError);
       }
       if (fieldErrors && fieldErrors.systemName) {
-        errorToast(fieldErrors.systemName);
+        showToast.error(fieldErrors.systemName);
       }
       if (fieldErrors && fieldErrors.updatedSystemName) {
-        errorToast(fieldErrors.updatedSystemName);
+        showToast.error(fieldErrors.updatedSystemName);
       }
     }
   }, [editSystemSpecActionData]);
@@ -78,10 +78,10 @@ export default function SystemSpecDisplay({
         formError,
       } = deleteSystemSpecActionData;
       if (formError) {
-        errorToast(formError);
+        showToast.error(formError);
       }
       if (fieldErrors && fieldErrors.systemName) {
-        errorToast(fieldErrors.systemName);
+        showToast.error(fieldErrors.systemName);
       }
     }
   }, [deleteSystemSpecActionData]);
