@@ -26,9 +26,23 @@ export default function AppInfoRequirements({
     <div className="w-full">
       <TailwindDisclosure title="Requirements">
         <RequirementTabs
-          mac={{ platformMac, macRequirementsMinimum }}
-          windows={{ platformWindows, pcRequirementsMinimum }}
-          linux={{ platformLinux, linuxRequirementsMinimum }}
+          platforms={[
+            {
+              platformName: 'Apple',
+              platformSupported: platformMac,
+              requirementsMinimum: macRequirementsMinimum,
+            },
+            {
+              platformName: 'Windows',
+              platformSupported: platformWindows,
+              requirementsMinimum: pcRequirementsMinimum,
+            },
+            {
+              platformName: 'Linux',
+              platformSupported: platformLinux,
+              requirementsMinimum: linuxRequirementsMinimum,
+            },
+          ]}
         />
       </TailwindDisclosure>
     </div>
