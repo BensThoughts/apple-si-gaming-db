@@ -1,12 +1,12 @@
 import type { LoaderArgs } from '@remix-run/server-runtime';
 import { json } from '@remix-run/node';
-import { Link, useLoaderData, useTransition } from '@remix-run/react';
+import { useLoaderData, useTransition } from '@remix-run/react';
 import { searchReleasedSteamAppsByName } from '~/models/steamApp.server';
 import { useMediaIsWide } from '~/lib/hooks/useMedia';
 import SearchTitleCard from '~/components/Cards/SearchTitleCard';
 import LoadingComponent from '~/components/LoadingComponent';
 import SearchInput from '~/components/FormComponents/SearchInput';
-import RoundedButton from '~/components/RoundedButton';
+import RoundedLink from '~/components/RoundedLink';
 
 
 function validateSearchQuery(searchQuery: string) {
@@ -75,16 +75,14 @@ export async function loader({
   }
 
   const PAGE_SIZE = 50;
-  const steamApps = await searchReleasedSteamAppsByName(searchQuery, PAGE_SIZE, page);
+  const skip = PAGE_SIZE * (page - 1);
+  const take = PAGE_SIZE + 1; // take 1 extra to see if there is a next page
+  const steamAppsAll = await searchReleasedSteamAppsByName(searchQuery, skip, take);
   let hasNextPage = false;
-  // TODO: could probably be steamApps.length === PAGE_SIZE
-  // TODO: maybe some way to use nextPage data
-  if (steamApps.length >= PAGE_SIZE) {
-    const nextPageOfSteamApps = await searchReleasedSteamAppsByName(searchQuery, PAGE_SIZE, page + 1);
-    if (nextPageOfSteamApps.length > 0) {
-      hasNextPage = true;
-    }
+  if (steamAppsAll.length >= PAGE_SIZE) {
+    hasNextPage = true;
   }
+  const steamApps = steamAppsAll.slice(0, PAGE_SIZE);
   const pageData = {
     steamApps,
     page,
@@ -138,21 +136,19 @@ export default function SearchIndexRoute() {
                 {(hasNextPage || (page > 1)) &&
                   <div className="flex justify-between w-full">
                     {page > 1 &&
-                      <Link to={`/search?searchQuery=${searchQuery}&page=${page - 1}`}>
-                        <RoundedButton>
-                          Previous Page
-                        </RoundedButton>
-                      </Link>
+                      <RoundedLink
+                        to={`/search?searchQuery=${searchQuery}&page=${page - 1}`}
+                      >
+                        Previous Page
+                      </RoundedLink>
                     }
                     {hasNextPage &&
-                      <Link
+                      <RoundedLink
                         to={`/search?searchQuery=${searchQuery}&page=${page + 1}`}
                         className="ml-auto"
                       >
-                        <RoundedButton>
-                          Next Page
-                        </RoundedButton>
-                      </Link>
+                        Next Page
+                      </RoundedLink>
                     }
                   </div>
                 }

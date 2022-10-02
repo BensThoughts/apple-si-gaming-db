@@ -63,14 +63,14 @@ export async function searchSteamAppByAppId(
 /**
  * Search DB for apps by name (page 1 is first page)
  * @param  {string} searchQuery
- * @param  {number} pageSize
- * @param  {number} page
+ * @param  {number} skip
+ * @param  {number} take
  * @param  {boolean} platformMac?
  */
 export async function searchReleasedSteamAppsByName(
     searchQuery: SteamApp['name'],
-    pageSize: number,
-    page: number,
+    skip: number,
+    take: number,
     platformMac?: boolean,
 ) {
   return prisma.steamApp.findMany({
@@ -99,7 +99,7 @@ export async function searchReleasedSteamAppsByName(
       headerImage: true,
       releaseDate: true,
     },
-    skip: pageSize * (page - 1),
-    take: pageSize,
+    skip,
+    take,
   });
 }
