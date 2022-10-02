@@ -5,6 +5,7 @@ import type { CreatePostActionData } from '~/routes/apps/$steamAppId/performance
 import type { RatingMedal } from '~/interfaces/database';
 import AnimatedUnderline from '~/components/AnimatedUnderline';
 import React, { useEffect, useRef } from 'react';
+import TextArea from '~/components/FormComponents/TextArea';
 
 
 interface PerformancePostFormProps {
@@ -29,6 +30,8 @@ function Wrapper({
   );
 }
 
+type RatingOption = RatingMedal | 'None';
+
 export default function PerformancePostForm({
   steamAppId,
   steamUserIsLoggedIn,
@@ -39,6 +42,7 @@ export default function PerformancePostForm({
   fieldErrors,
   isSubmittingForm,
 }: PerformancePostFormProps) {
+  const ratingOptions: RatingOption[] = ['None', 'Platinum', 'Gold', 'Silver', 'Bronze', 'Borked'];
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -89,7 +93,6 @@ export default function PerformancePostForm({
     );
   }
 
-  const ratingOptions: (RatingMedal | 'None')[] = ['None', 'Platinum', 'Gold', 'Silver', 'Bronze', 'Borked'];
   return (
     <Wrapper>
       <h2 className="text-secondary text-lg">Submit Your Own Performance Post</h2>
@@ -102,33 +105,27 @@ export default function PerformancePostForm({
         action={`/apps/${steamAppId}/performance-posts`}
       >
         <input type="hidden" name="_performancePostAction" value="createPost" />
-        <label className="w-full">
-                  Post Text{`: `}
-          {fieldErrors?.postText ? (
-                    <span className="text-color-error">
-                      {fieldErrors.postText}
-                    </span>
-                  ) : null}
-          <textarea
-            id="performancePostText"
-            name="performancePostText"
-            className="bg-primary rounded-lg p-2 w-full h-28"
-            defaultValue={fields?.postText ? fields.postText : ''}
-            // required
-            // minLength={3}
-            // maxLength={500}
-          />
-        </label>
+        <TextArea
+          id="performancePostText"
+          name="performancePostText"
+          className="bg-primary rounded-lg p-2 w-full h-28"
+          defaultValue={fields?.postText ? fields.postText : ''}
+          labelText="Post Text"
+          fieldError={fieldErrors?.postText ? fieldErrors.postText : undefined}
+          // required
+          // minLength={3}
+          // maxLength={500}
+        />
         <SelectMenu
           name="performancePostRatingMedal"
-          defaultValue={fields?.ratingMedal ? fields.ratingMedal : 'None'}
+          defaultValue={fields ? fields.ratingMedal : 'None'}
           options={ratingOptions}
           label="Rating"
           errorMessage={fieldErrors?.ratingMedal}
         />
         <SelectMenu
           name="performancePostSystemName"
-          defaultValue={steamUserSystemNames[0]}
+          defaultValue={fields ? fields.systemName : steamUserSystemNames[0]}
           options={steamUserSystemNames}
           label="Select System"
         />
