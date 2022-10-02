@@ -32,6 +32,7 @@ export default function SystemSpecsPopover({
           <Popover.Button
             onMouseEnter={() => setIsShowing(true)}
             onMouseLeave={() => setIsShowing(false)}
+            className="text-primary outline-none focus-visible:text-secondary-highlight"
           >
             {children}
           </Popover.Button>

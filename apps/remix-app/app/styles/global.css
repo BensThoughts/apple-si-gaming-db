@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .show-ring {
+    @apply outline-none ring-2 ring-secondary-highlight ring-offset-1 ring-offset-primary;
+  }
+  .show-ring-no-offset {
+    @apply outline-none ring-2 ring-secondary-highlight;
+  }
+}
+
 body[data-theme="light"] {
   --color-bg-primary: 224, 251, 253;
   --color-bg-secondary: 152, 193, 218;

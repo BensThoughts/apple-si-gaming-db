@@ -23,7 +23,7 @@ const MenuItem = ({
   ...rest
 }: MenuItemsProps) => {
   return (
-    <Link to={href}>
+    <Link to={href} className="focus-visible:show-ring-no-offset rounded-sm">
       {animatedLink
         ? (
           <AnimatedUnderline className={className} onClick={onClick}>

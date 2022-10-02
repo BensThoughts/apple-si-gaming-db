@@ -71,10 +71,8 @@ export default function Navbar({
             <div className="flex gap-x-4 justify-end items-center">
               <ThemeToggle />
               <span>{authState ? 'Logged In' : 'Logged Out'}</span>
-              <Link to="/profile">
-                <div className="block rounded-md h-[40px] w-[40px] bg-primary hover:bg-primary-highlight p-px group">
-                  <SteamIcon className="text-icon-secondary rounded-md w-full h-full group-hover:text-icon-secondary-highlight" />
-                </div>
+              <Link to="/profile" className="focus-visible:show-ring block rounded-md h-[40px] w-[40px] bg-primary hover:bg-primary-highlight p-px group">
+                <SteamIcon className="text-icon-secondary rounded-md w-full h-full group-hover:text-icon-secondary-highlight" />
               </Link>
             </div>
           </div>
@@ -86,10 +84,8 @@ export default function Navbar({
               to="/profile"
               className={`ml-3 text-sm text-primary-highlight inline-flex justify-center items-center
                           border border-transparent font-medium px-4 py-2 rounded
-                          bg-secondary hover:bg-secondary-highlight focus:outline-none
-                          focus-visible:bg-secondary-highlight focus-visible:ring-2
-                          focus-visible:ring-secondary-highlight focus-visible:ring-offset-1
-                          focus-visible:ring-offset-white max-h-[40px] max-w-[58px]`}
+                          bg-secondary hover:bg-secondary-highlight focus-visible:show-ring
+                          max-h-[40px] max-w-[58px]`}
             >
               <SteamIcon size={44} className="text-icon-primary" />
             </Link>
@@ -98,10 +94,8 @@ export default function Navbar({
               aria-label="navigation menu"
               className={`mr-3 text-sm text-primary-highlight inline-flex justify-center items-center
                           border border-transparent font-medium px-4 py-2 rounded
-                          bg-secondary hover:bg-secondary-highlight focus:outline-none
-                          focus-visible:bg-secondary-highlight focus-visible:ring-2
-                          focus-visible:ring-secondary-highlight focus-visible:ring-offset-1
-                          focus-visible:ring-offset-white max-h-[40px] max-w-[58px]`}
+                          bg-secondary hover:bg-secondary-highlight focus-visible:show-ring
+                          max-h-[40px] max-w-[58px]`}
             >
               <BarsIcon size={24} className="text-icon-primary" />
             </button>
