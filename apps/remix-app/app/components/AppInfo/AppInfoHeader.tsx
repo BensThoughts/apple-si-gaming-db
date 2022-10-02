@@ -36,7 +36,7 @@ export default function AppInfoHeader({
         <div className="flex flex-row justify-between text-sm px-2">
           {releaseDate && (
             <span>
-          Released:&nbsp;
+              Released:&nbsp;
               <i className="italic">{releaseDate}</i>
             </span>
           )}
