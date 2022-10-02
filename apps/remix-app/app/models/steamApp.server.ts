@@ -5,8 +5,7 @@ import {
 } from '@apple-si-gaming-db/database';
 
 import type {
-  SteamAppWithoutMetadata,
-  SteamUserWithoutMetadata,
+  SteamApp,
 } from '~/interfaces/database';
 
 import prisma from '~/lib/database/db.server';
@@ -18,7 +17,7 @@ export {
 };
 
 export async function searchAllAppsByAppIds(
-    steamAppIds: SteamAppWithoutMetadata['steamAppId'][],
+    steamAppIds: SteamApp['steamAppId'][],
 ) {
   return prisma.steamApp.findMany({
     where: {
@@ -33,8 +32,7 @@ export async function searchAllAppsByAppIds(
 }
 
 export async function searchSteamAppByAppId(
-    steamAppId: SteamAppWithoutMetadata['steamAppId'],
-    steamUserId?: SteamUserWithoutMetadata['steamUserId'],
+    steamAppId: SteamApp['steamAppId'],
 ) {
   return prisma.steamApp.findUnique({
     where: {
@@ -62,18 +60,28 @@ export async function searchSteamAppByAppId(
   });
 }
 
+/**
+ * Search DB for apps by name (page 1 is first page)
+ * @param  {string} searchQuery
+ * @param  {number} pageSize
+ * @param  {number} page
+ * @param  {boolean} platformMac?
+ */
 export async function searchReleasedSteamAppsByName(
-    name: SteamAppWithoutMetadata['name'],
+    searchQuery: SteamApp['name'],
+    pageSize: number,
+    page: number,
+    platformMac?: boolean,
 ) {
   return prisma.steamApp.findMany({
     where: {
       name: {
-        contains: name,
+        contains: searchQuery,
         mode: 'insensitive',
       },
-      // platformMac: {
-      //   equals: true,
-      // },
+      platformMac: platformMac ? {
+        equals: platformMac,
+      } : undefined,
       comingSoon: {
         equals: false,
       },
@@ -91,5 +99,7 @@ export async function searchReleasedSteamAppsByName(
       headerImage: true,
       releaseDate: true,
     },
+    skip: pageSize * (page - 1),
+    take: pageSize,
   });
 }
