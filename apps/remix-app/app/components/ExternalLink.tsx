@@ -12,7 +12,8 @@ export default function ExternalLink({
       rel="noopener noreferrer"
       target="_blank"
       className={`underline underline-offset-4 hover:text-icon-secondary
-                  transition-colors duration-200 ${className}`}
+                  transition-colors duration-200 focus-visible:text-secondary-highlight
+                  outline-none ${className}`}
       {...rest}
     >
       {children}
