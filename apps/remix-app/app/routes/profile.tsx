@@ -164,12 +164,12 @@ export default function LoginPage() {
           />
           <div className="max-w-md">
             <AsideCard title="Note" iconBackground="secondary">
-            Within your&nbsp;
+              Within your&nbsp;
               <ExternalLink
                 href="https://steamcommunity.com/my/edit/settings"
                 className="underline-offset-2"
               >
-              Steam Privacy Settings
+                Steam Privacy Settings
               </ExternalLink>
             , &apos;My profile&apos; must be set to public. &apos;Game Details&apos;
             is also required to be public, so that ownership can be verified for your contributions.
