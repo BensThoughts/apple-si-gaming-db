@@ -21,7 +21,6 @@ export default function SearchInput({
   if (componentSize === 'medium') {
     buttonHeight = 'h-[38px]';
   }
-
   const transition = useTransition();
   const transitionState = transition.state;
   const isSearchLocation = transition.location?.pathname === '/search' ? true : false;
@@ -42,6 +41,7 @@ export default function SearchInput({
     >
       <div className={`flex justify-center items-center gap-2`}>
         <div>
+          <input type="hidden" name="page" value="1" />
           <Input
             name="searchQuery"
             id="searchQuery"
