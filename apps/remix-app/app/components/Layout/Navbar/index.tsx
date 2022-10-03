@@ -20,11 +20,13 @@ import { Link } from '@remix-run/react';
 type NavBarProps = {
   className?: string;
   authState: boolean;
+  isSearchSubmitting: boolean;
 }
 
 export default function Navbar({
   className,
   authState,
+  isSearchSubmitting,
   ...rest
 }: NavBarProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,7 +66,10 @@ export default function Navbar({
                 {menuItems.map((menuItem) => (
                   <MenuItem animatedLink key={menuItem.href} href={menuItem.href}>{menuItem.name}</MenuItem>
                 ))}
-                <SearchInput componentSize="medium" />
+                <SearchInput
+                  componentSize="medium"
+                  isSubmitting={isSearchSubmitting}
+                />
 
               </div>
             </div>

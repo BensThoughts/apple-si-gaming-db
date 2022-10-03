@@ -1,36 +1,33 @@
 import RoundedButton from '../../RoundedButton';
 import Input from '~/components/FormComponents/Input';
-import { Form, useTransition } from '@remix-run/react';
+import { Form } from '@remix-run/react';
+import { useEffect, useRef } from 'react';
 
 const FORM_NAME = 'game-search-form';
 
 type SearchInputProps = {
   componentSize: 'large' | 'medium';
   fieldError?: string;
+  isSubmitting: boolean;
 } & React.InputHTMLAttributes<HTMLInputElement>
 
 export default function SearchInput({
-  defaultValue,
-  minLength = 1,
-  maxLength = 100,
-  required = true,
+  isSubmitting,
   fieldError,
   componentSize = 'large',
+  ...rest
 }: SearchInputProps) {
+  const formRef = useRef<HTMLFormElement>(null);
   let buttonHeight = 'h-[46px]';
   if (componentSize === 'medium') {
     buttonHeight = 'h-[38px]';
   }
-  const transition = useTransition();
-  const transitionState = transition.state;
-  const isSearchLocation = transition.location?.pathname === '/search' ? true : false;
-  const transitioning = (
-    (transitionState === 'submitting') &&
-    isSearchLocation
-  ) || (
-    (transitionState === 'loading') &&
-    isSearchLocation
-  );
+
+  useEffect(() => {
+    if (isSubmitting) {
+      formRef.current?.reset();
+    }
+  }, [isSubmitting]);
 
   return (
     <Form
@@ -38,6 +35,7 @@ export default function SearchInput({
       name={FORM_NAME}
       method="get"
       action="/search"
+      ref={formRef}
     >
       <div className={`flex justify-center items-center gap-2`}>
         <div>
@@ -45,23 +43,23 @@ export default function SearchInput({
           <Input
             name="searchQuery"
             id="searchQuery"
-            defaultValue={defaultValue}
             label="Search Games..."
             componentSize={componentSize}
-            minLength={minLength}
-            maxLength={maxLength}
-            required={required}
             fieldError={fieldError}
+            minLength={1}
+            maxLength={100}
+            required
+            {...rest}
           />
         </div>
         <RoundedButton
           className={`${buttonHeight} w-[89.66px]
-                      ${transitioning ? 'bg-primary-highlight hover:bg-primary-highlight' : 'bg-secondary'}
+                      ${isSubmitting ? 'bg-primary-highlight hover:bg-primary-highlight' : 'bg-secondary'}
                     `}
           type="submit"
-          disabled={transitioning}
+          disabled={isSubmitting}
         >
-          {transitioning ? 'Loading' : 'Search' }
+          {isSubmitting ? 'Loading' : 'Search' }
         </RoundedButton>
       </div>
       {fieldError ? <div className="text-color-error">{fieldError}</div> : null}

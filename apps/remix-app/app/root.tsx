@@ -13,6 +13,7 @@ import {
   ScrollRestoration,
   useCatch,
   useLoaderData,
+  useTransition,
 } from '@remix-run/react';
 import { json } from '@remix-run/node';
 import type { ExtendedAppLoadContext } from '~/interfaces';
@@ -98,10 +99,12 @@ function Document({
   children,
   title = 'Apple Silicon Gaming DB',
   steamUser,
+  isSearchSubmitting,
 }: {
   children: React.ReactNode,
   title?: string,
   steamUser?: SteamUserWithoutMetadata;
+  isSearchSubmitting?: boolean;
 }) {
   const setInitialTheme = `
   (function() {
@@ -140,6 +143,7 @@ function Document({
             <ThemeProvider>
               <Navbar
                 authState={steamUser ? true : false}
+                isSearchSubmitting={isSearchSubmitting ? isSearchSubmitting : false}
                 className="h-14"
               />
             </ThemeProvider>
@@ -163,9 +167,16 @@ export default function App() {
   // TODO: Getting cannot use loaderData in an error boundary errors,
   // TODO: with error being thrown on /profile, prob. because of this
   const loaderData = useLoaderData<typeof loader>();
+  const transition = useTransition();
+  const isSearchSubmitting =
+    transition.state === 'submitting' &&
+    transition.location.pathname === '/search';
   const steamUser = loaderData.steamUser;
   return (
-    <Document steamUser={steamUser as SteamUserWithoutMetadata | undefined}>
+    <Document
+      steamUser={steamUser as SteamUserWithoutMetadata | undefined}
+      isSearchSubmitting={isSearchSubmitting}
+    >
       <Outlet />
     </Document>
   );
