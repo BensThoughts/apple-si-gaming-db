@@ -18,7 +18,7 @@ export default function SearchTitleCard({
       to={`/apps/${steamAppId}/performance-posts`}
       className="focus-visible:show-ring bg-tertiary hover:bg-tertiary-highlight
                  rounded-lg w-full h-full max-w-lg focus-visible:bg-tertiary-highlight
-                 block"
+                 block border-1 border-secondary-highlight"
     >
       <div
         className="p-1 md:p-2 flex flex-col md:flex-row gap-2 items-center md:items-start
