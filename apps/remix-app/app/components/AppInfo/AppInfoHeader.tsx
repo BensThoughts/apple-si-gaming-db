@@ -3,14 +3,17 @@ import {
   WindowsIcon,
   LinuxIcon,
 } from '~/components/Icons';
+import AppInfoExternalLinks from './AppInfoExternalLinks';
 
 export default function AppInfoHeader({
+  steamAppId,
   headerImage,
   releaseDate,
   platformMac,
   platformLinux,
   platformWindows,
 }: {
+  steamAppId: number;
   headerImage?: string | null;
   releaseDate?: string | null;
   platformMac?: boolean | null;
@@ -18,7 +21,10 @@ export default function AppInfoHeader({
   platformWindows?: boolean | null;
 }) {
   return (
-    <div className="flex flex-col gap-4 justify-center items-center max-w-2xl">
+    <div
+      className="flex flex-col gap-4 justify-center items-center w-full
+                 bg-tertiary p-2 rounded-lg border-1 border-secondary-highlight"
+    >
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-center bg-primary-highlight p-[3px] md:p-[6px] rounded-lg">
           {headerImage && <img
@@ -55,6 +61,9 @@ export default function AppInfoHeader({
             />
           </div>
         </div>
+      </div>
+      <div>
+        <AppInfoExternalLinks steamAppId={steamAppId} />
       </div>
     </div>
   );

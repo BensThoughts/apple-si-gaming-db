@@ -14,7 +14,6 @@ import {
 } from '~/models/steamApp.server';
 
 import AppInfoTags from '~/components/AppInfo/AppInfoTags';
-import AppInfoExternalLinks from '~/components/AppInfo/AppInfoExternalLinks';
 // import LoadingComponent from '~/components/LoadingComponent';
 import AppInfoMainAppCard from '~/components/AppInfo/AppInfoMainAppCard';
 import AppInfoHeader from '~/components/AppInfo/AppInfoHeader';
@@ -73,13 +72,13 @@ export default function AppsRoute() {
         <div className="col-start-1 col-span-1">
           <div className="flex flex-col gap-3 h-full items-center">
             <AppInfoHeader
+              steamAppId={steamAppId}
               headerImage={headerImage}
               releaseDate={releaseDate}
               platformMac={platformMac}
               platformLinux={platformLinux}
               platformWindows={platformWindows}
             />
-            <AppInfoExternalLinks steamAppId={steamAppId} />
             {((genres.length > 0) || (categories.length > 0)) &&
                 <AppInfoTags
                   genres={genres}
