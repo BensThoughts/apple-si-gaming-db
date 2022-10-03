@@ -2,18 +2,21 @@ import RoundedButton from '../../RoundedButton';
 import Input from '~/components/FormComponents/Input';
 import { Form } from '@remix-run/react';
 import { useEffect, useRef } from 'react';
+import { showToast } from '~/components/Toasts';
 
 const FORM_NAME = 'game-search-form';
 
 type SearchInputProps = {
   componentSize: 'large' | 'medium';
-  fieldError?: string;
+  formError?: string;
+  fieldErrors?: { searchQuery?: string };
   isSubmitting: boolean;
 } & React.InputHTMLAttributes<HTMLInputElement>
 
 export default function SearchInput({
   isSubmitting,
-  fieldError,
+  formError,
+  fieldErrors,
   componentSize = 'large',
   ...rest
 }: SearchInputProps) {
@@ -22,6 +25,18 @@ export default function SearchInput({
   if (componentSize === 'medium') {
     buttonHeight = 'h-[38px]';
   }
+
+  // TODO: Doesn't seem to appear when inside useEffect
+  // TODO: it appears twice when not in useEffect
+  if (formError) {
+    showToast.error(formError);
+  }
+
+  useEffect(() => {
+    if (fieldErrors?.searchQuery) {
+      showToast.error(fieldErrors.searchQuery);
+    }
+  }, [fieldErrors]);
 
   useEffect(() => {
     if (isSubmitting) {
@@ -45,8 +60,8 @@ export default function SearchInput({
             id="searchQuery"
             label="Search Games..."
             componentSize={componentSize}
-            fieldError={fieldError}
-            minLength={1}
+            fieldError={fieldErrors ? fieldErrors.searchQuery : undefined}
+            minLength={2}
             maxLength={100}
             required
             {...rest}
@@ -62,7 +77,13 @@ export default function SearchInput({
           {isSubmitting ? 'Loading' : 'Search' }
         </RoundedButton>
       </div>
-      {fieldError ? <div className="text-color-error">{fieldError}</div> : null}
+      {(fieldErrors && fieldErrors.searchQuery) ? (
+        <div className="text-color-error">
+          {fieldErrors.searchQuery}
+        </div>
+      ) : (
+        null
+      )}
     </Form>
   );
 }
