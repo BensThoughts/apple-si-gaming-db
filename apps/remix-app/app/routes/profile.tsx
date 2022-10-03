@@ -138,7 +138,7 @@ export const meta: MetaFunction = ({ data }) => {
   };
 };
 
-export default function LoginPage() {
+export default function ProfilePage() {
   const {
     isLoggedIn,
     displayName,
