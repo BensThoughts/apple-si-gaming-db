@@ -8,7 +8,6 @@ import LoadingComponent from '~/components/LoadingComponent';
 import SearchInput from '~/components/FormComponents/SearchInput';
 import RoundedLink from '~/components/RoundedLink';
 
-
 function validateSearchQuery(searchQuery: string) {
   if (searchQuery.length > 100) {
     return `The search query is too long (100 character maximum)`;
@@ -25,7 +24,7 @@ export type LoaderData = {
       steamAppId: number;
       headerImage: string | null;
       releaseDate: string | null;
-    }[] | null;
+    }[];
     page: number;
     hasNextPage: boolean;
   }
@@ -59,7 +58,7 @@ export async function loader({
   // !This is the case where someone navigates to /search initially
   // !with no searchQuery
   if (searchQuery === undefined) {
-    return json({ steamApps: null, fields: { searchQuery: '' } });
+    return json<LoaderData>({ fields: { searchQuery: '' } });
   }
   if (typeof searchQuery !== 'string') {
     return badRequest({
@@ -91,79 +90,110 @@ export async function loader({
   return json<LoaderData>({ pageData, fields });
 }
 
-export default function SearchIndexRoute() {
+function SearchIndexWrap({
+  children,
+  fieldErrors,
+  isSubmitting,
+}: {
+  isSubmitting: boolean;
+  children?: React.ReactNode;
+  fieldErrors?: {
+    searchQuery?: string | undefined;
+  };
+}) {
   const { isWide } = useMediaIsWide();
+  return (
+    <div className="flex flex-col gap-6">
+      <div>
+        <SearchInput
+          isSubmitting={isSubmitting}
+          componentSize={isWide ? 'large' : 'medium'}
+          fieldError={fieldErrors?.searchQuery}
+        />
+      </div>
+      {children &&
+        <div>
+          {children}
+        </div>
+      }
+    </div>
+  );
+}
+
+export default function SearchIndexRoute() {
   const { pageData, fields, fieldErrors } = useLoaderData<LoaderData>();
 
   const steamApps = pageData?.steamApps;
   const hasNextPage = pageData?.hasNextPage;
   const page = pageData?.page ? pageData.page : 1;
   const searchQuery = fields?.searchQuery ? fields.searchQuery : '';
-  const transition = useTransition();
 
-  const isLoadingSearchResults = (
-    (transition.state === 'loading' && transition.location.pathname === '/search') ||
-    (transition.state === 'submitting' && transition.location.pathname === '/search')
-  ) ? true : false;
+  const transition = useTransition();
+  const isSubmitting = (
+    (transition.state === 'submitting') &&
+    (transition.location.pathname === '/search')
+  );
+
+  if (isSubmitting) {
+    return (
+      <SearchIndexWrap isSubmitting fieldErrors={fieldErrors}>
+        <LoadingComponent />
+      </SearchIndexWrap>
+    );
+  }
+
+  if (
+    (searchQuery.length > 0) &&
+    (steamApps) &&
+    (steamApps.length < 1)
+  ) {
+    return (
+      <SearchIndexWrap isSubmitting={isSubmitting} fieldErrors={fieldErrors}>
+        <div>
+          No Apps Found
+        </div>
+      </SearchIndexWrap>
+    );
+  }
+
+  if (!steamApps) {
+    return <SearchIndexWrap isSubmitting={isSubmitting} fieldErrors={fieldErrors} />;
+  }
 
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <SearchInput
-          defaultValue={searchQuery}
-          componentSize={isWide ? 'large' : 'medium'}
-          fieldError={fieldErrors?.searchQuery}
-          minLength={1}
-          maxLength={100}
-          required
-        />
-      </div>
-      <div>
-        {(isLoadingSearchResults ? <LoadingComponent /> : (
-          <>
-            {(steamApps && steamApps.length > 0) ? (
-              <div className="flex flex-col gap-3 items-center w-full border-secondary border-1 rounded-md p-4 bg-primary">
-                {steamApps.map(({ steamAppId, name, headerImage, releaseDate }) => (
-                  <div key={steamAppId}>
-                    <SearchTitleCard
-                      name={name}
-                      steamAppId={steamAppId}
-                      headerImageSrc={headerImage}
-                      releaseDate={releaseDate}
-                    />
-                  </div>
-                ))}
-                {(hasNextPage || (page > 1)) &&
-                  <div className="flex justify-between w-full">
-                    {page > 1 &&
-                      <RoundedLink
-                        to={`/search?searchQuery=${searchQuery}&page=${page - 1}`}
-                      >
-                        Previous Page
-                      </RoundedLink>
-                    }
-                    {hasNextPage &&
-                      <RoundedLink
-                        to={`/search?searchQuery=${searchQuery}&page=${page + 1}`}
-                        className="ml-auto"
-                      >
-                        Next Page
-                      </RoundedLink>
-                    }
-                  </div>
-                }
-
-
-              </div>
-            ) : (
-              <>
-                {(searchQuery.length > 0) ? <div>No Apps Found</div> : null}
-              </>
-            )}
-          </>
+    <SearchIndexWrap isSubmitting={isSubmitting} fieldErrors={fieldErrors}>
+      <div className="flex flex-col gap-3 items-center w-full border-secondary border-1 rounded-md p-4 bg-primary">
+        {steamApps.map(({ steamAppId, name, headerImage, releaseDate }) => (
+          <div key={steamAppId}>
+            <SearchTitleCard
+              name={name}
+              steamAppId={steamAppId}
+              headerImageSrc={headerImage}
+              releaseDate={releaseDate}
+            />
+          </div>
         ))}
+        {(hasNextPage || (page > 1)) &&
+          <div className="flex justify-between w-full">
+            {page > 1 &&
+              <RoundedLink
+                to={`/search?searchQuery=${searchQuery}&page=${page - 1}`}
+              >
+                Previous Page
+              </RoundedLink>
+            }
+            {hasNextPage &&
+              <RoundedLink
+                to={`/search?searchQuery=${searchQuery}&page=${page + 1}`}
+                className="ml-auto"
+              >
+                Next Page
+              </RoundedLink>
+            }
+          </div>
+        }
       </div>
-    </div>
+    </SearchIndexWrap>
   );
 }
 
