@@ -146,12 +146,10 @@ function Document({
                 isSearchSubmitting={isSearchSubmitting ? isSearchSubmitting : false}
                 className="h-14"
               />
-            </ThemeProvider>
-            <div className="relative inset-0 min-h-[450px] max-h-[580px] md:max-h-[450px] bg-app-bg-secondary z-0">
-              <div className="relative top-14">
+              <div className="absolute top-14 w-full z-10">
                 {children}
               </div>
-            </div>
+            </ThemeProvider>
             <Toaster />
           </Suspense>
         </ClientOnly>
