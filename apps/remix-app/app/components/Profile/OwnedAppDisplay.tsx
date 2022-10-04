@@ -14,8 +14,9 @@ export default function OwnedAppDisplay({
   return (
     <Link
       to={`/apps/${steamAppId}/performance-posts`}
-      className={`flex flex-col justify-center items-center gap-1 bg-primary p-2
-                  hover:bg-primary-highlight rounded-lg w-full md:max-w-[210px]
+      className={`flex flex-col justify-center items-center gap-1 bg-tertiary p-2
+                  hover:bg-tertiary-highlight rounded-lg w-full md:max-w-[210px]
+                  border-1 border-secondary-highlight
                   ${className}`}
     >
       <div
