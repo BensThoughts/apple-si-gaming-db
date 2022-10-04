@@ -67,9 +67,9 @@ export default function AppsRoute() {
   } = steamApp;
   return (
     <PageWrapper title={name}>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 min-h-screen">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 min-h-screen">
 
-        <div className="col-start-1 col-span-1">
+        <div className="col-start-1 col-span-1 md:col-span-4 xl:col-span-3">
           <div className="flex flex-col gap-3 h-full items-center">
             <AppInfoHeader
               steamAppId={steamAppId}
@@ -104,7 +104,7 @@ export default function AppsRoute() {
             }
           </div>
         </div>
-        <div className="md:col-start-2 md:col-span-2">
+        <div className="md:col-start-5 xl:col-start-4 col-end-[-1]">
           <Outlet />
         </div>
       </div>
