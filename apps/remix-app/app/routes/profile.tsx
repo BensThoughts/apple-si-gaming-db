@@ -156,14 +156,18 @@ export default function ProfilePage() {
   return (
     <PageWrapper title="Profile">
       <div className="flex flex-col gap-10 items-center w-full">
-        <div className="flex flex-col md:flex-row gap-8 justify-evenly">
+        <div
+          className="flex flex-col md:flex-row gap-8 justify-evenly
+                     border-1 border-secondary-highlight p-4 rounded-lg
+                     bg-tertiary w-full max-w-3xl"
+        >
           <LoginCard
             isLoggedIn={isLoggedIn}
             displayName={displayName}
             avatarFull={avatarFull}
           />
           <div className="max-w-md">
-            <AsideCard title="Note" iconBackground="secondary">
+            <AsideCard title="Note" iconBackground="bg-tertiary">
               Within your&nbsp;
               <ExternalLink
                 href="https://steamcommunity.com/my/edit/settings"
@@ -171,8 +175,8 @@ export default function ProfilePage() {
               >
                 Steam Privacy Settings
               </ExternalLink>
-            , &apos;My profile&apos; must be set to public. &apos;Game Details&apos;
-            is also required to be public, so that ownership can be verified for your contributions.
+              , &apos;My profile&apos; must be set to public. &apos;Game Details&apos;
+              is also required to be public, so that ownership can be verified for your contributions.
             </AsideCard>
           </div>
         </div>

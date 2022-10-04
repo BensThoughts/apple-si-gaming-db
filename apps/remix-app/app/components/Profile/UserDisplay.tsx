@@ -47,9 +47,9 @@ export default function UserDisplay({
 }: UserDisplayProps) {
   return (
     <div className="flex flex-col items-center w-full gap-10">
-      <div className="flex flex-col gap-6 items-center w-full max-w-3xl p-4 rounded-lg bg-app-bg border-1 border-secondary-highlight">
+      <div className="flex flex-col gap-6 items-center w-full max-w-3xl p-4 rounded-lg bg-tertiary border-1 border-secondary-highlight">
         <Heading>Systems</Heading>
-        <AsideCard title="System Information" iconBackground="primary" className="max-w-md">
+        <AsideCard title="System Information" iconBackground="bg-tertiary" className="max-w-md">
           This is where you can define your system information. This is the
           information that will be linked to your performance posts. You can copy
           and paste your system information directly from Steam. In Steam goto
@@ -71,7 +71,7 @@ export default function UserDisplay({
           />
         </div>
       </div>
-      <div className="flex flex-col gap-3 items-center w-full p-4 rounded-lg border-1 border-secondary-highlight">
+      <div className="flex flex-col gap-3 items-center w-full p-4 bg-app-bg rounded-lg border-1 border-secondary-highlight">
         <Heading>Library</Heading>
         {(ownedApps && ownedApps.length > 0) ? (
           <div>
