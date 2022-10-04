@@ -5,7 +5,7 @@ export default function SearchRoute() {
   return (
     <PageWrapper title="Search">
       <div className="flex flex-col w-full items-center gap-6">
-        <div className="w-[180px] block">
+        {/* <div className="w-[180px] block">
           <img
             src="/svg-images/searching-robot.svg"
             alt="searching robot"
@@ -13,7 +13,7 @@ export default function SearchRoute() {
               e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
             }}
           />
-        </div>
+        </div> */}
         <Outlet />
       </div>
     </PageWrapper>
