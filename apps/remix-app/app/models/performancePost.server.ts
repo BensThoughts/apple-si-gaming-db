@@ -90,6 +90,61 @@ export async function findPerformancePostsByAppId(steamAppId: SteamAppWithoutMet
   });
 }
 
+export interface TrendingSteamApp {
+  steamAppId: number;
+  name: string;
+  headerImage: string | null;
+  releaseDate: string | null;
+  numNewPerformancePosts: number;
+}
+
+export async function findTrendingSteamApps(
+    daysInPast: number,
+) {
+  const today = new Date();
+  const dateInPast = new Date(today.setDate(today.getDate() - daysInPast));
+  const steamAppsWithRecentPerformancePosts = await prisma.performancePost.findMany({
+    where: {
+      createdAt: {
+        gte: dateInPast,
+      },
+    },
+    take: 50,
+    select: {
+      steamApp: {
+        select: {
+          steamAppId: true,
+          name: true,
+          headerImage: true,
+          releaseDate: true,
+        },
+      },
+    },
+  });
+  const trendingSteamAppMap = new Map<number, TrendingSteamApp>();
+  steamAppsWithRecentPerformancePosts.forEach(({ steamApp }) => {
+    const trendingSteamApp = trendingSteamAppMap.get(steamApp.steamAppId);
+    if (!trendingSteamApp) {
+      trendingSteamAppMap.set(steamApp.steamAppId, {
+        ...steamApp,
+        numNewPerformancePosts: 1,
+      });
+    } else {
+      const numNewPerformancePosts = trendingSteamApp.numNewPerformancePosts + 1;
+      trendingSteamAppMap.set(steamApp.steamAppId, {
+        ...steamApp,
+        numNewPerformancePosts,
+      });
+    }
+  });
+  const trendingSteamApps =
+    Array.from(trendingSteamAppMap.values())
+        .sort((a, b) => (
+          a.numNewPerformancePosts > b.numNewPerformancePosts ? -1 : 0
+        )).slice(0, 10);
+  return trendingSteamApps;
+}
+
 export function convertRatingMedalStringToRatingMedal(ratingMedal: string): RatingMedal {
   switch (ratingMedal.toLowerCase()) {
     case 'borked':
