@@ -164,7 +164,7 @@ export default function PostsRoute() {
 
   return (
     <div className="flex flex-col gap-3">
-      <h2 className="text-xl text-primary-highlight">Performance Posts</h2>
+      {/* <h2 className="text-xl text-primary-highlight">Performance Posts</h2> */}
       <div className="w-full">
         <PerformancePostLayout performancePosts={performancePosts.map((post) => ({
           ...post,
