@@ -12,8 +12,8 @@ function validateSearchQuery(searchQuery: string) {
   if (searchQuery.length > 100) {
     return `The search query is too long (100 character maximum)`;
   }
-  if (searchQuery.length < 1) {
-    return `Search query must contain at least 1 character`;
+  if (searchQuery.length < 2) {
+    return `Search query must contain at least 2 character`;
   }
 }
 
@@ -92,11 +92,13 @@ export async function loader({
 
 function SearchIndexWrap({
   children,
+  formError,
   fieldErrors,
   isSubmitting,
 }: {
   isSubmitting: boolean;
   children?: React.ReactNode;
+  formError?: string;
   fieldErrors?: {
     searchQuery?: string | undefined;
   };
@@ -104,11 +106,13 @@ function SearchIndexWrap({
   const { isWide } = useMediaIsWide();
   return (
     <div className="flex flex-col gap-6">
-      <div>
+      <div className="flex w-full md:min-w-[546px] h-full items-center justify-center
+                      bg-tertiary rounded-lg border-1 border-secondary-highlight p-10">
         <SearchInput
           isSubmitting={isSubmitting}
           componentSize={isWide ? 'large' : 'medium'}
-          fieldError={fieldErrors?.searchQuery}
+          formError={formError}
+          fieldErrors={fieldErrors}
         />
       </div>
       {children &&
@@ -121,8 +125,7 @@ function SearchIndexWrap({
 }
 
 export default function SearchIndexRoute() {
-  const { pageData, fields, fieldErrors } = useLoaderData<LoaderData>();
-
+  const { pageData, fields, fieldErrors, formError } = useLoaderData<LoaderData>();
   const steamApps = pageData?.steamApps;
   const hasNextPage = pageData?.hasNextPage;
   const page = pageData?.page ? pageData.page : 1;
@@ -136,7 +139,11 @@ export default function SearchIndexRoute() {
 
   if (isSubmitting) {
     return (
-      <SearchIndexWrap isSubmitting fieldErrors={fieldErrors}>
+      <SearchIndexWrap
+        formError={formError}
+        fieldErrors={fieldErrors}
+        isSubmitting
+      >
         <LoadingComponent />
       </SearchIndexWrap>
     );
@@ -148,7 +155,11 @@ export default function SearchIndexRoute() {
     (steamApps.length < 1)
   ) {
     return (
-      <SearchIndexWrap isSubmitting={isSubmitting} fieldErrors={fieldErrors}>
+      <SearchIndexWrap
+        formError={formError}
+        fieldErrors={fieldErrors}
+        isSubmitting={isSubmitting}
+      >
         <div>
           No Apps Found
         </div>
@@ -157,12 +168,22 @@ export default function SearchIndexRoute() {
   }
 
   if (!steamApps) {
-    return <SearchIndexWrap isSubmitting={isSubmitting} fieldErrors={fieldErrors} />;
+    return (
+      <SearchIndexWrap
+        formError={formError}
+        fieldErrors={fieldErrors}
+        isSubmitting={isSubmitting}
+      />
+    );
   }
 
   return (
-    <SearchIndexWrap isSubmitting={isSubmitting} fieldErrors={fieldErrors}>
-      <div className="flex flex-col gap-3 items-center w-full border-secondary border-1 rounded-md p-4 bg-primary">
+    <SearchIndexWrap
+      formError={formError}
+      fieldErrors={fieldErrors}
+      isSubmitting={isSubmitting}
+    >
+      <div className="flex flex-col gap-3 items-center w-full border-secondary border-1 rounded-md p-4 bg-app-bg">
         {steamApps.map(({ steamAppId, name, headerImage, releaseDate }) => (
           <div key={steamAppId}>
             <SearchTitleCard
