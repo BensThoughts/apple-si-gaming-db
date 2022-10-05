@@ -13,7 +13,6 @@
     "dev:css": "cross-env NODE_ENV=development npm run generate:css -- --watch",
     "dev:remix": "cross-env NODE_ENV=development remix watch",
     "dev:server": "cross-env NODE_ENV=development node --inspect --require ../../node_modules/dotenv/config ./build/server.js",
-    "devBACKUP:node": "cross-env NODE_ENV=development nodemon ./server.js --watch ./server.js",
     "generate:css": "tailwindcss -i ./app/styles/global.css -o ./app/styles/tailwind.css",
     "start": "cross-env NODE_ENV=production node ./build/server.js",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint ."
