@@ -12,6 +12,7 @@ import {
   updateSteamApp,
   convertSteamApiDataToPrisma,
 } from '~/models/steamApp.server';
+import type { SteamCategory, SteamGenre } from '~/interfaces/database';
 
 import AppInfoTags from '~/components/AppInfo/AppInfoTags';
 // import LoadingComponent from '~/components/LoadingComponent';
@@ -19,6 +20,28 @@ import AppInfoMainAppCard from '~/components/AppInfo/AppInfoMainAppCard';
 import AppInfoHeader from '~/components/AppInfo/AppInfoHeader';
 import AppInfoRequirements from '~/components/AppInfo/AppInfoRequirements';
 import PageWrapper from '~/components/Layout/PageWrapper';
+
+interface LoaderData {
+  steamApp: {
+    steamAppId: number;
+    name: string;
+    dataDownloadAttempted: boolean;
+    dataDownloaded: boolean;
+    headerImage: string | null;
+    type: string | null;
+    requiredAge: string | null;
+    shortDescription: string | null;
+    releaseDate: string | null;
+    platformMac: boolean | null;
+    platformLinux: boolean | null;
+    platformWindows: boolean | null;
+    pcRequirementsMinimum: string | null;
+    macRequirementsMinimum: string | null;
+    linuxRequirementsMinimum: string | null;
+    genres: SteamGenre[];
+    categories: SteamCategory[];
+  } | null;
+}
 
 export async function loader({ params }: LoaderArgs) {
   invariant(params.steamAppId, 'Expected params.steamAppId');
@@ -33,7 +56,7 @@ export async function loader({ params }: LoaderArgs) {
       steamApp = await searchSteamAppByAppId(steamAppId);
     }
   }
-  return json({
+  return json<LoaderData>({
     steamApp,
   });
 }

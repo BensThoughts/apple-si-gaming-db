@@ -16,6 +16,34 @@ import UserDisplay from '~/components/Profile/UserDisplay';
 import { createSystem } from '~/lib/form-actions/profile/create-system.server';
 import { deleteSystem } from '~/lib/form-actions/profile/delete-system.server';
 import { editSystem } from '~/lib/form-actions/profile/edit-system.server';
+import { metaTags } from '~/lib/meta-tags';
+import type { SteamGenre } from '~/interfaces/database';
+
+interface LoaderData {
+  isLoggedIn: boolean;
+  steamUserId: string | null;
+  displayName: string | null;
+  avatarFull: string | null,
+  ownedApps: {
+    steamAppId: number;
+    name: string;
+    headerImage: string | null;
+    platformMac: boolean | null;
+    genres: SteamGenre[];
+  }[],
+  systemNames: string[],
+  systemSpecs: {
+    systemName: string;
+    manufacturer: string | null;
+    model: string | null;
+    cpuBrand: string | null;
+    osVersion: string | null;
+    videoDriver: string | null;
+    videoDriverVersion: string | null;
+    videoPrimaryVRAM: string | null;
+    memoryRAM: string | null;
+  }[],
+}
 
 export async function loader({ request, context }: LoaderArgs) {
   const { steamUser } = extractAppLoadContext(context);
@@ -29,7 +57,7 @@ export async function loader({ request, context }: LoaderArgs) {
         ownedApps,
         systemSpecs,
       } = userProfile;
-      return json({
+      return json<LoaderData>({
         isLoggedIn: true,
         steamUserId,
         displayName,
@@ -39,7 +67,7 @@ export async function loader({ request, context }: LoaderArgs) {
         systemSpecs,
       });
     } else {
-      return json({
+      return json<LoaderData>({
         isLoggedIn: true,
         steamUserId: null,
         displayName: null,
@@ -50,7 +78,7 @@ export async function loader({ request, context }: LoaderArgs) {
       });
     }
   }
-  return json({
+  return json<LoaderData>({
     isLoggedIn: false,
     steamUserId: null,
     displayName: null,
@@ -127,14 +155,14 @@ export async function action({ request, context }: ActionArgs) {
   }
 }
 
-export const meta: MetaFunction = ({ data }) => {
+export const meta: MetaFunction = ({ data }: { data: LoaderData }) => {
   if (data.isLoggedIn) {
     return {
-      title: data.displayName ? `Profile - ${data.displayName}` : `Profile`,
+      title: data.displayName ? `${metaTags.title} - Profile - ${data.displayName}` : `Profile`,
     };
   }
   return {
-    title: 'Login',
+    title: `${metaTags.title} - Login`,
   };
 };
 
@@ -145,7 +173,7 @@ export default function ProfilePage() {
     avatarFull,
     ownedApps,
     systemSpecs,
-  } = useLoaderData<typeof loader>();
+  } = useLoaderData<LoaderData>();
   const actionData = useActionData<ProfileActionData>();
   const transition = useTransition();
 
