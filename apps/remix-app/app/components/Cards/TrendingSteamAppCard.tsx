@@ -32,8 +32,6 @@ export default function TrendingSteamAppCard({
           {numNewPerformancePosts}
         </span>
       </div>
-      <div>
-      </div>
     </Link>
   );
 }
