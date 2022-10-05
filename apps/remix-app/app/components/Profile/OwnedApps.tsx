@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import SelectMenu from '../FormComponents/SelectMenu';
+import type { SelectOption } from '../FormComponents/SelectMenu';
 import ToggleSwitch from '../FormComponents/ToggleSwitch';
 import Input from '../FormComponents/Input';
 import OwnedAppDisplay from './OwnedAppDisplay';
@@ -17,13 +18,29 @@ interface OwnedApp {
   }[];
 }
 
+function computeGenreOptions(ownedApps: OwnedApp[], ALL_FILTER: SelectOption) {
+  const genreSet = new Set<string>();
+  ownedApps.forEach((app) => {
+    app.genres.forEach((genre) => genreSet.add(genre.description));
+  });
+  const genreOptions: SelectOption[] =
+    [...genreSet]
+        .sort((a, b) => (a < b ? -1 : 0))
+        .map((genre) => ({ name: genre, value: genre }));
+
+  genreOptions.unshift(ALL_FILTER);
+
+  return genreOptions;
+}
+
 export default function OwnedApps({
   ownedApps,
 }: {
   ownedApps: OwnedApp[]
 }) {
+  const ALL_FILTER = useMemo(() => ({ name: 'All', value: 'All' }), []);
+  const genreOptions = useMemo(() => computeGenreOptions(ownedApps, ALL_FILTER), [ownedApps, ALL_FILTER]);
   const [nameQuery, setNameQuery] = useState('');
-  const ALL_FILTER = 'All';
   const [genreFilter, setGenreFilter] = useState(ALL_FILTER);
   const [filterAppleOnly, setFilterAppleOnly] = useState(false);
   const [paginate, setPaginate] = useState(20);
@@ -32,17 +49,11 @@ export default function OwnedApps({
     setPaginate((prevValue) => prevValue + 20);
   };
 
-  const genreSet = new Set<string>().add(ALL_FILTER);
-  ownedApps.forEach((app) => {
-    app.genres.forEach((genre) => genreSet.add(genre.description));
-  });
-
-
   function searchNames(ownedApps: OwnedApp[]) {
     return ownedApps.filter(
         (app) =>
-          (genreFilter != ALL_FILTER
-          ? app.genres.map((genre) => genre.description).includes(genreFilter)
+          (genreFilter.value != ALL_FILTER.value
+          ? app.genres.map((genre) => genre.description).includes(genreFilter.value)
           : app) &&
           (filterAppleOnly
           ? app.platformMac
@@ -78,7 +89,7 @@ export default function OwnedApps({
         <div className="flex flex-col md:flex-row items-center justify-center gap-2">
           <label>Select Genre:</label>
           <SelectMenu
-            options={[...genreSet]}
+            options={genreOptions}
             onChange={(e) => setGenreFilter(e)}
             name="profileGenreFilter"
             // label="Select Genre"
