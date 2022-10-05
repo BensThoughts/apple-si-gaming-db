@@ -89,9 +89,9 @@ function extractComputerInformation(compInfo: string) {
   const modelReMatch = compInfo.match(modelRe);
   const formFactorReMatch = compInfo.match(formFactorRe);
   return {
-    manufacturer: manufacturerReMatch ? manufacturerReMatch[0] : null,
-    model: modelReMatch ? modelReMatch[0] : null,
-    formFactor: formFactorReMatch ? formFactorReMatch[0] : null,
+    manufacturer: manufacturerReMatch ? manufacturerReMatch[1] : null,
+    model: modelReMatch ? modelReMatch[1] : null,
+    formFactor: formFactorReMatch ? formFactorReMatch[1] : null,
   };
 }
 
