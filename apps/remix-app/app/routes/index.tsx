@@ -1,6 +1,24 @@
+import { json } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
+import { findTrendingSteamApps } from '~/models/performancePost.server';
+import type { TrendingSteamApp } from '~/models/performancePost.server';
 import PageWrapper from '~/components/Layout/PageWrapper';
+import TrendingSteamAppCard from '~/components/Cards/TrendingSteamAppCard';
+import { Fragment } from 'react';
+
+interface LoaderData {
+  trendingSteamApps: TrendingSteamApp[];
+}
+
+export async function loader() {
+  const trendingSteamApps = await findTrendingSteamApps(5);
+  return json<LoaderData>({
+    trendingSteamApps,
+  });
+}
 
 export default function Index() {
+  const { trendingSteamApps } = useLoaderData<typeof loader>();
   return (
     <PageWrapper>
       <div className="relative sm:flex sm:items-center sm:justify-center">
@@ -16,7 +34,32 @@ export default function Index() {
             </p>
           </div>
         </div>
-
+      </div>
+      {(trendingSteamApps.length > 0) && (
+        <div className="flex flex-col items-center gap-6">
+          <h2 className="text-secondary text-2xl">Trending Apps</h2>
+          <div className="flex flex-col items-center gap-2 w-full max-w-md">
+            {trendingSteamApps.map(({
+              steamAppId,
+              name,
+              headerImage,
+              releaseDate,
+              numNewPerformancePosts,
+            }) => (
+              <Fragment key={steamAppId}>
+                <TrendingSteamAppCard
+                  steamAppId={steamAppId}
+                  name={name}
+                  headerImage={headerImage}
+                  releaseDate={releaseDate}
+                  numNewPerformancePosts={numNewPerformancePosts}
+                />
+              </Fragment>
+            ))}
+          </div>
+        </div>
+      )}
+      <div>
 
       </div>
     </PageWrapper>
