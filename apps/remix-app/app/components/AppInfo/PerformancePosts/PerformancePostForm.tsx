@@ -1,6 +1,7 @@
 import { Form, Link } from '@remix-run/react';
 import RoundedButton from '~/components/RoundedButton';
 import SelectMenu from '~/components/FormComponents/SelectMenu';
+import type { SelectOption } from '~/components/FormComponents/SelectMenu';
 import type { CreatePostActionData } from '~/routes/apps/$steamAppId/performance-posts';
 import type { RatingMedal } from '~/interfaces/database';
 import AnimatedUnderline from '~/components/AnimatedUnderline';
@@ -30,8 +31,6 @@ function Wrapper({
   );
 }
 
-type RatingOption = RatingMedal | 'None';
-
 export default function PerformancePostForm({
   steamAppId,
   steamUserIsLoggedIn,
@@ -42,7 +41,38 @@ export default function PerformancePostForm({
   fieldErrors,
   isSubmittingForm,
 }: PerformancePostFormProps) {
-  const ratingOptions: RatingOption[] = ['None', 'Platinum', 'Gold', 'Silver', 'Bronze', 'Borked'];
+  const ratingOptions: SelectOption<RatingMedal | 'None'>[] = [
+    {
+      name: 'None',
+      value: 'None',
+    },
+    {
+      name: 'Platinum - Runs [ perfect ]',
+      value: 'Platinum',
+    },
+    {
+      name: 'Gold - Runs [ perfect after tweaks ]',
+      value: 'Gold',
+    },
+    {
+      name: 'Silver - Runs [ with minor issues ]',
+      value: 'Silver',
+    },
+    {
+      name: 'Bronze - Runs [ often crashes ]',
+      value: 'Bronze',
+    },
+    {
+      name: `Borked - Doesn't Run`,
+      value: 'Borked',
+    },
+  ];
+  const systemNameOptions: SelectOption[] = steamUserSystemNames.map((sysName) => (
+    {
+      name: sysName,
+      value: sysName,
+    }
+  ));
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -112,21 +142,24 @@ export default function PerformancePostForm({
           defaultValue={fields?.postText ? fields.postText : ''}
           labelText="Post Text"
           fieldError={fieldErrors?.postText ? fieldErrors.postText : undefined}
-          // required
-          // minLength={3}
-          // maxLength={500}
+          required
+          minLength={3}
+          maxLength={500}
         />
         <SelectMenu
           name="performancePostRatingMedal"
-          defaultValue={fields ? fields.ratingMedal : 'None'}
+          defaultValue={fields ? fields.ratingMedal : {
+            name: 'None',
+            value: 'None',
+          }}
           options={ratingOptions}
           label="Rating"
           errorMessage={fieldErrors?.ratingMedal}
         />
         <SelectMenu
           name="performancePostSystemName"
-          defaultValue={fields ? fields.systemName : steamUserSystemNames[0]}
-          options={steamUserSystemNames}
+          defaultValue={fields ? fields.systemName : systemNameOptions[0]}
+          options={systemNameOptions}
           label="Select System"
         />
         <RoundedButton type="submit" className="max-w-xs">Submit</RoundedButton>

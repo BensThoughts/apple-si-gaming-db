@@ -64,8 +64,14 @@ export type CreatePostActionData = {
   };
   fields?: {
     postText: PerformancePost['postText'];
-    ratingMedal: PerformancePost['ratingMedal'];
-    systemName: SteamUserSystemSpecs['systemName'];
+    ratingMedal: {
+      name: string;
+      value: PerformancePost['ratingMedal'] | 'None';
+    };
+    systemName: {
+      name: SteamUserSystemSpecs['systemName'];
+      value: SteamUserSystemSpecs['systemName'];
+    };
   };
 };
 
@@ -100,13 +106,15 @@ export async function action({
   const avatarMedium = steamUser.avatarMedium;
   const formData = await request.formData();
   const postText = formData.get('performancePostText');
-  const ratingMedal = formData.get('performancePostRatingMedal');
-  const systemName = formData.get('performancePostSystemName');
+  const ratingMedalName = formData.get('performancePostRatingMedal[name]');
+  const ratingMedalValue = formData.get('performancePostRatingMedal[value]');
+  const systemName = formData.get('performancePostSystemName[value]');
 
   // TODO: Not sure if postText/ratingMedal should be string or FormDataEntryValue
   if (
     typeof postText !== 'string' ||
-    typeof ratingMedal !== 'string' ||
+    typeof ratingMedalName !== 'string' ||
+    typeof ratingMedalValue !== 'string' ||
     typeof systemName !== 'string'
   ) {
     return badRequest({
@@ -116,12 +124,18 @@ export async function action({
 
   const fieldErrors = {
     postText: validatePostText(postText),
-    ratingMedal: validatePostRatingMedal(ratingMedal),
+    ratingMedal: validatePostRatingMedal(ratingMedalValue),
   };
   const fields = {
     postText,
-    ratingMedal: convertRatingMedalStringToRatingMedal(ratingMedal),
-    systemName,
+    ratingMedal: {
+      name: ratingMedalName,
+      value: convertRatingMedalStringToRatingMedal(ratingMedalValue),
+    },
+    systemName: {
+      name: systemName,
+      value: systemName,
+    },
   };
 
   if (Object.values(fieldErrors).some(Boolean)) {
@@ -135,7 +149,7 @@ export async function action({
       displayName,
       steamAppId,
       postText: postText,
-      ratingMedal: convertRatingMedalStringToRatingMedal(ratingMedal),
+      ratingMedal: convertRatingMedalStringToRatingMedal(ratingMedalValue),
       systemName,
     });
   } catch (err) {
