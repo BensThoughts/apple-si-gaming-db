@@ -2,7 +2,12 @@ import { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpIcon } from '~/components/Icons';
 
-export default function SelectMenu({
+export type SelectOption<T = string> = {
+  name: string;
+  value: T;
+}
+
+export default function SelectMenu<T = string>({
   options,
   onChange,
   name,
@@ -10,14 +15,14 @@ export default function SelectMenu({
   label,
   errorMessage,
 }: {
-  options: string[];
-  onChange?(e: string): void;
+  options: SelectOption<T>[];
+  onChange?(e: SelectOption<T>): void;
   name: string;
-  defaultValue: string;
+  defaultValue: SelectOption<T>;
   label?: string;
   errorMessage?: string;
 }) {
-  function onSelectionChange(selection: string) {
+  function onSelectionChange(selection: SelectOption<T>) {
     if (onChange) {
       onChange(selection);
     }
@@ -33,8 +38,9 @@ export default function SelectMenu({
         {label &&
           <Listbox.Label>
             {label}{`: `}{errorMessage ? <span className="text-color-error">{errorMessage}</span> : null}
-          </Listbox.Label>}
-        <div className="relative">
+          </Listbox.Label>
+        }
+        <div className="relative mt-1.5">
           <Listbox.Button
             className={`relative py-2 pr-10 pl-3 w-full text-left rounded-lg
                         cursor-default text-neutral-lightest bg-neutral-medium
@@ -43,10 +49,10 @@ export default function SelectMenu({
                         focus-visible:ring-offset-app-bg focus:outline-none sm:text-sm
                         bg-primary`}
           >
-            {({ value }: { value: string }) => (
+            {({ value }: { value: SelectOption<T> }) => (
               <>
-                <span className="block truncate">
-                  {value}
+                <span className="block truncate text-primary-highlight">
+                  {value.name}
                 </span>
                 <span className="flex absolute inset-y-0 right-0 items-center pr-2 pointer-events-none">
                   <ChevronUpIcon
@@ -65,7 +71,9 @@ export default function SelectMenu({
             leaveTo="opacity-0"
           >
             <Listbox.Options
-              className="overflow-auto absolute z-10 py-1 mt-1 w-full max-h-60 text-base rounded-md bg-primary focus:outline-none focus:ring-1 focus:ring-secondary sm:text-sm"
+              className="overflow-auto absolute z-10 py-1 mt-1 w-full max-h-60
+                         text-base rounded-md bg-primary focus:outline-none
+                         focus:ring-1 focus:ring-secondary sm:text-sm"
             >
               {options.map((option, optionIdx) => (
                 <Listbox.Option
@@ -79,10 +87,10 @@ export default function SelectMenu({
                     <>
                       <span
                         className={`${
-                          selected ? 'font-medium' : 'font-normal'
+                          selected ? 'font-medium text-primary-highlight' : 'font-normal text-primary'
                         } block truncate`}
                       >
-                        {option}
+                        {option.name}
                       </span>
                       {selected ? (
                        <span
