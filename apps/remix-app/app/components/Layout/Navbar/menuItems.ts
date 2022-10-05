@@ -11,10 +11,10 @@ export const menuItems = [
   //   name: 'About',
   //   href: '/about',
   // },
-  // {
-  //   name: 'Contact',
-  //   href: '/contact',
-  // },
+  {
+    name: 'Contact',
+    href: '/contact',
+  },
   {
     name: 'Profile',
     href: '/profile',
