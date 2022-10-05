@@ -16,11 +16,10 @@ import {
   useTransition,
 } from '@remix-run/react';
 import { json } from '@remix-run/node';
-import type { ExtendedAppLoadContext } from '~/interfaces';
-import type { SteamUserWithoutMetadata } from '~/interfaces/database';
 import { getProfileSession, commitProfileSession } from './lib/sessions/cookie-sessions.server';
 
 import tailwindStylesheetUrl from './styles/tailwind.css';
+import { metaTags } from './lib/meta-tags';
 import { extractAppLoadContext } from './lib/data-utils/appLoadContext.server';
 import {
   upsertSteamUser,
@@ -47,22 +46,13 @@ export const links: LinksFunction = () => {
 
 export const meta: MetaFunction = () => ({
   'charset': 'utf-8',
-  'title': 'Apple Silicon Gaming DB',
   'viewport': 'width=device-width,initial-scale=1',
-  'og:image': 'https://res.cloudinary.com/bensthoughts/image/upload/v1664943160/apple-silicon-gaming-db/og-images/og-image-home_yxvlgi.png',
-  'og:url': 'https://apple-si-gaming-db-remix-app.fly.dev/',
-  'og:type': 'website',
-  'og:title': 'Apple Silicon on Steam DB',
-  'og:description': 'Read and write performance reviews for Steam games running on Apple',
-  'twitter:card': 'summary_large_image',
-  'twitter:domain': 'apple-si-gaming-db-remix-app.fly.dev',
-  'twitter:url': 'https://apple-si-gaming-db-remix-app.fly.dev/',
-  'twitter:creator': '@bensthoughts',
-  'twitter:site': '@bensthoughts',
-  'twitter:title': 'Apple Silicon on Steam DB',
-  'twitter:description': 'Read and write performance reviews for Steam games running on Apple',
-  'twitter:image': 'https://res.cloudinary.com/bensthoughts/image/upload/v1664943160/apple-silicon-gaming-db/og-images/og-image-home_yxvlgi.png',
+  ...metaTags,
 });
+
+interface LoaderData {
+  isLoggedIn: boolean;
+}
 
 export async function loader({ request, context }: LoaderArgs) {
   const data = extractAppLoadContext(context);
@@ -85,7 +75,9 @@ export async function loader({ request, context }: LoaderArgs) {
     const ownedAppIdsInDB = ownedAppsInDB.map((app) => app.steamAppId);
     await updateUserOwnedApps(ownedAppIdsInDB, steamUser.steamUserId);
 
-    return json<ExtendedAppLoadContext>(data, {
+    return json<LoaderData>({
+      isLoggedIn: true,
+    }, {
       headers: {
         'Set-Cookie': await commitProfileSession(profileSession),
       },
@@ -94,14 +86,18 @@ export async function loader({ request, context }: LoaderArgs) {
   if (!steamUser) {
     // cookie.isLoggedIn = false;
     profileSession.unset('isLoggedIn');
-    return json<ExtendedAppLoadContext>(data, {
+    return json<LoaderData>({
+      isLoggedIn: false,
+    }, {
       headers: {
         'Set-Cookie': await commitProfileSession(profileSession),
       },
     });
   }
   // TODO: Do I need to commit the session here too?
-  return json<ExtendedAppLoadContext>(data, {
+  return json<LoaderData>({
+    isLoggedIn: true,
+  }, {
     headers: {
       'Set-Cookie': await commitProfileSession(profileSession),
     },
@@ -111,12 +107,12 @@ export async function loader({ request, context }: LoaderArgs) {
 function Document({
   children,
   title = 'Apple Silicon Gaming DB',
-  steamUser,
+  isLoggedIn,
   isSearchSubmitting,
 }: {
-  children: React.ReactNode,
-  title?: string,
-  steamUser?: SteamUserWithoutMetadata;
+  children: React.ReactNode;
+  title?: string;
+  isLoggedIn?: boolean;
   isSearchSubmitting?: boolean;
 }) {
   const setInitialTheme = `
@@ -155,7 +151,7 @@ function Document({
           <Suspense>
             <ThemeProvider>
               <Navbar
-                authState={steamUser ? true : false}
+                isLoggedIn={isLoggedIn ? isLoggedIn : false}
                 isSearchSubmitting={isSearchSubmitting ? isSearchSubmitting : false}
                 className="h-14"
               />
@@ -177,15 +173,14 @@ function Document({
 export default function App() {
   // TODO: Getting cannot use loaderData in an error boundary errors,
   // TODO: with error being thrown on /profile, prob. because of this
-  const loaderData = useLoaderData<typeof loader>();
+  const { isLoggedIn } = useLoaderData<LoaderData>();
   const transition = useTransition();
   const isSearchSubmitting =
     transition.state === 'submitting' &&
     transition.location.pathname === '/search';
-  const steamUser = loaderData.steamUser;
   return (
     <Document
-      steamUser={steamUser as SteamUserWithoutMetadata | undefined}
+      isLoggedIn={isLoggedIn}
       isSearchSubmitting={isSearchSubmitting}
     >
       <Outlet />
