@@ -17,7 +17,7 @@ export async function loader() {
   });
 }
 
-export default function Index() {
+export default function IndexRoute() {
   const { trendingSteamApps } = useLoaderData<typeof loader>();
   return (
     <PageWrapper>

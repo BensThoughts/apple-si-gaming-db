@@ -13,7 +13,7 @@ type SearchInputProps = {
   isSubmitting: boolean;
 } & React.InputHTMLAttributes<HTMLInputElement>
 
-export default function SearchInput({
+export default function SearchInputForm({
   isSubmitting,
   formError,
   fieldErrors,

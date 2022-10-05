@@ -3,9 +3,9 @@ import { json } from '@remix-run/node';
 import { useLoaderData, useTransition } from '@remix-run/react';
 import { searchReleasedSteamAppsByName } from '~/models/steamApp.server';
 import { useMediaIsWide } from '~/lib/hooks/useMedia';
-import SearchTitleCard from '~/components/Cards/SearchTitleCard';
+import SearchTitleCard from '~/components/Search/SearchTitleCard';
 import LoadingComponent from '~/components/LoadingComponent';
-import SearchInput from '~/components/FormComponents/SearchInput';
+import SearchInputForm from '~/components/Search/SearchInputForm';
 import RoundedLink from '~/components/RoundedLink';
 
 function validateSearchQuery(searchQuery: string) {
@@ -108,7 +108,7 @@ function SearchIndexWrap({
     <div className="flex flex-col gap-6">
       <div className="flex w-full md:min-w-[546px] h-full items-center justify-center
                       bg-tertiary rounded-lg border-1 border-secondary-highlight p-10">
-        <SearchInput
+        <SearchInputForm
           isSubmitting={isSubmitting}
           componentSize={isWide ? 'large' : 'medium'}
           formError={formError}
