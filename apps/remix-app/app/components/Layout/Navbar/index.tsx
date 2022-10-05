@@ -19,13 +19,13 @@ import { Link } from '@remix-run/react';
 
 type NavBarProps = {
   className?: string;
-  authState: boolean;
+  isLoggedIn: boolean;
   isSearchSubmitting: boolean;
 }
 
 export default function Navbar({
   className,
-  authState,
+  isLoggedIn,
   isSearchSubmitting,
   ...rest
 }: NavBarProps) {
@@ -75,7 +75,7 @@ export default function Navbar({
             </div>
             <div className="flex gap-x-4 justify-end items-center">
               <ThemeToggle />
-              <span>{authState ? 'Logged In' : 'Logged Out'}</span>
+              <span>{isLoggedIn ? 'Logged In' : 'Logged Out'}</span>
               <Link to="/profile" className="focus-visible:show-ring block rounded-md h-[40px] w-[40px] bg-primary hover:bg-primary-highlight p-px group">
                 <SteamIcon className="text-icon-secondary rounded-md w-full h-full group-hover:text-icon-secondary-highlight" />
               </Link>
