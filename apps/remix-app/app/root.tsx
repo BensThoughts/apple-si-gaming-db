@@ -46,9 +46,22 @@ export const links: LinksFunction = () => {
 };
 
 export const meta: MetaFunction = () => ({
-  charset: 'utf-8',
-  title: 'Apple Silicon Gaming DB',
-  viewport: 'width=device-width,initial-scale=1',
+  'charset': 'utf-8',
+  'title': 'Apple Silicon Gaming DB',
+  'viewport': 'width=device-width,initial-scale=1',
+  'og:image': 'https://res.cloudinary.com/bensthoughts/image/upload/v1664943160/apple-silicon-gaming-db/og-images/og-image-home_yxvlgi.png',
+  'og:url': 'https://apple-si-gaming-db-remix-app.fly.dev/',
+  'og:type': 'website',
+  'og:title': 'Apple Silicon on Steam DB',
+  'og:description': 'Read and write performance reviews for Steam games running on Apple',
+  'twitter:card': 'summary_large_image',
+  'twitter:domain': 'apple-si-gaming-db-remix-app.fly.dev',
+  'twitter:url': 'https://apple-si-gaming-db-remix-app.fly.dev/',
+  'twitter:creator': '@bensthoughts',
+  'twitter:site': '@bensthoughts',
+  'twitter:title': 'Apple Silicon on Steam DB',
+  'twitter:description': 'Read and write performance reviews for Steam games running on Apple',
+  'twitter:image': 'https://res.cloudinary.com/bensthoughts/image/upload/v1664943160/apple-silicon-gaming-db/og-images/og-image-home_yxvlgi.png',
 });
 
 export async function loader({ request, context }: LoaderArgs) {
