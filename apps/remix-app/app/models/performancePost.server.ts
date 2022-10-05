@@ -1,7 +1,7 @@
 import type {
   PerformancePost,
-  SteamAppWithoutMetadata,
-  SteamUserWithoutMetadata,
+  SteamApp,
+  SteamUser,
   RatingMedal,
   SteamUserSystemSpecs,
 } from '~/interfaces/database';
@@ -16,8 +16,8 @@ export async function createPerformancePost({
   ratingMedal,
   systemName,
 }: {
-  steamUserId: SteamUserWithoutMetadata['steamUserId'];
-  steamAppId: SteamAppWithoutMetadata['steamAppId'];
+  steamUserId: SteamUser['steamUserId'];
+  steamAppId: SteamApp['steamAppId'];
   postText: PerformancePost['postText'];
   ratingMedal: PerformancePost['ratingMedal'];
   avatarMedium?: PerformancePost['avatarMedium'];
@@ -66,7 +66,7 @@ export async function createPerformancePost({
   });
 };
 
-export async function findPerformancePostsByAppId(steamAppId: SteamAppWithoutMetadata['steamAppId']) {
+export async function findPerformancePostsByAppId(steamAppId: SteamApp['steamAppId']) {
   return prisma.performancePost.findMany({
     where: {
       steamAppId,
