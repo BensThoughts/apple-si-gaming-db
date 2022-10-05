@@ -1,4 +1,4 @@
-import type { LoaderArgs } from '@remix-run/server-runtime';
+import type { LoaderArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useLoaderData, useTransition } from '@remix-run/react';
 import { searchReleasedSteamAppsByName } from '~/models/steamApp.server';
@@ -7,6 +7,7 @@ import SearchTitleCard from '~/components/Search/SearchTitleCard';
 import LoadingComponent from '~/components/LoadingComponent';
 import SearchInputForm from '~/components/Search/SearchInputForm';
 import RoundedLink from '~/components/RoundedLink';
+import { metaTags } from '~/lib/meta-tags';
 
 function validateSearchQuery(searchQuery: string) {
   if (searchQuery.length > 100) {
@@ -89,6 +90,17 @@ export async function loader({
   };
   return json<LoaderData>({ pageData, fields });
 }
+
+export const meta: MetaFunction = ({ data }: { data: LoaderData }) => {
+  if (data.fields?.searchQuery) {
+    return {
+      'title': `${metaTags.title} - Search - ${data.fields.searchQuery}`,
+    };
+  }
+  return {
+    'title': `${metaTags.title} - Search`,
+  };
+};
 
 function SearchIndexWrap({
   children,

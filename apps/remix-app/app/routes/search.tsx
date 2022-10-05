@@ -1,5 +1,11 @@
+import type { MetaFunction } from '@remix-run/node';
 import { Outlet } from '@remix-run/react';
 import PageWrapper from '~/components/Layout/PageWrapper';
+import { metaTags } from '~/lib/meta-tags';
+
+export const meta: MetaFunction = () => ({
+  'title': `${metaTags.title} - Search`,
+});
 
 export default function SearchRoute() {
   return (

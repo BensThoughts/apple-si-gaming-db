@@ -1,5 +1,11 @@
+import type { MetaFunction } from '@remix-run/node';
 import AsideCard from '~/components/Cards/AsideCard';
 import PageWrapper from '~/components/Layout/PageWrapper';
+import { metaTags } from '~/lib/meta-tags';
+
+export const meta: MetaFunction = () => ({
+  'title': `${metaTags.title} - Contact`,
+});
 
 export default function ContactRoute() {
   return (
