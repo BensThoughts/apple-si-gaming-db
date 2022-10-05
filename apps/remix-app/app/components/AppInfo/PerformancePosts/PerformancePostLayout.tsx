@@ -70,8 +70,10 @@ export default function PerformancePostLayout({
         </div>
       ): (
         <div>
-          There are currently no performance posts for this app. If you own this app you can
-          submit one with the form at the bottom of this page.
+          There are currently no performance posts for this app. Use the form below to
+          <span className="text-secondary">
+            {` `}become the first to submit!
+          </span>
         </div>
       )}
     </div>
