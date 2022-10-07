@@ -164,14 +164,26 @@ export default function SystemSpecDisplay({
             </div>
             <div>
               <div
-                className="flex gap-2"
+                className="flex gap-2 md:gap-1"
               >
-                <RoundedButton onClick={() => openEditModal(systemName)}>
-                  <EditIcon />
-                </RoundedButton>
-                <RoundedButton onClick={() => openDeleteModal(systemName)}>
-                  <TrashIcon />
-                </RoundedButton>
+                <button
+                  onClick={() => openEditModal(systemName)}
+                  className="rounded-md py-1.5 px-2 bg-secondary hover:bg-secondary-highlight focus-visible:show-ring"
+                >
+                  <EditIcon
+                    strokeWidth={1.5}
+                    className="text-primary-highlight w-7 h-7"
+                  />
+                </button>
+                <button
+                  onClick={() => openEditModal(systemName)}
+                  className="rounded-md py-1.5 px-2 bg-secondary hover:bg-secondary-highlight focus-visible:show-ring"
+                >
+                  <TrashIcon
+                    strokeWidth={1.5}
+                    className="text-primary-highlight w-7 h-7"
+                  />
+                </button>
               </div>
             </div>
           </div>
