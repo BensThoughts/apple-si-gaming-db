@@ -88,11 +88,11 @@ export default function Navbar({
             <Link
               to="/profile"
               className={`ml-3 text-sm text-primary-highlight inline-flex justify-center items-center
-                          border border-transparent font-medium px-4 py-2 rounded
+                          border border-transparent font-medium rounded
                           bg-secondary hover:bg-secondary-highlight focus-visible:show-ring
-                          max-h-[40px] max-w-[58px]`}
+                          h-[40px] w-[58px]`}
             >
-              <SteamIcon size={44} className="text-icon-primary" />
+              <SteamIcon size={40} className="text-primary-highlight" />
             </Link>
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -100,9 +100,9 @@ export default function Navbar({
               className={`mr-3 text-sm text-primary-highlight inline-flex justify-center items-center
                           border border-transparent font-medium px-4 py-2 rounded
                           bg-secondary hover:bg-secondary-highlight focus-visible:show-ring
-                          max-h-[40px] max-w-[58px]`}
+                          h-[40px] w-[58px]`}
             >
-              <BarsIcon size={24} className="text-icon-primary" />
+              <BarsIcon size={24} className="text-primary-highlight" />
             </button>
           </div>
         </nav>
