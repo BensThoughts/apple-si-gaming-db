@@ -30,13 +30,13 @@ export default function PageWrapper({
   return (
     <div className="flex flex-col justify-between h-[calc(100vh_-_3.5rem)]">
       <div className="relative">
-        {title && <PageHeader title={title} titlePosition="left" className="mb-4 md:mb-8" />}
-        <PageMain className="mt-4 md:mt-12 mb-10">
+        {title && <PageHeader title={title} titlePosition="left" className="mb-4 md:mb-12" />}
+        <PageMain>
           {children}
         </PageMain>
         <Background />
       </div>
-      <PageFooter className="mt-10" />
+      <PageFooter className="mt-20" />
     </div>
   );
 }
