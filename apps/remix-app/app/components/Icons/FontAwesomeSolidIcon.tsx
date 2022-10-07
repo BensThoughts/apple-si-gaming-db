@@ -7,7 +7,10 @@ type IconProps = {
 
 const FasIcon = forwardRef<SVGSVGElement, IconProps>(({
   size = 24,
+  width,
+  height,
   fill = 'currentColor',
+  strokeWidth = 0,
   viewBox = '0 0 512 512',
   children,
   ...rest
@@ -15,9 +18,10 @@ const FasIcon = forwardRef<SVGSVGElement, IconProps>(({
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={size}
-      height={size}
+      width={size ? size : width}
+      height={size ? size : height}
       fill={fill}
+      strokeWidth={strokeWidth}
       viewBox={viewBox}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}
@@ -28,6 +32,6 @@ const FasIcon = forwardRef<SVGSVGElement, IconProps>(({
   );
 });
 
-FasIcon.displayName = 'FasIcon';
+FasIcon.displayName = 'FontAwesomeSolidIcon';
 
 export default FasIcon;
