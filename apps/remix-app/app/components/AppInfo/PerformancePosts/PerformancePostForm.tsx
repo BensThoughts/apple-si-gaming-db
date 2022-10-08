@@ -106,7 +106,7 @@ export default function PerformancePostForm({
   if (!steamUserOwnsApp) {
     return (
       <Wrapper>
-        <div>
+        <div className="w-full">
           It looks like you do not own this app yet. Please add it to your steam library to leave a
           performance review.
         </div>
