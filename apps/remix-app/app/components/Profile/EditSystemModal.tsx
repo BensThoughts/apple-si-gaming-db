@@ -4,7 +4,7 @@ import Input from '~/components/FormComponents/Input';
 import RoundedButton from '~/components/RoundedButton';
 import SystemModal from './SystemModal';
 
-interface DeleteSystemModalProps {
+interface EditSystemModalProps {
   systemName: string,
   systemNames: string[],
   title: string,
@@ -19,7 +19,7 @@ export default function EditSystemModal({
   title,
   isOpen,
   setIsOpen,
-}: DeleteSystemModalProps) {
+}: EditSystemModalProps) {
   const submit = useSubmit();
 
   function handleSubmitEvent(event: React.FormEvent<HTMLFormElement>) {
@@ -50,6 +50,9 @@ export default function EditSystemModal({
             <Input
               name="updatedSystemName"
               label="System Name..."
+              required
+              maxLength={25}
+              minLength={3}
             />
           </div>
           <div className="flex gap-2">

@@ -62,6 +62,9 @@ export default function CreateSystemForm({
           ? createSystemSpecActionData.fieldErrors.systemName
           : undefined
         }
+        required
+        minLength={3}
+        maxLength={25}
       />
       <TextArea
         labelText="System Info"

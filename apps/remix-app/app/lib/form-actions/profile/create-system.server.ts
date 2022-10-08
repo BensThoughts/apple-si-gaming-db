@@ -69,15 +69,20 @@ function validateSystemInfo(systemSpec: SystemSpec) {
   }
 }
 
+// TODO: These validations should be re-used between all forms
 function validateSystemName(systemName: string, systemNames: string[]) {
   if (systemName.length < 3) {
     return `The system name is too short (3 character minimum)`;
   }
-  if (systemName.length > 100) {
-    return `The system name is too long (100 character maximum)`;
+  if (systemName.length > 25) {
+    return `The system name is too long (25 character maximum)`;
   }
   if (systemNames.includes(systemName)) {
     return `The system name ${systemName} is already taken`;
+  }
+  // ! Added to allow for no system specs on a post
+  if (systemName === 'None') {
+    return `None is a reserved name and cannot be used`;
   }
 }
 

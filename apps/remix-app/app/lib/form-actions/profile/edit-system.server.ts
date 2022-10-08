@@ -10,24 +10,31 @@ const badRequest = (data: EditSystemSpecActionData) => (
     },
   }, { status: 400 })
 );
+
+// TODO: These validations should be re-used between all forms
 function validateSystemName(systemName: string) {
   if (systemName.length < 3) {
     return `The system name was too short (3 character minimum)`;
   }
-  if (systemName.length > 100) {
-    return `The system name was too long (100 character maximum)`;
+  if (systemName.length > 25) {
+    return `The system name was too long (25 character maximum)`;
   }
 }
 
+// TODO: These validations should be re-used between all forms
 function validateUpdatedSystemName(updatedSystemName: string, systemNames: string[]) {
   if (updatedSystemName.length < 3) {
     return `The updated system name was too short (3 character minimum)`;
   }
-  if (updatedSystemName.length > 100) {
-    return `The updated system name was too long (100 character maximum)`;
+  if (updatedSystemName.length > 25) {
+    return `The updated system name was too long (25 character maximum)`;
   }
   if (systemNames.includes(updatedSystemName)) {
     return `The system name ${updatedSystemName} is already taken`;
+  }
+  // ! Added to allow for no system specs on a post
+  if (updatedSystemName === 'None') {
+    return `None is a reserved name and cannot be used`;
   }
 }
 
