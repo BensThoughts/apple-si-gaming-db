@@ -193,17 +193,17 @@ export default function ProfilePage() {
     <PageWrapper title="Profile">
       <div className="flex flex-col gap-10 items-center w-full">
         <div
-          className="flex flex-col md:flex-row gap-4 md:gap-8 justify-evenly
-                     border-1 border-secondary-highlight p-4 rounded-lg
-                     bg-tertiary w-full max-w-3xl"
+          className="flex flex-col md:flex-row gap-4 md:gap-6 md:justify-evenly
+                     md:items-center p-4 md:p-6 rounded-lg border-1
+                     border-secondary-highlight bg-tertiary w-full max-w-3xl"
         >
           <LoginCard
             isLoggedIn={isLoggedIn}
             displayName={displayName}
             avatarFull={avatarFull}
           />
-          <div className="max-w-md">
-            <AsideCard title="Note" iconBackground="bg-tertiary">
+          <div className="flex items-center justify-center w-full h-full">
+            <AsideCard title="Note" iconBackground="bg-tertiary" className="max-w-md">
               Within your&nbsp;
               <ExternalLink
                 href="https://steamcommunity.com/my/edit/settings"
@@ -212,7 +212,7 @@ export default function ProfilePage() {
                 Steam Privacy Settings
               </ExternalLink>
               , &apos;My profile&apos; and &apos;Game Details&apos;
-              must be set to public in order to synchronize your Steam library
+              must be set to public to synchronize your Steam library
               with this site.
             </AsideCard>
           </div>
