@@ -3,7 +3,6 @@ import { EditIcon, InformationCircleIcon, TrashIcon } from '~/components/Icons';
 import DeleteSystemModal from './DeleteSystemModal';
 import EditSystemModal from './EditSystemModal';
 import SystemSpecsPopover from '~/components/AppInfo/PerformancePosts/SystemSpecsPopover';
-import RoundedButton from '../RoundedButton';
 import { showToast } from '../Toasts';
 import type { DeleteSystemSpecActionData, EditSystemSpecActionData } from '~/routes/profile';
 
@@ -167,7 +166,7 @@ export default function SystemSpecDisplay({
                 className="flex gap-2 md:gap-1"
               >
                 <button
-                  onClick={() => openEditModal(systemName)}
+                  onClick={() => openDeleteModal(systemName)}
                   className="rounded-md py-1.5 px-2 bg-secondary hover:bg-secondary-highlight focus-visible:show-ring"
                 >
                   <EditIcon
