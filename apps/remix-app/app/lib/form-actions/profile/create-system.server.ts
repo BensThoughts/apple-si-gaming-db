@@ -1,8 +1,9 @@
 import { redirect, json } from '@remix-run/node';
 import { createSystemSpecs, findSystemSpecSystemNames } from '~/models/steamUserSystemSpecs.server';
-import type { SystemSpec } from '~/interfaces';
 import type { SteamUserSystemSpecs } from '@apple-si-gaming-db/database';
 import type { CreateSystemSpecActionData, ProfileActionData } from '~/routes/profile';
+import { validateNewSystemName, validateSystemInfo } from './validators';
+import type { SystemSpec } from '~/interfaces';
 
 const badRequest = (data: CreateSystemSpecActionData) => (
   json<ProfileActionData>({
@@ -11,80 +12,6 @@ const badRequest = (data: CreateSystemSpecActionData) => (
     },
   }, { status: 400 })
 );
-
-function validateSystemInfo(systemSpec: SystemSpec) {
-  if (!systemSpec.computerInformation) {
-    return `Could not find Computer Information: section, was it the first section, followed by Processor Information: section`;
-  }
-  if (!systemSpec.computerInformation.manufacturer) {
-    return `Cannot validate manufacturer property`;
-  }
-  if (!systemSpec.computerInformation.model) {
-    return `Cannot validate computer model property`;
-  }
-  if (!systemSpec.computerInformation.formFactor) {
-    return `Cannot validate form factor property`;
-  }
-  if (!systemSpec.processorInformation) {
-    return `Could not find Processor Information: section, it must be right before Operating System Version: section`;
-  }
-  if (!systemSpec.processorInformation.cpuVendor) {
-    return `Cannot validate cpu vendor property`;
-  }
-  if (!systemSpec.processorInformation.cpuBrand) {
-    return `Cannot validate cpu brand property`;
-  }
-  if (!systemSpec.processorInformation.cpuFamily) {
-    return `Cannot validate cpu family property`;
-  }
-  if (!systemSpec.processorInformation.cpuModel) {
-    return `Cannot validate cpu model property`;
-  }
-  if (!systemSpec.processorInformation.cpuStepping) {
-    return `Cannot validate cpu stepping property`;
-  }
-  if (!systemSpec.processorInformation.cpuType) {
-    return `Cannot validate cpu type property`;
-  }
-  if (!systemSpec.processorInformation.cpuSpeed) {
-    return `Cannot validate cpu speed property`;
-  }
-  if (!systemSpec.os.osVersion) {
-    return `Cannot validate os version property`;
-  }
-  if (!systemSpec.videoCard) {
-    return `Could not find Video Card: section, it must be right before Memory: section`;
-  }
-  if (!systemSpec.videoCard.videoDriver) {
-    return `Cannot validate video driver property`;
-  }
-  if (!systemSpec.videoCard.videoDriverVersion) {
-    return `Cannot validate video driver version property`;
-  }
-  if (!systemSpec.videoCard.videoPrimaryVRAM) {
-    return `Cannot validate video primary VRAM property`;
-  }
-  if (!systemSpec.memory.memoryRAM) {
-    return `Cannot validate RAM property`;
-  }
-}
-
-// TODO: These validations should be re-used between all forms
-function validateSystemName(systemName: string, systemNames: string[]) {
-  if (systemName.length < 3) {
-    return `The system name is too short (3 character minimum)`;
-  }
-  if (systemName.length > 25) {
-    return `The system name is too long (25 character maximum)`;
-  }
-  if (systemNames.includes(systemName)) {
-    return `The system name ${systemName} is already taken`;
-  }
-  // ! Added to allow for no system specs on a post
-  if (systemName === 'None') {
-    return `None is a reserved name and cannot be used`;
-  }
-}
 
 function extractComputerInformation(compInfo: string) {
   const manufacturerRe = /Manufacturer:\s*([^\r\n]+)/i;
@@ -142,7 +69,7 @@ function extractVideoCard(vidCardInfo: string) {
 
 function extractSystemSpecs(
     systemData: string,
-) {
+): SystemSpec {
   // TODO: this could still get messed up if someone puts Video Card: section
   // TODO: between Computer Information: and Processor Information: section
 
@@ -215,10 +142,10 @@ export async function createSystem(
   const systemSpecs = extractSystemSpecs(systemInfo);
   const systemNames = await findSystemSpecSystemNames(steamUserId);
   if (!systemNames) {
-    return badRequest({ formError: `Could not find steam user with id ${steamUserId}` });
+    return badRequest({ formError: `Could not find system names. Does user exist? steamUserId: ${steamUserId}` });
   }
   const fieldErrors = {
-    systemName: validateSystemName(systemName, systemNames),
+    systemName: validateNewSystemName(systemName, systemNames),
     systemInfo: validateSystemInfo(systemSpecs),
   };
   const fields = {

@@ -2,6 +2,7 @@ import type { SteamUserSystemSpecs } from '~/interfaces/database';
 import { json, redirect } from '@remix-run/node';
 import { deleteSystemSpecs } from '~/models/steamUserSystemSpecs.server';
 import type { DeleteSystemSpecActionData, ProfileActionData } from '~/routes/profile';
+import { validateSystemName } from './validators';
 
 const badRequest = (data: DeleteSystemSpecActionData) => (
   json<ProfileActionData>({
@@ -10,15 +11,6 @@ const badRequest = (data: DeleteSystemSpecActionData) => (
     },
   }, { status: 400 })
 );
-
-function validateSystemName(systemInfoName: string) {
-  if (systemInfoName.length < 3) {
-    return `The system name is too short (3 character minimum)`;
-  }
-  if (systemInfoName.length > 100) {
-    return `The system name is too long (100 character maximum)`;
-  }
-}
 
 export async function deleteSystem(
     steamUserId: SteamUserSystemSpecs['steamUserId'],

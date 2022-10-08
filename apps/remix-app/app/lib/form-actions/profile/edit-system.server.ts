@@ -2,6 +2,7 @@ import { json, redirect } from '@remix-run/node';
 import type { SteamUserSystemSpecs } from '~/interfaces/database';
 import { findSystemSpecSystemNames, updateSteamUserSystemSpecSystemName } from '~/models/steamUserSystemSpecs.server';
 import type { EditSystemSpecActionData, ProfileActionData } from '~/routes/profile';
+import { validateNewSystemName, validateSystemName } from './validators';
 
 const badRequest = (data: EditSystemSpecActionData) => (
   json<ProfileActionData>({
@@ -10,33 +11,6 @@ const badRequest = (data: EditSystemSpecActionData) => (
     },
   }, { status: 400 })
 );
-
-// TODO: These validations should be re-used between all forms
-function validateSystemName(systemName: string) {
-  if (systemName.length < 3) {
-    return `The system name was too short (3 character minimum)`;
-  }
-  if (systemName.length > 25) {
-    return `The system name was too long (25 character maximum)`;
-  }
-}
-
-// TODO: These validations should be re-used between all forms
-function validateUpdatedSystemName(updatedSystemName: string, systemNames: string[]) {
-  if (updatedSystemName.length < 3) {
-    return `The updated system name was too short (3 character minimum)`;
-  }
-  if (updatedSystemName.length > 25) {
-    return `The updated system name was too long (25 character maximum)`;
-  }
-  if (systemNames.includes(updatedSystemName)) {
-    return `The system name ${updatedSystemName} is already taken`;
-  }
-  // ! Added to allow for no system specs on a post
-  if (updatedSystemName === 'None') {
-    return `None is a reserved name and cannot be used`;
-  }
-}
 
 export async function editSystem(
     steamUserId: SteamUserSystemSpecs['steamUserId'],
@@ -58,7 +32,7 @@ export async function editSystem(
 
   const fieldErrors = {
     systemName: validateSystemName(systemName),
-    updatedSystemName: validateUpdatedSystemName(updatedSystemName, systemNames),
+    updatedSystemName: validateNewSystemName(updatedSystemName, systemNames),
   };
   const fields = {
     systemName,
