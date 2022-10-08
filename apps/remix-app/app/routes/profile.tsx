@@ -16,6 +16,7 @@ import UserDisplay from '~/components/Profile/UserDisplay';
 import { createSystem } from '~/lib/form-actions/profile/create-system.server';
 import { deleteSystem } from '~/lib/form-actions/profile/delete-system.server';
 import { editSystem } from '~/lib/form-actions/profile/edit-system.server';
+import { updateOwnedGames } from '~/lib/form-actions/profile/update-owned-games.server';
 import { metaTags } from '~/lib/meta-tags';
 import type { SteamGenre } from '~/interfaces/database';
 
@@ -148,6 +149,9 @@ export async function action({ request, context }: ActionArgs) {
     }
     case 'editSystem': {
       return editSystem(steamUser.steamUserId, formData);
+    }
+    case 'updateOwnedGames': {
+      return updateOwnedGames(steamUser.steamUserId);
     }
     default: {
       throw new Error('Unexpected action in /profile');

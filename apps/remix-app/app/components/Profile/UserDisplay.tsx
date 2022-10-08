@@ -1,3 +1,4 @@
+import { Form } from '@remix-run/react';
 import AsideCard from '~/components/Cards/AsideCard';
 import Heading from '~/components/Heading';
 import type {
@@ -5,6 +6,7 @@ import type {
   DeleteSystemSpecActionData,
   EditSystemSpecActionData,
 } from '~/routes/profile';
+import RoundedButton from '../RoundedButton';
 import CreateSystemForm from './CreateSystemForm';
 import OwnedApps from './OwnedApps';
 import SystemSpecDisplay from './SystemSpecDisplay';
@@ -73,14 +75,27 @@ export default function UserDisplay({
       </div>
       <div className="flex flex-col gap-3 items-center w-full p-4 bg-app-bg rounded-lg border-1 border-secondary-highlight">
         <Heading>Library</Heading>
+        <AsideCard title="New Feature!" iconBackground="bg-app-bg" >
+          Use the update games button to re-synchronize your steam library without logging out.
+        </AsideCard>
+        <Form
+          action="/profile"
+          method="post"
+        >
+          <input type="hidden" name="_profileAction" value="updateOwnedGames" />
+          <RoundedButton type="submit">Update Games</RoundedButton>
+        </Form>
         {(ownedApps && ownedApps.length > 0) ? (
           <div>
             <OwnedApps ownedApps={ownedApps} />
           </div>
         ) : (
-          <div>
-            You are logged in but appear to have no apps owned. Is your Steam profile
-            set to public?
+          <div className="max-w-md">
+            <AsideCard title="No Games Found" iconBackground="bg-app-bg">
+              You are logged in but appear to have no apps owned. Is your Steam profile
+              set to public?  Please set you steam profile to public and then use the
+              update games button or logout and back in.
+            </AsideCard>
           </div>
         )}
       </div>
