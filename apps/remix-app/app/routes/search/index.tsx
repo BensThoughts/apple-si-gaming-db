@@ -172,8 +172,12 @@ export default function SearchIndexRoute() {
         fieldErrors={fieldErrors}
         isSubmitting={isSubmitting}
       >
-        <div>
-          No Apps Found
+        <div className="w-full flex items-center justify-center bg-tertiary
+                        border-1 border-secondary-highlight rounded-md p-4">
+          No apps found for&nbsp;
+          <i className="italic text-secondary">
+            {searchQuery}
+          </i>
         </div>
       </SearchIndexWrap>
     );
