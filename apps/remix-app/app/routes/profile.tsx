@@ -193,7 +193,7 @@ export default function ProfilePage() {
     <PageWrapper title="Profile">
       <div className="flex flex-col gap-10 items-center w-full">
         <div
-          className="flex flex-col md:flex-row gap-8 justify-evenly
+          className="flex flex-col md:flex-row gap-4 md:gap-8 justify-evenly
                      border-1 border-secondary-highlight p-4 rounded-lg
                      bg-tertiary w-full max-w-3xl"
         >
@@ -211,8 +211,9 @@ export default function ProfilePage() {
               >
                 Steam Privacy Settings
               </ExternalLink>
-              , &apos;My profile&apos; must be set to public. &apos;Game Details&apos;
-              is also required to be public, so that ownership can be verified for your contributions.
+              , &apos;My profile&apos; and &apos;Game Details&apos;
+              must be set to public in order to synchronize your Steam library
+              with this site.
             </AsideCard>
           </div>
         </div>
