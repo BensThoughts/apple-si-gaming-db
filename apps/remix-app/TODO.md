@@ -1,11 +1,16 @@
 # Todo
 
+## Priority Most User Requested
+
+- [ ] Add tags/icons for controller support
+- [ ] Add tags for aspect ration support
+
 ## Priority High
 
-- [ ] Add contact information (twitter, discord, reddit)
-- [ ] Add not affiliated with Steam information
+- [x] Add contact information (twitter, discord, reddit)
+- [x] Add not affiliated with Steam information
 - [ ] Figure out how to reset Select Menus on forms when form resets
-- [ ] Fill footer
+- [x] Fill footer
 - [ ] Add trending individual posts element to homepage
 - [x] Make background color elements curvy
 - [ ] Restyle layout for performance posts
