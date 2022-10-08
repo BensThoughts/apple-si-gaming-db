@@ -9,7 +9,7 @@ export default function AsideCard({
   ...rest
 }: {
   title: string;
-  iconBackground: 'bg-primary' | 'bg-secondary' | 'bg-tertiary',
+  iconBackground: 'bg-primary' | 'bg-secondary' | 'bg-tertiary' | 'bg-app-bg' | 'bg-app-bg-secondary',
   children: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>) {
   return (
