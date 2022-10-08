@@ -163,7 +163,7 @@ export default function SystemSpecDisplay({
             </div>
             <div>
               <div
-                className="flex gap-2 md:gap-1"
+                className="flex gap-2"
               >
                 <button
                   onClick={() => openEditModal(systemName)}
