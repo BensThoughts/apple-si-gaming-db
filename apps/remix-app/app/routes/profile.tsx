@@ -185,6 +185,10 @@ export default function ProfilePage() {
     transition.state === 'submitting' &&
     transition.submission.formData.get('_profileAction') === 'createSystem';
 
+  const isSubmittingUpdateGames =
+    transition.state === 'submitting' &&
+    transition.submission.formData.get('_profileAction') === 'updateOwnedGames';
+
   return (
     <PageWrapper title="Profile">
       <div className="flex flex-col gap-10 items-center w-full">
@@ -213,7 +217,7 @@ export default function ProfilePage() {
           </div>
         </div>
         {isLoggedIn ? (
-          <div>
+          <div className="w-full">
             <UserDisplay
               ownedApps={ownedApps}
               systemSpecs={systemSpecs}
@@ -221,6 +225,7 @@ export default function ProfilePage() {
               createSystemSpecActionData={actionData?._profileAction.createSystemSpec}
               editSystemSpecActionData={actionData?._profileAction.editSystemSpec}
               deleteSystemSpecActionData={actionData?._profileAction.deleteSystemSpec}
+              isSubmittingUpdateGames={isSubmittingUpdateGames}
             />
           </div>
         ) : (

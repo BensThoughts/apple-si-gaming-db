@@ -36,6 +36,7 @@ interface UserDisplayProps {
   isSubmittingCreateSystem: boolean;
   editSystemSpecActionData?: EditSystemSpecActionData;
   deleteSystemSpecActionData?: DeleteSystemSpecActionData;
+  isSubmittingUpdateGames: boolean;
 }
 
 
@@ -46,6 +47,7 @@ export default function UserDisplay({
   isSubmittingCreateSystem,
   editSystemSpecActionData,
   deleteSystemSpecActionData,
+  isSubmittingUpdateGames,
 }: UserDisplayProps) {
   return (
     <div className="flex flex-col items-center w-full gap-10">
@@ -75,7 +77,7 @@ export default function UserDisplay({
       </div>
       <div className="flex flex-col gap-3 items-center w-full p-4 bg-app-bg rounded-lg border-1 border-secondary-highlight">
         <Heading>Library</Heading>
-        <AsideCard title="New Feature!" iconBackground="bg-app-bg" >
+        <AsideCard title="New Feature!" iconBackground="bg-app-bg" className="max-w-lg">
           Use the update games button to re-synchronize your steam library without logging out.
         </AsideCard>
         <Form
@@ -83,7 +85,9 @@ export default function UserDisplay({
           method="post"
         >
           <input type="hidden" name="_profileAction" value="updateOwnedGames" />
-          <RoundedButton type="submit">Update Games</RoundedButton>
+          <RoundedButton type="submit">
+            {isSubmittingUpdateGames ? 'Updating...' : 'Update Games'}
+          </RoundedButton>
         </Form>
         {(ownedApps && ownedApps.length > 0) ? (
           <div>
@@ -91,11 +95,17 @@ export default function UserDisplay({
           </div>
         ) : (
           <div className="max-w-md">
-            <AsideCard title="No Games Found" iconBackground="bg-app-bg">
-              You are logged in but appear to have no apps owned. Is your Steam profile
-              set to public?  Please set you steam profile to public and then use the
-              update games button or logout and back in.
-            </AsideCard>
+            <div
+              className="flex flex-col gap-3 px-6 py-8 border-1 border-secondary-highlight
+                         rounded-md bg-primary text-primary"
+            >
+              <strong className="font-bold">No Apps Found</strong>
+              <div>
+                You are logged in but appear to have no apps owned. Is your Steam profile
+                set to public?  Please set your steam profile to public and then use the
+                update games button or logout and back in.
+              </div>
+            </div>
           </div>
         )}
       </div>
