@@ -53,12 +53,34 @@ export default function UserDisplay({
     <div className="flex flex-col items-center w-full gap-10">
       <div className="flex flex-col gap-6 items-center w-full max-w-3xl p-4 rounded-lg bg-tertiary border-1 border-secondary-highlight">
         <Heading>Systems</Heading>
+        <div className="w-full max-w-md border-1 border-secondary-highlight rounded-md p-4">
+          Creating predefined systems makes it easier to attach system information
+          to your performance posts. You can have more than one system defined.
+          <span className="text-secondary">
+            &nbsp;Try it out!
+          </span>
+        </div>
         <AsideCard title="System Information" iconBackground="bg-tertiary" className="max-w-md">
-          This is where you can define your system information. This is the
-          information that will be linked to your performance posts. You can copy
-          and paste your system information directly from Steam. In Steam goto
-          the help menu, select System Information, right click and select copy
-          all text to clipboard. Then just paste that into the text field below.
+          <div className="flex flex-col gap-3">
+            <div>
+              Copy and paste your system information directly from Steam
+              to create a system
+            </div>
+            <ul className="list-disc ml-6">
+              <li>
+                In Steam go to the help menu
+              </li>
+              <li>
+                Select "System Information"
+              </li>
+              <li>
+                Right click and select "copy all text to clipboard"
+              </li>
+              <li>
+                Paste that into the system info text field below
+              </li>
+            </ul>
+          </div>
         </AsideCard>
         <div className="w-full">
           <SystemSpecDisplay
@@ -75,20 +97,24 @@ export default function UserDisplay({
           />
         </div>
       </div>
-      <div className="flex flex-col gap-3 items-center w-full p-4 bg-app-bg rounded-lg border-1 border-secondary-highlight">
+      <div className="flex flex-col gap-8 items-center w-full p-4 bg-app-bg rounded-lg border-1 border-secondary-highlight">
         <Heading>Library</Heading>
-        <AsideCard title="New Feature!" iconBackground="bg-app-bg" className="max-w-lg">
-          Use the update games button to re-synchronize your steam library without logging out.
-        </AsideCard>
-        <Form
-          action="/profile"
-          method="post"
-        >
-          <input type="hidden" name="_profileAction" value="updateOwnedGames" />
-          <RoundedButton type="submit">
-            {isSubmittingUpdateGames ? 'Updating...' : 'Update Games'}
-          </RoundedButton>
-        </Form>
+
+        <div className="flex flex-col gap-3 items-center justify-center w-full">
+          <AsideCard title="New Feature!" iconBackground="bg-app-bg" className="max-w-lg">
+            Use the update library button to re-synchronize your steam library without logging out
+          </AsideCard>
+          <Form
+            action="/profile"
+            method="post"
+          >
+            <input type="hidden" name="_profileAction" value="updateOwnedGames" />
+            <RoundedButton type="submit">
+              {isSubmittingUpdateGames ? <span>Updating...</span> : <span>Update Library</span>}
+            </RoundedButton>
+          </Form>
+        </div>
+
         {(ownedApps && ownedApps.length > 0) ? (
           <div>
             <OwnedApps ownedApps={ownedApps} />
