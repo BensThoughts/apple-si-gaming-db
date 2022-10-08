@@ -39,7 +39,7 @@ export async function loader({ params, context }: LoaderArgs) {
 
 function validatePostRatingMedal(ratingMedal: string) {
   if (ratingMedal.toLowerCase() === 'none') {
-    return `Rating cannot be None`;
+    return `rating cannot be None`;
   }
   if (!isRatingMedalValid(ratingMedal)) {
     return `${ratingMedal} is not a valid option`;
