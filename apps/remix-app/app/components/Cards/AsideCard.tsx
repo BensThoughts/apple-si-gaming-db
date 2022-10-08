@@ -19,8 +19,10 @@ export default function AsideCard({
                        -translate-x-[50%] -translate-y-[50%] ${iconBackground}`}>
         <InformationCircleIcon className="absolute inset-0 translate-x-[3px] translate-y-[3px] text-icon-secondary w-8 h-8" />
       </div>
-      <strong className="font-bold">{title}</strong>
-      <div>{children}</div>
+      <div className="flex flex-col gap-3">
+        <strong className="font-bold">{title}</strong>
+        <div>{children}</div>
+      </div>
     </aside>
   );
 }
