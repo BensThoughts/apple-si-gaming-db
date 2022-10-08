@@ -68,12 +68,15 @@ export async function loader({ request, context }: LoaderArgs) {
     // cookie.isLoggedIn = true;
     profileSession.set('isLoggedIn', true);
     await upsertSteamUser(steamUser);
-    const userOwnedApps = await getSteamPlayerOwnedGamesRequest(steamUser.steamUserId);
-    const ownedAppIds = userOwnedApps.games.map((app) => app.appid);
+    const { games } = await getSteamPlayerOwnedGamesRequest(steamUser.steamUserId);
+    if (games) {
+      const ownedAppIds = games.map((app) => app.appid);
 
-    const ownedAppsInDB = await searchAllAppsByAppIds(ownedAppIds);
-    const ownedAppIdsInDB = ownedAppsInDB.map((app) => app.steamAppId);
-    await updateUserOwnedApps(ownedAppIdsInDB, steamUser.steamUserId);
+      const ownedAppsInDB = await searchAllAppsByAppIds(ownedAppIds);
+      const ownedAppIdsInDB = ownedAppsInDB.map((app) => app.steamAppId);
+      await updateUserOwnedApps(ownedAppIdsInDB, steamUser.steamUserId);
+    }
+
 
     return json<LoaderData>({
       isLoggedIn: true,
