@@ -162,10 +162,13 @@ export interface SteamApiAchievement {
  path?: string;
 }
 
-export interface SteamApiGetOwnedGamesResponse {
+
+// TODO: should this be | { } instead of
+// TODO: ? undefined properties?
+export type SteamApiGetOwnedGamesResponse = {
   response: {
-    game_count: number;
-    games: {
+    game_count?: number;
+    games?: {
       appid: number;
       playtime_2weeks: number;
       playtime_forever: number;
