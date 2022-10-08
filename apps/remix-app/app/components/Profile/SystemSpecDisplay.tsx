@@ -110,21 +110,21 @@ export default function SystemSpecDisplay({
   return (
     <div className="w-full flex flex-col justify-center items-center gap-3">
       {deleteModalSystemName &&
-      <DeleteSystemModal
-        title="Delete System"
-        isOpen={isDeleteModalOpen}
-        setIsOpen={setDeleteModalIsOpen}
-        systemName={deleteModalSystemName}
-      />
+        <DeleteSystemModal
+          title="Delete System"
+          isOpen={isDeleteModalOpen}
+          setIsOpen={setDeleteModalIsOpen}
+          systemName={deleteModalSystemName}
+        />
       }
       {editModalSystemName &&
-            <EditSystemModal
-              title="Edit Name"
-              isOpen={isEditModalOpen}
-              setIsOpen={setEditModalIsOpen}
-              systemName={editModalSystemName}
-              systemNames={systemNames}
-            />
+        <EditSystemModal
+          title="Edit Name"
+          isOpen={isEditModalOpen}
+          setIsOpen={setEditModalIsOpen}
+          systemName={editModalSystemName}
+          systemNames={systemNames}
+        />
       }
 
       {systemSpecs.map(({
@@ -166,7 +166,7 @@ export default function SystemSpecDisplay({
                 className="flex gap-2 md:gap-1"
               >
                 <button
-                  onClick={() => () => openEditModal(systemName)}
+                  onClick={() => openEditModal(systemName)}
                   className="rounded-md py-1.5 px-2 bg-secondary hover:bg-secondary-highlight focus-visible:show-ring"
                 >
                   <EditIcon
