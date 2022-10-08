@@ -37,7 +37,10 @@ export default function SelectMenu<T = string>({
       <div className="w-72">
         {label &&
           <Listbox.Label>
-            {label}{`: `}{errorMessage ? <span className="text-color-error">{errorMessage}</span> : null}
+            <span className="text-primary-highlight">
+              {label}{`: `}
+            </span>
+            {errorMessage && <span className="text-color-error">{errorMessage}</span>}
           </Listbox.Label>
         }
         <div className="relative mt-1.5">
