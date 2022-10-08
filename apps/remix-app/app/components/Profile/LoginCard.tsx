@@ -10,7 +10,7 @@ export default function LoginCard({
   displayName?: string | null;
 }) {
   return (
-    <div className={`flex flex-col items-center gap-2 p-4
+    <div className={`flex flex-col items-center gap-4 p-6
                      border-secondary-highlight border-solid
                      border-y-2 md:border-x-2 w-full max-w-md
                      rounded-lg`}>
@@ -30,10 +30,10 @@ export default function LoginCard({
       ): (
         <>
           <h2 className="text-center"><strong>Sign In</strong></h2>
-          Apple Silicon on Steam requires Steam authentication to verify that user reports are
-          written by people that own the game. Signing in with this method accesses only information
-          that you have intentionally set to be publicly visible.
-          <a href="/api/auth/steam/login" className="block w-[114px] h-[43px]">
+          Apple Silicon on Steam requires Steam authentication to post performance reports.
+          Signing in with this method accesses only information that you have intentionally
+          set to be publicly visible.
+          <a href="/api/auth/steam/login" className="block w-[114px] h-[43px] mt-2">
             <img
               src="steam_sign_in.png"
               alt="sign in with steam"
