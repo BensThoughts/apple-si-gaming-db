@@ -7,6 +7,7 @@
 
 ## Priority High
 
+- [ ] Centralize form validation (systemName etc.)
 - [x] Add contact information (twitter, discord, reddit)
 - [x] Add not affiliated with Steam information
 - [ ] Figure out how to reset Select Menus on forms when form resets
