@@ -152,7 +152,7 @@ export default function PerformancePostForm({
           fieldError={fieldErrors?.postText ? fieldErrors.postText : undefined}
           required
           minLength={3}
-          maxLength={500}
+          maxLength={1500}
         />
         <SelectMenu
           name="performancePostRatingMedal"

@@ -50,8 +50,8 @@ function validatePostText(postText: string) {
   if (postText.length < 3) {
     return `The performance posts text is too short (3 character minimum)`;
   }
-  if (postText.length > 500) {
-    return `The performance posts text is too long (500 character maximum)`;
+  if (postText.length > 1500) {
+    return `The performance posts text is too long (1500 character maximum)`;
   }
 }
 
