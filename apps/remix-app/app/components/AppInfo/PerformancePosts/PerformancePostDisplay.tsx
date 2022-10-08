@@ -56,21 +56,33 @@ export default function PerformancePostDisplay({
             </div>
           )}
           <span className="text-sm">{displayName}</span>
-          <SystemSpecsPopover
-            systemManufacturer={systemManufacturer}
-            systemModel={systemModel}
-            systemOsVersion={systemOsVersion}
-            systemCpuBrand={systemCpuBrand}
-            systemVideoDriver={systemVideoDriver}
-            systemVideoDriverVersion={systemVideoDriverVersion}
-            systemVideoPrimaryVRAM={systemVideoPrimaryVRAM}
-            systemMemoryRAM={systemMemoryRAM}
-          >
-            <span className="underline underline-offset-4 hover:text-icon-secondary
-                             transition-colors duration-200 text-sm">
-              System
-            </span>
-          </SystemSpecsPopover>
+          {/* // ! Below Added to allow for no system specs on a post */}
+          {(
+            systemManufacturer ||
+            systemModel ||
+            systemOsVersion ||
+            systemCpuBrand ||
+            systemVideoDriver ||
+            systemVideoDriverVersion ||
+            systemVideoPrimaryVRAM ||
+            systemMemoryRAM
+          ) &&
+            <SystemSpecsPopover
+              systemManufacturer={systemManufacturer}
+              systemModel={systemModel}
+              systemOsVersion={systemOsVersion}
+              systemCpuBrand={systemCpuBrand}
+              systemVideoDriver={systemVideoDriver}
+              systemVideoDriverVersion={systemVideoDriverVersion}
+              systemVideoPrimaryVRAM={systemVideoPrimaryVRAM}
+              systemMemoryRAM={systemMemoryRAM}
+            >
+              <span className="underline underline-offset-4 hover:text-icon-secondary
+                               transition-colors duration-200 text-sm">
+                System
+              </span>
+            </SystemSpecsPopover>
+          }
         </div>
         <div className="border-l-1 border-l-secondary-highlight pl-3">
           {postText}

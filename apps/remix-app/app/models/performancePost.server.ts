@@ -43,8 +43,23 @@ export async function createPerformancePost({
     },
   });
   // TODO: Rather than throwing an error, maybe just let it pass
+  // !Removed to allow no system specs on a performance post
+  // if (!systemSpecs) {
+  //   throw new Error(`System ${systemName} was not found in the database.`);
+  // }
+
+  // !Added to allow no system specs on performance posts
   if (!systemSpecs) {
-    throw new Error(`System ${systemName} was not found in the database.`);
+    return prisma.performancePost.create({
+      data: {
+        steamUserId,
+        displayName,
+        avatarMedium,
+        postText,
+        steamAppId,
+        ratingMedal,
+      },
+    });
   }
   return prisma.performancePost.create({
     data: {

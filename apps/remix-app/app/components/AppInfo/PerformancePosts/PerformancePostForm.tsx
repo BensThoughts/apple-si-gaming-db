@@ -73,6 +73,13 @@ export default function PerformancePostForm({
       value: sysName,
     }
   ));
+
+  // ! Added to avoid needing system info
+  systemNameOptions.unshift({
+    name: 'None',
+    value: 'None',
+  });
+
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -100,28 +107,29 @@ export default function PerformancePostForm({
     return (
       <Wrapper>
         <div>
-          It looks like you do not own this app yet. Add it to your steam library to leave a
-          performance review. (You also need to add at least 1 system to your profile to leave
-          a review)
+          It looks like you do not own this app yet. Please add it to your steam library to leave a
+          performance review.
         </div>
       </Wrapper>
     );
   }
-  if (steamUserSystemNames.length < 1) {
-    return (
-      <Wrapper>
-        <div>
-          You need to add a system to your&nbsp;
-          <Link to="/profile">
-            <AnimatedUnderline>
-              <span className="text-secondary">profile</span>
-            </AnimatedUnderline>
-          </Link>
-          &nbsp;to post a performance review for this app.
-        </div>
-      </Wrapper>
-    );
-  }
+
+  // ! Removed to avoid needing system info
+  // if (steamUserSystemNames.length < 1) {
+  //   return (
+  //     <Wrapper>
+  //       <div>
+  //         You need to add a system to your&nbsp;
+  //         <Link to="/profile">
+  //           <AnimatedUnderline>
+  //             <span className="text-secondary">profile</span>
+  //           </AnimatedUnderline>
+  //         </Link>
+  //         &nbsp;to post a performance review for this app.
+  //       </div>
+  //     </Wrapper>
+  //   );
+  // }
 
   return (
     <Wrapper>
@@ -131,7 +139,7 @@ export default function PerformancePostForm({
         method="post"
         name="performancePost"
         ref={formRef}
-        className="flex flex-col items-center gap-3 w-full max-w-lg"
+        className="flex flex-col items-center gap-6 w-full max-w-lg"
         action={`/apps/${steamAppId}/performance-posts`}
       >
         <input type="hidden" name="_performancePostAction" value="createPost" />
@@ -156,13 +164,26 @@ export default function PerformancePostForm({
           label="Rating"
           errorMessage={fieldErrors?.ratingMedal}
         />
-        <SelectMenu
-          name="performancePostSystemName"
-          defaultValue={fields ? fields.systemName : systemNameOptions[0]}
-          options={systemNameOptions}
-          label="Select System"
-        />
-        <RoundedButton type="submit" className="max-w-xs">Submit</RoundedButton>
+        <div className="flex flex-col gap-2 justify-center items-center rounded-md border-1 border-secondary-highlight p-4">
+          <div className="text-primary-faded">
+            You can choose to select a system from your&nbsp;
+            <Link to="/profile">
+              <AnimatedUnderline>
+                <span className="text-secondary">profile</span>
+              </AnimatedUnderline>
+            </Link>
+            &nbsp;to easily attach system information to your post.
+          </div>
+          <SelectMenu
+            name="performancePostSystemName"
+            defaultValue={fields ? fields.systemName : systemNameOptions[0]}
+            options={systemNameOptions}
+            label="Select System"
+          />
+        </div>
+        <RoundedButton type="submit" className="max-w-xs">
+          {isSubmittingForm ? 'Submitting' : 'Submit'}
+        </RoundedButton>
       </Form>
     </Wrapper>
   );
