@@ -4,10 +4,13 @@
 
 - [ ] Add tags/icons for controller support
 - [ ] Add tags for aspect ration support
+- [ ] Add options to leave fps in performance review
+- [ ] Add options to leave controller support info
 
 ## Priority High
 
-- [ ] Centralize form validation (systemName etc.)
+- [ ] Add clarifier for rating meaning (tooltip)
+- [x] Centralize form validation (systemName etc.)
 - [x] Add contact information (twitter, discord, reddit)
 - [x] Add not affiliated with Steam information
 - [ ] Figure out how to reset Select Menus on forms when form resets
@@ -23,7 +26,7 @@
       and lazy loading.
 - [x] Make Regex for system information more robust
 - [ ] Spruce up forms to be more visually consistent
-- [ ] Add a sync button to profile so users can sync their game library at
+- [x] Add a sync button to profile so users can sync their game library at
       anytime, not just on initial login
 - [ ] Add a way for users to flag inappropriate posts
 - [ ] Add a way for users to up/down vote performance posts?
