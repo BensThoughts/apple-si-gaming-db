@@ -10,8 +10,11 @@ interface LoaderData {
   trendingSteamApps: TrendingSteamApp[];
 }
 
+const DAYS_IN_PAST = 10;
+const NUM_TRENDING_APPS = 15;
+
 export async function loader() {
-  const trendingSteamApps = await findTrendingSteamApps(5);
+  const trendingSteamApps = await findTrendingSteamApps(DAYS_IN_PAST, NUM_TRENDING_APPS);
   return json<LoaderData>({
     trendingSteamApps,
   });
