@@ -7,6 +7,8 @@ import type {
 import type { PassportSteamUser } from '~/interfaces';
 
 import prisma from '~/lib/database/db.server';
+import { getSteamPlayerOwnedGamesRequest } from '@apple-si-gaming-db/steam-api';
+import { searchAllAppsByAppIds } from './steamApp.server';
 
 export async function findSteamUserSystemsByUserId(
     steamUserId: SteamUser['steamUserId'],
@@ -80,7 +82,20 @@ export function convertPassportSteamUserToPrismaSteamUser(passportSteamUser: Pas
   };
 }
 
+
 export async function updateUserOwnedApps(
+    steamUserId: SteamUser['steamUserId'],
+) {
+  const { games } = await getSteamPlayerOwnedGamesRequest(steamUserId);
+  if (games) {
+    const ownedAppIds = games.map((app) => app.appid);
+    const ownedAppsInDB = await searchAllAppsByAppIds(ownedAppIds);
+    const ownedAppIdsInDB = ownedAppsInDB.map((app) => app.steamAppId);
+    await updateUserOwnedAppsInDatabase(ownedAppIdsInDB, steamUserId);
+  }
+}
+
+export async function updateUserOwnedAppsInDatabase(
     steamAppIds: SteamApp['steamAppId'][],
     steamUserId: SteamUser['steamUserId'],
 ) {
