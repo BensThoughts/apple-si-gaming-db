@@ -29,14 +29,14 @@
   "dependencies": {
     "@apple-si-gaming-db/logger": "*",
     "@apple-si-gaming-db/steam-api": "*",
-    "@prisma/client": "4.3.1",
+    "@prisma/client": "^4.4.0",
     "tiny-invariant": "^1.2.0"
   },
   "devDependencies": {
     "@apple-si-gaming-db/tsconfig": "*",
     "eslint": "^8.20.0",
     "eslint-config-custom": "*",
-    "prisma": "^4.3.1",
+    "prisma": "^4.4.0",
     "rimraf": "^3.0.2",
     "tsup": "^5.11.13",
     "tsx": "^3.7.1",
