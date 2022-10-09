@@ -5,6 +5,21 @@ interface PerformancePostMetaBarProps {
   ratingMedal: RatingMedal;
 }
 
+function getRatingMedalText(ratingMedal: RatingMedal) {
+  switch (ratingMedal) {
+    case 'Platinum':
+      return 'Runs [ perfect ] - Platinum';
+    case 'Gold':
+      return 'Runs [ perfect after tweaks ] - Gold';
+    case 'Silver':
+      return 'Runs [ with minor issues ] - Silver';
+    case 'Bronze':
+      return 'Runs [ often crashes ] - Bronze';
+    case 'Borked':
+      return `Doesn't Run - Borked`;
+  }
+}
+
 export default function PerformancePostMetaBar({
   createdAt,
   ratingMedal,
@@ -15,7 +30,7 @@ export default function PerformancePostMetaBar({
         {createdAt.toDateString()}
       </i>
       <div>
-        {ratingMedal}
+        {getRatingMedalText(ratingMedal)}
       </div>
     </div>
   );
