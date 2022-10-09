@@ -110,14 +110,16 @@ app.use(passport.session());
 
 app.get('/api/auth/steam/login',
     passport.authenticate('steam'),
-    function(req, res) {
 
+    // This function never runs. authenticate()
+    // redirects user to steam
+    function(req, res) {
     });
 
 app.get('/api/auth/steam/return',
     passport.authenticate('steam', { failureRedirect: '/' }),
     async function(req, res) {
-      res.redirect('/');
+      res.redirect('/profile');
     });
 
 app.get('/api/auth/steam/logout',
