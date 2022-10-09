@@ -21,12 +21,6 @@ import { getProfileSession, commitProfileSession } from './lib/sessions/cookie-s
 import tailwindStylesheetUrl from './styles/tailwind.css';
 import { metaTags } from './lib/meta-tags';
 import { extractAppLoadContext } from './lib/data-utils/appLoadContext.server';
-import {
-  upsertSteamUser,
-  updateUserOwnedApps,
-} from './models/steamUser.server';
-import { searchAllAppsByAppIds } from './models/steamApp.server';
-import { getSteamPlayerOwnedGamesRequest } from './lib/data-utils/steamApi.server';
 import Navbar from '~/components/Layout/Navbar';
 import { Toaster } from 'react-hot-toast';
 
@@ -60,50 +54,23 @@ export async function loader({ request, context }: LoaderArgs) {
   const profileSession = await getProfileSession(
       request.headers.get('Cookie'),
   );
-
-  // TODO: May not need logic to only run get player owned games
-  // TODO: on initial login, this might only run on first page
-  // TODO: load/refresh anyways, and not not normal navigation/routing
-  if (steamUser && profileSession && !profileSession.has('isLoggedIn')) {
-    // cookie.isLoggedIn = true;
-    profileSession.set('isLoggedIn', true);
-    await upsertSteamUser(steamUser);
-    const { games } = await getSteamPlayerOwnedGamesRequest(steamUser.steamUserId);
-    if (games) {
-      const ownedAppIds = games.map((app) => app.appid);
-
-      const ownedAppsInDB = await searchAllAppsByAppIds(ownedAppIds);
-      const ownedAppIdsInDB = ownedAppsInDB.map((app) => app.steamAppId);
-      await updateUserOwnedApps(ownedAppIdsInDB, steamUser.steamUserId);
-    }
-
-
-    return json<LoaderData>({
-      isLoggedIn: true,
-    }, {
-      headers: {
-        'Set-Cookie': await commitProfileSession(profileSession),
-      },
-    });
-  }
   if (!steamUser) {
-    // cookie.isLoggedIn = false;
-    profileSession.unset('isLoggedIn');
+    if (profileSession && profileSession.has('alreadyLoggedIn')) {
+      profileSession.unset('alreadyLoggedIn');
+      return json<LoaderData>({
+        isLoggedIn: false,
+      }, {
+        headers: {
+          'Set-Cookie': await commitProfileSession(profileSession),
+        },
+      });
+    }
     return json<LoaderData>({
       isLoggedIn: false,
-    }, {
-      headers: {
-        'Set-Cookie': await commitProfileSession(profileSession),
-      },
     });
   }
-  // TODO: Do I need to commit the session here too?
   return json<LoaderData>({
     isLoggedIn: true,
-  }, {
-    headers: {
-      'Set-Cookie': await commitProfileSession(profileSession),
-    },
   });
 }
 
