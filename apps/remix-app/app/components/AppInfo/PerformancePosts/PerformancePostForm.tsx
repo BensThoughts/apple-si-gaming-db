@@ -164,7 +164,10 @@ export default function PerformancePostForm({
           label="Rating"
           errorMessage={fieldErrors?.ratingMedal}
         />
-        <div className="flex flex-col gap-2 justify-center items-center rounded-md border-1 border-secondary-highlight p-4">
+        <div
+          className="flex flex-col gap-2 justify-center items-center rounded-md
+                     md:border-1 md:border-secondary-highlight p-4"
+        >
           <div className="text-primary-faded">
             You can choose to select a system from your&nbsp;
             <Link to="/profile">
