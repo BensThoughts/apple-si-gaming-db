@@ -9,16 +9,16 @@ import {
 import AsideCard from '~/components/Cards/AsideCard';
 import LoginCard from '~/components/Profile/LoginCard';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-import { findUserProfileData } from '~/models/steamUser.server';
+import { findUserProfileData, updateUserOwnedApps, upsertSteamUser } from '~/models/steamUser.server';
 import ExternalLink from '~/components/ExternalLink';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import UserDisplay from '~/components/Profile/UserDisplay';
 import { createSystem } from '~/lib/form-actions/profile/create-system.server';
 import { deleteSystem } from '~/lib/form-actions/profile/delete-system.server';
 import { editSystem } from '~/lib/form-actions/profile/edit-system.server';
-import { updateOwnedGames } from '~/lib/form-actions/profile/update-owned-games.server';
 import { metaTags } from '~/lib/meta-tags';
 import type { SteamGenre } from '~/interfaces/database';
+import { commitProfileSession, getProfileSession } from '~/lib/sessions/cookie-sessions.server';
 
 interface LoaderData {
   isLoggedIn: boolean;
@@ -46,38 +46,53 @@ interface LoaderData {
   }[],
 }
 
+async function getUserProfileLoaderData(steamUserId: string): Promise<LoaderData> {
+  const userProfile = await findUserProfileData(steamUserId);
+  if (userProfile) {
+    const {
+      steamUserId,
+      displayName,
+      avatarFull,
+      ownedApps,
+      systemSpecs,
+    } = userProfile;
+    return {
+      isLoggedIn: true,
+      steamUserId,
+      displayName,
+      avatarFull,
+      ownedApps,
+      systemNames: systemSpecs.map((systemSpec) => systemSpec.systemName),
+      systemSpecs,
+    };
+  } else {
+    throw new Error(`Something went wrong loading your user profile data`);
+  }
+}
+
 export async function loader({ request, context }: LoaderArgs) {
   const { steamUser } = extractAppLoadContext(context);
+  const profileSession = await getProfileSession(
+      request.headers.get('Cookie'),
+  );
+
+  // !profileSession.has('alreadyLoggedIn') represents first login
+  // ! as opposed to just a page reload. This is unset in root.tsx
+  // ! when a user logs out and is redirected to /
+  if (steamUser && profileSession && !profileSession.has('alreadyLoggedIn')) {
+    profileSession.set('alreadyLoggedIn', true);
+    await upsertSteamUser(steamUser);
+    await updateUserOwnedApps(steamUser.steamUserId);
+    const userProfileLoaderData = await getUserProfileLoaderData(steamUser.steamUserId);
+    return json<LoaderData>(userProfileLoaderData, {
+      headers: {
+        'Set-Cookie': await commitProfileSession(profileSession),
+      },
+    });
+  }
   if (steamUser) {
-    const userProfile = await findUserProfileData(steamUser.steamUserId);
-    if (userProfile) {
-      const {
-        steamUserId,
-        displayName,
-        avatarFull,
-        ownedApps,
-        systemSpecs,
-      } = userProfile;
-      return json<LoaderData>({
-        isLoggedIn: true,
-        steamUserId,
-        displayName,
-        avatarFull,
-        ownedApps,
-        systemNames: systemSpecs.map((systemSpec) => systemSpec.systemName),
-        systemSpecs,
-      });
-    } else {
-      return json<LoaderData>({
-        isLoggedIn: true,
-        steamUserId: null,
-        displayName: null,
-        avatarFull: null,
-        ownedApps: [],
-        systemNames: [],
-        systemSpecs: [],
-      });
-    }
+    const userProfileLoaderData = await getUserProfileLoaderData(steamUser.steamUserId);
+    return json<LoaderData>(userProfileLoaderData);
   }
   return json<LoaderData>({
     isLoggedIn: false,
@@ -151,7 +166,8 @@ export async function action({ request, context }: ActionArgs) {
       return editSystem(steamUser.steamUserId, formData);
     }
     case 'updateOwnedGames': {
-      return updateOwnedGames(steamUser.steamUserId);
+      await updateUserOwnedApps(steamUser.steamUserId);
+      return redirect('/profile');
     }
     default: {
       throw new Error('Unexpected action in /profile');
@@ -245,3 +261,4 @@ export function ErrorBoundary({ error }: { error: Error }) {
     </div>
   );
 }
+
