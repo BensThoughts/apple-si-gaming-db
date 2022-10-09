@@ -25,7 +25,7 @@ export default function PageFooter({
             <TwitterIcon size={28} />
           </a>
           <a
-            href="https://discord.com/users/512126890362798110"
+            href="https://discord.gg/8Ub5669qJv"
             rel="noopener noreferrer"
             target="_blank"
             className="block"
