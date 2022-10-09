@@ -53,6 +53,7 @@ export async function createPerformancePost({
     return prisma.performancePost.create({
       data: {
         steamUserId,
+        steamUserIdForSteamUser: steamUserId,
         displayName,
         avatarMedium,
         postText,
@@ -64,6 +65,7 @@ export async function createPerformancePost({
   return prisma.performancePost.create({
     data: {
       steamUserId,
+      steamUserIdForSteamUser: steamUserId,
       displayName,
       avatarMedium,
       postText,
@@ -115,6 +117,7 @@ export interface TrendingSteamApp {
 
 export async function findTrendingSteamApps(
     daysInPast: number,
+    numberOfTrendingApps: number,
 ) {
   const today = new Date();
   const dateInPast = new Date(today.setDate(today.getDate() - daysInPast));
@@ -156,7 +159,7 @@ export async function findTrendingSteamApps(
     Array.from(trendingSteamAppMap.values())
         .sort((a, b) => (
           a.numNewPerformancePosts > b.numNewPerformancePosts ? -1 : 0
-        )).slice(0, 10);
+        )).slice(0, numberOfTrendingApps);
   return trendingSteamApps;
 }
 

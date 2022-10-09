@@ -41,11 +41,13 @@ model SteamUser {
   //   value: string;
   // }[];
 
-  PerformancePosts  PerformancePost[]
+  PerformancePosts PerformancePost[]
+  ownedApps        SteamApp[]
+  systemSpecs      SteamUserSystemSpecs[]
+
+  // Unused For Now
   appCount          Int?
   ownedAppsPlaytime SteamUserOwnedAppPlaytime[]
-  ownedApps         SteamApp[]
-  systemSpecs       SteamUserSystemSpecs[]
 }
 
 model SteamUserSystemSpecs {
@@ -53,6 +55,7 @@ model SteamUserSystemSpecs {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // Unused For Now
   steamUserId String
   steamUser   SteamUser @relation(fields: [steamUserId], references: [steamUserId], onDelete: Cascade)
 
@@ -101,13 +104,13 @@ model PerformancePost {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // ? What do to onDelete for steamUser?
-  steamUser   SteamUser? @relation(fields: [steamUserId], references: [steamUserId], onDelete: SetNull)
-  steamUserId String?
+  steamUser               SteamUser? @relation(fields: [steamUserIdForSteamUser], references: [steamUserId], onDelete: SetNull)
+  steamUserIdForSteamUser String?
 
   steamApp   SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
   steamAppId Int
 
+  steamUserId              String
   avatarMedium             String?
   displayName              String?
   postText                 String
@@ -189,7 +192,9 @@ model SteamApp {
   contentDescriptorNotes       String?
 
   performancePosts PerformancePost[]
-  usersWhoOwnApp   SteamUser[]
+
+  // Unused For Now
+  usersWhoOwnApp SteamUser[]
 
   @@unique([steamAppId, name])
 }
