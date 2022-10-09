@@ -194,7 +194,7 @@ export default function ProfilePage() {
       <div className="flex flex-col gap-10 items-center w-full">
         <div
           className="flex flex-col md:flex-row gap-4 md:gap-6 md:justify-evenly
-                     md:items-center p-4 md:p-6 rounded-lg border-1
+                     items-center p-4 md:p-6 rounded-lg border-1
                      border-secondary-highlight bg-tertiary w-full max-w-3xl"
         >
           <LoginCard
