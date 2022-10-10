@@ -1,6 +1,6 @@
 import { redirect, json } from '@remix-run/node';
 import { createSystemSpecs, findSystemSpecSystemNames } from '~/models/steamUserSystemSpecs.server';
-import type { SteamUserSystemSpecs } from '@apple-si-gaming-db/database';
+import type { SteamUserSystemSpecs } from '~/interfaces/database';
 import type { CreateSystemSpecActionData, ProfileActionData } from '~/routes/profile';
 import { validateNewSystemName, validateSystemInfo } from './validators';
 import type { SystemSpec } from '~/interfaces';
