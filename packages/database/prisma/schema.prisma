@@ -115,6 +115,8 @@ model PerformancePost {
   displayName              String?
   postText                 String
   ratingMedal              RatingMedal
+  frameRateAverage         FrameRate?
+  frameRateStutters        Boolean?
   systemManufacturer       String?
   systemModel              String?
   systemOsVersion          String?
@@ -123,6 +125,14 @@ model PerformancePost {
   systemVideoDriverVersion String?
   systemVideoPrimaryVRAM   String?
   systemMemoryRAM          String?
+}
+
+enum FrameRate {
+  VeryLow
+  Low
+  Medium
+  High
+  VeryHigh
 }
 
 enum RatingMedal {
