@@ -84,7 +84,7 @@ export default function OwnedApps({
         </div>
         <div className="flex flex-col md:flex-row items-center justify-center gap-2">
           <label>Apple:</label>
-          <ToggleSwitch enabled={filterAppleOnly} onChange={setFilterAppleOnly} />
+          <ToggleSwitch checked={filterAppleOnly} onChange={setFilterAppleOnly} />
         </div>
         <div className="flex flex-col md:flex-row items-center justify-center gap-2">
           <label>Select Genre:</label>
