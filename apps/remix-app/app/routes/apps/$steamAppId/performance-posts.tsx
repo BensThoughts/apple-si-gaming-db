@@ -6,7 +6,7 @@ import PerformancePostForm from '~/components/AppInfo/PerformancePosts/Performan
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
 import { convertRatingMedalStringToRatingMedal } from '~/models/performancePost.server';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-import type { PerformancePost, SteamUserSystemSpecs } from '~/interfaces/database';
+import type { FrameRate, PerformancePost, RatingMedal } from '~/interfaces/database';
 import { createPerformancePost, findPerformancePostsByAppId } from '~/models/performancePost.server';
 import { doesSteamUserOwnApp, findSteamUserSystemNamesByUserId } from '~/models/steamUser.server';
 
@@ -37,11 +37,29 @@ export async function loader({ params, context }: LoaderArgs) {
   });
 }
 
+function isTypeFrameRateAverage(frameRateAverage: string): frameRateAverage is FrameRate {
+  const frameRates: FrameRate[] = ['VeryLow', 'Low', 'Medium', 'High', 'VeryHigh'];
+  const frameRateStrings = frameRates as string[];
+  return frameRateStrings.includes(frameRateAverage);
+}
+
+// function validateFrameRateAverage(frameRateAverage: string) {
+//   if (frameRateAverage !== 'None' || !isTypeFrameRateAverage(frameRateAverage)) {
+//     return `${frameRateAverage} is not a valid FrameRate option`;
+//   }
+// }
+
+function isTypeRatingMedal(ratingMedal: string): ratingMedal is RatingMedal {
+  const ratingMedals: RatingMedal[] = ['Borked', 'Bronze', 'Gold', 'Platinum', 'Silver'];
+  const ratingMedalStrings = ratingMedals as string[];
+  return ratingMedalStrings.includes(ratingMedal);
+}
+
 function validatePostRatingMedal(ratingMedal: string) {
   if (ratingMedal.toLowerCase() === 'none') {
     return `rating cannot be None`;
   }
-  if (!isRatingMedalValid(ratingMedal)) {
+  if (!isTypeRatingMedal(ratingMedal)) {
     return `${ratingMedal} is not a valid option`;
   }
 }
@@ -59,36 +77,17 @@ export type CreatePostActionData = {
   formError?: string;
   fieldErrors?: {
     postText?: string | undefined;
+    frameRateAverage?: string | undefined;
     ratingMedal?: string | undefined;
     // systemName?: string | undefined;
   };
   fields?: {
     postText: PerformancePost['postText'];
-    ratingMedal: {
-      name: string;
-      value: PerformancePost['ratingMedal'] | 'None';
-    };
-    systemName: {
-      name: SteamUserSystemSpecs['systemName'];
-      value: SteamUserSystemSpecs['systemName'];
-    };
   };
 };
 
 const badRequest = (data: CreatePostActionData) => json(data, { status: 400 });
 
-function isRatingMedalValid(ratingMedal: string): boolean {
-  if (
-    (ratingMedal === 'Borked') ||
-    (ratingMedal === 'Bronze') ||
-    (ratingMedal === 'Silver') ||
-    (ratingMedal === 'Gold') ||
-    (ratingMedal === 'Platinum')
-  ) {
-    return true;
-  }
-  return false;
-}
 
 export async function action({
   request,
@@ -106,19 +105,34 @@ export async function action({
   const avatarMedium = steamUser.avatarMedium;
   const formData = await request.formData();
   const postText = formData.get('performancePostText');
-  const ratingMedalName = formData.get('performancePostRatingMedal[name]');
+  const frameRateAverageValue = formData.get('performancePostFrameRateAverage[value]');
+  const frameRateStutters = formData.get('performancePostFrameRateStutters');
   const ratingMedalValue = formData.get('performancePostRatingMedal[value]');
   const systemName = formData.get('performancePostSystemName[value]');
 
   // TODO: Not sure if postText/ratingMedal should be string or FormDataEntryValue
   if (
     typeof postText !== 'string' ||
-    typeof ratingMedalName !== 'string' ||
+    typeof frameRateAverageValue !== 'string' ||
     typeof ratingMedalValue !== 'string' ||
     typeof systemName !== 'string'
   ) {
     return badRequest({
       formError: `Form not submitted correctly.`,
+    });
+  }
+
+  if (
+    frameRateAverageValue !== 'None' &&
+    !isTypeFrameRateAverage(frameRateAverageValue)
+  ) {
+    return badRequest({
+      fieldErrors: {
+        frameRateAverage: `${frameRateAverageValue} is not a valid frame rate option`,
+      },
+      fields: {
+        postText,
+      },
     });
   }
 
@@ -128,14 +142,6 @@ export async function action({
   };
   const fields = {
     postText,
-    ratingMedal: {
-      name: ratingMedalName,
-      value: convertRatingMedalStringToRatingMedal(ratingMedalValue),
-    },
-    systemName: {
-      name: systemName,
-      value: systemName,
-    },
   };
 
   if (Object.values(fieldErrors).some(Boolean)) {
@@ -149,6 +155,8 @@ export async function action({
       displayName,
       steamAppId,
       postText: postText,
+      frameRateAverage: frameRateAverageValue,
+      frameRateStutters: frameRateStutters ? true : false,
       ratingMedal: convertRatingMedalStringToRatingMedal(ratingMedalValue),
       systemName,
     });
