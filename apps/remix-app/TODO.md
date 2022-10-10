@@ -22,6 +22,7 @@
 
 ## Priority Medium
 
+- [ ] Fix ring spacing on all elements with show-ring
 - [x] Refactor Icons
 - [ ] Look at using .client.ts(x) extension for colorMode, instead of using suspense
       and lazy loading.
