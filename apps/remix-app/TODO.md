@@ -4,12 +4,13 @@
 
 - [ ] Add tags/icons for controller support
 - [ ] Add tags for aspect ration support
-- [ ] Add options to leave fps in performance review
+- [x] Add options to leave fps in performance review
 - [ ] Add options to leave controller support info
 
 ## Priority High
 
 - [ ] Add clarifier for rating meaning (tooltip)
+- [ ] Add tests!
 - [x] Centralize form validation (systemName etc.)
 - [x] Add contact information (twitter, discord, reddit)
 - [x] Add not affiliated with Steam information
