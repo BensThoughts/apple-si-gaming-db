@@ -1,4 +1,4 @@
-import type { RatingMedal } from '~/interfaces/database';
+import type { FrameRate, RatingMedal } from '~/interfaces/database';
 import PerformancePostMetaBar from './PerformancePostMetaBar';
 import SystemSpecsPopover from './SystemSpecsPopover';
 // import { convertRatingMedalToNumber } from '~/interfaces/database';
@@ -8,6 +8,8 @@ type PerformancePostProps = {
   postText: string;
   createdAt: Date;
   ratingMedal: RatingMedal;
+  frameRateAverage?: FrameRate | null;
+  frameRateStutters?: boolean | null;
   avatarMedium?: string | null;
   displayName?: string | null;
   systemManufacturer?: string | null;
@@ -22,10 +24,12 @@ type PerformancePostProps = {
 
 export default function PerformancePostDisplay({
   createdAt,
-  postText,
-  ratingMedal,
   displayName,
   avatarMedium,
+  postText,
+  ratingMedal,
+  frameRateAverage,
+  frameRateStutters,
   systemManufacturer,
   systemModel,
   systemOsVersion,
@@ -39,7 +43,12 @@ export default function PerformancePostDisplay({
   // const ratingNum = convertRatingMedalToNumber(ratingMedal);
   return (
     <div className="flex flex-col w-full gap-3">
-      <PerformancePostMetaBar createdAt={createdAt} ratingMedal={ratingMedal} />
+      <PerformancePostMetaBar
+        createdAt={createdAt}
+        ratingMedal={ratingMedal}
+        frameRateAverage={frameRateAverage}
+        frameRateStutters={frameRateStutters}
+      />
       <div className="flex flex-row w-full gap-[1px]" {...rest}>
         <div className="flex flex-col items-center justify-center pr-3 border-r-2 border-r-secondary">
           {avatarMedium && (
