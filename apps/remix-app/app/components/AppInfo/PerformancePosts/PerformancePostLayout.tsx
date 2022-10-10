@@ -1,4 +1,4 @@
-import type { RatingMedal } from '~/interfaces/database';
+import type { FrameRate, RatingMedal } from '~/interfaces/database';
 import PerformancePostDisplay from './PerformancePostDisplay';
 
 type PerformancePostLayoutProps =
@@ -8,6 +8,8 @@ type PerformancePostLayoutProps =
     postText: string;
     createdAt: Date;
     ratingMedal: RatingMedal;
+    frameRateAverage?: FrameRate | null;
+    frameRateStutters?: boolean | null;
     displayName?: string | null;
     avatarMedium?: string | null;
     systemManufacturer?: string | null;
@@ -32,11 +34,13 @@ export default function PerformancePostLayout({
         <div className="flex flex-col gap-6 w-full">
           {performancePosts.map(({
             id,
-            postText,
-            ratingMedal,
             createdAt,
             displayName,
             avatarMedium,
+            postText,
+            ratingMedal,
+            frameRateAverage,
+            frameRateStutters,
             systemManufacturer,
             systemModel,
             systemOsVersion,
@@ -48,10 +52,12 @@ export default function PerformancePostLayout({
           }, idx) => (
             <div key={id} className="flex flex-col gap-6">
               <PerformancePostDisplay
-                postText={postText}
-                ratingMedal={ratingMedal}
                 createdAt={createdAt}
                 displayName={displayName}
+                postText={postText}
+                ratingMedal={ratingMedal}
+                frameRateAverage={frameRateAverage}
+                frameRateStutters={frameRateStutters}
                 avatarMedium={avatarMedium}
                 systemManufacturer={systemManufacturer}
                 systemModel={systemModel}
