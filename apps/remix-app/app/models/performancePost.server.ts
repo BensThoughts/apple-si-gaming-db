@@ -4,8 +4,10 @@ import type {
   SteamUser,
   RatingMedal,
   SteamUserSystemSpecs,
+  FrameRate,
 } from '~/interfaces/database';
 import prisma from '~/lib/database/db.server';
+
 
 export async function createPerformancePost({
   steamUserId,
@@ -13,12 +15,16 @@ export async function createPerformancePost({
   avatarMedium,
   steamAppId,
   postText,
+  frameRateAverage,
+  frameRateStutters,
   ratingMedal,
   systemName,
 }: {
   steamUserId: SteamUser['steamUserId'];
   steamAppId: SteamApp['steamAppId'];
   postText: PerformancePost['postText'];
+  frameRateAverage: FrameRate | 'None';
+  frameRateStutters: boolean;
   ratingMedal: PerformancePost['ratingMedal'];
   avatarMedium?: PerformancePost['avatarMedium'];
   displayName?: PerformancePost['displayName'];
@@ -48,29 +54,25 @@ export async function createPerformancePost({
   //   throw new Error(`System ${systemName} was not found in the database.`);
   // }
 
+  const performancePostData = {
+    steamAppId,
+    steamUserId,
+    steamUserIdForSteamUser: steamUserId,
+    displayName,
+    avatarMedium,
+    postText,
+    frameRateAverage: frameRateAverage !== 'None' ? frameRateAverage : undefined,
+    frameRateStutters,
+    ratingMedal,
+  };
+
   // !Added to allow no system specs on performance posts
   if (!systemSpecs) {
-    return prisma.performancePost.create({
-      data: {
-        steamUserId,
-        steamUserIdForSteamUser: steamUserId,
-        displayName,
-        avatarMedium,
-        postText,
-        steamAppId,
-        ratingMedal,
-      },
-    });
+    return prisma.performancePost.create({ data: performancePostData });
   }
   return prisma.performancePost.create({
     data: {
-      steamUserId,
-      steamUserIdForSteamUser: steamUserId,
-      displayName,
-      avatarMedium,
-      postText,
-      steamAppId,
-      ratingMedal,
+      ...performancePostData,
       systemManufacturer: systemSpecs.manufacturer,
       systemModel: systemSpecs.model,
       systemOsVersion: systemSpecs.osVersion,
@@ -95,6 +97,8 @@ export async function findPerformancePostsByAppId(steamAppId: SteamApp['steamApp
       displayName: true,
       postText: true,
       ratingMedal: true,
+      frameRateAverage: true,
+      frameRateStutters: true,
       systemManufacturer: true,
       systemModel: true,
       systemOsVersion: true,
@@ -180,19 +184,3 @@ export function convertRatingMedalStringToRatingMedal(ratingMedal: string): Rati
   }
 }
 
-export function convertRatingMedalToNumber(ratingMedal: RatingMedal) {
-  switch (ratingMedal) {
-    case 'Borked':
-      return 1;
-    case 'Bronze':
-      return 2;
-    case 'Silver':
-      return 3;
-    case 'Gold':
-      return 4;
-    case 'Platinum':
-      return 5;
-    default:
-      return 0;
-  }
-}
