@@ -3,11 +3,65 @@ import RoundedButton from '~/components/RoundedButton';
 import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { SelectOption } from '~/components/FormComponents/SelectMenu';
 import type { CreatePostActionData } from '~/routes/apps/$steamAppId/performance-posts';
-import type { RatingMedal } from '~/interfaces/database';
+import type { FrameRate, RatingMedal } from '~/interfaces/database';
 import AnimatedUnderline from '~/components/AnimatedUnderline';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import TextArea from '~/components/FormComponents/TextArea';
+import ToggleSwitch from '~/components/FormComponents/ToggleSwitch';
 
+const ratingOptions: SelectOption<RatingMedal | 'None'>[] = [
+  {
+    name: 'None',
+    value: 'None',
+  },
+  {
+    name: 'Platinum - Runs [ perfect ]',
+    value: 'Platinum',
+  },
+  {
+    name: 'Gold - Runs [ perfect after tweaks ]',
+    value: 'Gold',
+  },
+  {
+    name: 'Silver - Runs [ with minor issues ]',
+    value: 'Silver',
+  },
+  {
+    name: 'Bronze - Runs [ often crashes ]',
+    value: 'Bronze',
+  },
+  {
+    name: `Borked - Doesn't Run`,
+    value: 'Borked',
+  },
+];
+
+const frameRateAverageOptions: SelectOption<FrameRate | 'None'>[] = [
+  {
+    name: 'Not Sure',
+    value: 'None',
+  },
+  {
+    name: 'Very Low [ <25 FPS ]',
+    value: 'VeryLow',
+  },
+  {
+    name: 'Low [ 25 - 40 FPS ]',
+    value: 'Low',
+  },
+  {
+    name: 'Medium [ 40 - 60 FPS ]',
+    value: 'Medium',
+  },
+  {
+    name: 'High [ 60 - 120 ]',
+    value: 'High',
+  },
+  {
+    name: 'Very High [ 120+ FPS ]',
+    value: 'VeryHigh',
+  },
+];
 
 interface PerformancePostFormProps {
   steamAppId: number;
@@ -41,39 +95,14 @@ export default function PerformancePostForm({
   fieldErrors,
   isSubmittingForm,
 }: PerformancePostFormProps) {
-  const ratingOptions: SelectOption<RatingMedal | 'None'>[] = [
-    {
-      name: 'None',
-      value: 'None',
-    },
-    {
-      name: 'Platinum - Runs [ perfect ]',
-      value: 'Platinum',
-    },
-    {
-      name: 'Gold - Runs [ perfect after tweaks ]',
-      value: 'Gold',
-    },
-    {
-      name: 'Silver - Runs [ with minor issues ]',
-      value: 'Silver',
-    },
-    {
-      name: 'Bronze - Runs [ often crashes ]',
-      value: 'Bronze',
-    },
-    {
-      name: `Borked - Doesn't Run`,
-      value: 'Borked',
-    },
-  ];
+  const [frameRateStable, setFrameRateStable] = useState(false);
+
   const systemNameOptions: SelectOption[] = steamUserSystemNames.map((sysName) => (
     {
       name: sysName,
       value: sysName,
     }
   ));
-
   // ! Added to avoid needing system info
   systemNameOptions.unshift({
     name: 'None',
@@ -139,7 +168,7 @@ export default function PerformancePostForm({
         method="post"
         name="performancePost"
         ref={formRef}
-        className="flex flex-col items-center gap-6 w-full max-w-lg"
+        className="flex flex-col items-center gap-8 w-full max-w-lg"
         action={`/apps/${steamAppId}/performance-posts`}
       >
         <input type="hidden" name="_performancePostAction" value="createPost" />
@@ -154,16 +183,41 @@ export default function PerformancePostForm({
           minLength={3}
           maxLength={1500}
         />
-        <SelectMenu
-          name="performancePostRatingMedal"
-          defaultValue={fields ? fields.ratingMedal : {
-            name: 'None',
-            value: 'None',
-          }}
-          options={ratingOptions}
-          label="Rating"
-          errorMessage={fieldErrors?.ratingMedal}
-        />
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col md:flex-row gap-6 items-start md:items-center justify-center w-full">
+            <div>
+              <SelectMenu
+                name="performancePostFrameRateAverage"
+                defaultValue={{ name: 'Not Sure', value: 'None' }}
+                options={frameRateAverageOptions}
+                label="Average Frame Rate"
+                errorMessage={fieldErrors?.frameRateAverage}
+              />
+            </div>
+            <div>
+              <ToggleSwitch
+                checked={frameRateStable}
+                onChange={setFrameRateStable}
+                name="performancePostFrameRateStutters"
+                label="Stutters"
+              />
+            </div>
+          </div>
+          <div>
+            <SelectMenu
+              name="performancePostRatingMedal"
+              defaultValue={{
+                name: 'None',
+                value: 'None',
+              }}
+              options={ratingOptions}
+              label="Rating"
+              errorMessage={fieldErrors?.ratingMedal}
+            />
+          </div>
+        </div>
+
+
         <div
           className="flex flex-col gap-2 justify-center items-center rounded-md
                      md:border-1 md:border-secondary-highlight p-4"
@@ -179,7 +233,7 @@ export default function PerformancePostForm({
           </div>
           <SelectMenu
             name="performancePostSystemName"
-            defaultValue={fields ? fields.systemName : systemNameOptions[0]}
+            defaultValue={systemNameOptions[0]}
             options={systemNameOptions}
             label="Select System"
           />
