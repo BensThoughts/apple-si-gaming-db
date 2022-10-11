@@ -19,10 +19,10 @@ export default function ToggleSwitch({
     <div>
       <Switch.Group>
         {label &&
-        <div className="">
+        <div className="w-full flex justify-center">
           <Switch.Label passive={labelPassive}>
-            <span className="text-primary-highlight">
-              {label}{`: `}
+            <span className="text-primary">
+              {label}
             </span>
           </Switch.Label>
         </div>
