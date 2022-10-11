@@ -1,3 +1,4 @@
+import TextPill from '~/components/TextPill';
 import type { FrameRate, RatingMedal } from '~/interfaces/database';
 import PerformancePostMetaBar from './PerformancePostMetaBar';
 import SystemSpecsPopover from './SystemSpecsPopover';
@@ -6,6 +7,10 @@ import SystemSpecsPopover from './SystemSpecsPopover';
 
 type PerformancePostProps = {
   postText: string;
+  postTags: {
+    postTagId: number;
+    description: string;
+  }[];
   createdAt: Date;
   ratingMedal: RatingMedal;
   frameRateAverage?: FrameRate | null;
@@ -27,6 +32,7 @@ export default function PerformancePostDisplay({
   displayName,
   avatarMedium,
   postText,
+  postTags,
   ratingMedal,
   frameRateAverage,
   frameRateStutters,
@@ -48,9 +54,10 @@ export default function PerformancePostDisplay({
         ratingMedal={ratingMedal}
         frameRateAverage={frameRateAverage}
         frameRateStutters={frameRateStutters}
+        postTags={postTags}
       />
       <div className="flex flex-row w-full gap-[1px]" {...rest}>
-        <div className="flex flex-col items-center justify-center pr-3 border-r-2 border-r-secondary">
+        <div className="flex flex-col gap-1 items-center justify-start pr-3 border-r-2 border-r-secondary">
           {avatarMedium && (
             <div>
               <img
@@ -64,7 +71,7 @@ export default function PerformancePostDisplay({
               />
             </div>
           )}
-          <span className="text-sm">{displayName}</span>
+          {displayName && <span className="text-sm">{displayName}</span>}
           {/* // ! Below Added to allow for no system specs on a post */}
           {(
             systemManufacturer ||
@@ -92,9 +99,27 @@ export default function PerformancePostDisplay({
               </span>
             </SystemSpecsPopover>
           }
+          {postTags.length > 0 &&
+            <div className="md:hidden flex flex-col whitespace-nowrap gap-1 w-full justify-start">
+              {postTags.map((tag) => (
+                <div key={tag.postTagId}>
+                  <TextPill className="hover:bg-tertiary-highlight">{tag.description}</TextPill>
+                </div>
+              ))}
+            </div>}
         </div>
-        <div className="border-l-1 border-l-secondary-highlight pl-3">
-          {postText}
+        <div className="w-full flex flex-col gap-2 h-full border-l-1 border-l-secondary-highlight pl-3">
+          {postTags.length > 0 &&
+            <div className="hidden md:flex flex-row flex-wrap gap-1 w-full justify-start">
+              {postTags.map((tag) => (
+                <div key={tag.postTagId}>
+                  <TextPill className="hover:bg-tertiary-highlight">{tag.description}</TextPill>
+                </div>
+              ))}
+            </div>}
+          <div>
+            {postText}
+          </div>
           {/* {Array(ratingNum).fill(<RatingMedalIcon />)} */}
         </div>
       </div>
