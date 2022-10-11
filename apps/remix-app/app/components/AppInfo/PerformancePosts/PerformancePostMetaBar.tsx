@@ -44,7 +44,7 @@ export default function PerformancePostMetaBar({
   frameRateStutters,
 }: PerformancePostMetaBarProps) {
   return (
-    <div className="flex flex-col gap-1 md:gap-0 md:flex-row items-start md:items-center justify-between bg-primary w-full text-primary-faded text-sm px-3 py-1 rounded-sm">
+    <div className="flex flex-col gap-1 md:gap-0 md:flex-row items-start md:items-center justify-between text-sm px-3 py-1 rounded-sm bg-primary w-full text-primary-faded">
       <div className="flex flex-col gap-1 md:flex-row md:gap-2">
         <div>
           <span className="text-primary-highlight">{ratingMedal}</span> - {getRatingMedalText(ratingMedal)}
