@@ -12,15 +12,17 @@ export default function SelectMenu<T = string>({
   onChange,
   name,
   defaultValue,
-  label,
-  errorMessage,
+  labelText,
+  fieldError,
+  required = false,
 }: {
   options: SelectOption<T>[];
   onChange?(e: SelectOption<T>): void;
   name: string;
   defaultValue: SelectOption<T>;
-  label?: string;
-  errorMessage?: string;
+  labelText?: string;
+  fieldError?: string;
+  required?: boolean;
 }) {
   function onSelectionChange(selection: SelectOption<T>) {
     if (onChange) {
@@ -35,22 +37,32 @@ export default function SelectMenu<T = string>({
       name={name}
     >
       <div className="w-72">
-        {label &&
+        {labelText &&
           <Listbox.Label>
-            <span className="text-primary-highlight">
-              {label}{`: `}
+            <span className="text-primary">
+              {labelText}
             </span>
-            {errorMessage && <span className="text-color-error">{errorMessage}</span>}
+            {required &&
+              <span className="text-color-error">
+                *
+              </span>
+            }
+            {fieldError &&
+              <span className="text-primary">
+                {`: `}
+                <span className="text-color-error">
+                  {fieldError}
+                </span>
+              </span>
+            }
+
           </Listbox.Label>
         }
         <div className="relative mt-1.5">
           <Listbox.Button
             className={`relative py-2 pr-10 pl-3 w-full text-left rounded-lg
                         cursor-default text-neutral-lightest bg-neutral-medium
-                        focus-visible:ring-2 focus-visible:ring-secondary
-                        focus-visible:ring-opacity-80 focus-visible:ring-offset-4
-                        focus-visible:ring-offset-app-bg focus:outline-none sm:text-sm
-                        bg-primary`}
+                        focus-visible:show-ring sm:text-sm bg-primary`}
           >
             {({ value }: { value: SelectOption<T> }) => (
               <>
