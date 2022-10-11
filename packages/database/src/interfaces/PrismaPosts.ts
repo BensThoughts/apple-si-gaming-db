@@ -2,12 +2,14 @@ import type {
   PerformancePost,
   RatingMedal,
   FrameRate,
+  PostTag,
 } from '@prisma/client';
 
-export {
+export type {
   PerformancePost,
   RatingMedal,
   FrameRate,
+  PostTag,
 };
 
 export type PerformancePostWithoutMetadata =
