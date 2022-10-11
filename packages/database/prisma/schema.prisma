@@ -125,6 +125,40 @@ model PerformancePost {
   systemVideoDriverVersion String?
   systemVideoPrimaryVRAM   String?
   systemMemoryRAM          String?
+
+  postTags PostTag[]
+
+  // TODO: Decide if we should use explicit vs. implicit
+  // ! WITH JOIN TABLE
+  // postTagsOnPerformancePosts PostTagsOnPerformancePosts[]
+}
+
+// TODO: Decide if we should use explicit vs. implicit
+// ! WITH JOIN TABLE
+// model PostTagsOnPerformancePosts {
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   performancePostId String
+//   performancePost   PerformancePost @relation(fields: [performancePostId], references: [id], onDelete: Cascade)
+
+//   postTagId Int
+//   postTag   PostTag @relation(fields: [postTagId], references: [postTagId], onDelete: Cascade)
+//   @@id([performancePostId, postTagId])
+// }
+
+model PostTag {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  performancePosts PerformancePost[]
+  // TODO: Decide if we should use explicit vs. implicit
+  // ! WITH JOIN TABLE
+  // performancePostOnPostTag PostTagsOnPerformancePosts[]
+
+  postTagId   Int    @unique @default(autoincrement())
+  description String
 }
 
 enum FrameRate {
