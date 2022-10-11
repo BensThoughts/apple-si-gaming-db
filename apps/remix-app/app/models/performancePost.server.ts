@@ -5,6 +5,8 @@ import type {
   RatingMedal,
   SteamUserSystemSpecs,
   FrameRate,
+  PostTag,
+  Prisma,
 } from '~/interfaces/database';
 import prisma from '~/lib/database/db.server';
 
@@ -19,6 +21,7 @@ export async function createPerformancePost({
   frameRateStutters,
   ratingMedal,
   systemName,
+  postTagIds,
 }: {
   steamUserId: SteamUser['steamUserId'];
   steamAppId: SteamApp['steamAppId'];
@@ -29,6 +32,7 @@ export async function createPerformancePost({
   avatarMedium?: PerformancePost['avatarMedium'];
   displayName?: PerformancePost['displayName'];
   systemName: SteamUserSystemSpecs['systemName'];
+  postTagIds: PostTag['postTagId'][];
 }) {
   const systemSpecs = await prisma.steamUserSystemSpecs.findUnique({
     where: {
@@ -54,7 +58,7 @@ export async function createPerformancePost({
   //   throw new Error(`System ${systemName} was not found in the database.`);
   // }
 
-  const performancePostData = {
+  const performancePostData: Prisma.XOR<Prisma.PerformancePostCreateInput, Prisma.PerformancePostUncheckedCreateInput> = {
     steamAppId,
     steamUserId,
     steamUserIdForSteamUser: steamUserId,
@@ -64,6 +68,22 @@ export async function createPerformancePost({
     frameRateAverage: frameRateAverage !== 'None' ? frameRateAverage : undefined,
     frameRateStutters,
     ratingMedal,
+    postTags: postTagIds.length > 0 ? {
+      connect: postTagIds.map((postTagId) => ({
+        postTagId,
+      })),
+    } : undefined,
+    // TODO: Decide if we should use explicit vs. implicit
+    // ! WITH JOIN TABLE
+    // postTags: postTagIds.length > 0 ? {
+    //   create: postTagIds.map((postTagId) => ({
+    //     postTag: {
+    //       connect: {
+    //         id: postTagId,
+    //       },
+    //     },
+    //   })),
+    // } : undefined,
   };
 
   // !Added to allow no system specs on performance posts
@@ -85,7 +105,7 @@ export async function createPerformancePost({
   });
 };
 
-export async function findPerformancePostsByAppId(steamAppId: SteamApp['steamAppId']) {
+export async function findPerformancePostsBySteamAppId(steamAppId: SteamApp['steamAppId']) {
   return prisma.performancePost.findMany({
     where: {
       steamAppId,
@@ -96,6 +116,24 @@ export async function findPerformancePostsByAppId(steamAppId: SteamApp['steamApp
       avatarMedium: true,
       displayName: true,
       postText: true,
+      postTags: {
+        select: {
+          postTagId: true,
+          description: true,
+        },
+      },
+      // TODO: Decide if we should use explicit vs. implicit
+      // ! WITH JOIN TABLE
+      // postTags: {
+      //   select: {
+      //     postTag: {
+      //       select: {
+      //         id: true,
+      //         description: true,
+      //       },
+      //     },
+      //   },
+      // },
       ratingMedal: true,
       frameRateAverage: true,
       frameRateStutters: true,
