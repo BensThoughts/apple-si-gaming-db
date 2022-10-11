@@ -8,6 +8,8 @@ import AnimatedUnderline from '~/components/AnimatedUnderline';
 import React, { useEffect, useRef, useState } from 'react';
 import TextArea from '~/components/FormComponents/TextArea';
 import ToggleSwitch from '~/components/FormComponents/ToggleSwitch';
+import MultiSelectMenu from '~/components/FormComponents/MultiSelectMenu';
+import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
 
 const ratingOptions: SelectOption<RatingMedal | 'None'>[] = [
   {
@@ -54,7 +56,7 @@ const frameRateAverageOptions: SelectOption<FrameRate | 'None'>[] = [
     value: 'Medium',
   },
   {
-    name: 'High [ 60 - 120 ]',
+    name: 'High [ 60 - 120 FPS ]',
     value: 'High',
   },
   {
@@ -72,6 +74,10 @@ interface PerformancePostFormProps {
   fieldErrors: CreatePostActionData['fieldErrors'];
   formError: CreatePostActionData['formError'];
   isSubmittingForm: boolean;
+  postTags: {
+    postTagId: number;
+    description: string;
+  }[]
 }
 
 function Wrapper({
@@ -94,9 +100,16 @@ export default function PerformancePostForm({
   formError,
   fieldErrors,
   isSubmittingForm,
+  postTags,
 }: PerformancePostFormProps) {
   const [frameRateStable, setFrameRateStable] = useState(false);
 
+  const postTagOptions: MultiSelectOption<number>[] = postTags.map((tag) => (
+    {
+      label: tag.description,
+      value: tag.postTagId,
+    }
+  ));
   const systemNameOptions: SelectOption[] = steamUserSystemNames.map((sysName) => (
     {
       name: sysName,
@@ -183,15 +196,28 @@ export default function PerformancePostForm({
           minLength={3}
           maxLength={1500}
         />
-        <div className="flex flex-col gap-6">
-          <div className="flex flex-col md:flex-row gap-6 items-start md:items-center justify-center w-full">
+        <div className="flex flex-col gap-6 w-full max-w-md">
+          <div className="z-30">
+            <SelectMenu
+              name="performancePostRatingMedal"
+              defaultValue={{
+                name: 'None',
+                value: 'None',
+              }}
+              options={ratingOptions}
+              labelText="Rating"
+              required
+              fieldError={fieldErrors?.ratingMedal}
+            />
+          </div>
+          <div className="z-20 flex flex-col md:flex-row gap-6 items-start md:items-center justify-center md:justify-between w-full">
             <div>
               <SelectMenu
                 name="performancePostFrameRateAverage"
                 defaultValue={{ name: 'Not Sure', value: 'None' }}
                 options={frameRateAverageOptions}
-                label="Average Frame Rate"
-                errorMessage={fieldErrors?.frameRateAverage}
+                labelText="Average Frame Rate"
+                fieldError={fieldErrors?.frameRateAverage}
               />
             </div>
             <div>
@@ -203,21 +229,15 @@ export default function PerformancePostForm({
               />
             </div>
           </div>
-          <div>
-            <SelectMenu
-              name="performancePostRatingMedal"
-              defaultValue={{
-                name: 'None',
-                value: 'None',
-              }}
-              options={ratingOptions}
-              label="Rating"
-              errorMessage={fieldErrors?.ratingMedal}
+          <div className="z-10">
+            <MultiSelectMenu
+              name="performancePostTags"
+              id="performancePostTags"
+              options={postTagOptions}
+              fieldError={fieldErrors?.postTags}
             />
           </div>
         </div>
-
-
         <div
           className="flex flex-col gap-2 justify-center items-center rounded-md
                      md:border-1 md:border-secondary-highlight p-4"
@@ -235,7 +255,7 @@ export default function PerformancePostForm({
             name="performancePostSystemName"
             defaultValue={systemNameOptions[0]}
             options={systemNameOptions}
-            label="Select System"
+            labelText="Select System"
           />
         </div>
         <RoundedButton type="submit" className="max-w-xs">
