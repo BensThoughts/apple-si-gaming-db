@@ -54,7 +54,6 @@ export default function PerformancePostDisplay({
         ratingMedal={ratingMedal}
         frameRateAverage={frameRateAverage}
         frameRateStutters={frameRateStutters}
-        postTags={postTags}
       />
       <div className="flex flex-row w-full gap-[1px]" {...rest}>
         <div className="flex flex-col gap-1 items-center justify-start pr-3 border-r-2 border-r-secondary">
