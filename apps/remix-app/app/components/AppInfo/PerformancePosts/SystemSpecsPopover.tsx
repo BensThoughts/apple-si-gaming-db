@@ -32,7 +32,7 @@ export default function SystemSpecsPopover({
           <Popover.Button
             onMouseEnter={() => setIsShowing(true)}
             onMouseLeave={() => setIsShowing(false)}
-            className="text-primary outline-none focus-visible:text-secondary-highlight"
+            className="text-primary outline-none focus-visible:text-secondary-highlight select-none"
           >
             {children}
           </Popover.Button>
@@ -40,7 +40,7 @@ export default function SystemSpecsPopover({
           {(isShowing || open) && (
             <Popover.Panel
               className="absolute z-10 bg-primary border-secondary-highlight
-                 border-1 rounded-md p-2 w-screen max-w-sm"
+                 border-1 rounded-md p-2 w-screen max-w-xs md:max-w-sm"
               onMouseEnter={() => setIsShowing(true)}
               onMouseLeave={() => setIsShowing(false)}
               static
