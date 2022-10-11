@@ -6,6 +6,10 @@ type PerformancePostLayoutProps =
   performancePosts: {
     id: string;
     postText: string;
+    postTags: {
+      postTagId: number;
+      description: string;
+    }[],
     createdAt: Date;
     ratingMedal: RatingMedal;
     frameRateAverage?: FrameRate | null;
@@ -38,6 +42,7 @@ export default function PerformancePostLayout({
             displayName,
             avatarMedium,
             postText,
+            postTags,
             ratingMedal,
             frameRateAverage,
             frameRateStutters,
@@ -55,6 +60,7 @@ export default function PerformancePostLayout({
                 createdAt={createdAt}
                 displayName={displayName}
                 postText={postText}
+                postTags={postTags}
                 ratingMedal={ratingMedal}
                 frameRateAverage={frameRateAverage}
                 frameRateStutters={frameRateStutters}
