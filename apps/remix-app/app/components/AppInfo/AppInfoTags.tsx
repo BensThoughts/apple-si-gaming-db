@@ -22,10 +22,10 @@ export default function AppInfoTags({
         <div className="flex flex-col gap-3">
           {genres.length > 0 && (
             <div className="flex gap-2 flex-wrap">
-        Genres:
+              Genres:
               {genres.map((genre) => (
                 <div key={genre.genreId}>
-                  <TextPill>
+                  <TextPill className="bg-tertiary hover:bg-tertiary-highlight">
                     {genre.description}
                   </TextPill>
                 </div>
@@ -34,10 +34,10 @@ export default function AppInfoTags({
           )}
           {categories.length > 0 && (
             <div className="flex gap-2 flex-wrap">
-        Categories:
+              Categories:
               {categories.map((category) => (
                 <div key={category.categoryId}>
-                  <TextPill>
+                  <TextPill className="bg-tertiary hover:bg-tertiary-highlight">
                     {category.description}
                   </TextPill>
                 </div>
