@@ -1,5 +1,9 @@
 # Todo
 
+Decide on explicit or implicit many-many
+Implicit (faster, more ergonomic)
+Explicit (doesn't require db cleanup externally)
+
 ## Priority Most User Requested
 
 - [ ] Add tags/icons for controller support
@@ -9,7 +13,10 @@
 
 ## Priority High
 
-- [ ] Add clarifier for rating meaning (tooltip)
+- [ ] Add ability to tag performance post (Native, Rosetta 2, CrossOver 19 - 22,
+      Parallels 16 - 18)
+- [ ] Add controller review option
+- [ ] Add clarifier for rating meaning (tooltip?)
 - [ ] Add tests!
 - [x] Centralize form validation (systemName etc.)
 - [x] Add contact information (twitter, discord, reddit)
@@ -22,6 +29,7 @@
 
 ## Priority Medium
 
+- [ ] Fix focus-visible (show-ring) on MultiSelect
 - [ ] Fix ring spacing on all elements with show-ring
 - [x] Refactor Icons
 - [ ] Look at using .client.ts(x) extension for colorMode, instead of using suspense
