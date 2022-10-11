@@ -1,3 +1,7 @@
+/*
+  This component is also used to HeroIcons
+*/
+
 import { forwardRef } from 'react';
 
 type IconProps = {
@@ -11,7 +15,7 @@ const FeatherIcon = forwardRef<SVGSVGElement, IconProps>(({
   height,
   stroke = 'currentColor',
   strokeWidth = 2,
-  fill = 'transparent',
+  fill = 'none',
   strokeLinecap = 'round',
   strokeLinejoin = 'round',
   preserveAspectRatio = 'xMidYMid meet',
