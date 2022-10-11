@@ -6,20 +6,58 @@ import PerformancePostForm from '~/components/AppInfo/PerformancePosts/Performan
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
 import { convertRatingMedalStringToRatingMedal } from '~/models/performancePost.server';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-import type { FrameRate, PerformancePost, RatingMedal } from '~/interfaces/database';
-import { createPerformancePost, findPerformancePostsByAppId } from '~/models/performancePost.server';
+import type { FrameRate, PerformancePost, PostTag, RatingMedal } from '~/interfaces/database';
+import { createPerformancePost, findPerformancePostsBySteamAppId } from '~/models/performancePost.server';
 import { doesSteamUserOwnApp, findSteamUserSystemNamesByUserId } from '~/models/steamUser.server';
+import { findPostTags } from '~/models/postTag.server';
+
+interface LoaderData {
+  steamAppId: number;
+  steamUserOwnsApp: boolean;
+  steamUserIsLoggedIn: boolean;
+  steamUserSystemNames: string[];
+  postTags: {
+    postTagId: PostTag['postTagId'];
+    description: PostTag['description'];
+  }[];
+  performancePosts: {
+    id: PerformancePost['id'];
+    postText: PerformancePost['postText'];
+    postTags: {
+      postTagId: PostTag['postTagId'];
+      description: PostTag['description'];
+    }[],
+    createdAt: PerformancePost['createdAt'];
+    ratingMedal: PerformancePost['ratingMedal'];
+    frameRateAverage: PerformancePost['frameRateAverage']
+    frameRateStutters: PerformancePost['frameRateStutters'];
+    displayName: PerformancePost['displayName'];
+    avatarMedium: PerformancePost['avatarMedium'];
+    systemManufacturer: PerformancePost['systemManufacturer'];
+    systemModel: PerformancePost['systemModel'];
+    systemOsVersion: PerformancePost['systemOsVersion'];
+    systemCpuBrand: PerformancePost['systemCpuBrand'];
+    systemVideoDriver: PerformancePost['systemVideoDriver'];
+    systemVideoDriverVersion: PerformancePost['systemVideoDriverVersion'];
+    systemVideoPrimaryVRAM: PerformancePost['systemVideoPrimaryVRAM'];
+    systemMemoryRAM: PerformancePost['systemMemoryRAM'];
+  }[];
+}
 
 export async function loader({ params, context }: LoaderArgs) {
   invariant(params.steamAppId, 'Expected params.steamAppId');
   const steamAppId = Number(params.steamAppId);
   invariant(isFinite(steamAppId), 'Expected steamAppId to be a valid number');
   const steamUser = extractAppLoadContext(context).steamUser;
-  const performancePosts = await findPerformancePostsByAppId(steamAppId);
+  const performancePosts = await findPerformancePostsBySteamAppId(steamAppId);
 
   let steamUserOwnsApp = false;
   let steamUserIsLoggedIn = false;
   let steamUserSystemNames: string[] = [];
+  let postTags: {
+    postTagId: number;
+    description: string;
+  }[] = [];
   if (steamUser) {
     steamUserIsLoggedIn = true;
     steamUserOwnsApp = await doesSteamUserOwnApp(steamUser.steamUserId, steamAppId);
@@ -27,37 +65,29 @@ export async function loader({ params, context }: LoaderArgs) {
     if (systemNames) {
       steamUserSystemNames = systemNames;
     }
+    postTags = await findPostTags();
   }
-  return json({
+  return json<LoaderData>({
     steamAppId,
     performancePosts,
     steamUserIsLoggedIn,
     steamUserOwnsApp,
     steamUserSystemNames,
+    postTags,
   });
 }
 
 function isTypeFrameRateAverage(frameRateAverage: string): frameRateAverage is FrameRate {
-  const frameRates: FrameRate[] = ['VeryLow', 'Low', 'Medium', 'High', 'VeryHigh'];
-  const frameRateStrings = frameRates as string[];
-  return frameRateStrings.includes(frameRateAverage);
+  return ['VeryLow', 'Low', 'Medium', 'High', 'VeryHigh'].includes(frameRateAverage);
 }
 
-// function validateFrameRateAverage(frameRateAverage: string) {
-//   if (frameRateAverage !== 'None' || !isTypeFrameRateAverage(frameRateAverage)) {
-//     return `${frameRateAverage} is not a valid FrameRate option`;
-//   }
-// }
-
 function isTypeRatingMedal(ratingMedal: string): ratingMedal is RatingMedal {
-  const ratingMedals: RatingMedal[] = ['Borked', 'Bronze', 'Gold', 'Platinum', 'Silver'];
-  const ratingMedalStrings = ratingMedals as string[];
-  return ratingMedalStrings.includes(ratingMedal);
+  return ['Borked', 'Bronze', 'Gold', 'Platinum', 'Silver'].includes(ratingMedal);
 }
 
 function validatePostRatingMedal(ratingMedal: string) {
   if (ratingMedal.toLowerCase() === 'none') {
-    return `rating cannot be None`;
+    return `rating cannot be none`;
   }
   if (!isTypeRatingMedal(ratingMedal)) {
     return `${ratingMedal} is not a valid option`;
@@ -73,6 +103,22 @@ function validatePostText(postText: string) {
   }
 }
 
+function validatePostTagIds(postTagIds: string[]) {
+  let invalidTag: string | undefined = undefined;
+  if (postTagIds.some((tagId) => {
+    if (
+      !isFinite(Number(tagId)) ||
+      Number(tagId) < 0
+    ) {
+      invalidTag = tagId;
+      return true;
+    }
+    return false;
+  })) {
+    return `${invalidTag} is not a valid tagId`;
+  }
+}
+
 export type CreatePostActionData = {
   formError?: string;
   fieldErrors?: {
@@ -80,6 +126,7 @@ export type CreatePostActionData = {
     frameRateAverage?: string | undefined;
     ratingMedal?: string | undefined;
     // systemName?: string | undefined;
+    postTags?: string | undefined;
   };
   fields?: {
     postText: PerformancePost['postText'];
@@ -109,40 +156,47 @@ export async function action({
   const frameRateStutters = formData.get('performancePostFrameRateStutters');
   const ratingMedalValue = formData.get('performancePostRatingMedal[value]');
   const systemName = formData.get('performancePostSystemName[value]');
+  const postTagIdsData = formData.getAll('performancePostTags');
 
   // TODO: Not sure if postText/ratingMedal should be string or FormDataEntryValue
   if (
     typeof postText !== 'string' ||
     typeof frameRateAverageValue !== 'string' ||
     typeof ratingMedalValue !== 'string' ||
-    typeof systemName !== 'string'
+    typeof systemName !== 'string' ||
+    postTagIdsData.some((tagId) => typeof tagId !== 'string')
   ) {
     return badRequest({
       formError: `Form not submitted correctly.`,
     });
   }
 
-  if (
-    frameRateAverageValue !== 'None' &&
-    !isTypeFrameRateAverage(frameRateAverageValue)
-  ) {
-    return badRequest({
-      fieldErrors: {
-        frameRateAverage: `${frameRateAverageValue} is not a valid frame rate option`,
-      },
-      fields: {
-        postText,
-      },
-    });
+
+  let postTagIds: string[] = [];
+  if (postTagIdsData[0] !== '') {
+    postTagIds = postTagIdsData.map((tagId) => tagId.toString());
   }
 
-  const fieldErrors = {
+
+  let fieldErrors = {};
+  fieldErrors = {
     postText: validatePostText(postText),
     ratingMedal: validatePostRatingMedal(ratingMedalValue),
+    postTags: validatePostTagIds(postTagIds),
   };
   const fields = {
     postText,
   };
+  if (
+    frameRateAverageValue !== 'None' &&
+    !isTypeFrameRateAverage(frameRateAverageValue)
+  ) {
+    fieldErrors = {
+      ...fieldErrors,
+      frameRateAverage: `${frameRateAverageValue} is not a valid frame rate option`,
+    };
+    return badRequest({ fieldErrors, fields });
+  }
 
   if (Object.values(fieldErrors).some(Boolean)) {
     return badRequest({ fieldErrors, fields });
@@ -159,6 +213,7 @@ export async function action({
       frameRateStutters: frameRateStutters ? true : false,
       ratingMedal: convertRatingMedalStringToRatingMedal(ratingMedalValue),
       systemName,
+      postTagIds: postTagIds.map((tagId) => Number(tagId)),
     });
   } catch (err) {
     if (err instanceof Error) {
@@ -177,7 +232,8 @@ export default function PostsRoute() {
     steamUserIsLoggedIn,
     steamAppId,
     steamUserSystemNames,
-  } = useLoaderData<typeof loader>();
+    postTags,
+  } = useLoaderData<LoaderData>();
   const actionData = useActionData<CreatePostActionData>();
   const transition = useTransition();
   const isSubmittingPerformancePost =
@@ -190,6 +246,11 @@ export default function PostsRoute() {
       <div className="w-full">
         <PerformancePostLayout performancePosts={performancePosts.map((post) => ({
           ...post,
+          // WITH JOIN TABLE
+          // postTags: post.postTags.map(({ postTag }) => ({
+          //   postTagId: postTag.id,
+          //   description: postTag.description,
+          // })),
           createdAt: new Date(post.createdAt),
         }))} />
       </div>
@@ -203,6 +264,7 @@ export default function PostsRoute() {
           fieldErrors={actionData?.fieldErrors}
           fields={actionData?.fields}
           isSubmittingForm={isSubmittingPerformancePost}
+          postTags={postTags}
         />
       </div>
     </div>
@@ -216,4 +278,8 @@ export function ErrorBoundary({ error }: { error: Error }) {
       <div>{error.message}</div>
     </div>
   );
+}
+
+export function CatchBoundary() {
+
 }
