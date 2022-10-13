@@ -1,14 +1,8 @@
 import type {
   SteamApp,
-  SteamPriceOverview,
   SteamCategory,
   SteamGenre,
-  SteamScreenshot,
-  SteamMovie,
-  SteamAchievement,
-  SteamDemo,
-  SteamPackageGroup,
-  SteamPackageGroupSub,
+  Prisma,
 } from '@prisma/client';
 
 export {
@@ -23,51 +17,51 @@ export {
  * find operation.
  */
 
-export type SteamAppWithoutMetadata =
-  Partial<Omit<SteamApp, 'id' | 'createdAt' | 'updatedAt'>> &
-  Pick<SteamApp, 'steamAppId' | 'dataDownloaded' | 'dataDownloadAttempted' | 'name'> & {
-    demos?: SteamDemoWithoutMetadata[] | null,
-    priceOverview?: SteamPriceOverviewWithoutMetadata | null,
-    packageGroups?: SteamPackageGroupWithoutMetadata[] | null,
-    categories?: SteamCategoryWithoutMetadata[] | null,
-    genres?: SteamGenreWithoutMetadata[] | null,
-    screenshots?: SteamScreenshotWithoutMetadata[] | null,
-    movies?: SteamMovieWithoutMetadata[] | null,
-    achievements?: SteamAchievementWithoutMetadata[] | null,
-  };
 
-export type SteamDemoWithoutMetadata =
-  Partial<Omit<SteamDemo, 'id' | 'createdAt' | 'updatedAt' | 'steamApp'>> &
-  Pick<SteamDemo, 'steamAppId' | 'demoAppId'>
+export type SteamAppCreateInput =
+  Omit<Prisma.SteamAppCreateInput,
+    'demos' | 'priceOverview' | 'packageGroups' | 'categories' | 'genres' | 'screenshots' | 'movies' | 'achievements'
+  >
+// Partial<Omit<SteamApp, 'id' | 'createdAt' | 'updatedAt'>> &
+// Pick<SteamApp, 'steamAppId' | 'dataDownloaded' | 'dataDownloadAttempted' | 'name'>
+& {
+  demos?: Prisma.SteamDemoCreateManySteamAppInput[] | null,
+  priceOverview?: Prisma.SteamPriceOverviewCreateWithoutSteamAppInput | null,
+  packageGroups?: SteamPackageGroupCreateManySteamAppInput[] | null,
+  categories?: Prisma.SteamCategoryCreateManyInput[] | null,
+  genres?: Prisma.SteamGenreCreateManyInput[] | null,
+  screenshots?: Prisma.SteamScreenshotCreateManySteamAppInput[] | null,
+  movies?: Prisma.SteamMovieCreateManySteamAppInput[] | null,
+  achievements?: Prisma.SteamAchievementCreateManySteamAppInput[] | null,
+};
 
-export type SteamPriceOverviewWithoutMetadata =
-  Partial<Omit<SteamPriceOverview, 'id' | 'createdAt' | 'updatedAt' | 'steamApp'>> &
-  Pick<SteamPriceOverview, 'steamAppId'>;
+export type SteamDemoCreateManySteamAppInput =
+  Prisma.SteamDemoCreateManySteamAppInput;
 
-export type SteamPackageGroupWithoutMetadata =
-  Partial<Omit<SteamPackageGroup, 'id' | 'createdAt' | 'updatedAt' | 'steamApp'>> &
-  Pick<SteamPackageGroup, 'steamAppId' | 'name' > & {
-    subs?: SteamPackageGroupSubWithoutMetadata[] | null;
-  }
+export type SteamPriceOverviewCreateWithoutSteamAppInput =
+  Prisma.SteamPriceOverviewCreateWithoutSteamAppInput;
 
-export type SteamPackageGroupSubWithoutMetadata =
-  Partial<Omit<SteamPackageGroupSub, 'id' | 'createdAt' | 'updatedAt' | 'steamPackageGroup'>> &
-  Pick<SteamPackageGroupSub, 'steamAppId' | 'packageId' | 'packageGroupName' >
 
-export type SteamCategoryWithoutMetadata =
-  Omit<SteamCategory, 'id' | 'createdAt' | 'updatedAt' | 'steamApps'>
+export type SteamPackageGroupCreateManySteamAppInput =
+  Omit<Prisma.SteamPackageGroupCreateManySteamAppInput, 'subs'>
+    & {
+      subs?: SteamPackageGroupSubCreateWithoutSteamPackageGroupInput[] | null;
+    }
 
-export type SteamGenreWithoutMetadata =
-  Omit<SteamGenre, 'id' | 'createdAt' | 'updatedAt' | 'steamApps'>
+export type SteamPackageGroupSubCreateWithoutSteamPackageGroupInput =
+  Prisma.SteamPackageGroupSubCreateWithoutSteamPackageGroupInput;
 
-export type SteamScreenshotWithoutMetadata =
-  Partial<Omit<SteamScreenshot, 'id' | 'createdAt' | 'updatedAt' | 'steamApp'>> &
-  Pick<SteamScreenshot, 'steamAppId' | 'screenshotId'>;
+export type SteamCategoryCreateManyInput =
+  Prisma.SteamCategoryCreateManyInput;
 
-export type SteamMovieWithoutMetadata =
-  Partial<Omit<SteamMovie, 'id' | 'createdAt' | 'updatedAt' | 'steamApp'>> &
-  Pick<SteamMovie, 'steamAppId' | 'movieId'>;
+export type SteamGenreCreateManyInput =
+  Prisma.SteamGenreCreateManyInput;
 
-export type SteamAchievementWithoutMetadata =
-  Partial<Omit<SteamAchievement, 'id' | 'createdAt' | 'updatedAt' | 'steamApp'>> &
-  Pick<SteamAchievement, 'steamAppId' | 'name'>;
+export type SteamScreenshotCreateManySteamAppInput =
+  Prisma.SteamScreenshotCreateManySteamAppInput;
+
+export type SteamMovieCreateManySteamAppInput =
+  Prisma.SteamMovieCreateManySteamAppInput;
+
+export type SteamAchievementCreateManySteamAppInput =
+  Prisma.SteamAchievementCreateManySteamAppInput;
