@@ -1,6 +1,6 @@
 import type { LoaderArgs, ActionArgs } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
-import { useActionData, useLoaderData, useTransition } from '@remix-run/react';
+import { useActionData, useLoaderData, useMatches, useTransition } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 import PerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForm';
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
@@ -8,18 +8,19 @@ import { convertRatingMedalStringToRatingMedal } from '~/models/performancePost.
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import type { FrameRate, PerformancePost, PostTag, RatingMedal } from '~/interfaces/database';
 import { createPerformancePost, findPerformancePostsBySteamAppId } from '~/models/performancePost.server';
-import { doesSteamUserOwnApp, findSteamUserSystemNamesByUserId } from '~/models/steamUser.server';
+// import { doesSteamUserOwnApp, findSteamUserSystemNamesByUserId } from '~/models/steamUser.server';
 import { findPostTags } from '~/models/postTag.server';
+import type { SerializedRootLoaderData } from '~/root';
 
 interface LoaderData {
-  steamAppId: number;
-  steamUserOwnsApp: boolean;
-  steamUserIsLoggedIn: boolean;
-  steamUserSystemNames: string[];
-  postTags: {
-    postTagId: PostTag['postTagId'];
-    description: PostTag['description'];
-  }[];
+  steamUserData: {
+    isLoggedIn: boolean;
+    postTags: { // These are all possible tags that can be used when
+      postTagId: number; // creating a performance post
+      description: string;
+    }[]
+  }
+  steamAppId: PerformancePost['steamAppId'];
   performancePosts: {
     id: PerformancePost['id'];
     postText: PerformancePost['postText'];
@@ -51,29 +52,22 @@ export async function loader({ params, context }: LoaderArgs) {
   const steamUser = extractAppLoadContext(context).steamUser;
   const performancePosts = await findPerformancePostsBySteamAppId(steamAppId);
 
-  let steamUserOwnsApp = false;
-  let steamUserIsLoggedIn = false;
-  let steamUserSystemNames: string[] = [];
+  let isLoggedIn = false;
   let postTags: {
     postTagId: number;
     description: string;
   }[] = [];
   if (steamUser) {
-    steamUserIsLoggedIn = true;
-    steamUserOwnsApp = await doesSteamUserOwnApp(steamUser.steamUserId, steamAppId);
-    const systemNames = await findSteamUserSystemNamesByUserId(steamUser.steamUserId);
-    if (systemNames) {
-      steamUserSystemNames = systemNames;
-    }
+    isLoggedIn = true;
     postTags = await findPostTags();
   }
   return json<LoaderData>({
+    steamUserData: {
+      isLoggedIn,
+      postTags,
+    },
     steamAppId,
     performancePosts,
-    steamUserIsLoggedIn,
-    steamUserOwnsApp,
-    steamUserSystemNames,
-    postTags,
   });
 }
 
@@ -227,13 +221,27 @@ export async function action({
 
 export default function PostsRoute() {
   const {
-    performancePosts,
-    steamUserOwnsApp,
-    steamUserIsLoggedIn,
+    steamUserData,
     steamAppId,
-    steamUserSystemNames,
-    postTags,
+    performancePosts,
   } = useLoaderData<LoaderData>();
+  const {
+    isLoggedIn,
+    postTags,
+  } = steamUserData;
+  const matches = useMatches();
+  const rootLoaderData = matches[0].data as SerializedRootLoaderData;
+  const { prismaData } = rootLoaderData;
+  let ownsApp = false;
+  let systemNames: string[] = [];
+  if (prismaData) {
+    systemNames = prismaData.systemSpecs.map((systemSpec) => systemSpec.systemName);
+    const { ownedApps } = prismaData;
+    // TODO: This could be slow to run client side on large libraries
+    // TODO: consider moving back to loader
+    ownsApp = ownedApps.some((ownedApp) => ownedApp.steamAppId === steamAppId);
+  }
+
   const actionData = useActionData<CreatePostActionData>();
   const transition = useTransition();
   const isSubmittingPerformancePost =
@@ -257,9 +265,7 @@ export default function PostsRoute() {
       <div className="w-full">
         <PerformancePostForm
           steamAppId={steamAppId}
-          steamUserIsLoggedIn={steamUserIsLoggedIn}
-          steamUserOwnsApp={steamUserOwnsApp}
-          steamUserSystemNames={steamUserSystemNames}
+          steamUser={{ isLoggedIn, ownsApp, systemNames }}
           formError={actionData?.formError}
           fieldErrors={actionData?.fieldErrors}
           fields={actionData?.fields}
