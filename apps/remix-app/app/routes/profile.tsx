@@ -4,12 +4,13 @@ import { json } from '@remix-run/node';
 import {
   useActionData,
   useLoaderData,
+  useMatches,
   useTransition,
 } from '@remix-run/react';
 import AsideCard from '~/components/Cards/AsideCard';
 import LoginCard from '~/components/Profile/LoginCard';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-import { findUserProfileData, updateUserOwnedApps, upsertSteamUser } from '~/models/steamUser.server';
+import { doesSteamUserExists, updateUserOwnedApps, upsertSteamUser } from '~/models/steamUser.server';
 import ExternalLink from '~/components/ExternalLink';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import UserDisplay from '~/components/Profile/UserDisplay';
@@ -17,91 +18,38 @@ import { createSystem } from '~/lib/form-actions/profile/create-system.server';
 import { deleteSystem } from '~/lib/form-actions/profile/delete-system.server';
 import { editSystem } from '~/lib/form-actions/profile/edit-system.server';
 import { metaTags } from '~/lib/meta-tags';
-import type { SteamGenre } from '~/interfaces/database';
-import { commitProfileSession, getProfileSession } from '~/lib/sessions/cookie-sessions.server';
+// import type { SteamGenre } from '~/interfaces/database';
+import type { SerializedRootLoaderData } from '~/root';
 
-interface LoaderData {
+interface ProfileLoaderData {
   isLoggedIn: boolean;
-  steamUserId: string | null;
-  displayName: string | null;
-  avatarFull: string | null,
-  ownedApps: {
-    steamAppId: number;
-    name: string;
-    headerImage: string | null;
-    platformMac: boolean | null;
-    genres: SteamGenre[];
-  }[],
-  systemNames: string[],
-  systemSpecs: {
-    systemName: string;
-    manufacturer: string | null;
-    model: string | null;
-    cpuBrand: string | null;
-    osVersion: string | null;
-    videoDriver: string | null;
-    videoDriverVersion: string | null;
-    videoPrimaryVRAM: string | null;
-    memoryRAM: string | null;
-  }[],
+  contextData: {
+    steamUserId?: string | null;
+    displayName?: string | null;
+    avatarFull?: string | null,
+  }
 }
 
-async function getUserProfileLoaderData(steamUserId: string): Promise<LoaderData> {
-  const userProfile = await findUserProfileData(steamUserId);
-  if (userProfile) {
+export async function loader({ context }: LoaderArgs) {
+  const { steamUser } = extractAppLoadContext(context);
+  if (steamUser) {
     const {
       steamUserId,
       displayName,
       avatarFull,
-      ownedApps,
-      systemSpecs,
-    } = userProfile;
-    return {
+    } = steamUser;
+    return json<ProfileLoaderData>({
       isLoggedIn: true,
-      steamUserId,
-      displayName,
-      avatarFull,
-      ownedApps,
-      systemNames: systemSpecs.map((systemSpec) => systemSpec.systemName),
-      systemSpecs,
-    };
-  } else {
-    throw new Error(`Something went wrong loading your user profile data`);
-  }
-}
-
-export async function loader({ request, context }: LoaderArgs) {
-  const { steamUser } = extractAppLoadContext(context);
-  const profileSession = await getProfileSession(
-      request.headers.get('Cookie'),
-  );
-
-  // !profileSession.has('alreadyLoggedIn') represents first login
-  // ! as opposed to just a page reload. This is unset in root.tsx
-  // ! when a user logs out and is redirected to /
-  if (steamUser && profileSession && !profileSession.has('alreadyLoggedIn')) {
-    profileSession.set('alreadyLoggedIn', true);
-    await upsertSteamUser(steamUser);
-    await updateUserOwnedApps(steamUser.steamUserId);
-    const userProfileLoaderData = await getUserProfileLoaderData(steamUser.steamUserId);
-    return json<LoaderData>(userProfileLoaderData, {
-      headers: {
-        'Set-Cookie': await commitProfileSession(profileSession),
+      contextData: {
+        steamUserId,
+        displayName,
+        avatarFull,
       },
     });
   }
-  if (steamUser) {
-    const userProfileLoaderData = await getUserProfileLoaderData(steamUser.steamUserId);
-    return json<LoaderData>(userProfileLoaderData);
-  }
-  return json<LoaderData>({
+  return json<ProfileLoaderData>({
     isLoggedIn: false,
-    steamUserId: null,
-    displayName: null,
-    avatarFull: null,
-    ownedApps: [],
-    systemNames: [],
-    systemSpecs: [],
+    contextData: {},
   });
 }
 
@@ -166,6 +114,10 @@ export async function action({ request, context }: ActionArgs) {
       return editSystem(steamUser.steamUserId, formData);
     }
     case 'updateOwnedGames': {
+      const steamUserExists = await doesSteamUserExists(steamUser.steamUserId);
+      if (!steamUserExists) {
+        await upsertSteamUser(steamUser);
+      }
       await updateUserOwnedApps(steamUser.steamUserId);
       return redirect('/profile');
     }
@@ -175,10 +127,11 @@ export async function action({ request, context }: ActionArgs) {
   }
 }
 
-export const meta: MetaFunction = ({ data }: { data: LoaderData }) => {
-  if (data.isLoggedIn) {
+export const meta: MetaFunction = ({ data }: { data: ProfileLoaderData }) => {
+  if (data && data.isLoggedIn && data.contextData) {
+    const { displayName } = data.contextData;
     return {
-      title: data.displayName ? `${metaTags.title} - Profile - ${data.displayName}` : `Profile`,
+      title: displayName ? `${metaTags.title} - Profile - ${displayName}` : `Profile`,
     };
   }
   return {
@@ -189,11 +142,16 @@ export const meta: MetaFunction = ({ data }: { data: LoaderData }) => {
 export default function ProfilePage() {
   const {
     isLoggedIn,
-    displayName,
+    contextData,
+  } = useLoaderData<ProfileLoaderData>();
+  const {
     avatarFull,
-    ownedApps,
-    systemSpecs,
-  } = useLoaderData<LoaderData>();
+    displayName,
+  } = contextData;
+  const match = useMatches();
+  const rootLoaderData = match[0].data as SerializedRootLoaderData;
+  const ownedApps = rootLoaderData.prismaData ? rootLoaderData.prismaData.ownedApps : [];
+  const systemSpecs = rootLoaderData.prismaData ? rootLoaderData.prismaData.systemSpecs : [];
   const actionData = useActionData<ProfileActionData>();
   const transition = useTransition();
 
@@ -255,10 +213,9 @@ export default function ProfilePage() {
 
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
-    <div>
+    <PageWrapper>
       <h1>Error in /profile route</h1>
       <div>{error.message}</div>
-    </div>
+    </PageWrapper>
   );
 }
-
