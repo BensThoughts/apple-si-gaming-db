@@ -82,6 +82,16 @@ export function convertPassportSteamUserToPrismaSteamUser(passportSteamUser: Pas
   };
 }
 
+export async function doesSteamUserExists(
+    steamUserId: SteamUser['steamUserId'],
+) {
+  const steamUser = await prisma.steamUser.count({
+    where: {
+      steamUserId,
+    },
+  });
+  return steamUser > 0 ? true : false;
+}
 
 export async function updateUserOwnedApps(
     steamUserId: SteamUser['steamUserId'],
