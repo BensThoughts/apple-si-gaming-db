@@ -40,7 +40,7 @@ export default function SystemSpecsPopover({
           {(isShowing || open) && (
             <Popover.Panel
               className="absolute z-10 bg-primary border-secondary-highlight
-                 border-1 rounded-md p-2 w-screen max-w-xs md:max-w-sm"
+                 border-1 rounded-md p-2 w-screen max-w-[18rem] md:max-w-xs"
               onMouseEnter={() => setIsShowing(true)}
               onMouseLeave={() => setIsShowing(false)}
               static
