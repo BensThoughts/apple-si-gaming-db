@@ -16,13 +16,17 @@ import {
   useTransition,
 } from '@remix-run/react';
 import { json } from '@remix-run/node';
-import { getProfileSession, commitProfileSession } from './lib/sessions/cookie-sessions.server';
-
+// import { getProfileSession, commitProfileSession } from './lib/sessions/cookie-sessions.server';
+import type { SteamGenre } from '~/interfaces/database';
 import tailwindStylesheetUrl from './styles/tailwind.css';
 import { metaTags } from './lib/meta-tags';
 import { extractAppLoadContext } from './lib/data-utils/appLoadContext.server';
 import Navbar from '~/components/Layout/Navbar';
 import { Toaster } from 'react-hot-toast';
+import { findUserProfileData, updateUserOwnedApps, upsertSteamUser } from './models/steamUser.server';
+
+import type { SerializeFrom } from '@remix-run/node';
+import { commitProfileSession, getProfileSession } from './lib/sessions/cookie-sessions.server';
 
 const ThemeProvider = lazy(() => import('./lib/context/colorMode'));
 
@@ -44,33 +48,101 @@ export const meta: MetaFunction = () => ({
   ...metaTags,
 });
 
-interface LoaderData {
+type RootLoaderData = {
   isLoggedIn: boolean;
+  contextData: {
+    steamUserId?: string | null;
+    displayName?: string | null;
+    avatarFull?: string | null,
+  };
+  prismaData?: {
+    ownedApps: {
+      steamAppId: number;
+      name: string;
+      headerImage: string | null;
+      platformMac: boolean | null;
+      genres: SteamGenre[];
+    }[],
+    systemSpecs: {
+      systemName: string;
+      manufacturer: string | null;
+      model: string | null;
+      cpuBrand: string | null;
+      osVersion: string | null;
+      videoDriver: string | null;
+      videoDriverVersion: string | null;
+      videoPrimaryVRAM: string | null;
+      memoryRAM: string | null;
+    }[],
+  }
 }
 
+export type SerializedRootLoaderData = SerializeFrom<RootLoaderData>
+
 export async function loader({ request, context }: LoaderArgs) {
-  const data = extractAppLoadContext(context);
-  const { steamUser } = data;
+  const { steamUser } = extractAppLoadContext(context);
+  const isLoggedIn = steamUser ? true : false;
   const profileSession = await getProfileSession(
       request.headers.get('Cookie'),
   );
-  if (!steamUser) {
-    if (profileSession && profileSession.has('alreadyLoggedIn')) {
-      profileSession.unset('alreadyLoggedIn');
-      return json<LoaderData>({
-        isLoggedIn: false,
+  if (steamUser) {
+    const {
+      steamUserId,
+      displayName,
+      avatarFull,
+    } = steamUser;
+    // First time logging in need to add user to db
+    if (!profileSession.has('alreadyLoggedIn')) {
+      await upsertSteamUser(steamUser);
+      await updateUserOwnedApps(steamUser.steamUserId);
+      profileSession.set('alreadyLoggedIn', true);
+    }
+    const userProfile = await findUserProfileData(steamUser.steamUserId);
+    if (userProfile) {
+      const {
+        ownedApps,
+        systemSpecs,
+      } = userProfile;
+      // const systemNames = systemSpecs.map((systemSpec) => systemSpec.systemName);
+      return json<RootLoaderData>({
+        isLoggedIn,
+        contextData: {
+          steamUserId,
+          displayName,
+          avatarFull,
+        },
+        prismaData: {
+          ownedApps,
+          systemSpecs,
+        },
+      }, {
+        headers: {
+          'Set-Cookie': await commitProfileSession(profileSession),
+        },
+      });
+    } else {
+      return json<RootLoaderData>({
+        isLoggedIn,
+        contextData: {
+          steamUserId,
+          displayName,
+          avatarFull,
+        },
       }, {
         headers: {
           'Set-Cookie': await commitProfileSession(profileSession),
         },
       });
     }
-    return json<LoaderData>({
-      isLoggedIn: false,
-    });
   }
-  return json<LoaderData>({
-    isLoggedIn: true,
+
+  return json<RootLoaderData>({
+    isLoggedIn,
+    contextData: {},
+  }, {
+    headers: {
+      'Set-Cookie': await commitProfileSession(profileSession),
+    },
   });
 }
 
@@ -143,7 +215,7 @@ function Document({
 export default function App() {
   // TODO: Getting cannot use loaderData in an error boundary errors,
   // TODO: with error being thrown on /profile, prob. because of this
-  const { isLoggedIn } = useLoaderData<LoaderData>();
+  const { isLoggedIn }= useLoaderData<RootLoaderData>();
   const transition = useTransition();
   const isSearchSubmitting =
     transition.state === 'submitting' &&
