@@ -44,7 +44,6 @@ export async function searchSteamAppByAppId(
       dataDownloadAttempted: true,
       dataDownloaded: true,
       headerImage: true,
-      type: true,
       requiredAge: true,
       shortDescription: true,
       releaseDate: true,
