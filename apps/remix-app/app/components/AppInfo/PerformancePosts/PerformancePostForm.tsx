@@ -67,9 +67,11 @@ const frameRateAverageOptions: SelectOption<FrameRate | 'None'>[] = [
 
 interface PerformancePostFormProps {
   steamAppId: number;
-  steamUserIsLoggedIn: boolean;
-  steamUserOwnsApp: boolean;
-  steamUserSystemNames: string[];
+  steamUser: {
+    isLoggedIn: boolean;
+    ownsApp: boolean;
+    systemNames: string[];
+  }
   fields: CreatePostActionData['fields'];
   fieldErrors: CreatePostActionData['fieldErrors'];
   formError: CreatePostActionData['formError'];
@@ -93,15 +95,18 @@ function Wrapper({
 
 export default function PerformancePostForm({
   steamAppId,
-  steamUserIsLoggedIn,
-  steamUserOwnsApp,
-  steamUserSystemNames,
+  steamUser,
   fields,
   formError,
   fieldErrors,
   isSubmittingForm,
   postTags,
 }: PerformancePostFormProps) {
+  const {
+    isLoggedIn,
+    ownsApp,
+    systemNames,
+  } = steamUser;
   const [frameRateStable, setFrameRateStable] = useState(false);
 
   const postTagOptions: MultiSelectOption<number>[] = postTags.map((tag) => (
@@ -110,7 +115,7 @@ export default function PerformancePostForm({
       value: tag.postTagId,
     }
   ));
-  const systemNameOptions: SelectOption[] = steamUserSystemNames.map((sysName) => (
+  const systemNameOptions: SelectOption[] = systemNames.map((sysName) => (
     {
       name: sysName,
       value: sysName,
@@ -130,7 +135,7 @@ export default function PerformancePostForm({
     }
   }, [isSubmittingForm]);
 
-  if (!steamUserIsLoggedIn) {
+  if (!isLoggedIn) {
     return (
       <Wrapper>
         <div>
@@ -145,7 +150,7 @@ export default function PerformancePostForm({
       </Wrapper>
     );
   }
-  if (!steamUserOwnsApp) {
+  if (!ownsApp) {
     return (
       <Wrapper>
         <div className="w-full">
