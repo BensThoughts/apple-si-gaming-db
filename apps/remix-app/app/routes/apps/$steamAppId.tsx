@@ -1,7 +1,7 @@
-import { Outlet, useLoaderData } from '@remix-run/react';
+import { Outlet, useCatch, useLoaderData } from '@remix-run/react';
 import type { LoaderArgs } from '@remix-run/server-runtime';
 // import { redirect } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import { json, Response } from '@remix-run/node';
 import invariant from 'tiny-invariant';
 
 // import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
@@ -25,10 +25,7 @@ interface LoaderData {
   steamApp: {
     steamAppId: number;
     name: string;
-    dataDownloadAttempted: boolean;
-    dataDownloaded: boolean;
     headerImage: string | null;
-    type: string | null;
     requiredAge: string | null;
     shortDescription: string | null;
     releaseDate: string | null;
@@ -40,7 +37,7 @@ interface LoaderData {
     linuxRequirementsMinimum: string | null;
     genres: SteamGenre[];
     categories: SteamCategory[];
-  } | null;
+  };
 }
 
 export async function loader({ params }: LoaderArgs) {
@@ -48,12 +45,22 @@ export async function loader({ params }: LoaderArgs) {
   const steamAppId = Number(params.steamAppId);
   invariant(isFinite(steamAppId), 'Expected steamAppId to be a valid number');
   let steamApp = await searchSteamAppByAppId(steamAppId);
-  if (steamApp && (!steamApp?.dataDownloadAttempted || !steamApp?.dataDownloaded)) {
+  if (!steamApp) {
+    throw new Response('App Not Found!', {
+      status: 404,
+    });
+  }
+  if (!steamApp.dataDownloadAttempted || !steamApp.dataDownloaded) {
     const steamApiApp = await getSteamAppDetailsRequest(steamApp.steamAppId);
     if (steamApiApp.data) {
       const prismaSteamApp = convertSteamApiDataToPrisma(steamApiApp.data);
       await updateSteamApp(prismaSteamApp);
       steamApp = await searchSteamAppByAppId(steamAppId);
+    }
+    if (!steamApp) {
+      throw new Response('App Not Found!', {
+        status: 404,
+      });
     }
   }
   return json<LoaderData>({
@@ -64,13 +71,6 @@ export async function loader({ params }: LoaderArgs) {
 export default function AppsRoute() {
   const { steamApp } = useLoaderData<typeof loader>();
 
-  if (!steamApp) {
-    return (
-      <div>
-        No App Found
-      </div>
-    );
-  }
   const {
     name,
     steamAppId,
@@ -142,5 +142,22 @@ export function ErrorBoundary({ error }: { error: Error }) {
       <h1>Error in /apps route</h1>
       <div>{error.message}</div>
     </div>
+  );
+}
+
+export function CatchBoundary() {
+  const caught = useCatch();
+  return (
+    <PageWrapper title="Oops!">
+      <div>
+        <h1>Oops! - {caught.status} {caught.statusText}</h1>
+        {caught.status === 404 && (
+          <img
+            src="/svg-images/four-oh-four-error.svg"
+            alt="Four oh four error"
+          />
+        )}
+      </div>
+    </PageWrapper>
   );
 }
