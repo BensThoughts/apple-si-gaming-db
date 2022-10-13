@@ -1,13 +1,13 @@
 import type {
-  SteamAppWithoutMetadata,
-  SteamDemoWithoutMetadata,
-  SteamPackageGroupWithoutMetadata,
-  SteamPackageGroupSubWithoutMetadata,
-  SteamCategoryWithoutMetadata,
-  SteamGenreWithoutMetadata,
-  SteamScreenshotWithoutMetadata,
-  SteamMovieWithoutMetadata,
-  SteamAchievementWithoutMetadata,
+  SteamAchievementCreateManySteamAppInput,
+  SteamAppCreateInput,
+  SteamCategoryCreateManyInput,
+  SteamDemoCreateManySteamAppInput,
+  SteamGenreCreateManyInput,
+  SteamMovieCreateManySteamAppInput,
+  SteamPackageGroupCreateManySteamAppInput,
+  SteamPackageGroupSubCreateWithoutSteamPackageGroupInput,
+  SteamScreenshotCreateManySteamAppInput,
 } from '../interfaces';
 
 import type {
@@ -23,12 +23,12 @@ import type {
 } from '@apple-si-gaming-db/steam-api';
 
 export function extractSteamApiDemos(
-    steamAppId: number,
+    // steamAppId: number,
     demos: SteamApiDemo[],
-): SteamDemoWithoutMetadata[] {
+): SteamDemoCreateManySteamAppInput[] {
   return demos.map((demo) => {
     return {
-      steamAppId,
+      // steamAppId,
       demoAppId: demo.appid,
       description: demo.description ? demo.description : null,
     };
@@ -36,12 +36,12 @@ export function extractSteamApiDemos(
 }
 
 function extractSteamApiPackageGroups(
-    steamAppId: number,
+    // steamAppId: number,
     packageGroups: SteamApiPackageGroup[],
-): SteamPackageGroupWithoutMetadata[] {
+): SteamPackageGroupCreateManySteamAppInput[] {
   return packageGroups.map((packageGroup) => {
     return {
-      steamAppId,
+      // steamAppId,
       name: packageGroup.name,
       title: valueExistsOrNull(packageGroup.title),
       description: valueExistsOrNull(packageGroup.description),
@@ -49,19 +49,19 @@ function extractSteamApiPackageGroups(
       saveText: valueExistsOrNull(packageGroup.save_text),
       displayType: String(valueExistsOrNull(packageGroup.display_type)),
       isRecurringSubscription: valueExistsOrNull(packageGroup.is_recurring_subscription),
-      subs: packageGroup.subs ? extractSteamApiPackageGroupSubs(steamAppId, packageGroup.name, packageGroup.subs) : null,
+      subs: packageGroup.subs ? extractSteamApiPackageGroupSubs(packageGroup.name, packageGroup.subs) : undefined,
     };
   });
 }
 
 function extractSteamApiPackageGroupSubs(
-    steamAppId: number,
+    // steamAppId: number,
     packageGroupName: string,
     packageGroupSubs: SteamApiPackageGroupSub[],
-): SteamPackageGroupSubWithoutMetadata[] {
+): SteamPackageGroupSubCreateWithoutSteamPackageGroupInput[] {
   return packageGroupSubs.map((packageGroupSub) => {
     return {
-      steamAppId,
+      // steamAppId,
       packageGroupName,
       packageId: packageGroupSub.packageid,
       percentSavingsText: valueExistsOrNull(packageGroupSub.percent_savings_text),
@@ -75,7 +75,9 @@ function extractSteamApiPackageGroupSubs(
   });
 }
 
-function extractSteamApiCategories(categories: SteamApiCategory[]): SteamCategoryWithoutMetadata[] {
+function extractSteamApiCategories(
+    categories: SteamApiCategory[],
+): SteamCategoryCreateManyInput[] {
   return categories.map((category) => {
     return {
       categoryId: category.id,
@@ -84,7 +86,9 @@ function extractSteamApiCategories(categories: SteamApiCategory[]): SteamCategor
   });
 }
 
-function extractSteamApiGenres(genres: SteamApiGenre[]): SteamGenreWithoutMetadata[] {
+function extractSteamApiGenres(
+    genres: SteamApiGenre[],
+): SteamGenreCreateManyInput[] {
   return genres.map((genre) => {
     return {
       genreId: genre.id,
@@ -93,10 +97,13 @@ function extractSteamApiGenres(genres: SteamApiGenre[]): SteamGenreWithoutMetada
   });
 }
 
-function extractSteamApiScreenshots(steamAppId: number, screenshots: SteamApiScreenshotData[]): SteamScreenshotWithoutMetadata[] {
+function extractSteamApiScreenshots(
+    // steamAppId: number,
+    screenshots: SteamApiScreenshotData[],
+): SteamScreenshotCreateManySteamAppInput[] {
   return screenshots.map((screenshot) => {
     return {
-      steamAppId,
+      // steamAppId,
       screenshotId: screenshot.id,
       pathThumbnail: valueExistsOrNull(screenshot.path_thumbnail),
       pathFull: valueExistsOrNull(screenshot.path_full),
@@ -106,10 +113,13 @@ function extractSteamApiScreenshots(steamAppId: number, screenshots: SteamApiScr
 
 
 // TODO: Left out valueExistsOrNull because of potential complications with .['480]
-function extractSteamApiMovies(steamAppId: number, movies: SteamApiMovieData[]): SteamMovieWithoutMetadata[] {
+function extractSteamApiMovies(
+    // steamAppId: number,
+    movies: SteamApiMovieData[],
+): SteamMovieCreateManySteamAppInput[] {
   return movies.map((movie) => {
     return {
-      steamAppId,
+      // steamAppId,
       movieId: movie.id,
       name: valueExistsOrNull(movie.name),
       thumbnail: valueExistsOrNull(movie.thumbnail),
@@ -123,10 +133,13 @@ function extractSteamApiMovies(steamAppId: number, movies: SteamApiMovieData[]):
 }
 
 
-function extractSteamApiAchievements(steamAppId: number, achievements: SteamApiAchievement[]): SteamAchievementWithoutMetadata[] {
+function extractSteamApiAchievements(
+    // steamAppId: number,
+    achievements: SteamApiAchievement[],
+): SteamAchievementCreateManySteamAppInput[] {
   return achievements.map((achievement) => {
     return {
-      steamAppId,
+      // steamAppId,
       name: achievement.name,
       path: valueExistsOrNull(achievement.path),
       highlighted: true,
@@ -141,7 +154,9 @@ function valueExistsOrNull<T>(v: T) {
   return v;
 }
 
-export function convertSteamApiDataToPrisma(app: SteamApiAppData): SteamAppWithoutMetadata {
+export function convertSteamApiDataToPrisma(
+    app: SteamApiAppData,
+): SteamAppCreateInput {
   return {
     name: app.name,
     steamAppId: app.steam_appid,
@@ -170,9 +185,8 @@ export function convertSteamApiDataToPrisma(app: SteamApiAppData): SteamAppWitho
     legalNotice: valueExistsOrNull(app.legal_notice),
     developers: app.developers ? app.developers : [],
     publishers: app.publishers ? app.publishers : [],
-    demos: app.demos ? extractSteamApiDemos(app.steam_appid, app.demos) : null,
+    demos: app.demos ? extractSteamApiDemos(app.demos) : null,
     priceOverview: app.price_overview ? {
-      steamAppId: app.steam_appid,
       currency: valueExistsOrNull(app.price_overview.currency),
       initial: valueExistsOrNull(app.price_overview.initial),
       final: valueExistsOrNull(app.price_overview.final),
@@ -181,19 +195,19 @@ export function convertSteamApiDataToPrisma(app: SteamApiAppData): SteamAppWitho
       finalFormatted: valueExistsOrNull(app.price_overview.final_formatted),
     } : null,
     packages: app.packages ? app.packages : [],
-    packageGroups: app.package_groups ? extractSteamApiPackageGroups(app.steam_appid, app.package_groups) : null,
+    packageGroups: app.package_groups ? extractSteamApiPackageGroups(app.package_groups) : [],
     platformWindows: valueExistsOrNull(app.platforms?.windows), // boolean
     platformMac: valueExistsOrNull(app.platforms?.mac), // boolean
     platformLinux: valueExistsOrNull(app.platforms?.linux), // boolean
     metacriticScore: valueExistsOrNull(app.metacritic?.score),
     metacriticUrl: valueExistsOrNull(app.metacritic?.url),
-    categories: app.categories ? extractSteamApiCategories(app.categories) : null,
-    genres: app.genres ? extractSteamApiGenres(app.genres) : null,
-    screenshots: app.screenshots ? extractSteamApiScreenshots(app.steam_appid, app.screenshots) : null,
-    movies: app.movies ? extractSteamApiMovies(app.steam_appid, app.movies) : null,
+    categories: app.categories ? extractSteamApiCategories(app.categories) : [],
+    genres: app.genres ? extractSteamApiGenres(app.genres) : [],
+    screenshots: app.screenshots ? extractSteamApiScreenshots(app.screenshots) : [],
+    movies: app.movies ? extractSteamApiMovies(app.movies) : [],
     recommendationsTotal: valueExistsOrNull(app.recommendations?.total),
     achievementsTotal: valueExistsOrNull(app.achievements?.total),
-    achievements: app.achievements?.highlighted ? extractSteamApiAchievements(app.steam_appid, app.achievements.highlighted) : null,
+    achievements: app.achievements?.highlighted ? extractSteamApiAchievements(app.achievements.highlighted) : [],
     comingSoon: valueExistsOrNull(app.release_date?.coming_soon), // boolean
     releaseDate: valueExistsOrNull(app.release_date?.date),
     supportUrl: valueExistsOrNull(app.support_info?.url),
