@@ -56,7 +56,7 @@ export default function PerformancePostDisplay({
         frameRateStutters={frameRateStutters}
       />
       <div className="flex flex-row w-full gap-[1px]" {...rest}>
-        <div className="flex flex-col gap-1 items-center justify-start pr-3 border-r-2 border-r-secondary">
+        <div className="flex flex-col gap-1 items-center justify-start pr-3 border-r-2 border-r-secondary md:w-full md:max-w-[10rem]">
           {avatarMedium && (
             <div>
               <img
