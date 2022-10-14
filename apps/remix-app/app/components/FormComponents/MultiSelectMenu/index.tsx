@@ -6,7 +6,8 @@ const styles: StylesConfig = {
   container: (styles, state) => ({ ...styles }),
   control: (styles, state) => ({
     ...styles,
-    borderWidth: 0,
+    borderWidth: 1.5,
+    borderColor: state.isFocused ? 'rgb(var(--color-app-secondary-highlight))' : 'transparent',
   }),
   dropdownIndicator: (styles) => ({ ...styles }),
   group: (styles) => ({ ...styles }),
@@ -44,16 +45,22 @@ export default function MultiSelectMenu<T>({
   // postTags,
   options,
   fieldError,
+  isMulti = false,
+  closeMenuOnSelect = true,
+  labelText,
 }: {
   name?: string;
   id?: string;
   options: MultiSelectOption<T>[];
   fieldError?: string;
+  isMulti?: boolean;
+  closeMenuOnSelect?: boolean;
+  labelText: string;
 }) {
   return (
     <div>
       <label htmlFor={id}>
-        Tags
+        {labelText}
         {fieldError &&
           <span>
             {`: `}<span className="text-color-error">{fieldError}</span>
@@ -62,18 +69,18 @@ export default function MultiSelectMenu<T>({
       </label>
       <div className="mt-1.5">
         <Select
-          isMulti
+          isMulti={isMulti}
           name={name}
           options={options}
           id={id}
-          closeMenuOnSelect={false}
+          closeMenuOnSelect={closeMenuOnSelect}
           styles={styles}
           theme={(theme) => ({
             ...theme,
-            borderRadius: 6,
+            borderRadius: 8,
             colors: {
               ...theme.colors,
-              primary: 'transparent', // focus outline
+              primary: 'rgb(var(--color-app-secondary-highlight))', // focus outline
               primary75: theme.colors.primary75, // unsure
               primary50: 'rgb(var(--color-app-secondary-highlight))', // click/select option
               primary25: 'rgb(var(--color-app-secondary))', // hover option
@@ -83,7 +90,7 @@ export default function MultiSelectMenu<T>({
               neutral5: theme.colors.neutral5, // unsure
               neutral10: 'rgb(var(--color-app-secondary))', // tag background
               neutral20: 'rgb(var(--color-text-primary))', // outline and carat when not selected
-              neutral30: theme.colors.neutral30, // unsure
+              neutral30: 'transparent', // hover border color
               neutral40: 'rgb(var(--color-text-primary))', // No Options Text
               neutral50: 'rgb(var(--color-text-primary-highlight))', // Placeholder text
               neutral60: 'rgb(var(--color-text-primary))', // dropdown carat and X when focused
