@@ -2,7 +2,7 @@ import { Form, Link } from '@remix-run/react';
 import RoundedButton from '~/components/RoundedButton';
 import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { SelectOption } from '~/components/FormComponents/SelectMenu';
-import type { CreatePostActionData } from '~/routes/apps/$steamAppId/performance-posts';
+import type { CreatePerformancePostActionData } from '~/routes/apps/$steamAppId/performance-posts';
 import type { FrameRate, RatingMedal } from '~/interfaces/database';
 import AnimatedUnderline from '~/components/AnimatedUnderline';
 import React, { useEffect, useRef, useState } from 'react';
@@ -10,6 +10,7 @@ import TextArea from '~/components/FormComponents/TextArea';
 import ToggleSwitch from '~/components/FormComponents/ToggleSwitch';
 import MultiSelectMenu from '~/components/FormComponents/MultiSelectMenu';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
+import { showToast } from '~/components/Toasts';
 
 const ratingOptions: SelectOption<RatingMedal | 'None'>[] = [
   {
@@ -72,9 +73,9 @@ interface PerformancePostFormProps {
     ownsApp: boolean;
     systemNames: string[];
   }
-  fields: CreatePostActionData['fields'];
-  fieldErrors: CreatePostActionData['fieldErrors'];
-  formError: CreatePostActionData['formError'];
+  fields: CreatePerformancePostActionData['fields'];
+  fieldErrors: CreatePerformancePostActionData['fieldErrors'];
+  formError: CreatePerformancePostActionData['formError'];
   isSubmittingForm: boolean;
   postTags: {
     postTagId: number;
@@ -134,6 +135,12 @@ export default function PerformancePostForm({
       formRef.current?.reset();
     }
   }, [isSubmittingForm]);
+
+  useEffect(() => {
+    if (formError) {
+      showToast.error(formError);
+    }
+  }, [formError]);
 
   if (!isLoggedIn) {
     return (
@@ -238,8 +245,11 @@ export default function PerformancePostForm({
             <MultiSelectMenu
               name="performancePostTags"
               id="performancePostTags"
+              labelText="Tags"
               options={postTagOptions}
               fieldError={fieldErrors?.postTags}
+              isMulti={true}
+              closeMenuOnSelect={false}
             />
           </div>
         </div>
