@@ -55,7 +55,6 @@ export default function SelectMenu<T = string>({
                 </span>
               </span>
             }
-
           </Listbox.Label>
         }
         <div className="relative mt-1.5">
