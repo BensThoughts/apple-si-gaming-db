@@ -10,6 +10,9 @@ export type {
   PerformancePost,
   RatingMedal,
   FrameRate,
-  PostTag,
 
+  SteamGamepadPost,
+  SteamGamepad,
+
+  PostTag,
 } from '@apple-si-gaming-db/database';
