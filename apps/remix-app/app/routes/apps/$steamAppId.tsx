@@ -2,7 +2,6 @@ import { Outlet, useCatch, useLoaderData } from '@remix-run/react';
 import type { LoaderArgs } from '@remix-run/server-runtime';
 // import { redirect } from '@remix-run/node';
 import { json, Response } from '@remix-run/node';
-import invariant from 'tiny-invariant';
 
 // import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 // import { createPerformancePost } from '~/models/performancePost.server';
@@ -41,9 +40,13 @@ interface LoaderData {
 }
 
 export async function loader({ params }: LoaderArgs) {
-  invariant(params.steamAppId, 'Expected params.steamAppId');
+  if (!params.steamAppId) {
+    throw new Response('Expected params.steamAppid');
+  }
   const steamAppId = Number(params.steamAppId);
-  invariant(isFinite(steamAppId), 'Expected steamAppId to be a valid number');
+  if (!isFinite(steamAppId) || steamAppId < 0) {
+    throw new Response('steam appid must be a valid positive number');
+  }
   let steamApp = await searchSteamAppByAppId(steamAppId);
   if (!steamApp) {
     throw new Response('App Not Found!', {
@@ -150,7 +153,7 @@ export function CatchBoundary() {
   return (
     <PageWrapper title="Oops!">
       <div>
-        <h1>Oops! - {caught.status} {caught.statusText}</h1>
+        <h1>Oops! - {caught.status} - {caught.data}</h1>
         {caught.status === 404 && (
           <img
             src="/svg-images/four-oh-four-error.svg"

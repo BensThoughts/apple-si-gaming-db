@@ -20,6 +20,7 @@ export default function SteamAppIdIndexRoute() {
 
 export function CatchBoundary() {
   const caught = useCatch();
+  console.log(caught);
   return (
     <PageWrapper title="Oops!">
       <div>

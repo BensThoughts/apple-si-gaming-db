@@ -1,6 +1,6 @@
 import type { LoaderArgs, ActionArgs } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
-import { useActionData, useLoaderData, useMatches, useTransition } from '@remix-run/react';
+import { useActionData, useCatch, useLoaderData, useMatches, useTransition } from '@remix-run/react';
 import invariant from 'tiny-invariant';
 import PerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForm';
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
@@ -11,6 +11,7 @@ import { createPerformancePost, findPerformancePostsBySteamAppId } from '~/model
 // import { doesSteamUserOwnApp, findSteamUserSystemNamesByUserId } from '~/models/steamUser.server';
 import { findPostTags } from '~/models/postTag.server';
 import type { SerializedRootLoaderData } from '~/root';
+import PageWrapper from '~/components/Layout/PageWrapper';
 
 interface LoaderData {
   steamUserData: {
@@ -46,9 +47,13 @@ interface LoaderData {
 }
 
 export async function loader({ params, context }: LoaderArgs) {
-  invariant(params.steamAppId, 'Expected params.steamAppId');
+  if (!params.steamAppId) {
+    throw new Response('Expected params.steamAppid');
+  }
   const steamAppId = Number(params.steamAppId);
-  invariant(isFinite(steamAppId), 'Expected steamAppId to be a valid number');
+  if (!isFinite(steamAppId) || steamAppId < 0) {
+    throw new Response('steam appid must be a valid positive number');
+  }
   const steamUser = extractAppLoadContext(context).steamUser;
   const performancePosts = await findPerformancePostsBySteamAppId(steamAppId);
 
@@ -287,5 +292,19 @@ export function ErrorBoundary({ error }: { error: Error }) {
 }
 
 export function CatchBoundary() {
-
+  const caught = useCatch();
+  console.log(caught);
+  return (
+    <PageWrapper title="Oops!">
+      <div>
+        <h1>Oops! - {caught.status} - {caught.data}</h1>
+        {caught.status === 404 && (
+          <img
+            src="/svg-images/four-oh-four-error.svg"
+            alt="Four oh four error"
+          />
+        )}
+      </div>
+    </PageWrapper>
+  );
 }
