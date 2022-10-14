@@ -57,7 +57,9 @@ export async function findSteamUserSystemNamesByUserId(
 }
 
 
-export function convertPassportSteamUserToPrismaSteamUser(passportSteamUser: PassportSteamUser): Prisma.SteamUserCreateInput {
+export function convertPassportSteamUserToPrismaSteamUser(
+    passportSteamUser: PassportSteamUser,
+): Prisma.SteamUserCreateInput {
   return {
     steamUserId: passportSteamUser._json.steamid,
     displayName: passportSteamUser.displayName,
