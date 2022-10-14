@@ -1,7 +1,6 @@
 import type { LoaderArgs, ActionArgs } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { useActionData, useCatch, useLoaderData, useMatches, useTransition } from '@remix-run/react';
-import invariant from 'tiny-invariant';
 import PerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForm';
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
 import { convertRatingMedalStringToRatingMedal } from '~/models/performancePost.server';
@@ -13,7 +12,7 @@ import { findPostTags } from '~/models/postTag.server';
 import type { SerializedRootLoaderData } from '~/root';
 import PageWrapper from '~/components/Layout/PageWrapper';
 
-interface LoaderData {
+interface PerformancePostLoaderData {
   steamUserData: {
     isLoggedIn: boolean;
     postTags: { // These are all possible tags that can be used when
@@ -66,7 +65,7 @@ export async function loader({ params, context }: LoaderArgs) {
     isLoggedIn = true;
     postTags = await findPostTags();
   }
-  return json<LoaderData>({
+  return json<PerformancePostLoaderData>({
     steamUserData: {
       isLoggedIn,
       postTags,
@@ -118,7 +117,7 @@ function validatePostTagIds(postTagIds: string[]) {
   }
 }
 
-export type CreatePostActionData = {
+export type CreatePerformancePostActionData = {
   formError?: string;
   fieldErrors?: {
     postText?: string | undefined;
@@ -132,7 +131,7 @@ export type CreatePostActionData = {
   };
 };
 
-const badRequest = (data: CreatePostActionData) => json(data, { status: 400 });
+const badRequest = (data: CreatePerformancePostActionData) => json(data, { status: 400 });
 
 
 export async function action({
@@ -140,12 +139,17 @@ export async function action({
   params,
   context,
 }: ActionArgs) {
-  // TODO: Switch invariant to throw new Response to use catch.
-  invariant(params.steamAppId, 'Expected params.appid');
+  if (!params.steamAppId) {
+    throw new Response('Expected params.steamAppid');
+  }
   const steamAppId = Number(params.steamAppId);
-  invariant(isFinite(steamAppId), 'Expected appid to be a valid number');
+  if (!isFinite(steamAppId) || steamAppId < 0) {
+    throw new Response('steam appid must be a valid positive number');
+  }
   const { steamUser } = extractAppLoadContext(context);
-  invariant(steamUser, 'You must be logged into a valid Steam account to post performance reviews');
+  if (!steamUser) {
+    return badRequest({ formError: 'You must be logged in to post' });
+  }
   const steamUserId = steamUser.steamUserId;
   const displayName = steamUser.displayName;
   const avatarMedium = steamUser.avatarMedium;
@@ -224,12 +228,12 @@ export async function action({
   return redirect(`/apps/${steamAppId}/performance-posts`);
 }
 
-export default function PostsRoute() {
+export default function PerformancePostsRoute() {
   const {
     steamUserData,
     steamAppId,
     performancePosts,
-  } = useLoaderData<LoaderData>();
+  } = useLoaderData<PerformancePostLoaderData>();
   const {
     isLoggedIn,
     postTags,
@@ -239,7 +243,7 @@ export default function PostsRoute() {
   const { prismaData } = rootLoaderData;
   let ownsApp = false;
   let systemNames: string[] = [];
-  if (prismaData) {
+  if (prismaData && isLoggedIn) {
     systemNames = prismaData.systemSpecs.map((systemSpec) => systemSpec.systemName);
     const { ownedApps } = prismaData;
     // TODO: This could be slow to run client side on large libraries
@@ -247,7 +251,7 @@ export default function PostsRoute() {
     ownsApp = ownedApps.some((ownedApp) => ownedApp.steamAppId === steamAppId);
   }
 
-  const actionData = useActionData<CreatePostActionData>();
+  const actionData = useActionData<CreatePerformancePostActionData>();
   const transition = useTransition();
   const isSubmittingPerformancePost =
     transition.state === 'submitting' &&
@@ -284,10 +288,10 @@ export default function PostsRoute() {
 
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
-    <div>
+    <PageWrapper>
       <h1>Error in /apps/$appid/performance-posts route</h1>
       <div>{error.message}</div>
-    </div>
+    </PageWrapper>
   );
 }
 
