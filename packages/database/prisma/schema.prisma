@@ -1,6 +1,7 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// TODO: rename models to Steam<ModelName> e.g. PerformancePost and PostTag
 datasource db {
   provider             = "postgresql"
   url                  = env("DATABASE_URL")
@@ -41,7 +42,9 @@ model SteamUser {
   //   value: string;
   // }[];
 
+  // TODO: Fix capitalization with safe copy migrate
   PerformancePosts PerformancePost[]
+  gamepadPosts     SteamGamepadPost[]
   ownedApps        SteamApp[]
   systemSpecs      SteamUserSystemSpecs[]
 
@@ -99,6 +102,53 @@ model SteamUserOwnedAppPlaytime {
   rTimeLastPlayed        Int
 }
 
+model SteamGamepadPost {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  steamUser               SteamUser? @relation(fields: [steamUserIdForSteamUser], references: [steamUserId], onDelete: SetNull)
+  steamUserIdForSteamUser String?
+
+  steamApp   SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
+  steamAppId Int
+
+  steamUserId              String
+  avatarMedium             String?
+  displayName              String?
+  postText                 String
+  gamepad                  SteamGamepad @relation(fields: [gamepadId], references: [gamepadId])
+  gamepadId                Int
+  gamepadManufacturer      String
+  gamepadModel             String
+  ratingMedal              RatingMedal
+  systemManufacturer       String?
+  systemModel              String?
+  systemOsVersion          String?
+  systemCpuBrand           String?
+  systemVideoDriver        String?
+  systemVideoDriverVersion String?
+  systemVideoPrimaryVRAM   String?
+  systemMemoryRAM          String?
+
+  postTags PostTag[]
+}
+
+model SteamGamepad {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  gamepadPosts SteamGamepadPost[]
+
+  gamepadId    Int    @unique @default(autoincrement())
+  manufacturer String
+  model        String
+  label        String
+
+  @@unique([manufacturer, model])
+}
+
 model PerformancePost {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
@@ -153,6 +203,7 @@ model PostTag {
   updatedAt DateTime @updatedAt
 
   performancePosts PerformancePost[]
+  gamepadPosts     SteamGamepadPost[]
   // TODO: Decide if we should use explicit vs. implicit
   // ! WITH JOIN TABLE
   // performancePostOnPostTag PostTagsOnPerformancePosts[]
@@ -236,6 +287,7 @@ model SteamApp {
   contentDescriptorNotes       String?
 
   performancePosts PerformancePost[]
+  gamepadPosts     SteamGamepadPost[]
 
   // Unused For Now
   usersWhoOwnApp SteamUser[]
