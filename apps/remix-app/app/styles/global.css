@@ -16,9 +16,9 @@ body[data-theme="light"] {
   --color-bg-secondary: 152, 193, 218;
   --color-bg-modal: 243, 248, 251;
 
-  --color-app-primary: 244, 229, 198;
+  --color-app-primary: 248, 240, 227;
   /* --color-app-primary: 241, 234, 222; */
-  --color-app-primary-highlight: 239, 215, 171;
+  --color-app-primary-highlight: 246, 231, 211;
   --color-app-secondary: 80, 149, 213;
   --color-app-secondary-highlight: 49, 130, 206;
   --color-app-tertiary: 243, 248, 251;
