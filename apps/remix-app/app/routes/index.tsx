@@ -1,27 +1,50 @@
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { findTrendingSteamApps } from '~/models/performancePost.server';
-import type { TrendingSteamApp } from '~/models/performancePost.server';
+import { findLatestPerformancePosts } from '~/models/performancePost.server';
+import { findTrendingSteamApps } from '~/models/steamApp.server';
+import type { TrendingSteamApp } from '~/models/steamApp.server';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import TrendingSteamAppCard from '~/components/Cards/TrendingSteamAppCard';
 import { Fragment } from 'react';
+import type { FrameRate, RatingMedal } from '~/interfaces/database';
+import NewPerformancePostCard from '~/components/Cards/NewPerformancePostCard';
 
 interface LoaderData {
   trendingSteamApps: TrendingSteamApp[];
+  newPerformancePosts: {
+    id: string;
+    steamAppId: number;
+    steamApp: {
+      name: string;
+      headerImage: string | null;
+    };
+    postText: string;
+    postTags: {
+      postTagId: number;
+      description: string;
+    }[]
+    displayName: string | null;
+    avatarMedium: string | null;
+    ratingMedal: RatingMedal;
+    frameRateAverage: FrameRate | null;
+    frameRateStutters: boolean | null;
+    createdAt: Date;
+  }[]
 }
 
-const DAYS_IN_PAST = 10;
 const NUM_TRENDING_APPS = 15;
 
 export async function loader() {
-  const trendingSteamApps = await findTrendingSteamApps(DAYS_IN_PAST, NUM_TRENDING_APPS);
+  const trendingSteamApps = await findTrendingSteamApps(NUM_TRENDING_APPS);
+  const newPerformancePosts = await findLatestPerformancePosts(5);
   return json<LoaderData>({
     trendingSteamApps,
+    newPerformancePosts,
   });
 }
 
 export default function IndexRoute() {
-  const { trendingSteamApps } = useLoaderData<typeof loader>();
+  const { trendingSteamApps, newPerformancePosts } = useLoaderData<typeof loader>();
   return (
     <PageWrapper>
       <div className="relative sm:flex sm:items-center sm:justify-center">
@@ -38,30 +61,63 @@ export default function IndexRoute() {
           </div>
         </div>
       </div>
-      {(trendingSteamApps.length > 0) && (
-        <div className="flex flex-col items-center gap-6">
-          <h2 className="text-secondary text-2xl">Trending Apps</h2>
-          <div className="flex flex-col items-center gap-2 w-full max-w-md">
-            {trendingSteamApps.map(({
-              steamAppId,
-              name,
-              headerImage,
-              releaseDate,
-              numNewPerformancePosts,
-            }) => (
-              <Fragment key={steamAppId}>
-                <TrendingSteamAppCard
-                  steamAppId={steamAppId}
-                  name={name}
-                  headerImage={headerImage}
-                  releaseDate={releaseDate}
-                  numNewPerformancePosts={numNewPerformancePosts}
-                />
-              </Fragment>
-            ))}
+      <div className="flex flex-col items-center gap-12 w-full">
+        {(trendingSteamApps.length > 0) && (
+          <div className="flex flex-col items-center gap-6 w-full">
+            <h2 className="text-secondary text-2xl">Trending Apps</h2>
+            <div className="flex flex-col items-center gap-2 w-full max-w-md">
+              {trendingSteamApps.map(({
+                steamAppId,
+                name,
+                headerImage,
+                releaseDate,
+                _count,
+              }) => (
+                <Fragment key={steamAppId}>
+                  <TrendingSteamAppCard
+                    steamAppId={steamAppId}
+                    name={name}
+                    headerImage={headerImage}
+                    releaseDate={releaseDate}
+                    numNewPerformancePosts={_count.performancePosts}
+                  />
+                </Fragment>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+        {(newPerformancePosts.length > 0) && (
+          <div className="flex flex-col items-center gap-6 w-full">
+            <h2 className="text-secondary text-2xl">New Posts</h2>
+            <div className="w-full flex flex-col items-center gap-2">
+              {newPerformancePosts.map(({
+                id,
+                steamAppId,
+                steamApp,
+                postText,
+                postTags,
+                displayName,
+                avatarMedium,
+                ratingMedal,
+                createdAt,
+              }) => (
+                <Fragment key={id}>
+                  <NewPerformancePostCard
+                    steamAppId={steamAppId}
+                    steamApp={steamApp}
+                    postText={postText}
+                    displayName={displayName}
+                    avatarMedium={avatarMedium}
+                    ratingMedal={ratingMedal}
+                    createdAt={new Date(createdAt)}
+                  />
+                </Fragment>
+              ))}
+            </div>
+          </div>
+        )}
+
+      </div>
     </PageWrapper>
   );
 }
