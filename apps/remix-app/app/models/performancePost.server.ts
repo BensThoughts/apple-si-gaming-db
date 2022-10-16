@@ -109,6 +109,9 @@ export async function findPerformancePostsBySteamAppId(steamAppId: SteamApp['ste
     where: {
       steamAppId,
     },
+    orderBy: {
+      createdAt: 'desc',
+    },
     select: {
       id: true,
       createdAt: true,
@@ -148,59 +151,37 @@ export async function findPerformancePostsBySteamAppId(steamAppId: SteamApp['ste
   });
 }
 
-export interface TrendingSteamApp {
-  steamAppId: number;
-  name: string;
-  headerImage: string | null;
-  releaseDate: string | null;
-  numNewPerformancePosts: number;
-}
 
-export async function findTrendingSteamApps(
-    daysInPast: number,
-    numberOfTrendingApps: number,
+export async function findLatestPerformancePosts(
+    numPerformancePosts: number,
 ) {
-  const today = new Date();
-  const dateInPast = new Date(today.setDate(today.getDate() - daysInPast));
-  const steamAppsWithRecentPerformancePosts = await prisma.performancePost.findMany({
-    where: {
-      createdAt: {
-        gte: dateInPast,
-      },
-    },
-    take: 50,
+  return prisma.performancePost.findMany({
     select: {
+      id: true,
+      steamAppId: true,
       steamApp: {
         select: {
-          steamAppId: true,
           name: true,
           headerImage: true,
-          releaseDate: true,
         },
       },
+      createdAt: true,
+      ratingMedal: true,
+      postTags: {
+        select: {
+          postTagId: true,
+          description: true,
+        },
+      },
+      postText: true,
+      displayName: true,
+      avatarMedium: true,
+      frameRateAverage: true,
+      frameRateStutters: true,
     },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    take: numPerformancePosts,
   });
-  const trendingSteamAppMap = new Map<number, TrendingSteamApp>();
-  steamAppsWithRecentPerformancePosts.forEach(({ steamApp }) => {
-    const trendingSteamApp = trendingSteamAppMap.get(steamApp.steamAppId);
-    if (!trendingSteamApp) {
-      trendingSteamAppMap.set(steamApp.steamAppId, {
-        ...steamApp,
-        numNewPerformancePosts: 1,
-      });
-    } else {
-      const numNewPerformancePosts = trendingSteamApp.numNewPerformancePosts + 1;
-      trendingSteamAppMap.set(steamApp.steamAppId, {
-        ...steamApp,
-        numNewPerformancePosts,
-      });
-    }
-  });
-  const trendingSteamApps =
-    Array.from(trendingSteamAppMap.values())
-        .sort((a, b) => (
-          a.numNewPerformancePosts > b.numNewPerformancePosts ? -1 : 0
-        )).slice(0, numberOfTrendingApps);
-  return trendingSteamApps;
 }
-
