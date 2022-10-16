@@ -16,7 +16,7 @@ export default function OwnedAppDisplay({
       to={`/apps/${steamAppId}/performance-posts`}
       className={`flex flex-col justify-center items-center gap-1 bg-tertiary p-2
                   hover:bg-tertiary-highlight rounded-lg w-full md:max-w-[210px]
-                  border-1 border-secondary-highlight
+                  border-1 border-secondary-highlight focus-visible:show-ring
                   ${className}`}
     >
       <div
