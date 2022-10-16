@@ -20,7 +20,7 @@ export default function TrendingSteamAppCard({
       to={`/apps/${steamAppId}/performance-posts`}
       className="flex flex-col gap-2 items-center justify-center p-2 bg-tertiary
                  border-1 border-secondary-highlight rounded-md hover:bg-tertiary-highlight
-                 focus-visible:show-ring focus-visible:bg-tertiary-highlight w-full
+                 focus-visible:show-ring w-full
                  max-w-md"
     >
       <div>
