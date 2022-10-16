@@ -1,6 +1,6 @@
 import AnimatedUnderline from '~/components/AnimatedUnderline';
 
-export default function LoginCard({
+export default function ProfileDisplay({
   isLoggedIn,
   displayName,
   avatarFull,

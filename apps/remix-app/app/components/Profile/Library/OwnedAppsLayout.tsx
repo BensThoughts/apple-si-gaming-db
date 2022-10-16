@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
-import SelectMenu from '../FormComponents/SelectMenu';
-import type { SelectOption } from '../FormComponents/SelectMenu';
-import ToggleSwitch from '../FormComponents/ToggleSwitch';
-import Input from '../FormComponents/Input';
+import SelectMenu from '~/components/FormComponents/SelectMenu';
+import type { SelectOption } from '~/components/FormComponents/SelectMenu';
+import ToggleSwitch from '~/components/FormComponents/ToggleSwitch';
+import Input from '~/components/FormComponents/Input';
 import OwnedAppDisplay from './OwnedAppDisplay';
-import RoundedButton from '../RoundedButton';
+import RoundedButton from '~/components/RoundedButton';
 
 
 interface OwnedApp {
@@ -33,7 +33,7 @@ function computeGenreOptions(ownedApps: OwnedApp[], ALL_FILTER: SelectOption) {
   return genreOptions;
 }
 
-export default function OwnedApps({
+export default function OwnedAppsLayout({
   ownedApps,
 }: {
   ownedApps: OwnedApp[]

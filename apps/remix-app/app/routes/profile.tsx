@@ -7,11 +7,8 @@ import {
   useMatches,
   useTransition,
 } from '@remix-run/react';
-import AsideCard from '~/components/Cards/AsideCard';
-import LoginCard from '~/components/Profile/LoginCard';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import { doesSteamUserExists, updateUserOwnedApps, upsertSteamUser } from '~/models/steamUser.server';
-import ExternalLink from '~/components/ExternalLink';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import UserDisplay from '~/components/Profile/UserDisplay';
 import { createSystem } from '~/lib/form-actions/profile/create-system.server';
@@ -155,7 +152,7 @@ export default function ProfilePage() {
   const actionData = useActionData<ProfileActionData>();
   const transition = useTransition();
 
-  const isSubmittingCreateSystem =
+  const isSubmittingCreateSystemForm =
     transition.state === 'submitting' &&
     transition.submission.formData.get('_profileAction') === 'createSystem';
 
@@ -165,48 +162,18 @@ export default function ProfilePage() {
 
   return (
     <PageWrapper title="Profile">
-      <div className="flex flex-col gap-10 items-center w-full">
-        <div
-          className="flex flex-col md:flex-row gap-4 md:gap-6 md:justify-evenly
-                     items-center p-4 md:p-6 rounded-lg border-1
-                     border-secondary-highlight bg-tertiary w-full max-w-3xl"
-        >
-          <LoginCard
-            isLoggedIn={isLoggedIn}
-            displayName={displayName}
-            avatarFull={avatarFull}
-          />
-          <div className="flex items-center justify-center w-full h-full">
-            <AsideCard title="Note" iconBackground="bg-tertiary" className="max-w-md">
-              Within your&nbsp;
-              <ExternalLink
-                href="https://steamcommunity.com/my/edit/settings"
-                className="underline-offset-2"
-              >
-                Steam Privacy Settings
-              </ExternalLink>
-              , &apos;My profile&apos; and &apos;Game Details&apos;
-              must be set to public to synchronize your Steam library
-              with this site.
-            </AsideCard>
-          </div>
-        </div>
-        {isLoggedIn ? (
-          <div className="w-full">
-            <UserDisplay
-              ownedApps={ownedApps}
-              systemSpecs={systemSpecs}
-              isSubmittingCreateSystem={isSubmittingCreateSystem}
-              createSystemSpecActionData={actionData?._profileAction.createSystemSpec}
-              editSystemSpecActionData={actionData?._profileAction.editSystemSpec}
-              deleteSystemSpecActionData={actionData?._profileAction.deleteSystemSpec}
-              isSubmittingUpdateGames={isSubmittingUpdateGames}
-            />
-          </div>
-        ) : (
-          null
-        )}
-      </div>
+      <UserDisplay
+        isLoggedIn={isLoggedIn}
+        avatarFull={avatarFull}
+        displayName={displayName}
+        ownedApps={ownedApps}
+        systemSpecs={systemSpecs}
+        isSubmittingCreateSystemForm={isSubmittingCreateSystemForm}
+        createSystemSpecActionData={actionData?._profileAction.createSystemSpec}
+        editSystemSpecActionData={actionData?._profileAction.editSystemSpec}
+        deleteSystemSpecActionData={actionData?._profileAction.deleteSystemSpec}
+        isSubmittingUpdateGames={isSubmittingUpdateGames}
+      />
     </PageWrapper>
   );
 }

@@ -1,6 +1,6 @@
 import { Form, useSubmit } from '@remix-run/react';
 import React from 'react';
-import RoundedButton from '../RoundedButton';
+import RoundedButton from '~/components/RoundedButton';
 import SystemModal from './SystemModal';
 
 interface DeleteSystemModalProps {

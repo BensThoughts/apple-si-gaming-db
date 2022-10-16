@@ -3,7 +3,7 @@ import { EditIcon, InformationCircleIcon, TrashIcon } from '~/components/Icons';
 import DeleteSystemModal from './DeleteSystemModal';
 import EditSystemModal from './EditSystemModal';
 import SystemSpecsPopover from '~/components/AppInfo/PerformancePosts/SystemSpecsPopover';
-import { showToast } from '../Toasts';
+import { showToast } from '~/components/Toasts';
 import type { DeleteSystemSpecActionData, EditSystemSpecActionData } from '~/routes/profile';
 
 interface SystemSpecDisplayProps {
