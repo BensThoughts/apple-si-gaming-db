@@ -83,9 +83,9 @@ export default function PerformancePostLayout({
       ): (
         <div>
           There are currently no performance posts for this app. Use the form below to
-          <span className="text-secondary">
+          <strong className="font-semibold text-primary-highlight">
             {` `}become the first to submit!
-          </span>
+          </strong>
         </div>
       )}
     </div>
