@@ -22,6 +22,8 @@ export default function EditSystemModal({
 }: EditSystemModalProps) {
   const submit = useSubmit();
 
+  // Form must be submitted prior to closing the modal
+  // or errors occur.  So we use useSubmit()
   function handleSubmitEvent(event: React.FormEvent<HTMLFormElement>) {
     submit(event.currentTarget, { replace: true });
     setIsOpen(false);
