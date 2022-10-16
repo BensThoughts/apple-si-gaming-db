@@ -2,7 +2,6 @@ import type {
   PerformancePost,
   SteamApp,
   SteamUser,
-  RatingMedal,
   SteamUserSystemSpecs,
   FrameRate,
   PostTag,
@@ -26,7 +25,7 @@ export async function createPerformancePost({
   steamUserId: SteamUser['steamUserId'];
   steamAppId: SteamApp['steamAppId'];
   postText: PerformancePost['postText'];
-  frameRateAverage: FrameRate | 'None';
+  frameRateAverage?: FrameRate;
   frameRateStutters: boolean;
   ratingMedal: PerformancePost['ratingMedal'];
   avatarMedium?: PerformancePost['avatarMedium'];
@@ -65,7 +64,7 @@ export async function createPerformancePost({
     displayName,
     avatarMedium,
     postText,
-    frameRateAverage: frameRateAverage !== 'None' ? frameRateAverage : undefined,
+    frameRateAverage,
     frameRateStutters,
     ratingMedal,
     postTags: postTagIds.length > 0 ? {
@@ -203,22 +202,5 @@ export async function findTrendingSteamApps(
           a.numNewPerformancePosts > b.numNewPerformancePosts ? -1 : 0
         )).slice(0, numberOfTrendingApps);
   return trendingSteamApps;
-}
-
-export function convertRatingMedalStringToRatingMedal(ratingMedal: string): RatingMedal {
-  switch (ratingMedal.toLowerCase()) {
-    case 'borked':
-      return 'Borked';
-    case 'bronze':
-      return 'Bronze';
-    case 'silver':
-      return 'Silver';
-    case 'gold':
-      return 'Gold';
-    case 'platinum':
-      return 'Platinum';
-    default:
-      return 'Borked';
-  }
 }
 
