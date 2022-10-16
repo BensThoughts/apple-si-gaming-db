@@ -102,3 +102,42 @@ export async function searchReleasedSteamAppsByName(
     take,
   });
 }
+
+export interface TrendingSteamApp {
+  steamAppId: number;
+  name: string;
+  headerImage: string | null;
+  releaseDate: string | null;
+  _count: {
+    performancePosts: number,
+  }
+}
+
+export async function findTrendingSteamApps(
+    numTrendingApps: number,
+) {
+  return prisma.steamApp.findMany({
+    where: {
+      performancePosts: {
+        some: {},
+      },
+    },
+    select: {
+      steamAppId: true,
+      name: true,
+      headerImage: true,
+      releaseDate: true,
+      _count: {
+        select: {
+          performancePosts: true,
+        },
+      },
+    },
+    orderBy: {
+      performancePosts: {
+        _count: 'desc',
+      },
+    },
+    take: numTrendingApps,
+  });
+}
