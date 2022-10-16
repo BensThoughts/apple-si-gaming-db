@@ -68,9 +68,7 @@ export default function SearchInputForm({
           />
         </div>
         <RoundedButton
-          className={`${buttonHeight} w-[89.66px]
-                      ${isSubmitting ? 'bg-primary-highlight hover:bg-primary-highlight' : 'bg-secondary'}
-                    `}
+          className={`${buttonHeight} w-[89.66px]`}
           type="submit"
           disabled={isSubmitting}
         >
