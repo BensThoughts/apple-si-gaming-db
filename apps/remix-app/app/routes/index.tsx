@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { findLatestPerformancePosts } from '~/models/performancePost.server';
+import { findNewestPerformancePosts } from '~/models/performancePost.server';
 import { findTrendingSteamApps } from '~/models/steamApp.server';
 import type { TrendingSteamApp } from '~/models/steamApp.server';
 import PageWrapper from '~/components/Layout/PageWrapper';
@@ -32,11 +32,12 @@ interface LoaderData {
   }[]
 }
 
-const NUM_TRENDING_APPS = 15;
+const NUM_TRENDING_APPS = 10;
+const NUM_RECENT_POSTS = 10;
 
 export async function loader() {
   const trendingSteamApps = await findTrendingSteamApps(NUM_TRENDING_APPS);
-  const newPerformancePosts = await findLatestPerformancePosts(5);
+  const newPerformancePosts = await findNewestPerformancePosts(NUM_RECENT_POSTS);
   return json<LoaderData>({
     trendingSteamApps,
     newPerformancePosts,

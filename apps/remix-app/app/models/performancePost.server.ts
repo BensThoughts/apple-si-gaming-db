@@ -152,7 +152,7 @@ export async function findPerformancePostsBySteamAppId(steamAppId: SteamApp['ste
 }
 
 
-export async function findLatestPerformancePosts(
+export async function findNewestPerformancePosts(
     numPerformancePosts: number,
 ) {
   return prisma.performancePost.findMany({
