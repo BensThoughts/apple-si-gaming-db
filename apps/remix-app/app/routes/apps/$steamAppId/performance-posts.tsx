@@ -3,7 +3,6 @@ import { json, redirect } from '@remix-run/node';
 import { useActionData, useCatch, useLoaderData, useMatches, useTransition } from '@remix-run/react';
 import PerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForm';
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
-import { convertRatingMedalStringToRatingMedal } from '~/models/performancePost.server';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import type { FrameRate, PerformancePost, RatingMedal } from '~/interfaces/database';
 import { createPerformancePost, findPerformancePostsBySteamAppId } from '~/models/performancePost.server';
@@ -96,6 +95,15 @@ function validatePostRatingMedal(ratingMedal: string) {
   }
 }
 
+function validatePostFrameRateAverage(frameRateAverageValue: string) {
+  if (
+    frameRateAverageValue.toLowerCase() !== 'none' &&
+    !isTypeFrameRateAverage(frameRateAverageValue)
+  ) {
+    return `${frameRateAverageValue} is not a valid frame rate option`;
+  }
+}
+
 function validatePostText(postText: string) {
   if (postText.length < 3) {
     return `The performance posts text is too short (3 character minimum)`;
@@ -183,28 +191,30 @@ export async function action({
     postTagIds = postTagIdsData.map((tagId) => tagId.toString());
   }
 
-
-  let fieldErrors = {};
-  fieldErrors = {
+  const fieldErrors = {
     postText: validatePostText(postText),
     ratingMedal: validatePostRatingMedal(ratingMedalValue),
     postTags: validatePostTagIds(postTagIds),
+    frameRateAverage: validatePostFrameRateAverage(frameRateAverageValue),
   };
   const fields = {
     postText,
   };
+
+  if (Object.values(fieldErrors).some(Boolean)) {
+    return badRequest({ fieldErrors, fields });
+  }
+
+  // This should never return true (used for Typescript type validation)
   if (
     frameRateAverageValue !== 'None' &&
     !isTypeFrameRateAverage(frameRateAverageValue)
   ) {
-    fieldErrors = {
-      ...fieldErrors,
-      frameRateAverage: `${frameRateAverageValue} is not a valid frame rate option`,
-    };
     return badRequest({ fieldErrors, fields });
   }
 
-  if (Object.values(fieldErrors).some(Boolean)) {
+  // This should never return true (used for Typescript type validation)
+  if (!isTypeRatingMedal(ratingMedalValue)) {
     return badRequest({ fieldErrors, fields });
   }
 
@@ -215,9 +225,9 @@ export async function action({
       displayName,
       steamAppId,
       postText: postText,
-      frameRateAverage: frameRateAverageValue,
+      frameRateAverage: frameRateAverageValue === 'None' ? undefined : frameRateAverageValue,
       frameRateStutters: frameRateStutters ? true : false,
-      ratingMedal: convertRatingMedalStringToRatingMedal(ratingMedalValue),
+      ratingMedal: ratingMedalValue,
       systemName,
       postTagIds: postTagIds.map((tagId) => Number(tagId)),
     });
