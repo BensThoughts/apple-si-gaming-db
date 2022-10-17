@@ -181,7 +181,7 @@ export default function GamepadPostForm({
         className="flex flex-col items-center gap-8 w-full max-w-lg"
         action={`/apps/${steamAppId}/controller-posts`}
       >
-        <input type="hidden" name="_controllerPostAction" value="createPost" />
+        <input type="hidden" name="_gamepadPostAction" value="createPost" />
         <TextArea
           id="gamepadPostText"
           name="gamepadPostText"
