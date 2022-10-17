@@ -4,11 +4,13 @@ import PageWrapper from '~/components/Layout/PageWrapper';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import { findGamepadPostsBySteamAppId } from '~/models/gamepadPost.server';
 import { findPostTags } from '~/models/postTag.server';
-import type { PostTag, SteamGamepadPost } from '~/interfaces/database';
+import type { PostTag, SteamGamepad, SteamGamepadPost } from '~/interfaces/database';
 import { findGamePads } from '~/models/gamepad.server';
 import { json } from '@remix-run/node';
 import type { SerializedRootLoaderData } from '~/root';
-import GamepadPostForm from '~/components/AppInfo/GampadPosts/GamepadPostForm';
+import GamepadPostForm from '~/components/AppInfo/GamepadPosts/GamepadPostForm';
+import { doesSteamUserOwnApp } from '~/models/steamUser.server';
+import GamepadPostLayout from '~/components/AppInfo/GamepadPosts/GamepadPostLayout';
 
 // These are all possible tags that can be used when
 // creating a performance post
@@ -20,12 +22,13 @@ interface UserSelectPostTag {
 // These are all possible gamepads a user can post about
 interface UserSelectGamePad {
   gamepadId: number;
-  label: string;
+  description: string;
 }
 
 interface GamepadPostsLoaderData {
   steamUserData: {
     isLoggedIn: boolean;
+    ownsApp: boolean;
     postTags: UserSelectPostTag[];
     gamepads: UserSelectGamePad[];
   }
@@ -41,8 +44,9 @@ interface GamepadPostsLoaderData {
       postTagId: PostTag['postTagId'];
       description: PostTag['description'];
     }[],
-    gamepadManufacturer: SteamGamepadPost['gamepadManufacturer'];
-    gamepadModel: SteamGamepadPost['gamepadModel'];
+    gamepad: {
+      description: SteamGamepad['description'];
+    }
   }[]
 }
 
@@ -57,16 +61,19 @@ export async function loader({ params, context }: LoaderArgs) {
   const steamUser = extractAppLoadContext(context).steamUser;
   const gamepadPosts = await findGamepadPostsBySteamAppId(steamAppId);
   let isLoggedIn = false;
+  let ownsApp = false;
   let postTags: UserSelectPostTag[] = [];
   let gamepads: UserSelectGamePad[] = [];
   if (steamUser) {
     isLoggedIn = true;
+    ownsApp = await doesSteamUserOwnApp(steamUser.steamUserId, steamAppId);
     postTags = await findPostTags();
     gamepads = await findGamePads();
   }
   return json<GamepadPostsLoaderData>({
     steamUserData: {
       isLoggedIn,
+      ownsApp,
       postTags,
       gamepads,
     },
@@ -82,6 +89,7 @@ export type CreateGamepadPostActionData = {
     ratingMedal?: string | undefined;
     postTags?: string | undefined;
     gamepad?: string | undefined;
+    systemName?: string | undefined;
   };
   fields?: {
     postText: SteamGamepadPost['postText'];
@@ -97,31 +105,32 @@ export default function GamepadPostsRoute() {
   } = useLoaderData<GamepadPostsLoaderData>();
   const {
     isLoggedIn,
+    ownsApp,
     postTags,
     gamepads,
   } = steamUserData;
   const matches = useMatches();
   const rootLoaderData = matches[0].data as SerializedRootLoaderData;
   const { prismaData } = rootLoaderData;
-  let ownsApp = false;
   let systemNames: string[] = [];
   if (prismaData && isLoggedIn) {
     systemNames = prismaData.systemSpecs.map((systemSpec) => systemSpec.systemName);
-    const { ownedApps } = prismaData;
-    // TODO: This could be slow to run client side on large libraries
-    // TODO: consider moving back to loader
-    ownsApp = ownedApps.some((ownedApp) => ownedApp.steamAppId === steamAppId);
   }
 
   const transition = useTransition();
-  const isSubmittingPerformancePost =
+  const isSubmittingGamepadPost =
     transition.state === 'submitting' &&
-    transition.submission.formData.get('_performancePostAction') === 'createPost';
+    transition.submission.formData.get('_gamepadPostAction') === 'createPost';
 
   return (
     <div className="flex flex-col gap-3">
       <div className="w-full">
-
+        <GamepadPostLayout
+          gamepadPosts={gamepadPosts.map((gamepadPost) => ({
+            ...gamepadPost,
+            createdAt: new Date(gamepadPost.createdAt),
+          }))}
+        />
       </div>
       <div className="w-full">
         <GamepadPostForm
@@ -130,7 +139,7 @@ export default function GamepadPostsRoute() {
           formError={actionData?.formError}
           fieldErrors={actionData?.fieldErrors}
           fields={actionData?.fields}
-          isSubmittingForm={isSubmittingPerformancePost}
+          isSubmittingForm={isSubmittingGamepadPost}
           postTags={postTags}
           gamepads={gamepads}
         />
