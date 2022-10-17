@@ -33,7 +33,7 @@ interface LoaderData {
 }
 
 const NUM_TRENDING_APPS = 10;
-const NUM_RECENT_POSTS = 10;
+const NUM_RECENT_POSTS = 5;
 
 export async function loader() {
   const trendingSteamApps = await findTrendingSteamApps(NUM_TRENDING_APPS);
@@ -63,30 +63,6 @@ export default function IndexRoute() {
         </div>
       </div>
       <div className="flex flex-col items-center gap-12 w-full">
-        {(trendingSteamApps.length > 0) && (
-          <div className="flex flex-col items-center gap-6 w-full">
-            <h2 className="text-secondary text-2xl">Trending Apps</h2>
-            <div className="flex flex-col items-center gap-2 w-full max-w-md">
-              {trendingSteamApps.map(({
-                steamAppId,
-                name,
-                headerImage,
-                releaseDate,
-                _count,
-              }) => (
-                <Fragment key={steamAppId}>
-                  <TrendingSteamAppCard
-                    steamAppId={steamAppId}
-                    name={name}
-                    headerImage={headerImage}
-                    releaseDate={releaseDate}
-                    numNewPerformancePosts={_count.performancePosts}
-                  />
-                </Fragment>
-              ))}
-            </div>
-          </div>
-        )}
         {(newPerformancePosts.length > 0) && (
           <div className="flex flex-col items-center gap-6 w-full">
             <h2 className="text-secondary text-2xl">New Posts</h2>
@@ -117,7 +93,30 @@ export default function IndexRoute() {
             </div>
           </div>
         )}
-
+        {(trendingSteamApps.length > 0) && (
+          <div className="flex flex-col items-center gap-6 w-full">
+            <h2 className="text-secondary text-2xl">Trending Apps</h2>
+            <div className="flex flex-col items-center gap-2 w-full">
+              {trendingSteamApps.map(({
+                steamAppId,
+                name,
+                headerImage,
+                releaseDate,
+                _count,
+              }) => (
+                <Fragment key={steamAppId}>
+                  <TrendingSteamAppCard
+                    steamAppId={steamAppId}
+                    name={name}
+                    headerImage={headerImage}
+                    releaseDate={releaseDate}
+                    numNewPerformancePosts={_count.performancePosts}
+                  />
+                </Fragment>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </PageWrapper>
   );
