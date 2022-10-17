@@ -5,7 +5,7 @@ import SystemSpecsPopover from './SystemSpecsPopover';
 // import { convertRatingMedalToNumber } from '~/interfaces/database';
 // import { RatingMedalIcon } from '~/components/Icons';
 
-type PerformancePostProps = {
+type PerformancePostDisplayProps = {
   postText: string;
   postTags: {
     postTagId: number;
@@ -45,7 +45,7 @@ export default function PerformancePostDisplay({
   systemVideoPrimaryVRAM,
   systemMemoryRAM,
   ...rest
-}: PerformancePostProps) {
+}: PerformancePostDisplayProps) {
   // const ratingNum = convertRatingMedalToNumber(ratingMedal);
   return (
     <div className="flex flex-col w-full gap-3">
