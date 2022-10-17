@@ -2,7 +2,7 @@ import { redirect, json } from '@remix-run/node';
 import { createSystemSpecs, findSystemSpecSystemNames } from '~/models/steamUserSystemSpecs.server';
 import type { SteamUserSystemSpecs } from '~/interfaces/database';
 import type { CreateSystemSpecActionData, ProfileActionData } from '~/routes/profile';
-import { validateNewSystemName, validateSystemInfo } from './validators';
+import { validateNewSystemName, validateSystemInfo } from '~/lib/form-validators/profile';
 import type { SystemSpec } from '~/interfaces';
 
 const badRequest = (data: CreateSystemSpecActionData) => (

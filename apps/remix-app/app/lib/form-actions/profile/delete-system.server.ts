@@ -2,7 +2,7 @@ import type { SteamUserSystemSpecs } from '~/interfaces/database';
 import { json, redirect } from '@remix-run/node';
 import { deleteSystemSpecs } from '~/models/steamUserSystemSpecs.server';
 import type { DeleteSystemSpecActionData, ProfileActionData } from '~/routes/profile';
-import { validateSystemName } from './validators';
+import { validateSystemName } from '~/lib/form-validators/profile';
 
 const badRequest = (data: DeleteSystemSpecActionData) => (
   json<ProfileActionData>({

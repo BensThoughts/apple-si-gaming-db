@@ -4,12 +4,21 @@ import { useActionData, useCatch, useLoaderData, useMatches, useTransition } fro
 import PerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForm';
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-import type { FrameRate, PerformancePost, RatingMedal } from '~/interfaces/database';
+import type { PerformancePost } from '~/interfaces/database';
 import { createPerformancePost, findPerformancePostsBySteamAppId } from '~/models/performancePost.server';
 import { findPostTags } from '~/models/postTag.server';
 import type { SerializedRootLoaderData } from '~/root';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import { doesSteamUserOwnApp } from '~/models/steamUser.server';
+import {
+  validatePostText,
+  isTypeFrameRateAverage,
+  validatePostFrameRateAverage,
+  isTypeRatingMedal,
+  validatePostRatingMedal,
+  validatePostTagIds,
+} from '~/lib/form-validators/posts';
+import { validateSystemName } from '~/lib/form-validators/profile';
 
 // These are all possible tags that can be used when
 // creating a performance post
@@ -78,64 +87,13 @@ export async function loader({ params, context }: LoaderArgs) {
   });
 }
 
-function isTypeFrameRateAverage(frameRateAverage: string): frameRateAverage is FrameRate {
-  return ['VeryLow', 'Low', 'Medium', 'High', 'VeryHigh'].includes(frameRateAverage);
-}
-
-function isTypeRatingMedal(ratingMedal: string): ratingMedal is RatingMedal {
-  return ['Borked', 'Bronze', 'Gold', 'Platinum', 'Silver'].includes(ratingMedal);
-}
-
-function validatePostRatingMedal(ratingMedal: string) {
-  if (ratingMedal.toLowerCase() === 'none') {
-    return `rating cannot be none`;
-  }
-  if (!isTypeRatingMedal(ratingMedal)) {
-    return `${ratingMedal} is not a valid option`;
-  }
-}
-
-function validatePostFrameRateAverage(frameRateAverageValue: string) {
-  if (
-    frameRateAverageValue.toLowerCase() !== 'none' &&
-    !isTypeFrameRateAverage(frameRateAverageValue)
-  ) {
-    return `${frameRateAverageValue} is not a valid frame rate option`;
-  }
-}
-
-function validatePostText(postText: string) {
-  if (postText.length < 3) {
-    return `The performance posts text is too short (3 character minimum)`;
-  }
-  if (postText.length > 1500) {
-    return `The performance posts text is too long (1500 character maximum)`;
-  }
-}
-
-function validatePostTagIds(postTagIds: string[]) {
-  let invalidTag: string | undefined = undefined;
-  if (postTagIds.some((tagId) => {
-    if (
-      !isFinite(Number(tagId)) ||
-      Number(tagId) < 0
-    ) {
-      invalidTag = tagId;
-      return true;
-    }
-    return false;
-  })) {
-    return `${invalidTag} is not a valid tagId`;
-  }
-}
-
 export type CreatePerformancePostActionData = {
   formError?: string;
   fieldErrors?: {
     postText?: string | undefined;
     frameRateAverage?: string | undefined;
     ratingMedal?: string | undefined;
-    // systemName?: string | undefined;
+    systemName?: string | undefined;
     postTags?: string | undefined;
   };
   fields?: {
@@ -196,6 +154,7 @@ export async function action({
     ratingMedal: validatePostRatingMedal(ratingMedalValue),
     postTags: validatePostTagIds(postTagIds),
     frameRateAverage: validatePostFrameRateAverage(frameRateAverageValue),
+    systemName: validateSystemName(systemName),
   };
   const fields = {
     postText,
