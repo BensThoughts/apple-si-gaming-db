@@ -55,7 +55,7 @@ interface GamepadPostFormProps {
   }[];
   gamepads: {
     gamepadId: number;
-    label: string;
+    description: string;
   }[]
 }
 
@@ -87,7 +87,7 @@ export default function GamepadPostForm({
   } = steamUser;
   const gamepadOptions: MultiSelectOption<number>[] = gamepads.map((gamepad) => (
     {
-      label: gamepad.label,
+      label: gamepad.description,
       value: gamepad.gamepadId,
     }
   ));
@@ -137,7 +137,7 @@ export default function GamepadPostForm({
               <span className="text-secondary">login</span>
             </AnimatedUnderline>
           </Link>
-          &nbsp;to post a performance review for this app.
+          &nbsp;to post a controller review for this app.
         </div>
       </Wrapper>
     );
@@ -147,7 +147,7 @@ export default function GamepadPostForm({
       <Wrapper>
         <div className="w-full">
           It looks like you do not own this app yet. Please add it to your steam library to leave a
-          performance review.
+          controller review.
         </div>
       </Wrapper>
     );
@@ -164,7 +164,7 @@ export default function GamepadPostForm({
   //             <span className="text-secondary">profile</span>
   //           </AnimatedUnderline>
   //         </Link>
-  //         &nbsp;to post a performance review for this app.
+  //         &nbsp;to post a controller review for this app.
   //       </div>
   //     </Wrapper>
   //   );
@@ -172,16 +172,16 @@ export default function GamepadPostForm({
 
   return (
     <Wrapper>
-      <h2 className="text-secondary text-lg">Submit Your Own Performance Post</h2>
+      <h2 className="text-secondary text-lg">Submit Your Own Controller Post</h2>
       {formError && <div className="text-color-error">{formError}</div>}
       <Form
         method="post"
         name="gamepadPost"
         ref={formRef}
         className="flex flex-col items-center gap-8 w-full max-w-lg"
-        action={`/apps/${steamAppId}/performance-posts`}
+        action={`/apps/${steamAppId}/controller-posts`}
       >
-        <input type="hidden" name="_performancePostAction" value="createPost" />
+        <input type="hidden" name="_controllerPostAction" value="createPost" />
         <TextArea
           id="gamepadPostText"
           name="gamepadPostText"
