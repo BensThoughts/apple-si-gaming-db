@@ -11,26 +11,42 @@ interface TrendingSteamAppProps {
 export default function TrendingSteamAppCard({
   steamAppId,
   name,
-  headerImage,
+  headerImage, // 460W x 215H
   releaseDate,
   numNewPerformancePosts,
 }: TrendingSteamAppProps) {
   return (
     <Link
       to={`/apps/${steamAppId}/performance-posts`}
-      className="flex flex-col gap-2 items-center justify-center p-2 bg-tertiary
+      className="flex flex-col md:flex-row gap-2 items-center p-2 bg-tertiary
                  border-1 border-secondary-highlight rounded-md hover:bg-tertiary-highlight
                  focus-visible:show-ring w-full
-                 max-w-md"
+                 max-w-xl"
     >
-      <div>
-        {name}
-        <span className="text-primary-faded">
-          {` - `}New Posts:{` `}
-        </span>
-        <span className="text-secondary">
-          {numNewPerformancePosts}
-        </span>
+      {headerImage && (
+        <div className="w-full max-w-[15rem]">
+          <img
+            src={headerImage}
+            alt={name}
+            width={460}
+            height={215}
+          />
+        </div>
+      )}
+      <div className="flex flex-col md:flex-row justify-between md:self-start w-full">
+        <div className="text-center md:text-right justify-self-start font-semibold">
+          {name}
+        </div>
+        <div className="text-center md:text-right justify-self-end">
+          <span className="text-primary-highlight font-semibold">
+            {numNewPerformancePosts}
+          </span>
+          <span className="text-primary-faded text-sm italic">
+            {` `}New Posts
+          </span>
+
+
+        </div>
       </div>
     </Link>
   );
