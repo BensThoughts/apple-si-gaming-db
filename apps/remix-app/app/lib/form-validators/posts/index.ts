@@ -36,12 +36,12 @@ export function validatePostText(postText: string) {
   }
 }
 
-export function validatePostTagIds(postTagIds: string[]) {
-  let invalidTag: string | undefined = undefined;
+export function validatePostTagIds(postTagIds: number[]) {
+  let invalidTag: number | undefined = undefined;
   if (postTagIds.some((tagId) => {
     if (
-      !isFinite(Number(tagId)) ||
-      Number(tagId) < 0
+      !isFinite(tagId) ||
+      tagId < 0
     ) {
       invalidTag = tagId;
       return true;
@@ -49,5 +49,14 @@ export function validatePostTagIds(postTagIds: string[]) {
     return false;
   })) {
     return `${invalidTag} is not a valid tagId`;
+  }
+}
+
+export function validatePostGamepadId(gamepadId: number) {
+  if (!isFinite(gamepadId)) {
+    return 'Gamepad ID was not a valid number';
+  }
+  if (gamepadId < 1) {
+    return 'Gamepad ID was not a positive number greater than 0';
   }
 }
