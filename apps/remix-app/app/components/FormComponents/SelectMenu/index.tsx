@@ -15,6 +15,7 @@ export default function SelectMenu<T = string>({
   labelText,
   fieldError,
   required = false,
+  menuSize = 'medium',
 }: {
   options: SelectOption<T>[];
   onChange?(e: SelectOption<T>): void;
@@ -23,6 +24,7 @@ export default function SelectMenu<T = string>({
   labelText?: string;
   fieldError?: string;
   required?: boolean;
+  menuSize?: 'medium' | 'large';
 }) {
   function onSelectionChange(selection: SelectOption<T>) {
     if (onChange) {
@@ -36,7 +38,8 @@ export default function SelectMenu<T = string>({
       onChange={onSelectionChange}
       name={name}
     >
-      <div className="w-72">
+      {/* TODO: Should we be setting width here with w- (or in each component individually with max-w) */}
+      <div className={menuSize === 'medium' ? 'w-72' : 'w-80'}>
         {labelText &&
           <Listbox.Label>
             <span className="text-primary">
