@@ -8,15 +8,15 @@ interface GamepadPostMetaBarProps {
 function getRatingMedalText(ratingMedal: RatingMedal) {
   switch (ratingMedal) {
     case 'Platinum':
-      return 'Runs [ perfect ]';
+      return 'Works [ perfect ]';
     case 'Gold':
-      return 'Runs [ perfect after tweaks ]';
+      return 'Works [ perfect after tweaks ]';
     case 'Silver':
-      return 'Runs [ with minor issues ]';
+      return 'Works [ with minor issues ]';
     case 'Bronze':
-      return 'Runs [ often crashes ]';
+      return 'Works [ with major issues ]';
     case 'Borked':
-      return `Doesn't Run`;
+      return `Doesn't Work`;
   }
 }
 

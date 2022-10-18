@@ -17,23 +17,23 @@ const ratingOptions: SelectOption<RatingMedal | 'None'>[] = [
     value: 'None',
   },
   {
-    name: 'Platinum - Runs [ perfect ]',
+    name: 'Platinum - Works [ perfect ]',
     value: 'Platinum',
   },
   {
-    name: 'Gold - Runs [ perfect after tweaks ]',
+    name: 'Gold - Works [ perfect after tweaks ]',
     value: 'Gold',
   },
   {
-    name: 'Silver - Runs [ with minor issues ]',
+    name: 'Silver - Works [ with minor issues ]',
     value: 'Silver',
   },
   {
-    name: 'Bronze - Runs [ often crashes ]',
+    name: 'Bronze - Works [ with major issues ]',
     value: 'Bronze',
   },
   {
-    name: `Borked - Doesn't Run`,
+    name: `Borked - Doesn't Work`,
     value: 'Borked',
   },
 ];
@@ -196,19 +196,15 @@ export default function GamepadPostForm({
         <div className="flex flex-col gap-6 w-full max-w-md">
           <div className="z-30">
             <MultiSelectMenu
-              name="gamepadPostGamepad"
-              id="gamepadPostGamepad"
+              name="gamepadPostGamepadId"
+              id="gamepadPostGamepadId"
               labelText="Gamepad"
               isMulti={false}
-              closeMenuOnSelect={true}
-              // labelText="Gamepad"
-              // defaultValue={{
-              //   label: 'None',
-              //   value: -1,
-              // }}
               options={gamepadOptions}
-              // required
-              fieldError={fieldErrors?.gamepad}
+              openMenuOnFocus
+              closeMenuOnSelect
+              required
+              fieldError={fieldErrors?.gamepadId}
             />
           </div>
           <div className="z-20">
@@ -222,6 +218,7 @@ export default function GamepadPostForm({
               labelText="Rating"
               required
               fieldError={fieldErrors?.ratingMedal}
+              menuSize="large"
             />
           </div>
           <div className="z-10">
@@ -230,7 +227,7 @@ export default function GamepadPostForm({
               id="gamepadPostTags"
               labelText="Tags"
               options={postTagOptions}
-              fieldError={fieldErrors?.postTags}
+              fieldError={fieldErrors?.postTagIds}
               isMulti={true}
               closeMenuOnSelect={false}
             />
