@@ -123,3 +123,27 @@ export async function updateSteamUserSystemSpecSystemName(
     },
   });
 }
+
+export async function findUniqueSystemSpecForPost(
+    steamUserId: SteamUserSystemSpecs['steamUserId'],
+    systemName: SteamUserSystemSpecs['systemName'],
+) {
+  return prisma.steamUserSystemSpecs.findUnique({
+    where: {
+      systemName_steamUserId: {
+        steamUserId,
+        systemName,
+      },
+    },
+    select: {
+      manufacturer: true,
+      model: true,
+      osVersion: true,
+      cpuBrand: true,
+      videoDriver: true,
+      videoDriverVersion: true,
+      videoPrimaryVRAM: true,
+      memoryRAM: true,
+    },
+  });
+}
