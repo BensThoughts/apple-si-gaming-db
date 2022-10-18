@@ -8,6 +8,7 @@ import type {
   Prisma,
 } from '~/interfaces/database';
 import prisma from '~/lib/database/db.server';
+import { findUniqueSystemSpecForPost } from './steamUserSystemSpecs.server';
 
 
 export async function createPerformancePost({
@@ -33,45 +34,36 @@ export async function createPerformancePost({
   systemName: SteamUserSystemSpecs['systemName'];
   postTagIds: PostTag['postTagId'][];
 }) {
-  const systemSpecs = await prisma.steamUserSystemSpecs.findUnique({
-    where: {
-      systemName_steamUserId: {
-        steamUserId,
-        systemName,
-      },
-    },
-    select: {
-      manufacturer: true,
-      model: true,
-      osVersion: true,
-      cpuBrand: true,
-      videoDriver: true,
-      videoDriverVersion: true,
-      videoPrimaryVRAM: true,
-      memoryRAM: true,
-    },
-  });
+  const systemSpecs = await findUniqueSystemSpecForPost(steamUserId, systemName);
   // TODO: Rather than throwing an error, maybe just let it pass
   // !Removed to allow no system specs on a performance post
   // if (!systemSpecs) {
   //   throw new Error(`System ${systemName} was not found in the database.`);
   // }
 
-  const performancePostData: Prisma.XOR<Prisma.PerformancePostCreateInput, Prisma.PerformancePostUncheckedCreateInput> = {
-    steamAppId,
+  const performancePostData: Prisma.PerformancePostCreateInput = {
+    steamApp: {
+      connect: {
+        steamAppId,
+      },
+    },
+    steamUser: {
+      connect: {
+        steamUserId,
+      },
+    },
     steamUserId,
-    steamUserIdForSteamUser: steamUserId,
     displayName,
     avatarMedium,
     postText,
     frameRateAverage,
     frameRateStutters,
     ratingMedal,
-    postTags: postTagIds.length > 0 ? {
+    postTags: {
       connect: postTagIds.map((postTagId) => ({
         postTagId,
       })),
-    } : undefined,
+    },
     // TODO: Decide if we should use explicit vs. implicit
     // ! WITH JOIN TABLE
     // postTags: postTagIds.length > 0 ? {
