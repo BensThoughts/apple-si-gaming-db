@@ -1,16 +1,19 @@
-import type { LoaderArgs } from '@remix-run/node';
+import type { ActionArgs, LoaderArgs } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useActionData, useCatch, useLoaderData, useMatches, useTransition } from '@remix-run/react';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-import { findGamepadPostsBySteamAppId } from '~/models/gamepadPost.server';
+import { findGamepadPostsBySteamAppId, createGamepadPost } from '~/models/steamGamepadPost.server';
 import { findPostTags } from '~/models/postTag.server';
 import type { PostTag, SteamGamepad, SteamGamepadPost } from '~/interfaces/database';
-import { findGamePads } from '~/models/gamepad.server';
+import { findGamePads } from '~/models/steamGamepad.server';
 import { json } from '@remix-run/node';
 import type { SerializedRootLoaderData } from '~/root';
 import GamepadPostForm from '~/components/AppInfo/GamepadPosts/GamepadPostForm';
 import { doesSteamUserOwnApp } from '~/models/steamUser.server';
 import GamepadPostLayout from '~/components/AppInfo/GamepadPosts/GamepadPostLayout';
+import { isTypeRatingMedal, validatePostGamepadId, validatePostRatingMedal, validatePostTagIds, validatePostText } from '~/lib/form-validators/posts';
+import { validateSystemName } from '~/lib/form-validators/profile';
 
 // These are all possible tags that can be used when
 // creating a performance post
@@ -87,14 +90,90 @@ export type CreateGamepadPostActionData = {
   fieldErrors?: {
     postText?: string | undefined;
     ratingMedal?: string | undefined;
-    postTags?: string | undefined;
-    gamepad?: string | undefined;
+    postTagIds?: string | undefined;
+    gamepadId?: string | undefined;
     systemName?: string | undefined;
   };
   fields?: {
     postText: SteamGamepadPost['postText'];
   };
 };
+
+const badRequest = (data: CreateGamepadPostActionData) => json(data, { status: 400 });
+
+
+export async function action({ params, context, request }: ActionArgs) {
+  if (!params.steamAppId) {
+    throw new Response('Expected params.steamAppid');
+  }
+  const steamAppId = Number(params.steamAppId);
+  if (!isFinite(steamAppId) || steamAppId < 0) {
+    throw new Response('steam appid must be a valid positive number');
+  }
+  const { steamUser } = extractAppLoadContext(context);
+  if (!steamUser) {
+    return badRequest({ formError: 'You must be logged in to post' });
+  }
+  const steamUserId = steamUser.steamUserId;
+  const displayName = steamUser.displayName;
+  const avatarMedium = steamUser.avatarMedium;
+  const formData = await request.formData();
+  const gamepadIdString = formData.get('gamepadPostGamepadId');
+  const postText = formData.get('gamepadPostText');
+  const ratingMedal = formData.get('gamepadPostRatingMedal[value]');
+  const systemName = formData.get('gamepadPostSystemName[value]');
+  const postTagIdsData = formData.getAll('gamepadPostTags');
+  if (
+    typeof gamepadIdString !== 'string' ||
+    typeof postText !== 'string' ||
+    typeof ratingMedal !== 'string' ||
+    typeof systemName !== 'string' ||
+    postTagIdsData.some((tagId) => typeof tagId !== 'string')
+  ) {
+    return badRequest({
+      formError: `Form not submitted correctly.`,
+    });
+  }
+
+  const gamepadId = Number(gamepadIdString);
+  let postTagIds: number[] = [];
+  if (postTagIdsData[0] !== '') {
+    postTagIds = postTagIdsData.map((tagId) => Number(tagId.toString()));
+  }
+  const fieldErrors = {
+    gamepadId: validatePostGamepadId(gamepadId),
+    postText: validatePostText(postText),
+    ratingMedal: validatePostRatingMedal(ratingMedal),
+    postTagIds: validatePostTagIds(postTagIds),
+    systemName: validateSystemName(systemName),
+  };
+  const fields = {
+    postText,
+  };
+
+  if (Object.values(fieldErrors).some(Boolean)) {
+    return badRequest({ fieldErrors, fields });
+  }
+
+  // This should never return true (used for Typescript type validation)
+  if (!isTypeRatingMedal(ratingMedal)) {
+    return badRequest({ fieldErrors, fields });
+  }
+
+  await createGamepadPost({
+    steamAppId,
+    steamUserId,
+    avatarMedium,
+    displayName,
+    postText,
+    gamepadId,
+    ratingMedal,
+    postTagIds,
+    systemName,
+  });
+
+  return redirect(`/apps/${steamAppId}/controller-posts`);
+}
 
 export default function GamepadPostsRoute() {
   const actionData = useActionData<CreateGamepadPostActionData>();
@@ -159,7 +238,6 @@ export function ErrorBoundary({ error }: { error: Error }) {
 
 export function CatchBoundary() {
   const caught = useCatch();
-  console.log(caught);
   return (
     <PageWrapper title="Oops!">
       <div>
