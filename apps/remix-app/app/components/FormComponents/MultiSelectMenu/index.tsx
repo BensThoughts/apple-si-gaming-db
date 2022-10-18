@@ -42,33 +42,49 @@ export interface MultiSelectOption<T = string | number> {
 export default function MultiSelectMenu<T>({
   name,
   id,
-  // postTags,
   options,
-  fieldError,
   isMulti = false,
+  openMenuOnFocus = false,
   closeMenuOnSelect = true,
   labelText,
+  fieldError,
+  required,
 }: {
   name?: string;
   id?: string;
   options: MultiSelectOption<T>[];
-  fieldError?: string;
   isMulti?: boolean;
+  openMenuOnFocus?: boolean;
   closeMenuOnSelect?: boolean;
-  labelText: string;
+  labelText?: string;
+  fieldError?: string;
+  required?: boolean;
 }) {
   return (
     <div>
-      <label htmlFor={id}>
-        {labelText}
-        {fieldError &&
-          <span>
-            {`: `}<span className="text-color-error">{fieldError}</span>
+      {labelText && (
+        <label htmlFor={id}>
+          <span className="text-primary">
+            {labelText}
           </span>
-        }
-      </label>
+          {required &&
+            <span className="text-color-error">
+              *
+            </span>
+          }
+          {fieldError &&
+            <span className="text-primary">
+              {`: `}
+              <span className="text-color-error">
+                {fieldError}
+              </span>
+            </span>
+          }
+        </label>
+      )}
       <div className="mt-1.5">
         <Select
+          openMenuOnFocus={openMenuOnFocus}
           isMulti={isMulti}
           name={name}
           options={options}
