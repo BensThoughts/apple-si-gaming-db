@@ -125,16 +125,16 @@ export async function action({
   const avatarMedium = steamUser.avatarMedium;
   const formData = await request.formData();
   const postText = formData.get('performancePostText');
-  const frameRateAverageValue = formData.get('performancePostFrameRateAverage[value]');
+  const frameRateAverage = formData.get('performancePostFrameRateAverage[value]');
   const frameRateStutters = formData.get('performancePostFrameRateStutters');
-  const ratingMedalValue = formData.get('performancePostRatingMedal[value]');
+  const ratingMedal = formData.get('performancePostRatingMedal[value]');
   const systemName = formData.get('performancePostSystemName[value]');
   const postTagIdsData = formData.getAll('performancePostTags');
 
   if (
     typeof postText !== 'string' ||
-    typeof frameRateAverageValue !== 'string' ||
-    typeof ratingMedalValue !== 'string' ||
+    typeof frameRateAverage !== 'string' ||
+    typeof ratingMedal !== 'string' ||
     typeof systemName !== 'string' ||
     postTagIdsData.some((tagId) => typeof tagId !== 'string')
   ) {
@@ -144,16 +144,16 @@ export async function action({
   }
 
 
-  let postTagIds: string[] = [];
+  let postTagIds: number[] = [];
   if (postTagIdsData[0] !== '') {
-    postTagIds = postTagIdsData.map((tagId) => tagId.toString());
+    postTagIds = postTagIdsData.map((tagId) => Number(tagId.toString()));
   }
 
   const fieldErrors = {
     postText: validatePostText(postText),
-    ratingMedal: validatePostRatingMedal(ratingMedalValue),
+    ratingMedal: validatePostRatingMedal(ratingMedal),
     postTags: validatePostTagIds(postTagIds),
-    frameRateAverage: validatePostFrameRateAverage(frameRateAverageValue),
+    frameRateAverage: validatePostFrameRateAverage(frameRateAverage),
     systemName: validateSystemName(systemName),
   };
   const fields = {
@@ -166,36 +166,29 @@ export async function action({
 
   // This should never return true (used for Typescript type validation)
   if (
-    frameRateAverageValue !== 'None' &&
-    !isTypeFrameRateAverage(frameRateAverageValue)
+    frameRateAverage !== 'None' &&
+    !isTypeFrameRateAverage(frameRateAverage)
   ) {
     return badRequest({ fieldErrors, fields });
   }
 
   // This should never return true (used for Typescript type validation)
-  if (!isTypeRatingMedal(ratingMedalValue)) {
+  if (!isTypeRatingMedal(ratingMedal)) {
     return badRequest({ fieldErrors, fields });
   }
 
-  try {
-    await createPerformancePost({
-      steamUserId,
-      avatarMedium,
-      displayName,
-      steamAppId,
-      postText: postText,
-      frameRateAverage: frameRateAverageValue === 'None' ? undefined : frameRateAverageValue,
-      frameRateStutters: frameRateStutters ? true : false,
-      ratingMedal: ratingMedalValue,
-      systemName,
-      postTagIds: postTagIds.map((tagId) => Number(tagId)),
-    });
-  } catch (err) {
-    if (err instanceof Error) {
-      console.error(err);
-      throw new Error('Error in createPerformancePost', { cause: err });
-    }
-  }
+  await createPerformancePost({
+    steamUserId,
+    avatarMedium,
+    displayName,
+    steamAppId,
+    postText,
+    frameRateAverage: frameRateAverage === 'None' ? undefined : frameRateAverage,
+    frameRateStutters: frameRateStutters ? true : false,
+    ratingMedal,
+    systemName,
+    postTagIds,
+  });
 
   return redirect(`/apps/${steamAppId}/performance-posts`);
 }
