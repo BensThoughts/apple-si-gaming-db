@@ -14,6 +14,7 @@ import { doesSteamUserOwnApp } from '~/models/steamUser.server';
 import GamepadPostLayout from '~/components/AppInfo/GamepadPosts/GamepadPostLayout';
 import { isTypeRatingMedal, validatePostGamepadId, validatePostRatingMedal, validatePostTagIds, validatePostText } from '~/lib/form-validators/posts';
 import { validateSystemName } from '~/lib/form-validators/profile';
+import { validateSteamAppId } from '~/lib/loader-gaurds';
 
 // These are all possible tags that can be used when
 // creating a performance post
@@ -54,13 +55,7 @@ interface GamepadPostsLoaderData {
 }
 
 export async function loader({ params, context }: LoaderArgs) {
-  if (!params.steamAppId) {
-    throw new Response('Expected params.steamAppid');
-  }
-  const steamAppId = Number(params.steamAppId);
-  if (!isFinite(steamAppId) || steamAppId < 0) {
-    throw new Response('steam appid must be a valid positive number');
-  }
+  const steamAppId = validateSteamAppId(params);
   const steamUser = extractAppLoadContext(context).steamUser;
   const gamepadPosts = await findGamepadPostsBySteamAppId(steamAppId);
   let isLoggedIn = false;
@@ -103,13 +98,7 @@ const badRequest = (data: CreateGamepadPostActionData) => json(data, { status: 4
 
 
 export async function action({ params, context, request }: ActionArgs) {
-  if (!params.steamAppId) {
-    throw new Response('Expected params.steamAppid');
-  }
-  const steamAppId = Number(params.steamAppId);
-  if (!isFinite(steamAppId) || steamAppId < 0) {
-    throw new Response('steam appid must be a valid positive number');
-  }
+  const steamAppId = validateSteamAppId(params);
   const { steamUser } = extractAppLoadContext(context);
   if (!steamUser) {
     return badRequest({ formError: 'You must be logged in to post' });

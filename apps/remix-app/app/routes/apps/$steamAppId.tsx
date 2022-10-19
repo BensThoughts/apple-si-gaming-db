@@ -19,6 +19,7 @@ import AppInfoMainAppCard from '~/components/AppInfo/AppInfoMainAppCard';
 import AppInfoHeader from '~/components/AppInfo/AppInfoHeader';
 import AppInfoRequirements from '~/components/AppInfo/AppInfoRequirements';
 import PageWrapper from '~/components/Layout/PageWrapper';
+import { validateSteamAppId } from '~/lib/loader-gaurds';
 
 interface LoaderData {
   steamApp: {
@@ -40,13 +41,7 @@ interface LoaderData {
 }
 
 export async function loader({ params }: LoaderArgs) {
-  if (!params.steamAppId) {
-    throw new Response('Expected params.steamAppid');
-  }
-  const steamAppId = Number(params.steamAppId);
-  if (!isFinite(steamAppId) || steamAppId < 0) {
-    throw new Response('steam appid must be a valid positive number');
-  }
+  const steamAppId = validateSteamAppId(params);
   let steamApp = await searchSteamAppByAppId(steamAppId);
   if (!steamApp) {
     throw new Response('App Not Found!', {
