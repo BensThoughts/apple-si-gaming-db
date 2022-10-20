@@ -17,14 +17,15 @@ body[data-theme="light"] {
   --color-bg-modal: 243, 248, 251;
 
   --color-app-primary: 248, 240, 227;
-  /* --color-app-primary: 241, 234, 222; */
   --color-app-primary-highlight: 246, 231, 211;
   --color-app-secondary: 80, 149, 213;
   --color-app-secondary-highlight: 49, 130, 206;
   --color-app-tertiary: 243, 248, 251;
   --color-app-tertiary-highlight: 222, 236, 244;
-  --color-app-error: 207, 102, 121;
-  --color-app-accent: 241, 234, 222;
+
+  --color-app-error: 176, 0, 32;
+  --color-app-danger: 222, 53, 11;
+  --color-app-danger-light: 255, 189, 173;
 
   --color-text-primary: 45, 45, 45;
   --color-text-primary-highlight: 23, 23, 23;
@@ -48,8 +49,10 @@ body[data-theme="dark"] {
   --color-app-secondary-highlight: 78, 147, 212;
   --color-app-tertiary: 3, 24, 47;
   --color-app-tertiary-highlight: 10, 40, 74;
+
   --color-app-error: 176, 0, 32;
-  --color-app-accent: 99, 179, 237;
+  --color-app-danger: 222, 53, 11;
+  --color-app-danger-light: 255, 189, 173;
 
   --color-text-primary: 207, 207, 207;
   --color-text-primary-highlight: 250, 250, 250;
