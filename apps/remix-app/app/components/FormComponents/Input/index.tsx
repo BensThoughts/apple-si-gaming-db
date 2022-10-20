@@ -1,7 +1,7 @@
 type InputProps = {
   fieldError?: string;
   label: string;
-  componentSize?: 'medium' | 'large';
+  componentSize?: 'large' | 'small';
 } & React.InputHTMLAttributes<HTMLInputElement>
 
 export default function Input({
@@ -17,7 +17,7 @@ export default function Input({
   ...rest
 }: InputProps) {
   let inputSizeClassnames = 'px-3 py-3';
-  if (componentSize === 'medium') {
+  if (componentSize === 'small') {
     inputSizeClassnames = 'px-[7px] py-[7px]';
   }
   return (
