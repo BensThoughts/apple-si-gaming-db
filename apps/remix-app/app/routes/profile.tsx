@@ -3,6 +3,7 @@ import { redirect } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import {
   useActionData,
+  useCatch,
   useLoaderData,
   useMatches,
   useTransition,
@@ -183,6 +184,23 @@ export function ErrorBoundary({ error }: { error: Error }) {
     <PageWrapper>
       <h1>Error in /profile route</h1>
       <div>{error.message}</div>
+    </PageWrapper>
+  );
+}
+
+export function CatchBoundary() {
+  const caught = useCatch();
+  return (
+    <PageWrapper title="Oops!">
+      <div>
+        <h1>Oops! - {caught.status} - {caught.data}</h1>
+        {caught.status === 404 && (
+          <img
+            src="/svg-images/four-oh-four-error.svg"
+            alt="Four oh four error"
+          />
+        )}
+      </div>
     </PageWrapper>
   );
 }
