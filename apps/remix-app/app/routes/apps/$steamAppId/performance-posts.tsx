@@ -107,7 +107,7 @@ export async function action({
   const steamAppId = validateSteamAppId(params);
   const { steamUser } = extractAppLoadContext(context);
   if (!steamUser) {
-    return badRequest({ formError: 'You must be logged in to post' });
+    return redirect(`/apps/${steamAppId}/performance-posts`);
   }
   const steamUserId = steamUser.steamUserId;
   const displayName = steamUser.displayName;
