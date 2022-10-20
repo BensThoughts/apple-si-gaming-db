@@ -12,10 +12,8 @@ import {
   BarsIcon,
   SteamIcon,
 } from '~/components/Icons';
-import SearchInputForm from '~/components/Search/SearchInputForm';
+import SimpleSearchInputForm from '~/components/Search/SimpleSearchInputForm';
 import { Link } from '@remix-run/react';
-
-// bg-app-bg shadow-lg backdrop-filter bg-opacity-70 backdrop-blur-sm
 
 type NavBarProps = {
   className?: string;
@@ -66,8 +64,8 @@ export default function Navbar({
                 {menuItems.map((menuItem) => (
                   <MenuItem animatedLink key={menuItem.href} href={menuItem.href}>{menuItem.name}</MenuItem>
                 ))}
-                <SearchInputForm
-                  componentSize="medium"
+                <SimpleSearchInputForm
+                  componentSize="small"
                   isSubmitting={isSearchSubmitting}
                 />
 
