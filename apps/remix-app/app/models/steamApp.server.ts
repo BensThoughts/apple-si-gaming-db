@@ -90,28 +90,50 @@ export async function searchReleasedSteamAppsByName(
       genreIds,
       categoryIds,
     } = whereOptions;
+    const andClause: Prisma.Enumerable<Prisma.SteamAppWhereInput> = [];
+    if (genreIds) {
+      genreIds.forEach((genreId) => {
+        andClause.push({
+          genres: {
+            some: {
+              genreId,
+            },
+          },
+        });
+      });
+    }
+    if (categoryIds) {
+      categoryIds.forEach((categoryId) => {
+        andClause.push({
+          categories: {
+            some: {
+              categoryId,
+            },
+          },
+        });
+      });
+    }
     whereInput = {
       platformMac,
-      // AND: genreIds ? {
-
+      // TODO: This is exclusive, must meet all tags
+      AND: andClause.length > 0 ? andClause : undefined,
+      // TODO: This is inclusive meats any of the tags
+      // genres: genreIds ? {
+      //   some: {
+      //     OR: genreIds.map((genreId) => ({
+      //       genreId: {
+      //         equals: genreId,
+      //       },
+      //     })),
+      //   },
       // } : undefined,
-      // TODO: This is inclusive, is it possible to make it exclusive?
-      genres: genreIds ? {
-        some: {
-          OR: genreIds.map((genreId) => ({
-            genreId: {
-              equals: genreId,
-            },
-          })),
-        },
-      } : undefined,
-      categories: categoryIds ? {
-        some: {
-          OR: categoryIds.map((categoryId) => ({
-            categoryId,
-          })),
-        },
-      } : undefined,
+      // categories: categoryIds ? {
+      //   some: {
+      //     OR: categoryIds.map((categoryId) => ({
+      //       categoryId,
+      //     })),
+      //   },
+      // } : undefined,
     };
   }
   return prisma.steamApp.findMany({
