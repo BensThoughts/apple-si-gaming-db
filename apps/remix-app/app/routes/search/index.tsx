@@ -8,18 +8,21 @@ import LoadingComponent from '~/components/LoadingComponent';
 import SearchInputForm from '~/components/Search/SearchInputForm';
 import RoundedLink from '~/components/RoundedLink';
 import { metaTags } from '~/lib/meta-tags';
+import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
+import { findAllCategories } from '~/models/steamCategory.server';
+import { findAllGenres } from '~/models/steamGenre.server';
 
 function validateSearchQuery(searchQuery: string) {
   if (searchQuery.length > 100) {
     return `The search query is too long (100 character maximum)`;
   }
-  if (searchQuery.length < 2) {
-    return `Search query must contain at least 2 character`;
-  }
+  // if (searchQuery.length < 2) {
+  //   return `Search query must contain at least 2 character`;
+  // }
 }
 
 export type LoaderData = {
-  pageData?: {
+  searchResults?: {
     steamApps: {
       name: string;
       steamAppId: number;
@@ -28,6 +31,10 @@ export type LoaderData = {
     }[];
     page: number;
     hasNextPage: boolean;
+  }
+  searchOptions: {
+    genreOptions: MultiSelectOption[];
+    categoryOptions: MultiSelectOption[];
   }
   formError?: string;
   fieldErrors?: {
@@ -43,26 +50,72 @@ const badRequest = (data: LoaderData) => json<LoaderData>(data, { status: 400 })
 export async function loader({
   request,
 }: LoaderArgs) {
+  const genreOptions: MultiSelectOption[] =
+    (await findAllGenres())
+        .map((genre) => ({
+          label: genre.description,
+          value: genre.genreId,
+        }));
+  const categoryOptions: MultiSelectOption[] =
+      (await findAllCategories())
+          .map((category) => ({
+            label: category.description,
+            value: category.categoryId,
+          }));
+  const searchOptions = { genreOptions, categoryOptions };
+
   const url = new URL(request.url);
 
+  const searchQuery = url.searchParams.get('searchQuery')?.trim();
+
+  // !This is the case where someone navigates to /search initially
+  // !with no searchQuery
+  if (
+    (searchQuery === undefined) ||
+    (searchQuery === null)
+  ) {
+    return json<LoaderData>({ searchOptions, fields: { searchQuery: '' } });
+  }
   const pageQuery = url.searchParams.get('page')?.trim() || 1;
+  const searchAppleOnly = url.searchParams.get('searchAppleOnly');
+  const searchGenreIds = url.searchParams.getAll('searchGenreIds');
+  const searchCategoryIds = url.searchParams.getAll('searchCategoryIds');
+  let genreIds: string[] | undefined = undefined;
+  let categoryIds: number[] | undefined = undefined;
+
+  if (searchGenreIds[0] !== '' && searchGenreIds.length > 0) {
+    genreIds = searchGenreIds;
+  }
+  if (searchCategoryIds[0] !== '' && searchCategoryIds.length > 0) {
+    categoryIds = searchCategoryIds.map((categoryId) => Number(categoryId));
+  }
+
+  let platformMac: boolean | undefined = undefined;
+  if (
+    typeof searchAppleOnly === 'string' &&
+    searchAppleOnly === 'on'
+  ) {
+    platformMac = true;
+  }
+
   let page = 1;
   page = Number(pageQuery);
   if (!isFinite(page)) {
-    return badRequest( { formError: `Page must be a positive finite number` });
+    return badRequest( {
+      searchOptions,
+      formError: `Page must be a positive finite number`,
+    });
   }
   if (page < 1) {
-    return badRequest( { formError: `Page must be a positive number, greater than zero` });
+    return badRequest( {
+      searchOptions,
+      formError: `Page must be a positive number, greater than zero`,
+    });
   }
 
-  const searchQuery = url.searchParams.get('searchQuery')?.trim();
-  // !This is the case where someone navigates to /search initially
-  // !with no searchQuery
-  if (searchQuery === undefined) {
-    return json<LoaderData>({ fields: { searchQuery: '' } });
-  }
   if (typeof searchQuery !== 'string') {
     return badRequest({
+      searchOptions,
       formError: `Search form not submitted correctly.`,
     });
   }
@@ -71,24 +124,34 @@ export async function loader({
   };
   const fields = { searchQuery };
   if (Object.values(fieldErrors).some(Boolean)) {
-    return badRequest({ fieldErrors, fields });
+    return badRequest({ searchOptions, fieldErrors, fields });
   }
 
   const PAGE_SIZE = 50;
   const skip = PAGE_SIZE * (page - 1);
   const take = PAGE_SIZE + 1; // take 1 extra to see if there is a next page
-  const steamAppsAll = await searchReleasedSteamAppsByName(searchQuery, skip, take);
+  const steamAppsAll =
+    await searchReleasedSteamAppsByName({
+      searchQuery,
+      skip,
+      take,
+      whereOptions: {
+        platformMac,
+        genreIds,
+        categoryIds,
+      },
+    });
   let hasNextPage = false;
   if (steamAppsAll.length >= PAGE_SIZE) {
     hasNextPage = true;
   }
   const steamApps = steamAppsAll.slice(0, PAGE_SIZE);
-  const pageData = {
+  const searchResults = {
     steamApps,
     page,
     hasNextPage,
   };
-  return json<LoaderData>({ pageData, fields });
+  return json<LoaderData>({ searchOptions, searchResults, fields });
 }
 
 export const meta: MetaFunction = ({ data }: { data: LoaderData }) => {
@@ -103,11 +166,16 @@ export const meta: MetaFunction = ({ data }: { data: LoaderData }) => {
 };
 
 function SearchIndexWrap({
+  searchOptions,
   children,
   formError,
   fieldErrors,
   isSubmitting,
 }: {
+  searchOptions: {
+    genreOptions: MultiSelectOption[];
+    categoryOptions: MultiSelectOption[];
+  }
   isSubmitting: boolean;
   children?: React.ReactNode;
   formError?: string;
@@ -121,8 +189,10 @@ function SearchIndexWrap({
       <div className="flex w-full md:min-w-[546px] h-full items-center justify-center
                       bg-tertiary rounded-lg border-1 border-secondary-highlight p-10">
         <SearchInputForm
+          genreOptions={searchOptions.genreOptions}
+          categoryOptions={searchOptions.categoryOptions}
           isSubmitting={isSubmitting}
-          componentSize={isWide ? 'large' : 'medium'}
+          componentSize={isWide ? 'large' : 'small'}
           formError={formError}
           fieldErrors={fieldErrors}
         />
@@ -137,10 +207,10 @@ function SearchIndexWrap({
 }
 
 export default function SearchIndexRoute() {
-  const { pageData, fields, fieldErrors, formError } = useLoaderData<LoaderData>();
-  const steamApps = pageData?.steamApps;
-  const hasNextPage = pageData?.hasNextPage;
-  const page = pageData?.page ? pageData.page : 1;
+  const { searchResults, searchOptions, fields, fieldErrors, formError } = useLoaderData<LoaderData>();
+  const steamApps = searchResults?.steamApps;
+  const hasNextPage = searchResults?.hasNextPage;
+  const page = searchResults?.page ? searchResults.page : 1;
   const searchQuery = fields?.searchQuery ? fields.searchQuery : '';
 
   const transition = useTransition();
@@ -152,6 +222,7 @@ export default function SearchIndexRoute() {
   if (isSubmitting) {
     return (
       <SearchIndexWrap
+        searchOptions={searchOptions}
         formError={formError}
         fieldErrors={fieldErrors}
         isSubmitting
@@ -168,6 +239,7 @@ export default function SearchIndexRoute() {
   ) {
     return (
       <SearchIndexWrap
+        searchOptions={searchOptions}
         formError={formError}
         fieldErrors={fieldErrors}
         isSubmitting={isSubmitting}
@@ -183,9 +255,12 @@ export default function SearchIndexRoute() {
     );
   }
 
+  // !This is the case where someone navigates to /search initially
+  // !with no searchQuery
   if (!steamApps) {
     return (
       <SearchIndexWrap
+        searchOptions={searchOptions}
         formError={formError}
         fieldErrors={fieldErrors}
         isSubmitting={isSubmitting}
@@ -195,6 +270,7 @@ export default function SearchIndexRoute() {
 
   return (
     <SearchIndexWrap
+      searchOptions={searchOptions}
       formError={formError}
       fieldErrors={fieldErrors}
       isSubmitting={isSubmitting}
