@@ -11,7 +11,7 @@ export default function ToggleSwitch({
   checked: boolean;
   name?: string;
   label?: string;
-  labelPassive?: boolean;
+  labelPassive?: boolean; // Sets if clicking the label toggles the switch
   disabled?: boolean;
   onChange: (e: boolean) => void,
 }) {
