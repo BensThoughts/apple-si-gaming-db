@@ -6,6 +6,7 @@ import { showToast } from '~/components/Toasts';
 import UncontrolledToggleSwitch from '~/components/FormComponents/ToggleSwitch/UncontrolledToggleSwitch';
 import MultiSelectMenu from '~/components/FormComponents/MultiSelectMenu';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
+import type { SearchPageLoaderDataFormFields } from '~/routes/search/index';
 
 const FORM_NAME = 'game-search-form';
 
@@ -13,6 +14,7 @@ type SearchInputProps = {
   componentSize: 'large' | 'small';
   formError?: string;
   fieldErrors?: { searchQuery?: string };
+  // fields: SearchPageLoaderDataFormFields;
   isSubmitting: boolean;
   genreOptions: MultiSelectOption[];
   categoryOptions: MultiSelectOption[];
