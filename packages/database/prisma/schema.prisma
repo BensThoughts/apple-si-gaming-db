@@ -119,8 +119,6 @@ model SteamGamepadPost {
   postText                 String
   gamepad                  SteamGamepad @relation(fields: [gamepadId], references: [gamepadId])
   gamepadId                Int
-  gamepadManufacturer      String
-  gamepadModel             String
   ratingMedal              RatingMedal
   systemManufacturer       String?
   systemModel              String?
@@ -144,7 +142,7 @@ model SteamGamepad {
   gamepadId    Int    @unique @default(autoincrement())
   manufacturer String
   model        String
-  label        String
+  description  String
 
   @@unique([manufacturer, model])
 }
