@@ -5,7 +5,10 @@ import {
 } from '@apple-si-gaming-db/database';
 
 import type {
+  Prisma,
   SteamApp,
+  SteamGenre,
+  SteamCategory,
 } from '~/interfaces/database';
 
 import prisma from '~/lib/database/db.server';
@@ -59,28 +62,64 @@ export async function searchSteamAppByAppId(
   });
 }
 
-/**
- * Search DB for apps by name (page 1 is first page)
- * @param  {string} searchQuery
- * @param  {number} skip
- * @param  {number} take
- * @param  {boolean} platformMac?
- */
+
+interface SearchReleasedSteamAppsByNameProps {
+  searchQuery: SteamApp['name'];
+  skip: number;
+  take: number;
+  whereOptions?: {
+    platformMac?: SteamApp['platformMac'];
+    genreIds?: SteamGenre['genreId'][];
+    categoryIds?: SteamCategory['categoryId'][];
+  },
+}
+
 export async function searchReleasedSteamAppsByName(
-    searchQuery: SteamApp['name'],
-    skip: number,
-    take: number,
-    platformMac?: boolean,
+    searchOptions: SearchReleasedSteamAppsByNameProps,
 ) {
+  const {
+    searchQuery,
+    skip,
+    take,
+    whereOptions,
+  } = searchOptions;
+  let whereInput: Prisma.SteamAppWhereInput = {};
+  if (whereOptions) {
+    const {
+      platformMac,
+      genreIds,
+      categoryIds,
+    } = whereOptions;
+    whereInput = {
+      platformMac,
+      // AND: genreIds ? {
+
+      // } : undefined,
+      // TODO: This is inclusive, is it possible to make it exclusive?
+      genres: genreIds ? {
+        some: {
+          OR: genreIds.map((genreId) => ({
+            genreId: {
+              equals: genreId,
+            },
+          })),
+        },
+      } : undefined,
+      categories: categoryIds ? {
+        some: {
+          OR: categoryIds.map((categoryId) => ({
+            categoryId,
+          })),
+        },
+      } : undefined,
+    };
+  }
   return prisma.steamApp.findMany({
     where: {
       name: {
         contains: searchQuery,
         mode: 'insensitive',
       },
-      platformMac: platformMac ? {
-        equals: platformMac,
-      } : undefined,
       comingSoon: {
         equals: false,
       },
@@ -88,6 +127,7 @@ export async function searchReleasedSteamAppsByName(
         contains: 'game',
         mode: 'insensitive',
       },
+      ...whereInput,
     },
     orderBy: {
       name: 'asc',
