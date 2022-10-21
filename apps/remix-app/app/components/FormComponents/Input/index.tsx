@@ -21,7 +21,7 @@ export default function Input({
     inputSizeClassnames = 'px-[7px] py-[7px]';
   }
   return (
-    <div className="relative max-w-[fit-content] group rounded bg-primary">
+    <div className={`relative group rounded bg-primary w-full`}>
       <input
         name={name}
         id={id}
