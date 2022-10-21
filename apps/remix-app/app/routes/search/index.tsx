@@ -342,7 +342,7 @@ export default function SearchIndexRoute() {
         fields={fields}
         isSubmitting={isSubmitting}
       >
-        <div className="w-full max-w-lg flex items-center justify-center bg-tertiary
+        <div className="w-full max-w-xl flex items-center justify-center bg-tertiary
                         border-1 border-secondary-highlight rounded-md p-4">
           No apps found!
         </div>
@@ -376,7 +376,7 @@ export default function SearchIndexRoute() {
       fields={fields}
       isSubmitting={isSubmitting}
     >
-      <div className="flex flex-col gap-3 items-center w-full max-w-lg border-secondary border-1 rounded-md p-4 bg-app-bg">
+      <div className="flex flex-col gap-3 items-center w-full max-w-xl border-secondary border-1 rounded-md p-4 bg-app-bg">
         {steamApps.map(({ steamAppId, name, headerImage, releaseDate }) => (
           <div key={steamAppId}>
             <SearchTitleCard
