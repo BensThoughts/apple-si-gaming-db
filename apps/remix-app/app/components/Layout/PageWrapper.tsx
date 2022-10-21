@@ -16,8 +16,8 @@ function Background() {
     <>
       <div
         className={`absolute top-0 bg-no-repeat bg-cover
-                    aspect-[16/9] max-h-[calc(100vh_-_3.5rem)] min-h-[540px] w-full
-                    max-w-screen -z-50 ${bgImageCss}`}
+                    max-h-[calc(100vh_-_3.5rem)] min-h-[540px] w-screen
+                    -z-50 ${bgImageCss} bg-cover`}
       />
     </>
   );
