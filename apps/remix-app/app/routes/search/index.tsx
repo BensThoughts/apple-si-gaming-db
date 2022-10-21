@@ -10,6 +10,7 @@ import RoundedLink from '~/components/RoundedLink';
 import { metaTags } from '~/lib/meta-tags';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
 import { getSearchOptions } from '~/lib/loader-functions/search.server';
+import Heading from '~/components/Heading';
 
 function validateSearchQuery(searchQuery: string) {
   if (searchQuery.length > 100) {
@@ -249,8 +250,8 @@ function SearchIndexWrap({
   const { isWide } = useMediaIsWide();
   return (
     <div className="flex flex-col gap-6 w-full justify-center items-center">
-      <div className="flex w-full items-center justify-center
-                      bg-tertiary rounded-lg border-1 border-secondary-highlight p-10">
+      <div className="flex flex-col gap-4 w-full max-w-lg items-center justify-center
+                      bg-tertiary rounded-lg border-1 border-secondary-highlight px-10 py-6">
         <SearchForm
           genreOptions={searchOptions.genreOptions}
           categoryOptions={searchOptions.categoryOptions}
