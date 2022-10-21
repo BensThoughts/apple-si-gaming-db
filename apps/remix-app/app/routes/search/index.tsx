@@ -10,7 +10,6 @@ import RoundedLink from '~/components/RoundedLink';
 import { metaTags } from '~/lib/meta-tags';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
 import { getSearchOptions } from '~/lib/loader-functions/search.server';
-import Heading from '~/components/Heading';
 
 function validateSearchQuery(searchQuery: string) {
   if (searchQuery.length > 100) {
