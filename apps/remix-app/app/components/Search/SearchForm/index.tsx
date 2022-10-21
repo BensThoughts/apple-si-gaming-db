@@ -6,18 +6,21 @@ import { showToast } from '~/components/Toasts';
 import UncontrolledToggleSwitch from '~/components/FormComponents/ToggleSwitch/UncontrolledToggleSwitch';
 import MultiSelectMenu from '~/components/FormComponents/MultiSelectMenu';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
-import type { SearchPageLoaderDataFormFields } from '~/routes/search/index';
+import type {
+  SearchFormFieldErrors,
+  SearchFormFields,
+} from '~/routes/search/index';
 
 const FORM_NAME = 'game-search-form';
 
 type SearchInputProps = {
   componentSize: 'large' | 'small';
   formError?: string;
-  fieldErrors?: { searchQuery?: string };
-  // fields: SearchPageLoaderDataFormFields;
+  fieldErrors?: SearchFormFieldErrors;
+  fields?: SearchFormFields;
   isSubmitting: boolean;
-  genreOptions: MultiSelectOption[];
-  categoryOptions: MultiSelectOption[];
+  genreOptions: MultiSelectOption<string>[];
+  categoryOptions: MultiSelectOption<number>[];
 } & React.InputHTMLAttributes<HTMLInputElement>
 
 export default function SearchInputForm({
@@ -26,6 +29,7 @@ export default function SearchInputForm({
   isSubmitting,
   formError,
   fieldErrors,
+  fields,
   componentSize = 'large',
   ...rest
 }: SearchInputProps) {
@@ -35,6 +39,16 @@ export default function SearchInputForm({
     buttonHeight = 'h-[38px]';
   }
 
+  let defaultGenreOptions: MultiSelectOption<string>[] | undefined = undefined;
+  let defaultCategoryOptions: MultiSelectOption<number>[] | undefined = undefined;
+  if (fields && fields.searchGenreIds) {
+    const genreIds = fields.searchGenreIds;
+    defaultGenreOptions = genreOptions.filter((genreOption) => genreIds.includes(genreOption.value));
+  }
+  if (fields && fields.searchCategoryIds) {
+    const categoryIds = fields.searchCategoryIds;
+    defaultCategoryOptions = categoryOptions.filter((categoryOption) => categoryIds.includes(categoryOption.value));
+  }
   // TODO: showToast doesn't seem to appear when inside useEffect
   // TODO: it appears twice when not in useEffect fieldErrors vs formError
   if (formError) {
@@ -68,6 +82,7 @@ export default function SearchInputForm({
             name="searchQuery"
             id="searchQuery"
             label="Search Games..."
+            defaultValue={fields ? fields.searchQuery : ''}
             componentSize={componentSize}
             fieldError={fieldErrors ? fieldErrors.searchQuery : undefined}
             // minLength={2}
@@ -85,7 +100,7 @@ export default function SearchInputForm({
         </div>
         <div className="flex items-center gap-4">
           <UncontrolledToggleSwitch
-            defaultChecked={false}
+            defaultChecked={fields ? fields.searchAppleOnly : false}
             name="searchAppleOnly"
             label="Apple"
           />
@@ -95,6 +110,9 @@ export default function SearchInputForm({
             name="searchGenreIds"
             labelText="Genres"
             options={genreOptions}
+            defaultValue={defaultGenreOptions}
+            fieldError={fieldErrors?.searchGenreIds}
+            // defaultValue={fields ? fields.searchGenreIds : undefined}
             openMenuOnFocus={false}
             closeMenuOnSelect={true}
             isMulti
@@ -105,6 +123,9 @@ export default function SearchInputForm({
             name="searchCategoryIds"
             labelText="Categories"
             options={categoryOptions}
+            defaultValue={defaultCategoryOptions}
+            fieldError={fieldErrors?.searchCategoryIds}
+            // defaultValue={fields ? fields.searchCategoryIds : undefined}
             openMenuOnFocus={false}
             closeMenuOnSelect={true}
             isMulti
