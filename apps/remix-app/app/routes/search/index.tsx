@@ -248,21 +248,18 @@ function SearchIndexWrap({
 }) {
   const { isWide } = useMediaIsWide();
   return (
-    <div className="flex flex-col gap-6 w-full justify-center items-center">
-      <div className="flex flex-col gap-4 w-full max-w-lg items-center justify-center
-                      bg-tertiary rounded-lg border-1 border-secondary-highlight px-10 py-6">
-        <SearchForm
-          genreOptions={searchOptions.genreOptions}
-          categoryOptions={searchOptions.categoryOptions}
-          isSubmitting={isSubmitting}
-          componentSize={isWide ? 'large' : 'small'}
-          formError={formError}
-          fieldErrors={fieldErrors}
-          fields={fields}
-        />
-      </div>
+    <div className="flex flex-col gap-6 justify-center items-center w-full">
+      <SearchForm
+        genreOptions={searchOptions.genreOptions}
+        categoryOptions={searchOptions.categoryOptions}
+        isSubmitting={isSubmitting}
+        componentSize={isWide ? 'large' : 'small'}
+        formError={formError}
+        fieldErrors={fieldErrors}
+        fields={fields}
+      />
       {children &&
-        <div>
+        <div className="flex items-center justify-center w-full">
           {children}
         </div>
       }
@@ -345,7 +342,7 @@ export default function SearchIndexRoute() {
         fields={fields}
         isSubmitting={isSubmitting}
       >
-        <div className="w-full flex items-center justify-center bg-tertiary
+        <div className="w-full max-w-lg flex items-center justify-center bg-tertiary
                         border-1 border-secondary-highlight rounded-md p-4">
           No apps found!
         </div>
