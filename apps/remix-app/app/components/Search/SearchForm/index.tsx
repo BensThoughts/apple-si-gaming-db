@@ -68,82 +68,91 @@ export default function SearchInputForm({
   }, [isSubmitting]);
 
   return (
-    <Form
-      id={FORM_NAME}
-      name={FORM_NAME}
-      method="get"
-      action="/search"
-      ref={formRef}
-      className="w-full"
+    <div
+      className="flex flex-col gap-4 w-full max-w-xl items-center justify-center
+                  bg-tertiary rounded-lg border-1 border-secondary-highlight
+                  px-4 py-6 md:px-10 md:py-6"
     >
-      <div className="flex flex-col items-center gap-4 w-full">
-        <div className={`flex justify-center items-center gap-2`}>
-          <input type="hidden" name="page" value="1" />
-          <Input
-            name="searchQuery"
-            id="searchQuery"
-            label="Search Games..."
-            defaultValue={fields ? fields.searchQuery : ''}
-            componentSize={componentSize}
-            fieldError={fieldErrors ? fieldErrors.searchQuery : undefined}
-            // minLength={2}
-            maxLength={100}
-            // required
-            {...rest}
-          />
-          <RoundedButton
-            className={`${buttonHeight} w-[89.66px]`}
-            type="submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Loading' : 'Search' }
-          </RoundedButton>
-        </div>
-        <div className="flex flex-col items-start justify-center gap-4 w-full max-w-md">
-          <div>
-            <UncontrolledToggleSwitch
-              defaultChecked={fields ? fields.searchAppleOnly : false}
-              name="searchAppleOnly"
-              label="Apple"
+      <Form
+        id={FORM_NAME}
+        name={FORM_NAME}
+        method="get"
+        action="/search"
+        ref={formRef}
+        className="w-full"
+      >
+        <input type="hidden" name="page" value="1" className="hidden"/>
+        <div className="flex flex-col items-center gap-4 w-full">
+          <div className={`flex flex-col md:flex-row md:justify-between w-full justify-center items-center gap-4 md:gap-2`}>
+            <Input
+              name="searchQuery"
+              id="searchQuery"
+              label="Search Games..."
+              defaultValue={fields ? fields.searchQuery : ''}
+              componentSize={componentSize}
+              fieldError={fieldErrors ? fieldErrors.searchQuery : undefined}
+              // minLength={2}
+              maxLength={100}
+              // required
+              {...rest}
             />
+
+            <div className="flex justify-between md:justify-around items-center w-full">
+              <UncontrolledToggleSwitch
+                defaultChecked={fields ? fields.searchAppleOnly : false}
+                name="searchAppleOnly"
+                label="Apple"
+                labelPosition="left"
+              />
+              <RoundedButton
+                className={`${buttonHeight} w-[89.66px]`}
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Loading' : 'Search' }
+              </RoundedButton>
+            </div>
+
           </div>
-          <div className="w-full">
-            <MultiSelectMenu
-              name="searchGenreIds"
-              labelText="Genres"
-              options={genreOptions}
-              defaultValue={defaultGenreOptions}
-              fieldError={fieldErrors?.searchGenreIds}
-              // defaultValue={fields ? fields.searchGenreIds : undefined}
-              openMenuOnFocus={false}
-              closeMenuOnSelect={true}
-              isMulti
-            />
+          <div className="flex flex-col items-start justify-center gap-4 w-full">
+            <div className="w-full">
+              <MultiSelectMenu
+                name="searchGenreIds"
+                labelText="Genres"
+                options={genreOptions}
+                defaultValue={defaultGenreOptions}
+                fieldError={fieldErrors?.searchGenreIds}
+                // defaultValue={fields ? fields.searchGenreIds : undefined}
+                openMenuOnFocus={false}
+                closeMenuOnSelect={true}
+                isMulti
+              />
+            </div>
+            <div className="w-full">
+              <MultiSelectMenu
+                name="searchCategoryIds"
+                labelText="Categories"
+                options={categoryOptions}
+                defaultValue={defaultCategoryOptions}
+                fieldError={fieldErrors?.searchCategoryIds}
+                // defaultValue={fields ? fields.searchCategoryIds : undefined}
+                openMenuOnFocus={false}
+                closeMenuOnSelect={true}
+                isMulti
+              />
+            </div>
           </div>
-          <div className="w-full">
-            <MultiSelectMenu
-              name="searchCategoryIds"
-              labelText="Categories"
-              options={categoryOptions}
-              defaultValue={defaultCategoryOptions}
-              fieldError={fieldErrors?.searchCategoryIds}
-              // defaultValue={fields ? fields.searchCategoryIds : undefined}
-              openMenuOnFocus={false}
-              closeMenuOnSelect={true}
-              isMulti
-            />
-          </div>
+
         </div>
 
-      </div>
-
-      {(fieldErrors && fieldErrors.searchQuery) ? (
+        {(fieldErrors && fieldErrors.searchQuery) ? (
         <div className="text-color-error">
           {fieldErrors.searchQuery}
         </div>
       ) : (
         null
       )}
-    </Form>
+      </Form>
+    </div>
   );
 }
