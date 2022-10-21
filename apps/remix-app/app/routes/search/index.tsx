@@ -302,12 +302,16 @@ export default function SearchIndexRoute() {
   );
 
   if (isSubmitting) {
+    const newSearchQuery = transition.submission.formData.get('searchQuery');
     return (
       <SearchIndexWrap
         searchOptions={searchOptions}
         formError={formError}
         fieldErrors={fieldErrors}
-        fields={fields}
+        fields={fields ? {
+          ...fields,
+          searchQuery: newSearchQuery?.toString(),
+        } : undefined}
         isSubmitting
       >
         <LoadingComponent />
