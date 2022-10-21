@@ -74,8 +74,9 @@ export default function SearchInputForm({
       method="get"
       action="/search"
       ref={formRef}
+      className="w-full"
     >
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col items-center gap-4 w-full">
         <div className={`flex justify-center items-center gap-2`}>
           <input type="hidden" name="page" value="1" />
           <Input
@@ -98,39 +99,42 @@ export default function SearchInputForm({
             {isSubmitting ? 'Loading' : 'Search' }
           </RoundedButton>
         </div>
-        <div className="flex items-center gap-4">
-          <UncontrolledToggleSwitch
-            defaultChecked={fields ? fields.searchAppleOnly : false}
-            name="searchAppleOnly"
-            label="Apple"
-          />
+        <div className="flex flex-col items-start justify-center gap-4 w-full max-w-md">
+          <div>
+            <UncontrolledToggleSwitch
+              defaultChecked={fields ? fields.searchAppleOnly : false}
+              name="searchAppleOnly"
+              label="Apple"
+            />
+          </div>
+          <div className="w-full">
+            <MultiSelectMenu
+              name="searchGenreIds"
+              labelText="Genres"
+              options={genreOptions}
+              defaultValue={defaultGenreOptions}
+              fieldError={fieldErrors?.searchGenreIds}
+              // defaultValue={fields ? fields.searchGenreIds : undefined}
+              openMenuOnFocus={false}
+              closeMenuOnSelect={true}
+              isMulti
+            />
+          </div>
+          <div className="w-full">
+            <MultiSelectMenu
+              name="searchCategoryIds"
+              labelText="Categories"
+              options={categoryOptions}
+              defaultValue={defaultCategoryOptions}
+              fieldError={fieldErrors?.searchCategoryIds}
+              // defaultValue={fields ? fields.searchCategoryIds : undefined}
+              openMenuOnFocus={false}
+              closeMenuOnSelect={true}
+              isMulti
+            />
+          </div>
         </div>
-        <div>
-          <MultiSelectMenu
-            name="searchGenreIds"
-            labelText="Genres"
-            options={genreOptions}
-            defaultValue={defaultGenreOptions}
-            fieldError={fieldErrors?.searchGenreIds}
-            // defaultValue={fields ? fields.searchGenreIds : undefined}
-            openMenuOnFocus={false}
-            closeMenuOnSelect={true}
-            isMulti
-          />
-        </div>
-        <div>
-          <MultiSelectMenu
-            name="searchCategoryIds"
-            labelText="Categories"
-            options={categoryOptions}
-            defaultValue={defaultCategoryOptions}
-            fieldError={fieldErrors?.searchCategoryIds}
-            // defaultValue={fields ? fields.searchCategoryIds : undefined}
-            openMenuOnFocus={false}
-            closeMenuOnSelect={true}
-            isMulti
-          />
-        </div>
+
       </div>
 
       {(fieldErrors && fieldErrors.searchQuery) ? (

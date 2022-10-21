@@ -248,8 +248,8 @@ function SearchIndexWrap({
 }) {
   const { isWide } = useMediaIsWide();
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex w-full md:min-w-[546px] h-full items-center justify-center
+    <div className="flex flex-col gap-6 w-full justify-center items-center">
+      <div className="flex w-full items-center justify-center
                       bg-tertiary rounded-lg border-1 border-secondary-highlight p-10">
         <SearchForm
           genreOptions={searchOptions.genreOptions}
@@ -310,7 +310,7 @@ export default function SearchIndexRoute() {
         fieldErrors={fieldErrors}
         fields={fields ? {
           ...fields,
-          searchQuery: newSearchQuery?.toString(),
+          searchQuery: newSearchQuery ? newSearchQuery.toString() : '',
         } : undefined}
         isSubmitting
       >
@@ -379,7 +379,7 @@ export default function SearchIndexRoute() {
       fields={fields}
       isSubmitting={isSubmitting}
     >
-      <div className="flex flex-col gap-3 items-center w-full border-secondary border-1 rounded-md p-4 bg-app-bg">
+      <div className="flex flex-col gap-3 items-center w-full max-w-lg border-secondary border-1 rounded-md p-4 bg-app-bg">
         {steamApps.map(({ steamAppId, name, headerImage, releaseDate }) => (
           <div key={steamAppId}>
             <SearchTitleCard
