@@ -43,6 +43,7 @@ export default function MultiSelectMenu<T>({
   name,
   id,
   options,
+  defaultValue,
   isMulti = false,
   openMenuOnFocus = false,
   closeMenuOnSelect = true,
@@ -53,6 +54,7 @@ export default function MultiSelectMenu<T>({
   name?: string;
   id?: string;
   options: MultiSelectOption<T>[];
+  defaultValue?: MultiSelectOption<T>[]; // This is only good on multiSelect
   isMulti?: boolean;
   openMenuOnFocus?: boolean;
   closeMenuOnSelect?: boolean;
@@ -88,6 +90,7 @@ export default function MultiSelectMenu<T>({
           isMulti={isMulti}
           name={name}
           options={options}
+          defaultValue={defaultValue}
           id={id}
           closeMenuOnSelect={closeMenuOnSelect}
           styles={styles}
