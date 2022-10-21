@@ -4,7 +4,7 @@ type IconProps = {
   size?: number,
 } & React.SVGAttributes<SVGElement>
 
-export default function AppleIcon({
+export default function ChevronUpIcon({
   size,
   strokeWidth = 1.5,
   ...rest
