@@ -98,10 +98,17 @@ function(identifier: any, profile: any, done: any) {
 ));
 
 const PASSPORT_COOKIE_NAME = 'passport-steam';
+const PASSPORT_SESSION_SECRET = process.env.ASGD_PASSPORT_SESSION_SECRET;
+if (!PASSPORT_SESSION_SECRET) {
+  console.error('env var ASGD_PASSPORT_SESSION_SECRET not set.');
+  process.exit(1);
+}
 
 app.use(session({
   name: PASSPORT_COOKIE_NAME,
-  secret: process.env.ASGD_SESSION_SECRET,
+  secret: PASSPORT_SESSION_SECRET,
+  sameSite: 'lax',
+  secure: process.env.NODE_ENV === 'production' ? true : false,
   maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
 }));
 
