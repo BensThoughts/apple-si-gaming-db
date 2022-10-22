@@ -1,4 +1,3 @@
-import { Suspense, lazy, useEffect, useState } from 'react';
 import type {
   LinksFunction,
   LoaderArgs,
@@ -27,16 +26,10 @@ import { findUserProfileData, updateUserOwnedApps, upsertSteamUser } from './mod
 
 import type { SerializeFrom } from '@remix-run/node';
 import { commitProfileSession, getProfileSession } from './lib/sessions/cookie-sessions.server';
+import type { Theme } from './lib/context/theme-provider';
+import { useTheme, ThemeProvider, NonFlashOfWrongThemeEls } from './lib/context/theme-provider';
+import { getThemeSession } from './lib/sessions/theme-session.server';
 
-const ThemeProvider = lazy(() => import('./lib/context/colorMode'));
-
-export function ClientOnly({ children }: { children: React.ReactNode }) {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  return mounted ? <>{children}</> : null;
-}
 
 export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: tailwindStylesheetUrl }];
@@ -49,6 +42,7 @@ export const meta: MetaFunction = () => ({
 });
 
 type RootLoaderData = {
+  theme: Theme | null;
   isLoggedIn: boolean;
   contextData: {
     steamUserId?: string | null;
@@ -80,6 +74,8 @@ type RootLoaderData = {
 export type SerializedRootLoaderData = SerializeFrom<RootLoaderData>
 
 export async function loader({ request, context }: LoaderArgs) {
+  const themeSession = await getThemeSession(request);
+  const theme = themeSession.getTheme();
   const { steamUser } = extractAppLoadContext(context);
   const isLoggedIn = steamUser ? true : false;
   const profileSession = await getProfileSession(
@@ -105,6 +101,7 @@ export async function loader({ request, context }: LoaderArgs) {
       } = userProfile;
       // const systemNames = systemSpecs.map((systemSpec) => systemSpec.systemName);
       return json<RootLoaderData>({
+        theme,
         isLoggedIn,
         contextData: {
           steamUserId,
@@ -122,6 +119,7 @@ export async function loader({ request, context }: LoaderArgs) {
       });
     } else {
       return json<RootLoaderData>({
+        theme,
         isLoggedIn,
         contextData: {
           steamUserId,
@@ -137,6 +135,7 @@ export async function loader({ request, context }: LoaderArgs) {
   }
 
   return json<RootLoaderData>({
+    theme,
     isLoggedIn,
     contextData: {},
   }, {
@@ -151,59 +150,33 @@ function Document({
   title = 'Apple Silicon Gaming DB',
   isLoggedIn,
   isSearchSubmitting,
+  ssrTheme,
 }: {
   children: React.ReactNode;
   title?: string;
   isLoggedIn?: boolean;
   isSearchSubmitting?: boolean;
+  ssrTheme: Theme | null;
 }) {
-  const setInitialTheme = `
-  (function() {
-    function getInitialColorMode() {
-      const persistedColorPreference = window.localStorage.getItem('color-mode');
-      const hasPersistedPreference = typeof persistedColorPreference === 'string';
-
-      if (hasPersistedPreference) {
-        return persistedColorPreference;
-      }
-
-      const mql = window.matchMedia('(prefers-color-scheme: dark)');
-      const hasMediaQueryPreference = typeof mql.matches === 'boolean';
-      if (hasMediaQueryPreference) {
-        return mql.matches ? 'dark' : 'light';
-      }
-
-      return 'light';
-    }
-
-    const colorMode = getInitialColorMode();
-    document.body.dataset.theme = colorMode;
-  })()`;
-
+  const [theme] = useTheme();
   return (
-    <html lang="en">
+    <html lang="en" className={theme ? theme : ''}>
       <head>
         <Meta />
         {title ? <title>title</title> : null}
         <Links />
       </head>
       <body className="min-h-screen bg-app-bg">
-        <script dangerouslySetInnerHTML={{ __html: setInitialTheme }} />
-        <ClientOnly>
-          <Suspense>
-            <ThemeProvider>
-              <Navbar
-                isLoggedIn={isLoggedIn ? isLoggedIn : false}
-                isSearchSubmitting={isSearchSubmitting ? isSearchSubmitting : false}
-                className="h-14"
-              />
-              <div className="absolute top-14 w-full z-10">
-                {children}
-              </div>
-            </ThemeProvider>
-            <Toaster />
-          </Suspense>
-        </ClientOnly>
+        <Navbar
+          isLoggedIn={isLoggedIn ? isLoggedIn : false}
+          isSearchSubmitting={isSearchSubmitting ? isSearchSubmitting : false}
+          className="h-14"
+        />
+        <div className="absolute top-14 w-full z-10">
+          {children}
+        </div>
+        <Toaster />
+        <NonFlashOfWrongThemeEls ssrTheme={Boolean(ssrTheme)} />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
@@ -212,48 +185,71 @@ function Document({
   );
 }
 
+function AppWithThemeContext({
+  children,
+  specifiedTheme,
+}: {
+  children: React.ReactNode;
+  specifiedTheme: Theme | null;
+}) {
+  return (
+    <ThemeProvider specifiedTheme={specifiedTheme}>
+      {children}
+    </ThemeProvider>
+  );
+}
+
 export default function App() {
   // TODO: Getting cannot use loaderData in an error boundary errors,
   // TODO: with error being thrown on /profile, prob. because of this
-  const { isLoggedIn }= useLoaderData<RootLoaderData>();
+  const { isLoggedIn, theme }= useLoaderData<RootLoaderData>();
   const transition = useTransition();
   const isSearchSubmitting =
     transition.state === 'submitting' &&
     transition.location.pathname === '/search';
   return (
-    <Document
-      isLoggedIn={isLoggedIn}
-      isSearchSubmitting={isSearchSubmitting}
-    >
-      <Outlet />
-    </Document>
+    <AppWithThemeContext specifiedTheme={theme}>
+      <Document
+        isLoggedIn={isLoggedIn}
+        isSearchSubmitting={isSearchSubmitting}
+        ssrTheme={theme}
+      >
+        <Outlet />
+      </Document>
+    </AppWithThemeContext>
   );
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
-    <Document title="Error">
-      <div>
-        <h1>App Error</h1>
-        <pre>{error.message}</pre>
-      </div>
-    </Document>
+    <AppWithThemeContext specifiedTheme={null}>
+
+      <Document title="Error" ssrTheme={null}>
+        <div>
+          <h1>App Error</h1>
+          <pre>{error.message}</pre>
+        </div>
+      </Document>
+    </AppWithThemeContext>
   );
 }
 
 export function CatchBoundary() {
   const caught = useCatch();
   return (
-    <Document title="Oops!">
-      <div>
-        <h1>Oops! - {caught.status} {caught.statusText}</h1>
-        {caught.status === 404 && (
-          <img
-            src="/svg-images/four-oh-four-error.svg"
-            alt="Four oh four error"
-          />
-        )}
-      </div>
-    </Document>
+    <AppWithThemeContext specifiedTheme={null}>
+
+      <Document title="Oops!" ssrTheme={null}>
+        <div>
+          <h1>Oops! - {caught.status} {caught.statusText}</h1>
+          {caught.status === 404 && (
+            <img
+              src="/svg-images/four-oh-four-error.svg"
+              alt="Four oh four error"
+            />
+          )}
+        </div>
+      </Document>
+    </AppWithThemeContext>
   );
 }

@@ -1,5 +1,5 @@
-import { isTheme } from '../context/colorModeNew';
-import type { Theme } from '../context/colorModeNew';
+import { isTheme } from '../context/theme-provider';
+import type { Theme } from '../context/theme-provider';
 import { createCookieSessionStorage } from '@remix-run/node';
 
 // const sessionSecret = process.env.SESSION_SECRET;
@@ -11,12 +11,12 @@ if (!sessionSecret) {
 
 const themeStorage = createCookieSessionStorage({
   cookie: {
-    name: 'my_remix_theme',
-    secure: true,
+    name: '__theme_session',
+    // secure: true,
     secrets: [sessionSecret],
     sameSite: 'lax',
     path: '/',
-    httpOnly: true,
+    // httpOnly: true,
   },
 });
 

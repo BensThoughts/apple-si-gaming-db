@@ -1,5 +1,6 @@
-import { useContext } from 'react';
-import { ThemeContext } from '~/lib/context/colorMode';
+// import { useContext } from 'react';
+// import { ThemeContext } from '~/lib/context/colorMode';
+import { useTheme } from '~/lib/context/theme-provider';
 import PageFooter from './PageFooter';
 import PageHeader from './PageHeader';
 import PageMain from './PageMain';
@@ -7,9 +8,10 @@ import PageMain from './PageMain';
 type PageProps = { title?: string; } & React.HTMLAttributes<HTMLDivElement>
 
 function Background() {
-  const { colorMode } = useContext(ThemeContext);
+  const [currentTheme] = useTheme();
+  // const { colorMode } = useContext(ThemeContext);
   let bgImageCss = `bg-[url('/svg-images/layered-waves-light.svg')]`;
-  if (colorMode === 'dark') {
+  if (currentTheme === 'dark') {
     bgImageCss = `bg-[url('/svg-images/layered-waves-dark.svg')]`;
   }
   return (
