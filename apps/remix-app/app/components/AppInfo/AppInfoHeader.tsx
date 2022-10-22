@@ -29,7 +29,7 @@ export default function AppInfoHeader({
         <div className="flex items-center justify-center bg-primary-highlight p-[3px] md:p-[6px] rounded-lg">
           {headerImage && <img
             src={headerImage}
-            alt={`Header for ${name}`}
+            alt="Cover Art"
             width={460}
             height={215}
             className="rounded-md"
