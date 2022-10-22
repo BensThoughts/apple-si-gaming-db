@@ -10,6 +10,7 @@ const generateColorClass = (variable) => {
 };
 
 module.exports = {
+  darkMode: 'class',
   content: ['./app/**/*.{ts,tsx,jsx,js}'],
   theme: {
     colors: {
