@@ -2,7 +2,6 @@ import { isTheme } from '../context/theme-provider';
 import type { Theme } from '../context/theme-provider';
 import { createCookieSessionStorage } from '@remix-run/node';
 
-// const sessionSecret = process.env.SESSION_SECRET;
 const sessionSecret = process.env.ASGD_THEME_SESSION_SECRET;
 
 if (!sessionSecret) {
