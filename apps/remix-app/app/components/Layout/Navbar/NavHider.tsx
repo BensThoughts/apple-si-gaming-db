@@ -21,9 +21,9 @@ export default function NavHider({ className, children }: NavHiderProps) {
       leaveFrom="translate-y-0"
       leaveTo="-translate-y-full"
     >
-      <div className={`fixed inset-0 h-14 max-h-14 z-[49] ${className}`}>
+      <nav className={`fixed inset-0 h-14 max-h-14 z-[49] ${className}`}>
         {children}
-      </div>
+      </nav>
     </Transition>
 
 

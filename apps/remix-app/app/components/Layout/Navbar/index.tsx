@@ -53,7 +53,7 @@ export default function Navbar({
         </div>
       </MenuDrawer>
       <NavHider>
-        <nav {...rest} className={`bg-opacity-70 bg-app-bg-secondary shadow-lg z-[49] flex items-center
+        <div {...rest} className={`bg-opacity-70 bg-app-bg-secondary shadow-lg z-[49] flex items-center
                                    justify-between w-full p-0 transition-colors ${className}`}>
 
           {/* Medium+ Screens */}
@@ -103,7 +103,7 @@ export default function Navbar({
               <BarsIcon size={24} className="text-primary-highlight" />
             </button>
           </div>
-        </nav>
+        </div>
       </NavHider>
 
     </>
