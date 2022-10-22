@@ -26,7 +26,7 @@ import { Toaster } from 'react-hot-toast';
 import { findUserProfileData, updateUserOwnedApps, upsertSteamUser } from '~/models/steamUser.server';
 
 import type { SerializeFrom } from '@remix-run/node';
-import { commitProfileSession, getProfileSession } from '~/lib/sessions/cookie-sessions.server';
+import { commitProfileSession, getProfileSession } from '~/lib/sessions/profile-session.server';
 
 const ThemeProvider = lazy(() => import('~/lib/context/colorMode'));
 
