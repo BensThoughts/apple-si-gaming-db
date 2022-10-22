@@ -61,7 +61,7 @@ function ThemeProvider({
       return;
     }
 
-    persistThemeRef.current.submit({ theme }, { action: 'action/set-theme', method: 'post' });
+    persistThemeRef.current.submit({ theme }, { action: 'actions/set-theme', method: 'post' });
   }, [theme]);
 
   return <ThemeContext.Provider value={[theme, setTheme]}>{children}</ThemeContext.Provider>;
