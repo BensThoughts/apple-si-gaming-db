@@ -1,5 +1,9 @@
+
+// import { lazy, Suspense } from 'react';
 import type { StylesConfig } from 'react-select';
+import { ClientOnly } from '~/components/ClientOnly';
 import Select from 'react-select';
+// const Select = lazy(() => import('react-select'));
 
 const styles: StylesConfig = {
   clearIndicator: (styles, state) => ({ ...styles }),
@@ -63,64 +67,67 @@ export default function MultiSelectMenu<T>({
   required?: boolean;
 }) {
   return (
-    <div>
-      {labelText && (
-        <label htmlFor={id}>
-          <span className="text-primary">
-            {labelText}
-          </span>
-          {required &&
+    <ClientOnly>
+      <div>
+        {labelText && (
+          <label htmlFor={id}>
+            <span className="text-primary">
+              {labelText}
+            </span>
+            {required &&
             <span className="text-color-error">
               *
             </span>
-          }
-          {fieldError &&
+            }
+            {fieldError &&
             <span className="text-primary">
               {`: `}
               <span className="text-color-error">
                 {fieldError}
               </span>
             </span>
-          }
-        </label>
-      )}
-      <div className="mt-1.5">
-        <Select
-          openMenuOnFocus={openMenuOnFocus}
-          isMulti={isMulti}
-          name={name}
-          options={options}
-          defaultValue={defaultValue}
-          id={id}
-          closeMenuOnSelect={closeMenuOnSelect}
-          styles={styles}
-          theme={(theme) => ({
-            ...theme,
-            borderRadius: 8,
-            colors: {
-              ...theme.colors,
-              primary: 'rgb(var(--color-app-secondary-highlight))', // focus outline
-              primary75: theme.colors.primary75, // unsure
-              primary50: 'rgb(var(--color-app-secondary-highlight))', // click/select option
-              primary25: 'rgb(var(--color-app-secondary))', // hover option
-              danger: theme.colors.danger,
-              dangerLight: theme.colors.dangerLight,
-              neutral0: 'rgb(var(--color-app-primary))', // primary background
-              neutral5: theme.colors.neutral5, // unsure
-              neutral10: 'rgb(var(--color-app-secondary))', // tag background
-              neutral20: 'rgb(var(--color-text-primary))', // outline and carat when not selected
-              neutral30: 'transparent', // hover border color
-              neutral40: 'rgb(var(--color-text-primary))', // No Options Text
-              neutral50: 'rgb(var(--color-text-primary-highlight))', // Placeholder text
-              neutral60: 'rgb(var(--color-text-primary))', // dropdown carat and X when focused
-              neutral70: theme.colors.neutral70, // unsure
-              neutral80: 'rgb(var(--color-text-primary-highlight))', // input text color (also text color for tags and hover carat/clear X)
-              neutral90: theme.colors.neutral90, // unsure
-            },
-          })}
-        />
+            }
+          </label>
+        )}
+        <div className="mt-1.5">
+          <Select
+            id={id}
+            instanceId={`instance-${id}`}
+            inputId={`input-${id}`}
+            openMenuOnFocus={openMenuOnFocus}
+            isMulti={isMulti}
+            name={name}
+            options={options}
+            defaultValue={defaultValue}
+            closeMenuOnSelect={closeMenuOnSelect}
+            styles={styles}
+            theme={(theme) => ({
+              ...theme,
+              borderRadius: 8,
+              colors: {
+                ...theme.colors,
+                primary: 'rgb(var(--color-app-secondary-highlight))', // focus outline
+                primary75: theme.colors.primary75, // unsure
+                primary50: 'rgb(var(--color-app-secondary-highlight))', // click/select option
+                primary25: 'rgb(var(--color-app-secondary))', // hover option
+                danger: theme.colors.danger,
+                dangerLight: theme.colors.dangerLight,
+                neutral0: 'rgb(var(--color-app-primary))', // primary background
+                neutral5: theme.colors.neutral5, // unsure
+                neutral10: 'rgb(var(--color-app-secondary))', // tag background
+                neutral20: 'rgb(var(--color-text-primary))', // outline and carat when not selected
+                neutral30: 'transparent', // hover border color
+                neutral40: 'rgb(var(--color-text-primary))', // No Options Text
+                neutral50: 'rgb(var(--color-text-primary-highlight))', // Placeholder text
+                neutral60: 'rgb(var(--color-text-primary))', // dropdown carat and X when focused
+                neutral70: theme.colors.neutral70, // unsure
+                neutral80: 'rgb(var(--color-text-primary-highlight))', // input text color (also text color for tags and hover carat/clear X)
+                neutral90: theme.colors.neutral90, // unsure
+              },
+            })}
+          />
+        </div>
       </div>
-    </div>
-
+    </ClientOnly>
   );
 }
