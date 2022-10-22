@@ -118,6 +118,7 @@ export default function SearchInputForm({
             <div className="w-full">
               <MultiSelectMenu
                 name="searchGenreIds"
+                id="searchGenreIds"
                 labelText="Genres"
                 options={genreOptions}
                 defaultValue={defaultGenreOptions}
@@ -131,6 +132,7 @@ export default function SearchInputForm({
             <div className="w-full">
               <MultiSelectMenu
                 name="searchCategoryIds"
+                id="searchCategoryIds"
                 labelText="Categories"
                 options={categoryOptions}
                 defaultValue={defaultCategoryOptions}
