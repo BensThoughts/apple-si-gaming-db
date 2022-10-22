@@ -10,7 +10,7 @@ processes = []
 [env]
   PORT = "8080"
   NODE_ENV = "production"
-  ASGD_DOMAIN = "https://applesilicongaming.com"
+  # ! ASGD_PASSPORT_DOMAIN = "https://www.applesilicongaming.com" (Set as Secret)
 
 [deploy]
   release_command = "yarn run db:migrate:deploy"
