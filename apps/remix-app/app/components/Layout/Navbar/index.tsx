@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import ThemeToggle from '~/components/ThemeToggle';
+import ThemeToggle from '~/components/Layout/Navbar/ThemeToggle';
 import MenuDrawer from '~/components/Layout/MenuDrawer';
 import MenuItem from './MenuItem';
 import NavHider from './NavHider';
