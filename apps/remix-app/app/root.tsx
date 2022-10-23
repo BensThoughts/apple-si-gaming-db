@@ -15,7 +15,6 @@ import {
   useTransition,
 } from '@remix-run/react';
 import { json } from '@remix-run/node';
-// import { getProfileSession, commitProfileSession } from './lib/sessions/cookie-sessions.server';
 import type { SteamGenre } from '~/interfaces/database';
 import tailwindStylesheetUrl from './styles/tailwind.css';
 import { metaTags } from './lib/meta-tags';
@@ -25,7 +24,7 @@ import { Toaster } from 'react-hot-toast';
 import { findUserProfileData, updateUserOwnedApps, upsertSteamUser } from './models/steamUser.server';
 
 import type { SerializeFrom } from '@remix-run/node';
-import { commitProfileSession, getProfileSession } from './lib/sessions/profile-session.server';
+import { getProfileSession } from './lib/sessions/profile-session.server';
 import type { Theme } from './lib/context/theme-provider';
 import { useTheme, ThemeProvider, NonFlashOfWrongThemeEls } from './lib/context/theme-provider';
 import { getThemeSession } from './lib/sessions/theme-session.server';
@@ -78,9 +77,7 @@ export async function loader({ request, context }: LoaderArgs) {
   const theme = themeSession.getTheme();
   const { steamUser } = extractAppLoadContext(context);
   const isLoggedIn = steamUser ? true : false;
-  const profileSession = await getProfileSession(
-      request.headers.get('Cookie'),
-  );
+  const profileSession = await getProfileSession(request);
   if (steamUser) {
     const {
       steamUserId,
@@ -88,10 +85,10 @@ export async function loader({ request, context }: LoaderArgs) {
       avatarFull,
     } = steamUser;
     // First time logging in need to add user to db
-    if (!profileSession.has('alreadyLoggedIn')) {
+    if (!profileSession.hasAlreadyLoggedIn()) {
       await upsertSteamUser(steamUser);
       await updateUserOwnedApps(steamUser.steamUserId);
-      profileSession.set('alreadyLoggedIn', true);
+      profileSession.setAlreadyLoggedIn(true);
     }
     const userProfile = await findUserProfileData(steamUser.steamUserId);
     if (userProfile) {
@@ -114,7 +111,7 @@ export async function loader({ request, context }: LoaderArgs) {
         },
       }, {
         headers: {
-          'Set-Cookie': await commitProfileSession(profileSession),
+          'Set-Cookie': await profileSession.commit(),
         },
       });
     } else {
@@ -128,7 +125,7 @@ export async function loader({ request, context }: LoaderArgs) {
         },
       }, {
         headers: {
-          'Set-Cookie': await commitProfileSession(profileSession),
+          'Set-Cookie': await profileSession.commit(),
         },
       });
     }
@@ -140,7 +137,7 @@ export async function loader({ request, context }: LoaderArgs) {
     contextData: {},
   }, {
     headers: {
-      'Set-Cookie': await commitProfileSession(profileSession),
+      'Set-Cookie': await profileSession.commit(),
     },
   });
 }

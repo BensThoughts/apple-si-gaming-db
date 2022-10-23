@@ -20,11 +20,17 @@ const profileSession = createCookieSessionStorage({
   },
 });
 
-const getProfileSession = profileSession.getSession;
-const commitProfileSession = profileSession.commitSession;
-const destroyProfileSession = profileSession.destroySession;
+async function getProfileSession(request: Request) {
+  const session = await profileSession.getSession(request.headers.get('Cookie'));
+  return {
+    hasAlreadyLoggedIn: () => {
+      return session.has('alreadyLoggedIn');
+    },
+    setAlreadyLoggedIn: (alreadyLoggedIn: boolean) => session.set('alreadyLoggedIn', alreadyLoggedIn),
+    commit: () => profileSession.commitSession(session),
+  };
+}
+
 export {
   getProfileSession,
-  commitProfileSession,
-  destroyProfileSession,
 };
