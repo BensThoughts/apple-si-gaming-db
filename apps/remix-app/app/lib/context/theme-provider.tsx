@@ -23,24 +23,20 @@ const getPreferredTheme = () => (window.matchMedia(prefersDarkMQ).matches ? Them
 
 function ThemeProvider({
   children,
-  specifiedTheme,
+  ssrCookieTheme,
 }: {
   children: ReactNode;
-  specifiedTheme: Theme | null;
+  ssrCookieTheme: Theme | null;
 }) {
   const [theme, setTheme] = useState<Theme | null>(() => {
-    if (specifiedTheme) {
-      if (themes.includes(specifiedTheme)) {
-        return specifiedTheme;
+    if (ssrCookieTheme) {
+      if (themes.includes(ssrCookieTheme)) {
+        return ssrCookieTheme;
       } else {
         return null;
       }
     }
     return null;
-    // if (typeof window !== 'object') {
-    //   return null;
-    // }
-    // return getPreferredTheme();
   });
 
   const persistTheme = useFetcher();
@@ -56,7 +52,7 @@ function ThemeProvider({
   useEffect(() => {
     if (!mountRun.current) {
       mountRun.current = true;
-      if (!specifiedTheme) {
+      if (!ssrCookieTheme) {
         setTheme(getPreferredTheme());
       }
       return;
@@ -66,7 +62,7 @@ function ThemeProvider({
     }
 
     persistThemeRef.current.submit({ theme }, { action: 'actions/set-theme', method: 'post' });
-  }, [theme, specifiedTheme]);
+  }, [theme, ssrCookieTheme]);
 
   // useEffect(() => {
   //   const mediaQuery = window.matchMedia(prefersDarkMQ);
