@@ -183,20 +183,6 @@ function Document({
   );
 }
 
-function AppWithThemeContext({
-  children,
-  ssrCookieTheme,
-}: {
-  children: React.ReactNode;
-  ssrCookieTheme: Theme | null;
-}) {
-  return (
-    <ThemeProvider ssrCookieTheme={ssrCookieTheme}>
-      {children}
-    </ThemeProvider>
-  );
-}
-
 export default function App() {
   // TODO: Getting cannot use loaderData in an error boundary errors,
   // TODO: with error being thrown on /profile, prob. because of this
@@ -206,7 +192,7 @@ export default function App() {
     transition.state === 'submitting' &&
     transition.location.pathname === '/search';
   return (
-    <AppWithThemeContext ssrCookieTheme={theme}>
+    <ThemeProvider ssrCookieTheme={theme}>
       <Document
         isLoggedIn={isLoggedIn}
         isSearchSubmitting={isSearchSubmitting}
@@ -214,40 +200,32 @@ export default function App() {
       >
         <Outlet />
       </Document>
-    </AppWithThemeContext>
+    </ThemeProvider>
   );
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
-    <AppWithThemeContext ssrCookieTheme={null}>
-
+    <ThemeProvider ssrCookieTheme={null}>
       <Document title="Error" ssrTheme={null}>
         <div>
-          <h1>App Error</h1>
+          <h1>Main App Error</h1>
           <pre>{error.message}</pre>
         </div>
       </Document>
-    </AppWithThemeContext>
+    </ThemeProvider>
   );
 }
 
 export function CatchBoundary() {
   const caught = useCatch();
   return (
-    <AppWithThemeContext ssrCookieTheme={null}>
-
-      <Document title="Oops!" ssrTheme={null}>
+    <ThemeProvider ssrCookieTheme={null}>
+      <Document title="Root Oops!" ssrTheme={null}>
         <div>
           <h1>Oops! - {caught.status} {caught.statusText}</h1>
-          {caught.status === 404 && (
-            <img
-              src="/svg-images/four-oh-four-error.svg"
-              alt="Four oh four error"
-            />
-          )}
         </div>
       </Document>
-    </AppWithThemeContext>
+    </ThemeProvider>
   );
 }
