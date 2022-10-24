@@ -37,7 +37,7 @@ export const links: LinksFunction = () => {
 export const meta: MetaFunction = ({ data }) => ({
   'charset': 'utf-8',
   'viewport': 'width=device-width,initial-scale=1',
-  // 'color-scheme': (data && data.theme === 'light') ? 'light dark' : 'dark light',
+  'color-scheme': (data && data.theme === 'light') ? 'light dark' : 'dark light',
   ...metaTags,
 });
 
@@ -185,13 +185,13 @@ function Document({
 
 function AppWithThemeContext({
   children,
-  specifiedTheme,
+  ssrCookieTheme,
 }: {
   children: React.ReactNode;
-  specifiedTheme: Theme | null;
+  ssrCookieTheme: Theme | null;
 }) {
   return (
-    <ThemeProvider specifiedTheme={specifiedTheme}>
+    <ThemeProvider ssrCookieTheme={ssrCookieTheme}>
       {children}
     </ThemeProvider>
   );
@@ -206,7 +206,7 @@ export default function App() {
     transition.state === 'submitting' &&
     transition.location.pathname === '/search';
   return (
-    <AppWithThemeContext specifiedTheme={theme}>
+    <AppWithThemeContext ssrCookieTheme={theme}>
       <Document
         isLoggedIn={isLoggedIn}
         isSearchSubmitting={isSearchSubmitting}
@@ -220,7 +220,7 @@ export default function App() {
 
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
-    <AppWithThemeContext specifiedTheme={null}>
+    <AppWithThemeContext ssrCookieTheme={null}>
 
       <Document title="Error" ssrTheme={null}>
         <div>
@@ -235,7 +235,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
 export function CatchBoundary() {
   const caught = useCatch();
   return (
-    <AppWithThemeContext specifiedTheme={null}>
+    <AppWithThemeContext ssrCookieTheme={null}>
 
       <Document title="Oops!" ssrTheme={null}>
         <div>
