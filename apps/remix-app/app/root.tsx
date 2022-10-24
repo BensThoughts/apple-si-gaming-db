@@ -34,9 +34,10 @@ export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: tailwindStylesheetUrl }];
 };
 
-export const meta: MetaFunction = () => ({
+export const meta: MetaFunction = ({ data }) => ({
   'charset': 'utf-8',
   'viewport': 'width=device-width,initial-scale=1',
+  // 'color-scheme': (data && data.theme === 'light') ? 'light dark' : 'dark light',
   ...metaTags,
 });
 
@@ -157,13 +158,13 @@ function Document({
 }) {
   const [theme] = useTheme();
   return (
-    <html lang="en" className={theme ? theme : ''}>
+    <html lang="en">
       <head>
         <Meta />
         {title ? <title>title</title> : null}
         <Links />
       </head>
-      <body className="min-h-screen bg-app-bg">
+      <body className="min-h-screen bg-app-bg" data-theme={theme ? theme : ''} >
         <Navbar
           isLoggedIn={isLoggedIn ? isLoggedIn : false}
           isSearchSubmitting={isSearchSubmitting ? isSearchSubmitting : false}
@@ -172,8 +173,8 @@ function Document({
         <div className="absolute top-14 w-full z-10">
           {children}
         </div>
-        <Toaster />
         <NonFlashOfWrongThemeEls ssrTheme={Boolean(ssrTheme)} />
+        <Toaster />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

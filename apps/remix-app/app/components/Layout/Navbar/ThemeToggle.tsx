@@ -13,7 +13,7 @@ export default function ThemeToggle() {
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === Theme.LIGHT ? Theme.DARK : Theme.LIGHT));
   };
-  const inactiveColorMode = theme === 'light' ? 'dark' : 'light';
+  const inactiveColorMode = theme === Theme.DARK ? Theme.DARK : Theme.LIGHT;
 
   return (
     <button
@@ -27,7 +27,7 @@ export default function ThemeToggle() {
       <span
         className={`absolute top-[3px] left-[3px] w-[32px] h-[32px] rounded-[50%]
                     bg-secondary transition-transform
-                    ${theme === 'dark' ? 'translate-x-[40px]' : 'translate-x-0'}`}
+                    ${theme === Theme.DARK ? 'translate-x-[40px]' : 'translate-x-0'}`}
       />
       <span aria-hidden="true"><CloudMoonIcon className="text-icon-secondary" /></span>
       <span aria-hidden="true"><SunIcon className="text-icon-secondary" /></span>
