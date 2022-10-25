@@ -84,13 +84,23 @@ passport.deserializeUser((obj: false | Express.User | null | undefined, done) =>
   done(null, obj);
 });
 
+const ASGD_PASSPORT_DOMAIN = process.env.ASGD_PASSPORT_DOMAIN;
+if (!ASGD_PASSPORT_DOMAIN) {
+  console.error('env ASGD_PASSPORT_DOMAIN not set correctly');
+  process.exit(1);
+}
+const ASGD_STEAM_API_KEY = process.env.ASGD_STEAM_API_KEY;
+if (!ASGD_STEAM_API_KEY) {
+  console.error('env ASGD_STEAM_API_KEY not set correctly');
+}
+
 // @ts-ignore: 'new' expression, whose target lacks a construct signature,
 // implicitly has an 'any' type.ts(7009)
 passport.use(new SteamStrategy({
   name: 'steam',
-  returnURL: `${process.env.ASGD_PASSPORT_DOMAIN}/api/auth/steam/return`,
-  realm: `${process.env.ASGD_PASSPORT_DOMAIN}`,
-  apiKey: `${process.env.ASGD_STEAM_API_KEY}`,
+  returnURL: `${ASGD_PASSPORT_DOMAIN}/api/auth/steam/return`,
+  realm: `${ASGD_PASSPORT_DOMAIN}`,
+  apiKey: `${ASGD_STEAM_API_KEY}`,
 },
 function(identifier: any, profile: any, done: any) {
   return done(null, profile);
