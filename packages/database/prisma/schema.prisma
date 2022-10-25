@@ -13,6 +13,20 @@ generator client {
   previewFeatures = ["referentialIntegrity"]
 }
 
+model PostTag {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  performancePosts SteamPerformancePost[]
+  // TODO: Decide if we should use explicit vs. implicit
+  // ! WITH JOIN TABLE
+  // performancePostOnPostTag PostTagsOnPerformancePosts[]
+
+  postTagId   Int    @unique @default(autoincrement())
+  description String
+}
+
 model SteamUser {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
@@ -43,8 +57,7 @@ model SteamUser {
   // }[];
 
   // TODO: Fix capitalization with safe copy migrate
-  PerformancePosts PerformancePost[]
-  gamepadPosts     SteamGamepadPost[]
+  PerformancePosts SteamPerformancePost[]
   ownedApps        SteamApp[]
   systemSpecs      SteamUserSystemSpecs[]
 
@@ -102,42 +115,10 @@ model SteamUserOwnedAppPlaytime {
   rTimeLastPlayed        Int
 }
 
-model SteamGamepadPost {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  steamUser               SteamUser? @relation(fields: [steamUserIdForSteamUser], references: [steamUserId], onDelete: SetNull)
-  steamUserIdForSteamUser String?
-
-  steamApp   SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
-  steamAppId Int
-
-  steamUserId              String
-  avatarMedium             String?
-  displayName              String?
-  postText                 String
-  gamepad                  SteamGamepad @relation(fields: [gamepadId], references: [gamepadId])
-  gamepadId                Int
-  ratingMedal              RatingMedal
-  systemManufacturer       String?
-  systemModel              String?
-  systemOsVersion          String?
-  systemCpuBrand           String?
-  systemVideoDriver        String?
-  systemVideoDriverVersion String?
-  systemVideoPrimaryVRAM   String?
-  systemMemoryRAM          String?
-
-  postTags PostTag[]
-}
-
 model SteamGamepad {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  gamepadPosts SteamGamepadPost[]
 
   gamepadId    Int    @unique @default(autoincrement())
   manufacturer String
@@ -147,7 +128,7 @@ model SteamGamepad {
   @@unique([manufacturer, model])
 }
 
-model PerformancePost {
+model SteamPerformancePost {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -194,21 +175,6 @@ model PerformancePost {
 //   postTag   PostTag @relation(fields: [postTagId], references: [postTagId], onDelete: Cascade)
 //   @@id([performancePostId, postTagId])
 // }
-
-model PostTag {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  performancePosts PerformancePost[]
-  gamepadPosts     SteamGamepadPost[]
-  // TODO: Decide if we should use explicit vs. implicit
-  // ! WITH JOIN TABLE
-  // performancePostOnPostTag PostTagsOnPerformancePosts[]
-
-  postTagId   Int    @unique @default(autoincrement())
-  description String
-}
 
 enum FrameRate {
   VeryLow
@@ -284,8 +250,7 @@ model SteamApp {
   contentDescriptorIds         Int[]
   contentDescriptorNotes       String?
 
-  performancePosts PerformancePost[]
-  gamepadPosts     SteamGamepadPost[]
+  performancePosts SteamPerformancePost[]
 
   // Unused For Now
   usersWhoOwnApp SteamUser[]

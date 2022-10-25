@@ -1,9 +1,8 @@
 export type {
-  PerformancePost,
+  SteamPerformancePost,
   RatingMedal,
   FrameRate,
 
-  SteamGamepadPost,
   SteamGamepad,
 
   PostTag,
