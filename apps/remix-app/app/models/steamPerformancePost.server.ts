@@ -1,5 +1,5 @@
 import type {
-  PerformancePost,
+  SteamPerformancePost,
   SteamApp,
   SteamUser,
   SteamUserSystemSpecs,
@@ -25,12 +25,12 @@ export async function createPerformancePost({
 }: {
   steamUserId: SteamUser['steamUserId'];
   steamAppId: SteamApp['steamAppId'];
-  postText: PerformancePost['postText'];
+  postText: SteamPerformancePost['postText'];
   frameRateAverage?: FrameRate;
   frameRateStutters: boolean;
-  ratingMedal: PerformancePost['ratingMedal'];
-  avatarMedium?: PerformancePost['avatarMedium'];
-  displayName?: PerformancePost['displayName'];
+  ratingMedal: SteamPerformancePost['ratingMedal'];
+  avatarMedium?: SteamPerformancePost['avatarMedium'];
+  displayName?: SteamPerformancePost['displayName'];
   systemName: SteamUserSystemSpecs['systemName'];
   postTagIds: PostTag['postTagId'][];
 }) {
@@ -41,7 +41,7 @@ export async function createPerformancePost({
   //   throw new Error(`System ${systemName} was not found in the database.`);
   // }
 
-  const performancePostData: Prisma.PerformancePostCreateInput = {
+  const performancePostData: Prisma.SteamPerformancePostCreateInput = {
     steamApp: {
       connect: {
         steamAppId,
@@ -79,9 +79,9 @@ export async function createPerformancePost({
 
   // !Added to allow no system specs on performance posts
   if (!systemSpecs) {
-    return prisma.performancePost.create({ data: performancePostData });
+    return prisma.steamPerformancePost.create({ data: performancePostData });
   }
-  return prisma.performancePost.create({
+  return prisma.steamPerformancePost.create({
     data: {
       ...performancePostData,
       systemManufacturer: systemSpecs.manufacturer,
@@ -97,7 +97,7 @@ export async function createPerformancePost({
 };
 
 export async function findPerformancePostsBySteamAppId(steamAppId: SteamApp['steamAppId']) {
-  return prisma.performancePost.findMany({
+  return prisma.steamPerformancePost.findMany({
     where: {
       steamAppId,
     },
@@ -147,7 +147,7 @@ export async function findPerformancePostsBySteamAppId(steamAppId: SteamApp['ste
 export async function findNewestPerformancePosts(
     numPerformancePosts: number,
 ) {
-  return prisma.performancePost.findMany({
+  return prisma.steamPerformancePost.findMany({
     select: {
       id: true,
       steamAppId: true,

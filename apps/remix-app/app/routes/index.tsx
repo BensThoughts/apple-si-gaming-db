@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { findNewestPerformancePosts } from '~/models/performancePost.server';
+import { findNewestPerformancePosts } from '~/models/steamPerformancePost.server';
 import { findTrendingSteamApps } from '~/models/steamApp.server';
 import type { TrendingSteamApp } from '~/models/steamApp.server';
 import PageWrapper from '~/components/Layout/PageWrapper';

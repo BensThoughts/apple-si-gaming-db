@@ -4,8 +4,8 @@ import { useActionData, useCatch, useLoaderData, useMatches, useTransition } fro
 import PerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForm';
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-import type { PerformancePost } from '~/interfaces/database';
-import { createPerformancePost, findPerformancePostsBySteamAppId } from '~/models/performancePost.server';
+import type { SteamPerformancePost } from '~/interfaces/database';
+import { createPerformancePost, findPerformancePostsBySteamAppId } from '~/models/steamPerformancePost.server';
 import { findPostTags } from '~/models/postTag.server';
 import type { SerializedRootLoaderData } from '~/root';
 import PageWrapper from '~/components/Layout/PageWrapper';
@@ -33,25 +33,25 @@ interface PerformancePostLoaderData {
     ownsApp: boolean;
     postTags: UserSelectPostTag[]
   }
-  steamAppId: PerformancePost['steamAppId'];
+  steamAppId: SteamPerformancePost['steamAppId'];
   performancePosts: {
-    id: PerformancePost['id'];
-    postText: PerformancePost['postText'];
+    id: SteamPerformancePost['id'];
+    postText: SteamPerformancePost['postText'];
     postTags: UserSelectPostTag[],
-    createdAt: PerformancePost['createdAt'];
-    ratingMedal: PerformancePost['ratingMedal'];
-    frameRateAverage: PerformancePost['frameRateAverage']
-    frameRateStutters: PerformancePost['frameRateStutters'];
-    displayName: PerformancePost['displayName'];
-    avatarMedium: PerformancePost['avatarMedium'];
-    systemManufacturer: PerformancePost['systemManufacturer'];
-    systemModel: PerformancePost['systemModel'];
-    systemOsVersion: PerformancePost['systemOsVersion'];
-    systemCpuBrand: PerformancePost['systemCpuBrand'];
-    systemVideoDriver: PerformancePost['systemVideoDriver'];
-    systemVideoDriverVersion: PerformancePost['systemVideoDriverVersion'];
-    systemVideoPrimaryVRAM: PerformancePost['systemVideoPrimaryVRAM'];
-    systemMemoryRAM: PerformancePost['systemMemoryRAM'];
+    createdAt: SteamPerformancePost['createdAt'];
+    ratingMedal: SteamPerformancePost['ratingMedal'];
+    frameRateAverage: SteamPerformancePost['frameRateAverage']
+    frameRateStutters: SteamPerformancePost['frameRateStutters'];
+    displayName: SteamPerformancePost['displayName'];
+    avatarMedium: SteamPerformancePost['avatarMedium'];
+    systemManufacturer: SteamPerformancePost['systemManufacturer'];
+    systemModel: SteamPerformancePost['systemModel'];
+    systemOsVersion: SteamPerformancePost['systemOsVersion'];
+    systemCpuBrand: SteamPerformancePost['systemCpuBrand'];
+    systemVideoDriver: SteamPerformancePost['systemVideoDriver'];
+    systemVideoDriverVersion: SteamPerformancePost['systemVideoDriverVersion'];
+    systemVideoPrimaryVRAM: SteamPerformancePost['systemVideoPrimaryVRAM'];
+    systemMemoryRAM: SteamPerformancePost['systemMemoryRAM'];
   }[];
 }
 
@@ -92,7 +92,7 @@ export type CreatePerformancePostActionData = {
     postTags?: string | undefined;
   };
   fields?: {
-    postText: PerformancePost['postText'];
+    postText: SteamPerformancePost['postText'];
   };
 };
 

@@ -7,11 +7,11 @@ export type {
   SteamUser,
   SteamUserSystemSpecs,
 
-  PerformancePost,
+  // SteamPerformancePost,
+  SteamPerformancePost,
   RatingMedal,
   FrameRate,
 
-  SteamGamepadPost,
   SteamGamepad,
 
   PostTag,
