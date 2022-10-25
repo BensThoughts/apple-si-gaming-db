@@ -15,7 +15,8 @@
     "dev:server": "cross-env NODE_ENV=development node --inspect --require ../../node_modules/dotenv/config ./build/server.js",
     "generate:css": "tailwindcss -i ./app/styles/global.css -o ./app/styles/tailwind.css",
     "start": "cross-env NODE_ENV=production node ./build/server.js",
-    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint ."
+    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
+    "check": "tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
     "@apple-si-gaming-db/database": "*",
