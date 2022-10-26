@@ -56,7 +56,7 @@ export function validatePostGamepadId(gamepadId: number) {
   if (!isFinite(gamepadId)) {
     return 'Gamepad ID was not a valid number';
   }
-  if (gamepadId < 1) {
-    return 'Gamepad ID was not a positive number greater than 0';
+  if (gamepadId < 0) {
+    return 'Gamepad ID was not a positive number';
   }
 }
