@@ -1,62 +1,107 @@
 import { prisma } from '.';
-
-import https from 'https';
+import type { Prisma } from './interfaces/index';
 import { logger } from '@apple-si-gaming-db/logger';
+import { getSteamAppListRequest } from '@apple-si-gaming-db/steam-api';
 
-interface SteamAppListResponse {
-  applist: {
-    apps: {
-      name: string;
-      appid: number;
-    }[]
-  }
-}
+const gamepadData: Prisma.SteamGamepadCreateManyInput[] = [
+  {
+    gamepadId: 1,
+    manufacturer: 'Microsoft',
+    model: 'XBox One',
+    description: 'XBox One',
+  },
+  {
+    gamepadId: 2,
+    manufacturer: 'Microsoft',
+    model: 'XBox Elite I',
+    description: 'XBox Elite I',
+  },
+  {
+    gamepadId: 3,
+    manufacturer: 'Microsoft',
+    model: 'XBox Elite II',
+    description: 'XBox Elite II',
+  },
+  {
+    gamepadId: 4,
+    manufacturer: 'Nintendo',
+    model: 'Switch Pro',
+    description: 'Switch Pro',
+  },
+  {
+    gamepadId: 5,
+    manufacturer: 'Nintendo',
+    model: 'Switch',
+    description: 'Switch',
+  },
+  {
+    gamepadId: 6,
+    manufacturer: 'Sony',
+    model: 'Playstation 4',
+    description: 'Playstation 4',
+  },
+  {
+    gamepadId: 7,
+    manufacturer: 'Sony',
+    model: 'Playstation 5',
+    description: 'Playstation 5',
+  },
+];
+
+const postTagData: Prisma.PostTagCreateManyInput[] = [
+  {
+    postTagId: 1,
+    description: 'Native',
+  },
+  {
+    postTagId: 2,
+    description: 'Parallels',
+  },
+  {
+    postTagId: 3,
+    description: 'CrossOver',
+  },
+  {
+    postTagId: 4,
+    description: 'VirtualBox',
+  },
+];
 
 async function seed() {
-  https.get('https://api.steampowered.com/ISteamApps/GetAppList/v2/', (res) => {
-    const data: Buffer[] = [];
-    const headerDate = res.headers && res.headers.date ? res.headers.date : 'no response date';
-    logger.info('https get requested started');
-    logger.info('Status Code: ' + res.statusCode);
-    logger.info('Date in Response header: ' + headerDate);
-
-    res.on('data', (chunk) => {
-      data.push(chunk);
-    });
-
-    res.on('end', async () => {
-      logger.info('https request ended');
-
-      // * Clear the db of any currently stored data
-      const steamResponse: SteamAppListResponse = JSON.parse(Buffer.concat(data).toString());
-      const apps = steamResponse.applist.apps;
-
-      const deDupedAppIds = apps.map((app) => app.appid).filter((e, i, a) => a.indexOf(e) === i);
-      const deDupedApps = deDupedAppIds.map((appid) => {
-        return {
-          steamAppId: appid,
-          name: apps.find((app) => app.appid === appid)!.name,
-        };
-      });
-      logger.error('Length with dupes: ' + apps.length);
-      logger.error('Length without dupes: ' + deDupedApps.length);
-
-      logger.info('Start deleting all entries in db');
-      await prisma.steamApp.deleteMany();
-      logger.info('Finished deleting all entries in db');
-
-      // * Create many with Prisma
-      logger.info('Start writing games to DB');
-      await prisma.steamApp.createMany({
-        data: deDupedApps,
-      }).catch((err) => {
-        logger.error(err);
-      });
-      logger.info('Finished writing games to DB');
-    });
-  }).on('error', (err) => {
-    logger.error(err);
+  logger.info('deleting SteamApps');
+  await prisma.steamApp.deleteMany();
+  logger.info('deleting SteamApps finished');
+  logger.info('https get requested started');
+  const { applist } = await getSteamAppListRequest();
+  logger.info('https get request finished');
+  const { apps } = applist;
+  logger.info('creating SteamApps started');
+  await prisma.steamApp.createMany({
+    data: apps.map((app) => ({
+      steamAppId: app.appid,
+      name: app.name,
+    })),
+    skipDuplicates: true,
   });
+  logger.info('creating SteamApps finished');
+
+  logger.info('started deleting PostTags');
+  await prisma.postTag.deleteMany();
+  logger.info('finished deleting PostTags');
+  logger.info('creating PostTags');
+  await prisma.postTag.createMany({
+    data: postTagData,
+  });
+  logger.info('finished creating PostTags');
+
+  logger.info('started deleting SteamGamepads');
+  await prisma.steamGamepad.deleteMany();
+  logger.info('finished deleting SteamGamepads');
+  logger.info('started creating gamepads');
+  await prisma.steamGamepad.createMany({
+    data: gamepadData,
+  });
+  logger.info('finished creating gamepads');
 }
 
 seed()
