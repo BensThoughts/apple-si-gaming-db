@@ -125,6 +125,8 @@ model SteamGamepad {
   model        String
   description  String
 
+  steamPerformancePosts SteamPerformancePost[]
+
   @@unique([manufacturer, model])
 }
 
@@ -155,7 +157,9 @@ model SteamPerformancePost {
   systemVideoPrimaryVRAM   String?
   systemMemoryRAM          String?
 
-  postTags PostTag[]
+  postTags       PostTag[]
+  steamGamepadId Int?
+  steamGamepad   SteamGamepad? @relation(fields: [steamGamepadId], references: [gamepadId], onDelete: SetNull)
 
   // TODO: Decide if we should use explicit vs. implicit
   // ! WITH JOIN TABLE
