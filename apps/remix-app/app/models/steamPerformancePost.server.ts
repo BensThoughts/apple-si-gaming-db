@@ -6,6 +6,7 @@ import type {
   FrameRate,
   PostTag,
   Prisma,
+  SteamGamepad,
 } from '~/interfaces/database';
 import prisma from '~/lib/database/db.server';
 import { findUniqueSystemSpecForPost } from './steamUserSystemSpecs.server';
@@ -22,6 +23,7 @@ export async function createPerformancePost({
   ratingMedal,
   systemName,
   postTagIds,
+  gamepadId,
 }: {
   steamUserId: SteamUser['steamUserId'];
   steamAppId: SteamApp['steamAppId'];
@@ -33,14 +35,8 @@ export async function createPerformancePost({
   displayName?: SteamPerformancePost['displayName'];
   systemName: SteamUserSystemSpecs['systemName'];
   postTagIds: PostTag['postTagId'][];
+  gamepadId?: SteamGamepad['gamepadId'];
 }) {
-  const systemSpecs = await findUniqueSystemSpecForPost(steamUserId, systemName);
-  // TODO: Rather than throwing an error, maybe just let it pass
-  // !Removed to allow no system specs on a performance post
-  // if (!systemSpecs) {
-  //   throw new Error(`System ${systemName} was not found in the database.`);
-  // }
-
   const performancePostData: Prisma.SteamPerformancePostCreateInput = {
     steamApp: {
       connect: {
@@ -59,6 +55,11 @@ export async function createPerformancePost({
     frameRateAverage,
     frameRateStutters,
     ratingMedal,
+    steamGamepad: gamepadId ? {
+      connect: {
+        gamepadId,
+      },
+    } : undefined,
     postTags: {
       connect: postTagIds.map((postTagId) => ({
         postTagId,
@@ -76,6 +77,13 @@ export async function createPerformancePost({
     //   })),
     // } : undefined,
   };
+
+  const systemSpecs = await findUniqueSystemSpecForPost(steamUserId, systemName);
+  // TODO: Rather than throwing an error, maybe just let it pass
+  // !Removed to allow no system specs on a performance post
+  // if (!systemSpecs) {
+  //   throw new Error(`System ${systemName} was not found in the database.`);
+  // }
 
   // !Added to allow no system specs on performance posts
   if (!systemSpecs) {
@@ -139,6 +147,12 @@ export async function findPerformancePostsBySteamAppId(steamAppId: SteamApp['ste
       systemVideoDriverVersion: true,
       systemVideoPrimaryVRAM: true,
       systemMemoryRAM: true,
+      steamGamepad: {
+        select: {
+          gamepadId: true,
+          description: true,
+        },
+      },
     },
   });
 }
