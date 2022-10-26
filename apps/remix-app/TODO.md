@@ -13,9 +13,9 @@ Explicit (doesn't require db cleanup externally)
 
 ## Priority High
 
-- [ ] Add ability to tag performance post (Native, Rosetta 2, CrossOver 19 - 22,
-      Parallels 16 - 18)
 - [ ] Add controller review option
+- [x] Add ability to tag performance post (Native, Rosetta 2, CrossOver 19 - 22,
+      Parallels 16 - 18)
 - [ ] Add clarifier for rating meaning (tooltip?)
 - [ ] Add tests!
 - [x] Centralize form validation (systemName etc.)
@@ -23,7 +23,7 @@ Explicit (doesn't require db cleanup externally)
 - [x] Add not affiliated with Steam information
 - [ ] Figure out how to reset Select Menus on forms when form resets
 - [x] Fill footer
-- [ ] Add trending individual posts element to homepage
+- [x] Add trending individual posts element to homepage
 - [x] Make background color elements curvy
 - [ ] Restyle layout for performance posts
 
