@@ -2,6 +2,7 @@ import axios from 'axios';
 import invariant from 'tiny-invariant';
 import type {
   SteamApiAppDetailsResponse,
+  SteamApiAppListResponse,
   SteamApiGetOwnedGamesResponse,
 } from './interfaces';
 
@@ -63,15 +64,6 @@ export async function getSteamPlayerOwnedGamesRequest(
       // });
     }
     throw err;
-  }
-}
-
-interface SteamApiAppListResponse {
-  applist: {
-    apps: {
-      name: string;
-      appid: number;
-    }[]
   }
 }
 

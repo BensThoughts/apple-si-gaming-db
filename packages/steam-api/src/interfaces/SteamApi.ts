@@ -179,3 +179,12 @@ export type SteamApiGetOwnedGamesResponse = {
     }[];
   }
 }
+
+export interface SteamApiAppListResponse {
+  applist: {
+    apps: {
+      name: string;
+      appid: number;
+    }[]
+  }
+}
