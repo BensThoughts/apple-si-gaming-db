@@ -80,7 +80,11 @@ interface PerformancePostFormProps {
   postTags: {
     postTagId: number;
     description: string;
-  }[]
+  }[];
+  gamepads: {
+    gamepadId: number;
+    description: string;
+  }[];
 }
 
 function Wrapper({
@@ -102,6 +106,7 @@ export default function PerformancePostForm({
   fieldErrors,
   isSubmittingForm,
   postTags,
+  gamepads,
 }: PerformancePostFormProps) {
   const {
     isLoggedIn,
@@ -109,24 +114,6 @@ export default function PerformancePostForm({
     systemNames,
   } = steamUser;
   const [frameRateStable, setFrameRateStable] = useState(false);
-
-  const postTagOptions: MultiSelectOption<number>[] = postTags.map((tag) => (
-    {
-      label: tag.description,
-      value: tag.postTagId,
-    }
-  ));
-  const systemNameOptions: SelectOption[] = systemNames.map((sysName) => (
-    {
-      name: sysName,
-      value: sysName,
-    }
-  ));
-  // ! Added to avoid needing system info
-  systemNameOptions.unshift({
-    name: 'None',
-    value: 'None',
-  });
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -185,6 +172,36 @@ export default function PerformancePostForm({
   //   );
   // }
 
+
+  const postTagOptions: MultiSelectOption<number>[] = postTags.map((tag) => (
+    {
+      label: tag.description,
+      value: tag.postTagId,
+    }
+  ));
+  const systemNameOptions: SelectOption[] = systemNames.map((sysName) => (
+    {
+      name: sysName,
+      value: sysName,
+    }
+  ));
+  // ! Added to avoid needing system info
+  systemNameOptions.unshift({
+    name: 'None',
+    value: 'None',
+  });
+
+  const gamepadOptions: MultiSelectOption<number>[] = gamepads.map((gamepad) => (
+    {
+      label: gamepad.description,
+      value: gamepad.gamepadId,
+    }
+  ));
+  gamepadOptions.unshift({
+    label: 'None',
+    value: 0,
+  });
+
   return (
     <Wrapper>
       <h2 className="text-secondary text-lg">Submit Your Own Performance Post</h2>
@@ -209,7 +226,7 @@ export default function PerformancePostForm({
           maxLength={1500}
         />
         <div className="flex flex-col gap-6 w-full max-w-md">
-          <div className="z-30">
+          <div className="z-[30]">
             <SelectMenu
               name="performancePostRatingMedal"
               defaultValue={{
@@ -222,7 +239,7 @@ export default function PerformancePostForm({
               fieldError={fieldErrors?.ratingMedal}
             />
           </div>
-          <div className="z-20 flex flex-col md:flex-row gap-6 items-start md:items-center justify-center md:justify-between w-full">
+          <div className="z-[29] flex flex-col md:flex-row gap-6 items-start md:items-center justify-center md:justify-between w-full">
             <div>
               <SelectMenu
                 name="performancePostFrameRateAverage"
@@ -241,7 +258,18 @@ export default function PerformancePostForm({
               />
             </div>
           </div>
-          <div className="z-10">
+          <div className="z-[28]">
+            <MultiSelectMenu
+              name="performancePostGamepadId"
+              id="performancePostGamepadId"
+              labelText="Controller"
+              options={gamepadOptions}
+              fieldError={fieldErrors?.gamepadId}
+              isMulti={false}
+              closeMenuOnSelect={true}
+            />
+          </div>
+          <div className="z-[27]">
             <MultiSelectMenu
               name="performancePostTags"
               id="performancePostTags"
