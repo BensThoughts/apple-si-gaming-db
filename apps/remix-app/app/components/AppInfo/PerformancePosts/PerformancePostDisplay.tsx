@@ -11,6 +11,10 @@ type PerformancePostDisplayProps = {
     postTagId: number;
     description: string;
   }[];
+  steamGamepad?: {
+    gamepadId: number;
+    description: string;
+  } | null;
   createdAt: Date;
   ratingMedal: RatingMedal;
   frameRateAverage?: FrameRate | null;
@@ -33,6 +37,7 @@ export default function PerformancePostDisplay({
   avatarMedium,
   postText,
   postTags,
+  steamGamepad,
   ratingMedal,
   frameRateAverage,
   frameRateStutters,
@@ -98,24 +103,38 @@ export default function PerformancePostDisplay({
               </span>
             </SystemSpecsPopover>
           }
-          {postTags.length > 0 &&
+          {/* Gamepad and Post Tags Small Screens Only */}
+          {(postTags.length > 0 || steamGamepad) &&
             <div className="md:hidden flex flex-col whitespace-nowrap gap-1 w-full justify-start">
+              {steamGamepad &&
+                <div>
+                  <TextPill className="bg-primary hover:bg-primary-highlight">{steamGamepad.description}</TextPill>
+                </div>
+              }
               {postTags.map((tag) => (
                 <div key={tag.postTagId}>
                   <TextPill className="hover:bg-tertiary-highlight">{tag.description}</TextPill>
                 </div>
               ))}
-            </div>}
+            </div>
+          }
         </div>
         <div className="w-full flex flex-col gap-2 h-full border-l-1 border-l-secondary-highlight pl-3">
-          {postTags.length > 0 &&
+          {/* Gamepad and Post Tags Medium Screens Only */}
+          {(postTags.length > 0 || steamGamepad) &&
             <div className="hidden md:flex flex-row flex-wrap gap-1 w-full justify-start">
+              {steamGamepad &&
+                <div>
+                  <TextPill className="bg-primary hover:bg-primary-highlight">{steamGamepad.description}</TextPill>
+                </div>
+              }
               {postTags.map((tag) => (
                 <div key={tag.postTagId}>
                   <TextPill className="hover:bg-tertiary-highlight">{tag.description}</TextPill>
                 </div>
               ))}
-            </div>}
+            </div>
+          }
           <div>
             {postText}
           </div>

@@ -10,6 +10,10 @@ type PerformancePostLayoutProps =
       postTagId: number;
       description: string;
     }[],
+    steamGamepad: {
+      gamepadId: number;
+      description: string;
+    } | null,
     createdAt: Date;
     ratingMedal: RatingMedal;
     frameRateAverage?: FrameRate | null;
@@ -43,6 +47,7 @@ export default function PerformancePostLayout({
             avatarMedium,
             postText,
             postTags,
+            steamGamepad,
             ratingMedal,
             frameRateAverage,
             frameRateStutters,
@@ -61,6 +66,7 @@ export default function PerformancePostLayout({
                 displayName={displayName}
                 postText={postText}
                 postTags={postTags}
+                steamGamepad={steamGamepad}
                 ratingMedal={ratingMedal}
                 frameRateAverage={frameRateAverage}
                 frameRateStutters={frameRateStutters}
