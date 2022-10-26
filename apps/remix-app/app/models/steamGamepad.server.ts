@@ -6,5 +6,8 @@ export async function findSteamGamePads() {
       gamepadId: true,
       description: true,
     },
+    orderBy: {
+      gamepadId: 'asc',
+    },
   });
 };
