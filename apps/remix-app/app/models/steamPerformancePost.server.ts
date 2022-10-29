@@ -6,7 +6,8 @@ import type {
   FrameRate,
   PostTag,
   Prisma,
-  SteamGamepad,
+  GamepadMetadata,
+  GamepadRating,
 } from '~/interfaces/database';
 import prisma from '~/lib/database/db.server';
 import { findUniqueSystemSpecForPost } from './steamUserSystemSpecs.server';
@@ -24,6 +25,7 @@ export async function createPerformancePost({
   systemName,
   postTagIds,
   gamepadId,
+  gamepadRating,
 }: {
   steamUserId: SteamUser['steamUserId'];
   steamAppId: SteamApp['steamAppId'];
@@ -35,7 +37,8 @@ export async function createPerformancePost({
   displayName?: SteamPerformancePost['displayName'];
   systemName: SteamUserSystemSpecs['systemName'];
   postTagIds: PostTag['postTagId'][];
-  gamepadId?: SteamGamepad['gamepadId'];
+  gamepadId?: GamepadMetadata['gamepadId'];
+  gamepadRating?: GamepadRating;
 }) {
   const performancePostData: Prisma.SteamPerformancePostCreateInput = {
     steamApp: {
@@ -55,11 +58,12 @@ export async function createPerformancePost({
     frameRateAverage,
     frameRateStutters,
     ratingMedal,
-    steamGamepad: gamepadId ? {
+    gamepadMetadata: gamepadId ? {
       connect: {
         gamepadId,
       },
     } : undefined,
+    gamepadRating,
     postTags: {
       connect: postTagIds.map((postTagId) => ({
         postTagId,
@@ -147,12 +151,13 @@ export async function findPerformancePostsBySteamAppId(steamAppId: SteamApp['ste
       systemVideoDriverVersion: true,
       systemVideoPrimaryVRAM: true,
       systemMemoryRAM: true,
-      steamGamepad: {
+      gamepadMetadata: {
         select: {
           gamepadId: true,
           description: true,
         },
       },
+      gamepadRating: true,
     },
   });
 }
