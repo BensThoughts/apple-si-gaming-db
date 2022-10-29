@@ -4,7 +4,7 @@ import { useActionData, useCatch, useLoaderData, useMatches, useTransition } fro
 import PerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForm';
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-import type { PostTag, SteamGamepad, SteamPerformancePost } from '~/interfaces/database';
+import type { PostTag, GamepadMetadata, SteamPerformancePost, GamepadRating } from '~/interfaces/database';
 import { createPerformancePost, findPerformancePostsBySteamAppId } from '~/models/steamPerformancePost.server';
 import { findPostTags } from '~/models/postTag.server';
 import type { SerializedRootLoaderData } from '~/root';
@@ -18,10 +18,12 @@ import {
   validatePostRatingMedal,
   validatePostTagIds,
   validatePostGamepadId,
+  validateGamepadRating,
+  isTypeGamepadRating,
 } from '~/lib/form-validators/posts';
 import { validateSystemName } from '~/lib/form-validators/profile';
 import { validateSteamAppId } from '~/lib/loader-gaurds';
-import { findSteamGamePads } from '~/models/steamGamepad.server';
+import { findAllGamepads } from '~/models/gamepadMetadata.server';
 
 // These are all possible tags that can be used when
 // creating a performance post
@@ -31,8 +33,8 @@ interface UserSelectPostTag {
 }
 
 interface UserSelectGamepad {
-  gamepadId: SteamGamepad['gamepadId'];
-  description: SteamGamepad['description'];
+  gamepadId: GamepadMetadata['gamepadId'];
+  description: GamepadMetadata['description'];
 }
 interface PerformancePostLoaderData {
   steamUserData: {
@@ -46,7 +48,8 @@ interface PerformancePostLoaderData {
     id: SteamPerformancePost['id'];
     postText: SteamPerformancePost['postText'];
     postTags: UserSelectPostTag[],
-    steamGamepad: UserSelectGamepad | null,
+    gamepadMetadata: UserSelectGamepad | null,
+    gamepadRating: GamepadRating | null,
     createdAt: SteamPerformancePost['createdAt'];
     ratingMedal: SteamPerformancePost['ratingMedal'];
     frameRateAverage: SteamPerformancePost['frameRateAverage']
@@ -77,7 +80,7 @@ export async function loader({ params, context }: LoaderArgs) {
     isLoggedIn = true;
     ownsApp = await doesSteamUserOwnApp(steamUser.steamUserId, steamAppId);
     postTags = await findPostTags();
-    gamepads = await findSteamGamePads();
+    gamepads = await findAllGamepads();
   }
   return json<PerformancePostLoaderData>({
     steamUserData: {
@@ -100,6 +103,7 @@ export type CreatePerformancePostActionData = {
     systemName?: string;
     postTags?: string;
     gamepadId?: string;
+    gamepadRating?: string;
   };
   fields?: {
     postText: SteamPerformancePost['postText'];
@@ -130,6 +134,7 @@ export async function action({
   const systemName = formData.get('performancePostSystemName[value]');
   const postTagIdsData = formData.getAll('performancePostTags');
   const gamepadIdData = formData.get('performancePostGamepadId');
+  const gamepadRating = formData.get('performancePostGamepadRating[value]');
 
   if (
     typeof postText !== 'string' ||
@@ -137,6 +142,7 @@ export async function action({
     typeof ratingMedal !== 'string' ||
     typeof systemName !== 'string' ||
     typeof gamepadIdData !== 'string' ||
+    typeof gamepadRating !== 'string' ||
     postTagIdsData.some((tagId) => typeof tagId !== 'string')
   ) {
     return badRequest({
@@ -150,11 +156,13 @@ export async function action({
     postTagIds = postTagIdsData.map((tagId) => Number(tagId.toString()));
   }
   const gamepadId = Number(gamepadIdData);
+  console.log(gamepadId);
 
   const fieldErrors = {
     postText: validatePostText(postText),
     ratingMedal: validatePostRatingMedal(ratingMedal),
-    gamepadId: validatePostGamepadId(gamepadId),
+    gamepadId: validatePostGamepadId(gamepadId, gamepadRating),
+    gamepadRating: validateGamepadRating(gamepadRating, gamepadId),
     postTags: validatePostTagIds(postTagIds),
     frameRateAverage: validatePostFrameRateAverage(frameRateAverage),
     systemName: validateSystemName(systemName),
@@ -180,6 +188,14 @@ export async function action({
     return badRequest({ fieldErrors, fields });
   }
 
+  // This should never return true (used for Typescript type validation)
+  if (
+    gamepadRating !== 'None' &&
+    !isTypeGamepadRating(gamepadRating)
+  ) {
+    return badRequest({ fieldErrors, fields });
+  }
+
   await createPerformancePost({
     steamUserId,
     avatarMedium,
@@ -192,6 +208,7 @@ export async function action({
     systemName,
     postTagIds,
     gamepadId: gamepadId < 1 ? undefined : gamepadId,
+    gamepadRating: gamepadRating === 'None' ? undefined : gamepadRating,
   });
 
   return redirect(`/apps/${steamAppId}/performance-posts`);
@@ -224,7 +241,6 @@ export default function PerformancePostsRoute() {
   const isSubmittingPerformancePost =
     transition.state === 'submitting' &&
     transition.submission.formData.get('_performancePostAction') === 'createPost';
-
 
   return (
     <div className="flex flex-col gap-3">
