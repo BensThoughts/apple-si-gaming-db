@@ -12,7 +12,8 @@ export type {
   RatingMedal,
   FrameRate,
 
-  SteamGamepad,
+  GamepadMetadata,
+  GamepadRating,
 
   PostTag,
 } from '@apple-si-gaming-db/database';
