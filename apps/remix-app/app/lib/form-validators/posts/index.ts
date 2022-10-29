@@ -1,4 +1,4 @@
-import type { FrameRate, RatingMedal } from '~/interfaces/database';
+import type { FrameRate, GamepadRating, RatingMedal } from '~/interfaces/database';
 
 
 export function isTypeFrameRateAverage(frameRateAverage: string): frameRateAverage is FrameRate {
@@ -15,7 +15,7 @@ export function validatePostFrameRateAverage(frameRateAverageValue: string) {
 }
 
 export function isTypeRatingMedal(ratingMedal: string): ratingMedal is RatingMedal {
-  return ['Borked', 'Bronze', 'Gold', 'Platinum', 'Silver'].includes(ratingMedal);
+  return ['Borked', 'Bronze', 'Silver', 'Gold', 'Platinum'].includes(ratingMedal);
 }
 
 export function validatePostRatingMedal(ratingMedal: string) {
@@ -29,10 +29,10 @@ export function validatePostRatingMedal(ratingMedal: string) {
 
 export function validatePostText(postText: string) {
   if (postText.length < 3) {
-    return `The performance posts text is too short (3 character minimum)`;
+    return `performance posts text is too short (3 character minimum)`;
   }
   if (postText.length > 1500) {
-    return `The performance posts text is too long (1500 character maximum)`;
+    return `performance posts text is too long (1500 character maximum)`;
   }
 }
 
@@ -52,11 +52,35 @@ export function validatePostTagIds(postTagIds: number[]) {
   }
 }
 
-export function validatePostGamepadId(gamepadId: number) {
+export function isTypeGamepadRating(ratingMedal: string): ratingMedal is GamepadRating {
+  return ['GamepadBorked', 'GamepadBronze', 'GamepadSilver', 'GamepadGold', 'GamepadPlatinum'].includes(ratingMedal);
+}
+
+export function validatePostGamepadId(gamepadId: number, gamepadRating: string) {
   if (!isFinite(gamepadId)) {
-    return 'Gamepad ID was not a valid number';
+    return 'gamepad ID was not a valid number';
   }
   if (gamepadId < 0) {
-    return 'Gamepad ID was not a positive number';
+    return 'gamepad ID was not a positive number';
+  }
+  // The None Case for gamepadId is value 0
+  // By this point we know gamepadId is a valid >= 0 number
+  if (
+    gamepadId === 0 &&
+    isTypeGamepadRating(gamepadRating)
+  ) {
+    return `controller rating given with no controller selected`;
+  }
+}
+
+export function validateGamepadRating(gamepadRating: string, gamepadId: number) {
+  // The None Case for gamepadId is value 0
+  if (gamepadId !== 0) {
+    if (gamepadRating.toLowerCase() === 'none') {
+      return `rating cannot be none`;
+    }
+    if (!isTypeGamepadRating(gamepadRating)) {
+      return `rating was not a valid rating option`;
+    }
   }
 }
