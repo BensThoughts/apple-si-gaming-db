@@ -1,7 +1,7 @@
 import prisma from '~/lib/database/db.server';
 
-export async function findSteamGamePads() {
-  return prisma.steamGamepad.findMany({
+export async function findAllGamepads() {
+  return prisma.gamepadMetadata.findMany({
     select: {
       gamepadId: true,
       description: true,
