@@ -145,7 +145,7 @@ export async function loader({ request, context }: LoaderArgs) {
 
 function Document({
   children,
-  title = 'Apple Silicon Gaming DB',
+  title = 'Steamed Apples',
   isLoggedIn,
   isSearchSubmitting,
   ssrTheme,
