@@ -3,7 +3,7 @@ import type { Prisma } from './interfaces/index';
 import { logger } from '@apple-si-gaming-db/logger';
 import { getSteamAppListRequest } from '@apple-si-gaming-db/steam-api';
 
-const gamepadData: Prisma.SteamGamepadCreateManyInput[] = [
+const gamepadData: Prisma.GamepadMetadataCreateManyInput[] = [
   {
     gamepadId: 1,
     manufacturer: 'Microsoft',
@@ -95,10 +95,10 @@ async function seed() {
   logger.info('finished creating PostTags');
 
   logger.info('started deleting SteamGamepads');
-  await prisma.steamGamepad.deleteMany();
+  await prisma.gamepadMetadata.deleteMany();
   logger.info('finished deleting SteamGamepads');
   logger.info('started creating gamepads');
-  await prisma.steamGamepad.createMany({
+  await prisma.gamepadMetadata.createMany({
     data: gamepadData,
   });
   logger.info('finished creating gamepads');

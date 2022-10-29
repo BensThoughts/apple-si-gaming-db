@@ -115,7 +115,9 @@ model SteamUserOwnedAppPlaytime {
   rTimeLastPlayed        Int
 }
 
-model SteamGamepad {
+// Named GamepadMetadata so as not to confuse with built in
+// typescript type Gamepad
+model GamepadMetadata {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -157,10 +159,10 @@ model SteamPerformancePost {
   systemVideoPrimaryVRAM   String?
   systemMemoryRAM          String?
 
-  postTags       PostTag[]
-  steamGamepadId Int?
-  steamGamepad   SteamGamepad? @relation(fields: [steamGamepadId], references: [gamepadId], onDelete: SetNull)
-
+  postTags        PostTag[]
+  gamepadId       Int?
+  gamepadMetadata GamepadMetadata? @relation(fields: [gamepadId], references: [gamepadId], onDelete: SetNull)
+  gamepadRating   GamepadRating?
   // TODO: Decide if we should use explicit vs. implicit
   // ! WITH JOIN TABLE
   // postTagsOnPerformancePosts PostTagsOnPerformancePosts[]
@@ -194,6 +196,14 @@ enum RatingMedal {
   Silver
   Gold
   Platinum
+}
+
+enum GamepadRating {
+  GamepadBorked
+  GamepadBronze
+  GamepadSilver
+  GamepadGold
+  GamepadPlatinum
 }
 
 model SteamApp {

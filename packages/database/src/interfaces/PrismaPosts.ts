@@ -3,7 +3,8 @@ export type {
   RatingMedal,
   FrameRate,
 
-  SteamGamepad,
+  GamepadMetadata,
+  GamepadRating,
 
   PostTag,
 } from '@prisma/client';
