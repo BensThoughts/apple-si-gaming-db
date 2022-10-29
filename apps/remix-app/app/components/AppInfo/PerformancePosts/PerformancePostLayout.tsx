@@ -1,4 +1,4 @@
-import type { FrameRate, RatingMedal } from '~/interfaces/database';
+import type { FrameRate, GamepadRating, RatingMedal } from '~/interfaces/database';
 import PerformancePostDisplay from './PerformancePostDisplay';
 
 type PerformancePostLayoutProps =
@@ -10,10 +10,11 @@ type PerformancePostLayoutProps =
       postTagId: number;
       description: string;
     }[],
-    steamGamepad: {
+    gamepadMetadata: {
       gamepadId: number;
       description: string;
     } | null,
+    gamepadRating: GamepadRating | null;
     createdAt: Date;
     ratingMedal: RatingMedal;
     frameRateAverage?: FrameRate | null;
@@ -47,7 +48,8 @@ export default function PerformancePostLayout({
             avatarMedium,
             postText,
             postTags,
-            steamGamepad,
+            gamepadMetadata,
+            gamepadRating,
             ratingMedal,
             frameRateAverage,
             frameRateStutters,
@@ -66,7 +68,8 @@ export default function PerformancePostLayout({
                 displayName={displayName}
                 postText={postText}
                 postTags={postTags}
-                steamGamepad={steamGamepad}
+                gamepadMetadata={gamepadMetadata}
+                gamepadRating={gamepadRating}
                 ratingMedal={ratingMedal}
                 frameRateAverage={frameRateAverage}
                 frameRateStutters={frameRateStutters}

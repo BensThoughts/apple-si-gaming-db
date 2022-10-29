@@ -1,5 +1,5 @@
 import TextPill from '~/components/TextPill';
-import type { FrameRate, RatingMedal } from '~/interfaces/database';
+import type { FrameRate, GamepadRating, RatingMedal } from '~/interfaces/database';
 import PerformancePostMetaBar from './PerformancePostMetaBar';
 import SystemSpecsPopover from './SystemSpecsPopover';
 // import { convertRatingMedalToNumber } from '~/interfaces/database';
@@ -11,10 +11,11 @@ type PerformancePostDisplayProps = {
     postTagId: number;
     description: string;
   }[];
-  steamGamepad?: {
+  gamepadMetadata?: {
     gamepadId: number;
     description: string;
   } | null;
+  gamepadRating?: GamepadRating | null;
   createdAt: Date;
   ratingMedal: RatingMedal;
   frameRateAverage?: FrameRate | null;
@@ -31,13 +32,29 @@ type PerformancePostDisplayProps = {
   systemMemoryRAM?: string | null;
 } & React.HTMLAttributes<HTMLDivElement>
 
+const convertGamepadRatingToString = (gamepadRating: GamepadRating) => {
+  switch (gamepadRating) {
+    case 'GamepadBorked':
+      return `Doesn't work`;
+    case 'GamepadBronze':
+      return `Works with major issues`;
+    case 'GamepadSilver':
+      return `Works with minor issues`;
+    case 'GamepadGold':
+      return `Works perfect after tweaks`;
+    case 'GamepadPlatinum':
+      return `Works perfect`;
+  }
+};
+
 export default function PerformancePostDisplay({
   createdAt,
   displayName,
   avatarMedium,
   postText,
   postTags,
-  steamGamepad,
+  gamepadMetadata,
+  gamepadRating,
   ratingMedal,
   frameRateAverage,
   frameRateStutters,
@@ -104,11 +121,11 @@ export default function PerformancePostDisplay({
             </SystemSpecsPopover>
           }
           {/* Gamepad and Post Tags Small Screens Only */}
-          {(postTags.length > 0 || steamGamepad) &&
+          {(postTags.length > 0 || gamepadMetadata) &&
             <div className="md:hidden flex flex-col whitespace-nowrap gap-1 w-full justify-start">
-              {steamGamepad &&
+              {(gamepadMetadata && gamepadRating) &&
                 <div>
-                  <TextPill className="bg-primary hover:bg-primary-highlight">{steamGamepad.description}</TextPill>
+                  <TextPill className="bg-primary hover:bg-primary-highlight">{`${gamepadMetadata.description}`}</TextPill>
                 </div>
               }
               {postTags.map((tag) => (
@@ -121,11 +138,11 @@ export default function PerformancePostDisplay({
         </div>
         <div className="w-full flex flex-col gap-2 h-full border-l-1 border-l-secondary-highlight pl-3">
           {/* Gamepad and Post Tags Medium Screens Only */}
-          {(postTags.length > 0 || steamGamepad) &&
+          {(postTags.length > 0 || gamepadMetadata) &&
             <div className="hidden md:flex flex-row flex-wrap gap-1 w-full justify-start">
-              {steamGamepad &&
+              {(gamepadMetadata && gamepadRating) &&
                 <div>
-                  <TextPill className="bg-primary hover:bg-primary-highlight">{steamGamepad.description}</TextPill>
+                  <TextPill className="bg-primary hover:bg-primary-highlight">{`${gamepadMetadata.description} - ${convertGamepadRatingToString(gamepadRating)}`}</TextPill>
                 </div>
               }
               {postTags.map((tag) => (

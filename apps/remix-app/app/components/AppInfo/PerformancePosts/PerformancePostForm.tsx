@@ -3,7 +3,7 @@ import RoundedButton from '~/components/RoundedButton';
 import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { SelectOption } from '~/components/FormComponents/SelectMenu';
 import type { CreatePerformancePostActionData } from '~/routes/apps/$steamAppId/performance-posts';
-import type { FrameRate, RatingMedal } from '~/interfaces/database';
+import type { FrameRate, GamepadRating, RatingMedal } from '~/interfaces/database';
 import AnimatedUnderline from '~/components/AnimatedUnderline';
 import React, { useEffect, useRef, useState } from 'react';
 import TextArea from '~/components/FormComponents/TextArea';
@@ -12,13 +12,13 @@ import MultiSelectMenu from '~/components/FormComponents/MultiSelectMenu';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
 import { showToast } from '~/components/Toasts';
 
-const ratingOptions: SelectOption<RatingMedal | 'None'>[] = [
+const steamAppRatingOptions: SelectOption<RatingMedal | 'None'>[] = [
   {
     name: 'None',
     value: 'None',
   },
   {
-    name: 'Platinum - Runs [ perfect ]',
+    name: 'Platinum - Runs Perfect',
     value: 'Platinum',
   },
   {
@@ -63,6 +63,33 @@ const frameRateAverageOptions: SelectOption<FrameRate | 'None'>[] = [
   {
     name: 'Very High [ 120+ FPS ]',
     value: 'VeryHigh',
+  },
+];
+
+const gamepadRatingOptions: SelectOption<GamepadRating | 'None'>[] = [
+  {
+    name: 'None',
+    value: 'None',
+  },
+  {
+    name: 'Platinum - Works Perfect',
+    value: 'GamepadPlatinum',
+  },
+  {
+    name: 'Gold - Works [ perfect after tweaks ]',
+    value: 'GamepadGold',
+  },
+  {
+    name: 'Silver - Works [ with minor issues ]',
+    value: 'GamepadSilver',
+  },
+  {
+    name: 'Bronze - Works [ with major issues ]',
+    value: 'GamepadBronze',
+  },
+  {
+    name: `Borked - Doesn't Work`,
+    value: `GamepadBorked`,
   },
 ];
 
@@ -197,10 +224,10 @@ export default function PerformancePostForm({
       value: gamepad.gamepadId,
     }
   ));
-  gamepadOptions.unshift({
-    label: 'None',
-    value: 0,
-  });
+  // gamepadOptions.unshift({
+  //   label: 'None',
+  //   value: 0,
+  // });
 
   return (
     <Wrapper>
@@ -233,7 +260,7 @@ export default function PerformancePostForm({
                 name: 'None',
                 value: 'None',
               }}
-              options={ratingOptions}
+              options={steamAppRatingOptions}
               labelText="Rating"
               required
               fieldError={fieldErrors?.ratingMedal}
@@ -270,6 +297,16 @@ export default function PerformancePostForm({
             />
           </div>
           <div className="z-[27]">
+            <SelectMenu
+              name="performancePostGamepadRating"
+              defaultValue={{ name: 'None', value: 'None' }}
+              options={gamepadRatingOptions}
+              labelText="Controller Rating"
+              fieldError={fieldErrors?.gamepadRating}
+              menuSize="large"
+            />
+          </div>
+          <div className="z-[26]">
             <MultiSelectMenu
               name="performancePostTags"
               id="performancePostTags"
