@@ -224,10 +224,10 @@ export default function PerformancePostForm({
       value: gamepad.gamepadId,
     }
   ));
-  // gamepadOptions.unshift({
-  //   label: 'None',
-  //   value: 0,
-  // });
+  gamepadOptions.unshift({
+    label: 'None',
+    value: 0,
+  });
 
   return (
     <Wrapper>
