@@ -77,7 +77,7 @@ export function validateGamepadRating(gamepadRating: string, gamepadId: number) 
   // The None Case for gamepadId is value 0
   if (gamepadId !== 0) {
     if (gamepadRating.toLowerCase() === 'none') {
-      return `rating cannot be none`;
+      return `rating cannot be none when controller is selected`;
     }
     if (!isTypeGamepadRating(gamepadRating)) {
       return `rating was not a valid rating option`;
