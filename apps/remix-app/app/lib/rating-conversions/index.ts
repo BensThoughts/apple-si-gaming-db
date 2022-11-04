@@ -4,7 +4,22 @@ import type {
   GamepadRating,
 } from '~/interfaces/database';
 
-export function convertRatingMedalToText(ratingMedal: RatingMedal) {
+export function convertRatingMedalToFullText(ratingMedal: RatingMedal) {
+  switch (ratingMedal) {
+    case 'Platinum':
+      return `${ratingMedal} - ${convertRatingMedalToDescription(ratingMedal)}`;
+    case 'Gold':
+      return `${ratingMedal} - ${convertRatingMedalToDescription(ratingMedal)}`;
+    case 'Silver':
+      return `${ratingMedal} - ${convertRatingMedalToDescription(ratingMedal)}`;
+    case 'Bronze':
+      return `${ratingMedal} - ${convertRatingMedalToDescription(ratingMedal)}`;
+    case 'Borked':
+      return `${ratingMedal} - ${convertRatingMedalToDescription(ratingMedal)}`;
+  }
+}
+
+export function convertRatingMedalToDescription(ratingMedal: RatingMedal) {
   switch (ratingMedal) {
     case 'Platinum':
       return 'Runs [ perfect ]';
@@ -19,7 +34,7 @@ export function convertRatingMedalToText(ratingMedal: RatingMedal) {
   }
 }
 
-export function convertFrameRateToText(frameRateAverage: FrameRate) {
+export function convertFrameRateToDescription(frameRateAverage: FrameRate) {
   switch (frameRateAverage) {
     case 'VeryLow':
       return '<25 FPS';
@@ -34,7 +49,22 @@ export function convertFrameRateToText(frameRateAverage: FrameRate) {
   }
 }
 
-export function convertGamepadRatingToText(gamepadRating: GamepadRating) {
+export function convertGamepadRatingToFullText(gamepadRating: GamepadRating) {
+  switch (gamepadRating) {
+    case 'GamepadBorked':
+      return `${convertGamepadRatingToMedalText('GamepadBorked')} - ${convertGamepadRatingToDescription('GamepadBorked')}`;
+    case 'GamepadBronze':
+      return `${convertGamepadRatingToMedalText('GamepadBronze')} - ${convertGamepadRatingToDescription('GamepadBronze')}`;
+    case 'GamepadSilver':
+      return `${convertGamepadRatingToMedalText('GamepadSilver')} - ${convertGamepadRatingToDescription('GamepadSilver')}`;
+    case 'GamepadGold':
+      return `${convertGamepadRatingToMedalText('GamepadGold')} - ${convertGamepadRatingToDescription('GamepadGold')}`;
+    case 'GamepadPlatinum':
+      return `${convertGamepadRatingToMedalText('GamepadPlatinum')} - ${convertGamepadRatingToDescription('GamepadPlatinum')}`;
+  }
+}
+
+export function convertGamepadRatingToDescription(gamepadRating: GamepadRating) {
   switch (gamepadRating) {
     case 'GamepadBorked':
       return `Doesn't work`;
