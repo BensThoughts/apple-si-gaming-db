@@ -156,7 +156,6 @@ export async function action({
     postTagIds = postTagIdsData.map((tagId) => Number(tagId.toString()));
   }
   const gamepadId = Number(gamepadIdData);
-  console.log(gamepadId);
 
   const fieldErrors = {
     postText: validatePostText(postText),
@@ -247,11 +246,6 @@ export default function PerformancePostsRoute() {
       <div className="w-full">
         <PerformancePostLayout performancePosts={performancePosts.map((post) => ({
           ...post,
-          // WITH JOIN TABLE
-          // postTags: post.postTags.map(({ postTag }) => ({
-          //   postTagId: postTag.id,
-          //   description: postTag.description,
-          // })),
           createdAt: new Date(post.createdAt),
         }))} />
       </div>
