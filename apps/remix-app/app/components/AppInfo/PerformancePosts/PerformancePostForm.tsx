@@ -11,6 +11,11 @@ import ToggleSwitch from '~/components/FormComponents/ToggleSwitch';
 import MultiSelectMenu from '~/components/FormComponents/MultiSelectMenu';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
 import { showToast } from '~/components/Toasts';
+import {
+  convertFrameRateToDescription,
+  convertRatingMedalToFullText,
+  convertGamepadRatingToFullText,
+} from '~/lib/rating-conversions';
 
 const steamAppRatingOptions: SelectOption<RatingMedal | 'None'>[] = [
   {
@@ -18,23 +23,23 @@ const steamAppRatingOptions: SelectOption<RatingMedal | 'None'>[] = [
     value: 'None',
   },
   {
-    name: 'Platinum - Runs Perfect',
+    name: convertRatingMedalToFullText('Platinum'),
     value: 'Platinum',
   },
   {
-    name: 'Gold - Runs [ perfect after tweaks ]',
+    name: convertRatingMedalToFullText('Gold'),
     value: 'Gold',
   },
   {
-    name: 'Silver - Runs [ with minor issues ]',
+    name: convertRatingMedalToFullText('Silver'),
     value: 'Silver',
   },
   {
-    name: 'Bronze - Runs [ often crashes ]',
+    name: convertRatingMedalToFullText('Bronze'),
     value: 'Bronze',
   },
   {
-    name: `Borked - Doesn't Run`,
+    name: convertRatingMedalToFullText('Borked'),
     value: 'Borked',
   },
 ];
@@ -45,23 +50,23 @@ const frameRateAverageOptions: SelectOption<FrameRate | 'None'>[] = [
     value: 'None',
   },
   {
-    name: 'Very Low [ <25 FPS ]',
+    name: convertFrameRateToDescription('VeryLow'),
     value: 'VeryLow',
   },
   {
-    name: 'Low [ 25 - 40 FPS ]',
+    name: convertFrameRateToDescription('Low'),
     value: 'Low',
   },
   {
-    name: 'Medium [ 40 - 60 FPS ]',
+    name: convertFrameRateToDescription('Medium'),
     value: 'Medium',
   },
   {
-    name: 'High [ 60 - 120 FPS ]',
+    name: convertFrameRateToDescription('High'),
     value: 'High',
   },
   {
-    name: 'Very High [ 120+ FPS ]',
+    name: convertFrameRateToDescription('VeryHigh'),
     value: 'VeryHigh',
   },
 ];
@@ -72,23 +77,23 @@ const gamepadRatingOptions: SelectOption<GamepadRating | 'None'>[] = [
     value: 'None',
   },
   {
-    name: 'Platinum - Works Perfect',
+    name: convertGamepadRatingToFullText('GamepadPlatinum'),
     value: 'GamepadPlatinum',
   },
   {
-    name: 'Gold - Works [ perfect after tweaks ]',
+    name: convertGamepadRatingToFullText('GamepadGold'),
     value: 'GamepadGold',
   },
   {
-    name: 'Silver - Works [ with minor issues ]',
+    name: convertGamepadRatingToFullText('GamepadSilver'),
     value: 'GamepadSilver',
   },
   {
-    name: 'Bronze - Works [ with major issues ]',
+    name: convertGamepadRatingToFullText('GamepadBronze'),
     value: 'GamepadBronze',
   },
   {
-    name: `Borked - Doesn't Work`,
+    name: convertGamepadRatingToFullText('GamepadBorked'),
     value: `GamepadBorked`,
   },
 ];

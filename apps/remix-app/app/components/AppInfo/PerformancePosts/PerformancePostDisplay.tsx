@@ -2,6 +2,7 @@ import TextPill from '~/components/TextPill';
 import type { FrameRate, GamepadRating, RatingMedal } from '~/interfaces/database';
 import PerformancePostMetaBar from './PerformancePostMetaBar';
 import SystemSpecsPopover from './SystemSpecsPopover';
+import { convertGamepadRatingToDescription } from '~/lib/rating-conversions';
 // import { convertRatingMedalToNumber } from '~/interfaces/database';
 // import { RatingMedalIcon } from '~/components/Icons';
 
@@ -31,21 +32,6 @@ type PerformancePostDisplayProps = {
   systemVideoPrimaryVRAM?: string | null;
   systemMemoryRAM?: string | null;
 } & React.HTMLAttributes<HTMLDivElement>
-
-const convertGamepadRatingToString = (gamepadRating: GamepadRating) => {
-  switch (gamepadRating) {
-    case 'GamepadBorked':
-      return `Doesn't work`;
-    case 'GamepadBronze':
-      return `Works with major issues`;
-    case 'GamepadSilver':
-      return `Works with minor issues`;
-    case 'GamepadGold':
-      return `Works perfect after tweaks`;
-    case 'GamepadPlatinum':
-      return `Works perfect`;
-  }
-};
 
 export default function PerformancePostDisplay({
   createdAt,
@@ -142,7 +128,9 @@ export default function PerformancePostDisplay({
             <div className="hidden md:flex flex-row flex-wrap gap-1 w-full justify-start">
               {(gamepadMetadata && gamepadRating) &&
                 <div>
-                  <TextPill className="bg-primary hover:bg-primary-highlight">{`${gamepadMetadata.description} - ${convertGamepadRatingToString(gamepadRating)}`}</TextPill>
+                  <TextPill className="bg-primary hover:bg-primary-highlight">
+                    {`${gamepadMetadata.description} - ${convertGamepadRatingToDescription(gamepadRating)}`}
+                  </TextPill>
                 </div>
               }
               {postTags.map((tag) => (
