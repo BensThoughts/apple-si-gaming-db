@@ -293,7 +293,7 @@ export default function PerformancePostForm({
           <div className="z-[28]">
             <MultiSelectMenu
               name="performancePostGamepadId"
-              id="performancePostGamepadId"
+              id={`performancePostGamepadId-${steamAppId}`}
               labelText="Controller"
               options={gamepadOptions}
               fieldError={fieldErrors?.gamepadId}
@@ -314,11 +314,11 @@ export default function PerformancePostForm({
           <div className="z-[26]">
             <MultiSelectMenu
               name="performancePostTags"
-              id="performancePostTags"
+              id={`performancePostTags-${steamAppId}`}
               labelText="Tags"
               options={postTagOptions}
               fieldError={fieldErrors?.postTags}
-              isMulti={true}
+              isMulti={false}
               closeMenuOnSelect={false}
             />
           </div>
