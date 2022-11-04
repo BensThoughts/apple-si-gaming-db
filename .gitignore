@@ -50,3 +50,6 @@ dist
 
 dump.sql
 .db-backups
+
+set_env_vars.sh
+unset_env_vars.sh
