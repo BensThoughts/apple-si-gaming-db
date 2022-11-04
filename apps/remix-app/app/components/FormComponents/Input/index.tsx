@@ -26,7 +26,7 @@ export default function Input({
         name={name}
         id={id}
         type="text"
-        className={`outline-none peer bg-transparent ${inputSizeClassnames}`}
+        className={`outline-none peer bg-transparent w-full ${inputSizeClassnames}`}
         placeholder=" "
         defaultValue={defaultValue}
         minLength={minLength}
