@@ -8,7 +8,7 @@ export default function AppInfoMainAppCard({
   shortDescription,
 }: MainAppCardProps) {
   return (
-    <div className={`flex flex-col items-center gap-2 justify-center p-3
+    <div className={`hidden md:flex flex-col items-center gap-2 justify-center p-3
                      bg-tertiary border-secondary border-solid border-1
                      rounded-lg max-w-2xl`}>
       {requiredAge &&
