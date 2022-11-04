@@ -1,4 +1,5 @@
 import type { FrameRate, GamepadRating, RatingMedal } from '~/interfaces/database';
+import AppRatingOverview from './AppRatingOverview';
 import PerformancePostDisplay from './PerformancePostDisplay';
 
 type PerformancePostLayoutProps =
@@ -32,14 +33,35 @@ type PerformancePostLayoutProps =
   }[];
 }
 
+function PostLayoutCard({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="grid grid-cols-1 w-full
+    bg-tertiary border-solid border-2 border-secondary
+    p-3 rounded-lg"
+    >
+      {children}
+    </div>
+  );
+}
+
 export default function PerformancePostLayout({
   performancePosts,
 }: PerformancePostLayoutProps) {
+  if (performancePosts.length < 1) {
+    return (
+      <PostLayoutCard>
+        There are currently no performance posts for this app. Use the form below to
+        <strong className="font-semibold text-primary-highlight">
+          {` `}become the first to submit!
+        </strong>
+      </PostLayoutCard>
+    );
+  }
+
   return (
-    <div className={`grid grid-cols-1 w-full
-                     bg-tertiary border-solid border-2 border-secondary
-                     p-3 rounded-lg`}>
-      {performancePosts.length > 0 ? (
+    <div className="flex flex-col items-center justify-center gap-2">
+      <AppRatingOverview performancePosts={performancePosts} />
+      <PostLayoutCard>
         <div className="flex flex-col gap-6 w-full">
           {performancePosts.map(({
             id,
@@ -89,14 +111,7 @@ export default function PerformancePostLayout({
             </div>
           ))}
         </div>
-      ): (
-        <div>
-          There are currently no performance posts for this app. Use the form below to
-          <strong className="font-semibold text-primary-highlight">
-            {` `}become the first to submit!
-          </strong>
-        </div>
-      )}
+      </PostLayoutCard>
     </div>
   );
 }
