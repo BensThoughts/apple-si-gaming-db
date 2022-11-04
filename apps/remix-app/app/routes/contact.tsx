@@ -45,16 +45,17 @@ export default function ContactRoute() {
             to improve it.
           </AsideCard>
         </div>
-        <div className="flex justify-center items-center w-full">
+        <div className="flex justify-center items-center w-full bg-transparent">
           <iframe
             title="Google Suggestion Form"
             src="https://docs.google.com/forms/d/e/1FAIpQLScqU74BFS0uzbw8N7HDVhVY8EH5cY0ttsKHA1jLUhuCMnugew/viewform?embedded=true"
             width="640"
             height="1740"
             frameBorder="0"
-            className="relative inset-0"
-            // marginHeight="0"
-            // marginwidth="0"
+            className="relative inset-0 bg-transparent rounded-lg border-2 border-secondary-highlight"
+            marginHeight={0}
+            marginWidth={0}
+            style={{ backgroundColor: 'transparent' }}
           >Loading…</iframe>
         </div>
       </div>
