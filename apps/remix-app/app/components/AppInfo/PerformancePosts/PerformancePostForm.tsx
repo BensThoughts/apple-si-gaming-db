@@ -318,7 +318,7 @@ export default function PerformancePostForm({
               labelText="Tags"
               options={postTagOptions}
               fieldError={fieldErrors?.postTags}
-              isMulti={false}
+              isMulti={true}
               closeMenuOnSelect={false}
             />
           </div>
