@@ -92,8 +92,8 @@ export default function MultiSelectMenu<T>({
         <div className="mt-1.5">
           <Select
             id={id}
-            instanceId={`instance-${id}`}
-            inputId={`input-${id}`}
+            instanceId={`instanceId-${id}`}
+            inputId={`inputId-${id}`}
             openMenuOnFocus={openMenuOnFocus}
             isMulti={isMulti}
             name={name}
