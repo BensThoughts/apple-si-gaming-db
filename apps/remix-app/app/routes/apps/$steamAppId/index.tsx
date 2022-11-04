@@ -2,7 +2,7 @@ import type { LoaderArgs } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
 import { useCatch } from '@remix-run/react';
 import PageWrapper from '~/components/Layout/PageWrapper';
-import { validateSteamAppId } from '~/lib/loader-gaurds';
+import { validateSteamAppId } from '~/lib/loader-functions/params-validators.server';
 
 export async function loader({ params }: LoaderArgs) {
   const steamAppId = validateSteamAppId(params);

@@ -19,7 +19,7 @@ import AppInfoMainAppCard from '~/components/AppInfo/AppInfoMainAppCard';
 import AppInfoHeader from '~/components/AppInfo/AppInfoHeader';
 import AppInfoRequirements from '~/components/AppInfo/AppInfoRequirements';
 import PageWrapper from '~/components/Layout/PageWrapper';
-import { validateSteamAppId } from '~/lib/loader-gaurds';
+import { validateSteamAppId } from '~/lib/loader-functions/params-validators.server';
 
 interface LoaderData {
   steamApp: {

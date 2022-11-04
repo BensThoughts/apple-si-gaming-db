@@ -22,7 +22,7 @@ import {
   isTypeGamepadRating,
 } from '~/lib/form-validators/posts';
 import { validateSystemName } from '~/lib/form-validators/profile';
-import { validateSteamAppId } from '~/lib/loader-gaurds';
+import { validateSteamAppId } from '~/lib/loader-functions/params-validators.server';
 import { findAllGamepads } from '~/models/gamepadMetadata.server';
 
 // These are all possible tags that can be used when
