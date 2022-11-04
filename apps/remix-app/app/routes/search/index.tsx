@@ -351,8 +351,12 @@ export default function SearchIndexRoute() {
   }
 
   const searchParams = new URLSearchParams();
+  // !searchQuery must always be defined or the route
+  // !will think this is an initial navigation to /search
   if (searchQuery) {
     searchParams.set('searchQuery', searchQuery);
+  } else {
+    searchParams.set('searchQuery', '');
   }
   if (searchAppleOnly) {
     searchParams.set('searchAppleOnly', 'on');
