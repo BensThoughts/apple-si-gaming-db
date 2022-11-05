@@ -131,7 +131,6 @@ export async function loader({ request, context }: LoaderArgs) {
       });
     }
   }
-
   return json<RootLoaderData>({
     theme,
     isLoggedIn,
@@ -145,7 +144,7 @@ export async function loader({ request, context }: LoaderArgs) {
 
 function Document({
   children,
-  title = 'Steamed Apples',
+  title,
   isLoggedIn,
   isSearchSubmitting,
   ssrTheme,
@@ -160,8 +159,8 @@ function Document({
   return (
     <html lang="en">
       <head>
+        {title ? <title>{title}</title> : null}
         <Meta />
-        {title ? <title>title</title> : null}
         <Links />
       </head>
       <body className="min-h-screen bg-app-bg" data-theme={theme ? theme : ''} >
@@ -207,7 +206,7 @@ export default function App() {
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
     <ThemeProvider ssrCookieTheme={null}>
-      <Document title="Error" ssrTheme={null}>
+      <Document title={`${metaTags.title} - Error`} ssrTheme={null}>
         <div>
           <h1>Main App Error</h1>
           <pre>{error.message}</pre>
@@ -221,7 +220,7 @@ export function CatchBoundary() {
   const caught = useCatch();
   return (
     <ThemeProvider ssrCookieTheme={null}>
-      <Document title="Root Oops!" ssrTheme={null}>
+      <Document title={`${metaTags.title} - Oops!`} ssrTheme={null}>
         <div>
           <h1>Oops! - {caught.status} {caught.statusText}</h1>
         </div>

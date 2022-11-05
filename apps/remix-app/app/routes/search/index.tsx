@@ -1,6 +1,6 @@
 import type { LoaderArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useLoaderData, useTransition } from '@remix-run/react';
+import { useCatch, useLoaderData, useTransition } from '@remix-run/react';
 import { searchReleasedSteamAppsByName } from '~/models/steamApp.server';
 import { useMediaIsWide } from '~/lib/hooks/useMedia';
 import SearchTitleCard from '~/components/Search/SearchTitleCard';
@@ -10,6 +10,7 @@ import RoundedLink from '~/components/RoundedLink';
 import { metaTags } from '~/lib/meta-tags';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
 import { getSearchOptions } from '~/lib/loader-functions/search.server';
+import PageWrapper from '~/components/Layout/PageWrapper';
 
 function validateSearchQuery(searchQuery: string) {
   if (searchQuery.length > 100) {
@@ -421,5 +422,17 @@ export function ErrorBoundary({ error }: { error: Error }) {
       <h1>Error in /search/index route</h1>
       <div>{error.message}</div>
     </div>
+  );
+}
+
+export function CatchBoundary() {
+  const caught = useCatch();
+  return (
+    <PageWrapper title="Oops!">
+      <div>
+        <h1>Oops! - {caught.status} - {caught.data}</h1>
+        <p>Error in /search/index route</p>
+      </div>
+    </PageWrapper>
   );
 }

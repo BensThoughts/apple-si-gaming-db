@@ -280,12 +280,7 @@ export function CatchBoundary() {
     <PageWrapper title="Oops!">
       <div>
         <h1>Oops! - {caught.status} - {caught.data}</h1>
-        {caught.status === 404 && (
-          <img
-            src="/svg-images/four-oh-four-error.svg"
-            alt="Four oh four error"
-          />
-        )}
+        <p>Error in /apps/$steamAppId/performance-posts route</p>
       </div>
     </PageWrapper>
   );

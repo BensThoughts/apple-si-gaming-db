@@ -121,3 +121,12 @@ export default function IndexRoute() {
     </PageWrapper>
   );
 }
+
+export function ErrorBoundary({ error }: { error: Error }) {
+  return (
+    <PageWrapper>
+      <h1>Error in /index route</h1>
+      <div>{error.message}</div>
+    </PageWrapper>
+  );
+}

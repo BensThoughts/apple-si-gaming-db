@@ -1,4 +1,4 @@
-const TITLE = 'Apple Silicon on Steam DB';
+const TITLE = 'Steamed Apples';
 
 export const metaTags = {
   'title': TITLE,
