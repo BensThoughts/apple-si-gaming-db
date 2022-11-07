@@ -25,7 +25,7 @@ export default function BannerAlert({
     const formData = new FormData();
     formData.set('redirectTo', redirectTo);
     formData.set('bannerName', bannerName);
-    submit(formData, { action: '/actions/hide-banner', method: 'post', replace: true });
+    submit(formData, { action: '/actions/hide-banner', method: 'post' });
   }
 
   if (!showBannerRaw) {
