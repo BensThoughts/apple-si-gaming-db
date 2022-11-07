@@ -10,7 +10,6 @@ import RoundedLink from '~/components/RoundedLink';
 import { metaTags } from '~/lib/meta-tags';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
 import { getSearchOptions } from '~/lib/loader-functions/search.server';
-import PageWrapper from '~/components/Layout/PageWrapper';
 
 function validateSearchQuery(searchQuery: string) {
   if (searchQuery.length > 100) {
@@ -428,11 +427,9 @@ export function ErrorBoundary({ error }: { error: Error }) {
 export function CatchBoundary() {
   const caught = useCatch();
   return (
-    <PageWrapper title="Oops!">
-      <div>
-        <h1>Oops! - {caught.status} - {caught.data}</h1>
-        <p>Error in /search/index route</p>
-      </div>
-    </PageWrapper>
+    <div>
+      <h1>Oops! - {caught.status} - {caught.data}</h1>
+      <p>Error in /search/index route</p>
+    </div>
   );
 }

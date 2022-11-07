@@ -8,7 +8,6 @@ import type { PostTag, GamepadMetadata, SteamPerformancePost, GamepadRating } fr
 import { createPerformancePost, findPerformancePostsBySteamAppId } from '~/models/steamPerformancePost.server';
 import { findPostTags } from '~/models/postTag.server';
 import type { SerializedRootLoaderData } from '~/root';
-import PageWrapper from '~/components/Layout/PageWrapper';
 import { doesSteamUserOwnApp } from '~/models/steamUser.server';
 import {
   validatePostText,
@@ -267,21 +266,19 @@ export default function PerformancePostsRoute() {
 
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
-    <PageWrapper>
+    <div>
       <h1>Error in /apps/$appid/performance-posts route</h1>
       <div>{error.message}</div>
-    </PageWrapper>
+    </div>
   );
 }
 
 export function CatchBoundary() {
   const caught = useCatch();
   return (
-    <PageWrapper title="Oops!">
-      <div>
-        <h1>Oops! - {caught.status} - {caught.data}</h1>
-        <p>Error in /apps/$steamAppId/performance-posts route</p>
-      </div>
-    </PageWrapper>
+    <div>
+      <h1>Oops! - {caught.status} - {caught.data}</h1>
+      <p>Error in /apps/$steamAppId/performance-posts route</p>
+    </div>
   );
 }
