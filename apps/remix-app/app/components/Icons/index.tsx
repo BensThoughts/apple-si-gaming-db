@@ -10,8 +10,9 @@ export { default as LinuxIcon } from './Linux';
 export { default as RedditIcon } from './Reddit';
 export { default as SteamIcon } from './Steam';
 export { default as SunIcon } from './Sun';
-export { default as ThumsUpIcon } from './ThumbsUp';
+export { default as ThumbsUpIcon } from './ThumbsUp';
 export { default as TrashIcon } from './Trash';
 export { default as TwitterIcon } from './Twitter';
 export { default as WindowsIcon } from './Windows';
+export { default as XMarkIcon } from './XMark';
 
