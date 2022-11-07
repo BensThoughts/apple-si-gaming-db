@@ -18,7 +18,7 @@ export default function TrendingSteamAppCard({
   return (
     <Link
       to={`/apps/${steamAppId}/performance-posts`}
-      className="flex flex-col md:flex-row gap-2 items-center p-2 bg-tertiary
+      className="flex flex-col md:flex-row gap-8 md:gap-2 items-center px-2 py-8 md:p-2 bg-tertiary
                  border-1 border-secondary-highlight rounded-md hover:bg-tertiary-highlight
                  focus-visible:show-ring w-full
                  max-w-xl"
