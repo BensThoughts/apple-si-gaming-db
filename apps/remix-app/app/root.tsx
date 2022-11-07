@@ -28,7 +28,7 @@ import { getProfileSession } from './lib/sessions/profile-session.server';
 import type { Theme } from './lib/context/theme-provider';
 import { useTheme, ThemeProvider, NonFlashOfWrongThemeEls } from './lib/context/theme-provider';
 import { getThemeSession } from './lib/sessions/theme-session.server';
-import { getBannerSession } from './lib/sessions/banner-session.server';
+// import { getBannerSession } from './lib/sessions/banner-session.server';
 
 
 export const links: LinksFunction = () => {
@@ -82,17 +82,22 @@ type RootLoaderData = {
 export type SerializedRootLoaderData = SerializeFrom<RootLoaderData>
 
 export async function loader({ request, context }: LoaderArgs) {
+  const host = request.headers.get('host');
+  console.log(host);
+  const showNewDomainBanner = host?.includes('steamedapples') ? false : true;
   const themeSession = await getThemeSession(request);
   const theme = themeSession.getTheme();
   const { steamUser } = extractAppLoadContext(context);
   const isLoggedIn = steamUser ? true : false;
   const profileSession = await getProfileSession(request);
-  const bannerSession = await getBannerSession(request);
+  // const bannerSession = await getBannerSession(request);
+  // const newDomainBanner = bannerSession.getShowBanner('newDomainName');
 
-  if (!bannerSession.hasShowBanner('newDomainName')) {
-    bannerSession.setShowBanner('newDomainName', true);
-  }
-  const showNewDomainBanner = bannerSession.getShowBanner('newDomainName');
+  // let showNewDomainBanner = false;
+  // if (!newDomainBanner) {
+  //   bannerSession.setShowBanner('newDomainName', true);
+  //   showNewDomainBanner = true;
+  // }
 
   if (steamUser) {
     const {
@@ -117,7 +122,7 @@ export async function loader({ request, context }: LoaderArgs) {
       // TODO: code for headers is duplicated before each return json()
       const headers = new Headers();
       headers.append('Set-Cookie', await profileSession.commit());
-      headers.append('Set-Cookie', await bannerSession.commit());
+      // headers.append('Set-Cookie', await bannerSession.commit());
       return json<RootLoaderData>({
         cookieData: {
           theme,
@@ -144,7 +149,7 @@ export async function loader({ request, context }: LoaderArgs) {
       // TODO: code for headers is duplicated before each return json()
       const headers = new Headers();
       headers.append('Set-Cookie', await profileSession.commit());
-      headers.append('Set-Cookie', await bannerSession.commit());
+      // headers.append('Set-Cookie', await bannerSession.commit());
       return json<RootLoaderData>({
         cookieData: {
           theme,
@@ -168,7 +173,7 @@ export async function loader({ request, context }: LoaderArgs) {
   // TODO: code for headers is duplicated before each return json()
   const headers = new Headers();
   headers.append('Set-Cookie', await profileSession.commit());
-  headers.append('Set-Cookie', await bannerSession.commit());
+  // headers.append('Set-Cookie', await bannerSession.commit());
   return json<RootLoaderData>({
     cookieData: {
       theme,
