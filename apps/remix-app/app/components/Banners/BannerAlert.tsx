@@ -33,7 +33,7 @@ export default function BannerAlert({
   }
 
   return (
-    <div className="bg-tertiary border-t-4 border-secondary rounded-b text-primary px-4 py-3 shadow-md" role="alert">
+    <div className="bg-tertiary rounded text-primary px-4 py-3 shadow-md" role="alert">
       <div className="flex justify-between">
         <div className="flex gap-2">
           <div className="py-1"><InformationCircleIcon size={24} /></div>
