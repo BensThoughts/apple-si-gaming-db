@@ -28,6 +28,7 @@ import { getProfileSession } from './lib/sessions/profile-session.server';
 import type { Theme } from './lib/context/theme-provider';
 import { useTheme, ThemeProvider, NonFlashOfWrongThemeEls } from './lib/context/theme-provider';
 import { getThemeSession } from './lib/sessions/theme-session.server';
+import { getBannerSession } from './lib/sessions/banner-session.server';
 
 
 export const links: LinksFunction = () => {
@@ -44,6 +45,7 @@ export const meta: MetaFunction = ({ data }) => ({
 type RootLoaderData = {
   theme: Theme | null;
   isLoggedIn: boolean;
+  showNewDomainBanner: boolean;
   contextData: {
     steamUserId?: string | null;
     displayName?: string | null;
@@ -79,6 +81,13 @@ export async function loader({ request, context }: LoaderArgs) {
   const { steamUser } = extractAppLoadContext(context);
   const isLoggedIn = steamUser ? true : false;
   const profileSession = await getProfileSession(request);
+  const bannerSession = await getBannerSession(request);
+
+  if (!bannerSession.hasShowBanner('newDomainName')) {
+    bannerSession.setShowBanner('newDomainName', true);
+  }
+  const showNewDomainBanner = bannerSession.getShowBanner('newDomainName');
+
   if (steamUser) {
     const {
       steamUserId,
@@ -97,10 +106,16 @@ export async function loader({ request, context }: LoaderArgs) {
         ownedApps,
         systemSpecs,
       } = userProfile;
-      // const systemNames = systemSpecs.map((systemSpec) => systemSpec.systemName);
+      // const systemNames = systemSpecs.map((systemSpec) =>
+      // systemSpec.systemName);
+      // TODO: code for headers is duplicated before each return json()
+      const headers = new Headers();
+      headers.append('Set-Cookie', await profileSession.commit());
+      headers.append('Set-Cookie', await bannerSession.commit());
       return json<RootLoaderData>({
         theme,
         isLoggedIn,
+        showNewDomainBanner,
         contextData: {
           steamUserId,
           displayName,
@@ -111,34 +126,38 @@ export async function loader({ request, context }: LoaderArgs) {
           systemSpecs,
         },
       }, {
-        headers: {
-          'Set-Cookie': await profileSession.commit(),
-        },
+        headers,
       });
     } else {
+      // TODO: code for headers is duplicated before each return json()
+      const headers = new Headers();
+      headers.append('Set-Cookie', await profileSession.commit());
+      headers.append('Set-Cookie', await bannerSession.commit());
       return json<RootLoaderData>({
         theme,
         isLoggedIn,
+        showNewDomainBanner,
         contextData: {
           steamUserId,
           displayName,
           avatarFull,
         },
       }, {
-        headers: {
-          'Set-Cookie': await profileSession.commit(),
-        },
+        headers,
       });
     }
   }
+  // TODO: code for headers is duplicated before each return json()
+  const headers = new Headers();
+  headers.append('Set-Cookie', await profileSession.commit());
+  headers.append('Set-Cookie', await bannerSession.commit());
   return json<RootLoaderData>({
     theme,
     isLoggedIn,
+    showNewDomainBanner,
     contextData: {},
   }, {
-    headers: {
-      'Set-Cookie': await profileSession.commit(),
-    },
+    headers,
   });
 }
 
