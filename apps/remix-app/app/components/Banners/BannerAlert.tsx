@@ -21,11 +21,11 @@ export default function BannerAlert({
   const [showBannerRaw, setShowBannerRaw] = useState(showBanner);
 
   function onClick() {
-    setShowBannerRaw(false);
     const formData = new FormData();
     formData.set('redirectTo', redirectTo);
     formData.set('bannerName', bannerName);
     submit(formData, { action: '/actions/hide-banner', method: 'post' });
+    setShowBannerRaw(false);
   }
 
   if (!showBannerRaw) {
