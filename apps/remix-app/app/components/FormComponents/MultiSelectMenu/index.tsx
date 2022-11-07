@@ -41,6 +41,14 @@ export interface MultiSelectOption<T = string | number> {
   value: T;
 }
 
+function SelectFallback() {
+  return (
+    <div className="flex items-center w-full bg-primary rounded-lg min-h-[39px] pl-3 font-semibold">
+      Loading...
+    </div>
+  );
+}
+
 export default function MultiSelectMenu<T>({
   name,
   id,
@@ -87,7 +95,7 @@ export default function MultiSelectMenu<T>({
         </label>
       )}
       <div className="mt-1.5">
-        <ClientOnly fallback={<div>LOADING...</div>}>
+        <ClientOnly fallback={<SelectFallback />}>
           {() =>
             <Select
               id={id}
