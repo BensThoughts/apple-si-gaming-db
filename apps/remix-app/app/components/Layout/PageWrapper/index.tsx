@@ -42,12 +42,15 @@ export default function PageWrapper({
     <div className="flex flex-col justify-between h-[calc(100vh_-_3.5rem)]">
       <div className="relative">
         {title && <PageHeader title={title} titlePosition="left" />}
-        <div className="px-4 mt-2">
-          <NewDomainBannerAlert
-            showBanner={showNewDomainBanner}
-            redirectTo={currentRoute}
-          />
+        <div className="flex justify-center items-center w-full">
+          <div className="px-4 max-w-5xl mt-2 w-full">
+            <NewDomainBannerAlert
+              showBanner={showNewDomainBanner}
+              redirectTo={currentRoute}
+            />
+          </div>
         </div>
+
 
         {topSpacer && <TopSpacer />}
         <PageMain>
