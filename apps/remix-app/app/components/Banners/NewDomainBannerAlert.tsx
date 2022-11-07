@@ -13,6 +13,7 @@ export default function NewDomainBannerAlert({
       bannerName="newDomainName"
       showBanner={showBanner}
       redirectTo={redirectTo}
+      dismissible={false}
     >
       <p>
       We are now located at{` `}
