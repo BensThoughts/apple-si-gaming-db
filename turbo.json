@@ -28,6 +28,7 @@
     }
   },
   "globalDependencies": [
+    "$ASGD_BANNER_SESSION_SECRET",
     "$ASGD_BATCH_SIZE",
     "$ASGD_DATA_DOWNLOAD_ATTEMPTED",
     "$ASGD_DAYS_SINCE_SYNC",
