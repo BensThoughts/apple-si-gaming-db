@@ -4,8 +4,8 @@ type IconProps = {
   size?: number,
 } & React.SVGAttributes<SVGElement>
 
-export default function AppleIcon({
-  size = 32,
+export default function InformationCircleIcon({
+  size = 24,
   ...rest
 }: IconProps) {
   return (
