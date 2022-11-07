@@ -24,10 +24,9 @@ interface LoaderData {
   }[]
 }
 
-const NUM_TRENDING_APPS = 10;
-const NUM_RECENT_POSTS = 5;
-
 export async function loader() {
+  const NUM_TRENDING_APPS = 10;
+  const NUM_RECENT_POSTS = 5;
   const trendingSteamApps = await findTrendingSteamApps(NUM_TRENDING_APPS);
   const newPerformancePosts = await findNewestPerformancePosts(NUM_RECENT_POSTS);
   return json<LoaderData>({
@@ -58,7 +57,7 @@ export default function IndexRoute() {
         {(newPerformancePosts.length > 0) && (
           <div className="flex flex-col items-center gap-6 w-full">
             <h2 className="text-secondary text-2xl">New Posts</h2>
-            <div className="w-full flex flex-col items-center gap-2">
+            <div className="w-full flex flex-col items-center gap-4">
               {newPerformancePosts.map(({
                 id,
                 steamAppId,
@@ -85,7 +84,7 @@ export default function IndexRoute() {
         {(trendingSteamApps.length > 0) && (
           <div className="flex flex-col items-center gap-6 w-full">
             <h2 className="text-secondary text-2xl">Trending Apps</h2>
-            <div className="flex flex-col items-center gap-2 w-full">
+            <div className="flex flex-col items-center gap-4 w-full">
               {trendingSteamApps.map(({
                 steamAppId,
                 name,
