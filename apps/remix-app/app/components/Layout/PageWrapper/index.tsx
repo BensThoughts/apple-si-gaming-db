@@ -42,7 +42,7 @@ export default function PageWrapper({
     <div className="flex flex-col justify-between h-[calc(100vh_-_3.5rem)]">
       <div className="relative">
         {title && <PageHeader title={title} titlePosition="left" />}
-        <div className="px-4">
+        <div className="px-4 mt-2">
           <NewDomainBannerAlert
             showBanner={showNewDomainBanner}
             redirectTo={currentRoute}
