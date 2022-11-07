@@ -82,22 +82,14 @@ type RootLoaderData = {
 export type SerializedRootLoaderData = SerializeFrom<RootLoaderData>
 
 export async function loader({ request, context }: LoaderArgs) {
-  const host = request.headers.get('host');
-  console.log(host);
-  const showNewDomainBanner = host?.includes('steamedapples') ? false : true;
+  const host = request.headers.get('Host');
+  console.log('Request Host: ' + host);
+  const showNewDomainBanner = host?.toLowerCase().includes('steamedapples') ? false : true;
   const themeSession = await getThemeSession(request);
   const theme = themeSession.getTheme();
   const { steamUser } = extractAppLoadContext(context);
   const isLoggedIn = steamUser ? true : false;
   const profileSession = await getProfileSession(request);
-  // const bannerSession = await getBannerSession(request);
-  // const newDomainBanner = bannerSession.getShowBanner('newDomainName');
-
-  // let showNewDomainBanner = false;
-  // if (!newDomainBanner) {
-  //   bannerSession.setShowBanner('newDomainName', true);
-  //   showNewDomainBanner = true;
-  // }
 
   if (steamUser) {
     const {
