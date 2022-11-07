@@ -1,5 +1,5 @@
 import { json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { useLoaderData, useMatches } from '@remix-run/react';
 import { findNewestPerformancePosts } from '~/models/steamPerformancePost.server';
 import { findTrendingSteamApps } from '~/models/steamApp.server';
 import type { TrendingSteamApp } from '~/models/steamApp.server';
@@ -8,6 +8,8 @@ import TrendingSteamAppCard from '~/components/Cards/TrendingSteamAppCard';
 import { Fragment } from 'react';
 import type { FrameRate, RatingMedal } from '~/interfaces/database';
 import NewPerformancePostCard from '~/components/Cards/NewPerformancePostCard';
+import type { SerializedRootLoaderData } from '~/root';
+import NewDomainBannerAlert from '~/components/Banners/NewDomainBannerAlert';
 
 interface LoaderData {
   trendingSteamApps: TrendingSteamApp[];
@@ -46,8 +48,15 @@ export async function loader() {
 
 export default function IndexRoute() {
   const { trendingSteamApps, newPerformancePosts } = useLoaderData<typeof loader>();
+  const matches = useMatches();
+  const rootLoaderData = matches[0].data as SerializedRootLoaderData;
+  const { showNewDomainBanner } = rootLoaderData;
   return (
     <PageWrapper>
+      <NewDomainBannerAlert
+        showBanner={showNewDomainBanner}
+        redirectTo="/"
+      />
       <div className="relative sm:flex sm:items-center sm:justify-center">
         <div className="mx-auto max-w-3xl sm:px-6 lg:px-8">
           <div className="relative px-4 pt-16 pb-8 sm:px-6 sm:pt-20 sm:pb-14 lg:px-8 lg:pb-20 lg:pt-20">
