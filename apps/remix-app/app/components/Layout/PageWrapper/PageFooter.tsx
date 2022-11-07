@@ -1,4 +1,4 @@
-import { DiscordIcon, RedditIcon, TwitterIcon } from '../Icons';
+import { DiscordIcon, RedditIcon, TwitterIcon } from '../../Icons';
 
 export default function PageFooter({
   className,

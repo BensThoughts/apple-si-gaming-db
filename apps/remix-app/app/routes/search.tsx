@@ -9,17 +9,8 @@ export const meta: MetaFunction = () => ({
 
 export default function SearchRoute() {
   return (
-    <PageWrapper title="Search">
+    <PageWrapper title="Search" topSpacer>
       <div className="flex flex-col w-full items-center gap-6">
-        {/* <div className="w-[180px] block">
-          <img
-            src="/svg-images/searching-robot.svg"
-            alt="searching robot"
-            onError={(e) => {
-              e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
-            }}
-          />
-        </div> */}
         <Outlet />
       </div>
     </PageWrapper>

@@ -1,15 +1,11 @@
-// import { useContext } from 'react';
-// import { ThemeContext } from '~/lib/context/colorMode';
 import { useTheme } from '~/lib/context/theme-provider';
 import PageFooter from './PageFooter';
 import PageHeader from './PageHeader';
 import PageMain from './PageMain';
-
-type PageProps = { title?: string; } & React.HTMLAttributes<HTMLDivElement>
+import TopSpacer from './TopSpacer';
 
 function Background() {
   const [currentTheme] = useTheme();
-  // const { colorMode } = useContext(ThemeContext);
   let bgImageCss = `bg-[url('/svg-images/layered-waves-light.svg')]`;
   if (currentTheme === 'dark') {
     bgImageCss = `bg-[url('/svg-images/layered-waves-dark.svg')]`;
@@ -25,14 +21,21 @@ function Background() {
   );
 }
 
+type PageProps = {
+  title?: string;
+  topSpacer?: boolean;
+} & React.HTMLAttributes<HTMLDivElement>
+
 export default function PageWrapper({
   title,
+  topSpacer = false,
   children,
 }: PageProps) {
   return (
     <div className="flex flex-col justify-between h-[calc(100vh_-_3.5rem)]">
       <div className="relative">
-        {title && <PageHeader title={title} titlePosition="left" className="mb-4 md:mb-12" />}
+        {title && <PageHeader title={title} titlePosition="left" />}
+        {topSpacer && <TopSpacer />}
         <PageMain>
           {children}
         </PageMain>

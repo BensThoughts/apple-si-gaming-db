@@ -18,6 +18,7 @@ import { editSystem } from '~/lib/form-actions/profile/edit-system.server';
 import { metaTags } from '~/lib/meta-tags';
 // import type { SteamGenre } from '~/interfaces/database';
 import type { SerializedRootLoaderData } from '~/root';
+import TopSpacer from '~/components/Layout/PageWrapper/TopSpacer';
 
 interface ProfileLoaderData {
   isLoggedIn: boolean;
@@ -162,7 +163,8 @@ export default function ProfilePage() {
     transition.submission.formData.get('_profileAction') === 'updateOwnedGames';
 
   return (
-    <PageWrapper title="Profile">
+    <PageWrapper title="Profile" topSpacer>
+      <TopSpacer />
       <UserDisplay
         isLoggedIn={isLoggedIn}
         avatarFull={avatarFull}
@@ -181,7 +183,7 @@ export default function ProfilePage() {
 
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
-    <PageWrapper>
+    <PageWrapper topSpacer>
       <h1>Error in /profile route</h1>
       <div>{error.message}</div>
     </PageWrapper>
@@ -191,7 +193,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
 export function CatchBoundary() {
   const caught = useCatch();
   return (
-    <PageWrapper title="Oops!">
+    <PageWrapper title="Oops!" topSpacer>
       <div>
         <h1>Oops! - {caught.status} - {caught.data}</h1>
       </div>

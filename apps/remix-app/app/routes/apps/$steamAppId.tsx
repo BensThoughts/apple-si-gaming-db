@@ -87,7 +87,7 @@ export default function AppsRoute() {
     categories,
   } = steamApp;
   return (
-    <PageWrapper title={name}>
+    <PageWrapper title={name} topSpacer>
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4 min-h-screen">
 
         <div className="col-start-1 col-span-1 md:col-span-4 xl:col-span-3">
@@ -136,17 +136,19 @@ export default function AppsRoute() {
 
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
-    <div>
-      <h1>Error in /apps route</h1>
-      <div>{error.message}</div>
-    </div>
+    <PageWrapper topSpacer>
+      <div>
+        <h1>Error in /apps route</h1>
+        <div>{error.message}</div>
+      </div>
+    </PageWrapper>
   );
 }
 
 export function CatchBoundary() {
   const caught = useCatch();
   return (
-    <PageWrapper title="Oops!">
+    <PageWrapper title="Oops!" topSpacer>
       <div>
         <h1>Oops! - {caught.status} - {caught.data}</h1>
         <p>Error in /apps/$steamAppId route</p>
