@@ -1,5 +1,5 @@
 import { json } from '@remix-run/node';
-import { useLoaderData, useMatches } from '@remix-run/react';
+import { useLoaderData } from '@remix-run/react';
 import { findNewestPerformancePosts } from '~/models/steamPerformancePost.server';
 import { findTrendingSteamApps } from '~/models/steamApp.server';
 import type { TrendingSteamApp } from '~/models/steamApp.server';
@@ -8,8 +8,8 @@ import TrendingSteamAppCard from '~/components/Cards/TrendingSteamAppCard';
 import { Fragment } from 'react';
 import type { FrameRate, RatingMedal } from '~/interfaces/database';
 import NewPerformancePostCard from '~/components/Cards/NewPerformancePostCard';
-import type { SerializedRootLoaderData } from '~/root';
 import NewDomainBannerAlert from '~/components/Banners/NewDomainBannerAlert';
+import { useBannerData } from '~/lib/hooks/useMatchesData';
 
 interface LoaderData {
   trendingSteamApps: TrendingSteamApp[];
@@ -48,9 +48,8 @@ export async function loader() {
 
 export default function IndexRoute() {
   const { trendingSteamApps, newPerformancePosts } = useLoaderData<typeof loader>();
-  const matches = useMatches();
-  const rootLoaderData = matches[0].data as SerializedRootLoaderData;
-  const { showNewDomainBanner } = rootLoaderData;
+  const bannerData = useBannerData();
+  const showNewDomainBanner = bannerData ? bannerData.showNewDomainBanner : true;
   return (
     <PageWrapper>
       <NewDomainBannerAlert
