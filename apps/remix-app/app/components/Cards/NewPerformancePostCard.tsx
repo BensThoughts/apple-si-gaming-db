@@ -5,9 +5,7 @@ interface NewPerformancePostCardProps {
   steamAppId: number;
   steamApp: {
     name: string;
-    headerImage: string | null;
-  }
-  createdAt: Date;
+  };
   postText: string;
   avatarMedium: string | null;
   displayName: string | null;
@@ -17,7 +15,6 @@ interface NewPerformancePostCardProps {
 export default function NewPerformancePostCard({
   steamAppId,
   steamApp,
-  createdAt,
   postText,
   avatarMedium,
   displayName,
@@ -32,7 +29,6 @@ export default function NewPerformancePostCard({
                  flex items-center justify-start"
     >
       {/* Medium+ Screens */}
-
       <div className="hidden md:flex items-center gap-2 w-full h-full">
         <div className="flex flex-col items-center justify-center gap-2 w-full max-w-[8rem]">
           {avatarMedium && (
@@ -81,9 +77,7 @@ export default function NewPerformancePostCard({
         <div className="line-clamp-3">
           {postText}
         </div>
-
       </div>
-
     </Link>
   );
 }

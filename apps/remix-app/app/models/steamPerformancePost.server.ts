@@ -173,22 +173,12 @@ export async function findNewestPerformancePosts(
       steamApp: {
         select: {
           name: true,
-          headerImage: true,
         },
       },
-      createdAt: true,
       ratingMedal: true,
-      postTags: {
-        select: {
-          postTagId: true,
-          description: true,
-        },
-      },
       postText: true,
       displayName: true,
       avatarMedium: true,
-      frameRateAverage: true,
-      frameRateStutters: true,
     },
     orderBy: {
       createdAt: 'desc',

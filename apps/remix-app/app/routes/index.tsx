@@ -6,7 +6,7 @@ import type { TrendingSteamApp } from '~/models/steamApp.server';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import TrendingSteamAppCard from '~/components/Cards/TrendingSteamAppCard';
 import { Fragment } from 'react';
-import type { FrameRate, RatingMedal } from '~/interfaces/database';
+import type { RatingMedal } from '~/interfaces/database';
 import NewPerformancePostCard from '~/components/Cards/NewPerformancePostCard';
 
 interface LoaderData {
@@ -16,19 +16,11 @@ interface LoaderData {
     steamAppId: number;
     steamApp: {
       name: string;
-      headerImage: string | null;
     };
     postText: string;
-    postTags: {
-      postTagId: number;
-      description: string;
-    }[]
     displayName: string | null;
     avatarMedium: string | null;
     ratingMedal: RatingMedal;
-    frameRateAverage: FrameRate | null;
-    frameRateStutters: boolean | null;
-    createdAt: Date;
   }[]
 }
 
@@ -72,11 +64,9 @@ export default function IndexRoute() {
                 steamAppId,
                 steamApp,
                 postText,
-                postTags,
                 displayName,
                 avatarMedium,
                 ratingMedal,
-                createdAt,
               }) => (
                 <Fragment key={id}>
                   <NewPerformancePostCard
@@ -86,7 +76,6 @@ export default function IndexRoute() {
                     displayName={displayName}
                     avatarMedium={avatarMedium}
                     ratingMedal={ratingMedal}
-                    createdAt={new Date(createdAt)}
                   />
                 </Fragment>
               ))}
