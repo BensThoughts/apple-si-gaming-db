@@ -43,34 +43,40 @@ export const meta: MetaFunction = ({ data }) => ({
 });
 
 type RootLoaderData = {
-  theme: Theme | null;
-  isLoggedIn: boolean;
-  showNewDomainBanner: boolean;
-  contextData: {
-    steamUserId?: string | null;
-    displayName?: string | null;
-    avatarFull?: string | null,
+  cookieData: {
+    theme: Theme | null;
+    banners: {
+      showNewDomainBanner: boolean;
+    }
   };
-  prismaData?: {
-    ownedApps: {
-      steamAppId: number;
-      name: string;
-      headerImage: string | null;
-      platformMac: boolean | null;
-      genres: SteamGenre[];
-    }[],
-    systemSpecs: {
-      systemName: string;
-      manufacturer: string | null;
-      model: string | null;
-      cpuBrand: string | null;
-      osVersion: string | null;
-      videoDriver: string | null;
-      videoDriverVersion: string | null;
-      videoPrimaryVRAM: string | null;
-      memoryRAM: string | null;
-    }[],
-  }
+  steamUserData: {
+    contextData: {
+      isLoggedIn: boolean;
+      steamUserId?: string | null;
+      displayName?: string | null;
+      avatarFull?: string | null,
+    };
+    prismaData?: {
+      ownedApps: {
+        steamAppId: number;
+        name: string;
+        headerImage: string | null;
+        platformMac: boolean | null;
+        genres: SteamGenre[];
+      }[],
+      systemSpecs: {
+        systemName: string;
+        manufacturer: string | null;
+        model: string | null;
+        cpuBrand: string | null;
+        osVersion: string | null;
+        videoDriver: string | null;
+        videoDriverVersion: string | null;
+        videoPrimaryVRAM: string | null;
+        memoryRAM: string | null;
+      }[],
+    }
+  };
 }
 
 export type SerializedRootLoaderData = SerializeFrom<RootLoaderData>
@@ -113,17 +119,23 @@ export async function loader({ request, context }: LoaderArgs) {
       headers.append('Set-Cookie', await profileSession.commit());
       headers.append('Set-Cookie', await bannerSession.commit());
       return json<RootLoaderData>({
-        theme,
-        isLoggedIn,
-        showNewDomainBanner,
-        contextData: {
-          steamUserId,
-          displayName,
-          avatarFull,
+        cookieData: {
+          theme,
+          banners: {
+            showNewDomainBanner,
+          },
         },
-        prismaData: {
-          ownedApps,
-          systemSpecs,
+        steamUserData: {
+          contextData: {
+            isLoggedIn,
+            steamUserId,
+            displayName,
+            avatarFull,
+          },
+          prismaData: {
+            ownedApps,
+            systemSpecs,
+          },
         },
       }, {
         headers,
@@ -134,13 +146,19 @@ export async function loader({ request, context }: LoaderArgs) {
       headers.append('Set-Cookie', await profileSession.commit());
       headers.append('Set-Cookie', await bannerSession.commit());
       return json<RootLoaderData>({
-        theme,
-        isLoggedIn,
-        showNewDomainBanner,
-        contextData: {
-          steamUserId,
-          displayName,
-          avatarFull,
+        cookieData: {
+          theme,
+          banners: {
+            showNewDomainBanner,
+          },
+        },
+        steamUserData: {
+          contextData: {
+            isLoggedIn,
+            steamUserId,
+            displayName,
+            avatarFull,
+          },
         },
       }, {
         headers,
@@ -152,10 +170,17 @@ export async function loader({ request, context }: LoaderArgs) {
   headers.append('Set-Cookie', await profileSession.commit());
   headers.append('Set-Cookie', await bannerSession.commit());
   return json<RootLoaderData>({
-    theme,
-    isLoggedIn,
-    showNewDomainBanner,
-    contextData: {},
+    cookieData: {
+      theme,
+      banners: {
+        showNewDomainBanner,
+      },
+    },
+    steamUserData: {
+      contextData: {
+        isLoggedIn,
+      },
+    },
   }, {
     headers,
   });
@@ -204,7 +229,16 @@ function Document({
 export default function App() {
   // TODO: Getting cannot use loaderData in an error boundary errors,
   // TODO: with error being thrown on /profile, prob. because of this
-  const { isLoggedIn, theme }= useLoaderData<RootLoaderData>();
+  const {
+    cookieData: {
+      theme,
+    },
+    steamUserData: {
+      contextData: {
+        isLoggedIn,
+      },
+    },
+  }= useLoaderData<RootLoaderData>();
   const transition = useTransition();
   const isSearchSubmitting =
     transition.state === 'submitting' &&
