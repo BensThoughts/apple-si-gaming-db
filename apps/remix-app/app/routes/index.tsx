@@ -8,8 +8,6 @@ import TrendingSteamAppCard from '~/components/Cards/TrendingSteamAppCard';
 import { Fragment } from 'react';
 import type { FrameRate, RatingMedal } from '~/interfaces/database';
 import NewPerformancePostCard from '~/components/Cards/NewPerformancePostCard';
-import NewDomainBannerAlert from '~/components/Banners/NewDomainBannerAlert';
-import { useBannerData } from '~/lib/hooks/useMatchesData';
 
 interface LoaderData {
   trendingSteamApps: TrendingSteamApp[];
@@ -48,14 +46,8 @@ export async function loader() {
 
 export default function IndexRoute() {
   const { trendingSteamApps, newPerformancePosts } = useLoaderData<typeof loader>();
-  const bannerData = useBannerData();
-  const showNewDomainBanner = bannerData ? bannerData.showNewDomainBanner : true;
   return (
-    <PageWrapper>
-      <NewDomainBannerAlert
-        showBanner={showNewDomainBanner}
-        redirectTo="/"
-      />
+    <PageWrapper currentRoute="/">
       <div className="relative sm:flex sm:items-center sm:justify-center">
         <div className="mx-auto max-w-3xl sm:px-6 lg:px-8">
           <div className="relative px-4 pt-16 pb-8 sm:px-6 sm:pt-20 sm:pb-14 lg:px-8 lg:pb-20 lg:pt-20">
@@ -132,7 +124,7 @@ export default function IndexRoute() {
 
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
-    <PageWrapper>
+    <PageWrapper currentRoute="/">
       <h1>Error in /index route</h1>
       <div>{error.message}</div>
     </PageWrapper>

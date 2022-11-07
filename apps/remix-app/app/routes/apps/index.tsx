@@ -16,7 +16,7 @@ export default function SteamAppIdIndexRoute() {
 export function CatchBoundary() {
   const caught = useCatch();
   return (
-    <PageWrapper title="Oops!" topSpacer>
+    <PageWrapper currentRoute="/apps" title="Oops!" topSpacer>
       <div>
         <h1>Oops! - {caught.status} - {caught.data}</h1>
         <p>Error in /apps/index route</p>

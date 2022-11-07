@@ -169,7 +169,7 @@ export default function ProfilePage() {
     transition.submission.formData.get('_profileAction') === 'updateOwnedGames';
 
   return (
-    <PageWrapper title="Profile" topSpacer>
+    <PageWrapper currentRoute="/profile" title="Profile" topSpacer>
       <UserDisplay
         isLoggedIn={isLoggedIn}
         avatarFull={avatarFull}
@@ -188,7 +188,7 @@ export default function ProfilePage() {
 
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
-    <PageWrapper topSpacer>
+    <PageWrapper currentRoute="/profile" topSpacer>
       <h1>Error in /profile route</h1>
       <div>{error.message}</div>
     </PageWrapper>
@@ -198,7 +198,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
 export function CatchBoundary() {
   const caught = useCatch();
   return (
-    <PageWrapper title="Oops!" topSpacer>
+    <PageWrapper currentRoute="/profile" title="Oops!" topSpacer>
       <div>
         <h1>Oops! - {caught.status} - {caught.data}</h1>
       </div>
