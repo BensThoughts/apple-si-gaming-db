@@ -16,7 +16,6 @@ import { deleteSystem } from '~/lib/form-actions/profile/delete-system.server';
 import { editSystem } from '~/lib/form-actions/profile/edit-system.server';
 import { metaTags } from '~/lib/meta-tags';
 // import type { SteamGenre } from '~/interfaces/database';
-import TopSpacer from '~/components/Layout/PageWrapper/TopSpacer';
 import { useSteamUserOwnedApps, useSteamUserSystemSpecs } from '~/lib/hooks/useMatchesData';
 
 interface ProfileLoaderData {
@@ -171,7 +170,6 @@ export default function ProfilePage() {
 
   return (
     <PageWrapper title="Profile" topSpacer>
-      <TopSpacer />
       <UserDisplay
         isLoggedIn={isLoggedIn}
         avatarFull={avatarFull}
