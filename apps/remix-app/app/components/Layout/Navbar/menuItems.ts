@@ -7,10 +7,10 @@ export const menuItems = [
     name: 'Search',
     href: '/search',
   },
-  // {
-  //   name: 'About',
-  //   href: '/about',
-  // },
+  {
+    name: 'Apps',
+    href: '/apps',
+  },
   {
     name: 'Contact',
     href: '/contact',
