@@ -1,9 +1,7 @@
 
-import { lazy, Suspense } from 'react';
+import { ClientOnly } from 'remix-utils';
 import type { StylesConfig } from 'react-select';
-import { ClientOnly } from '~/components/ClientOnly';
-// import Select from 'react-select';
-const Select = lazy(() => import('react-select'));
+import Select from 'react-select';
 
 const styles: StylesConfig = {
   clearIndicator: (styles, state) => ({ ...styles }),
@@ -67,30 +65,30 @@ export default function MultiSelectMenu<T>({
   required?: boolean;
 }) {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <ClientOnly>
-        <div>
-          {labelText && (
-            <label htmlFor={id}>
-              <span className="text-primary">
-                {labelText}
-              </span>
-              {required &&
+    <div>
+      {labelText && (
+        <label htmlFor={id}>
+          <span className="text-primary">
+            {labelText}
+          </span>
+          {required &&
             <span className="text-color-error">
               *
             </span>
-              }
-              {fieldError &&
+          }
+          {fieldError &&
             <span className="text-primary">
               {`: `}
               <span className="text-color-error">
                 {fieldError}
               </span>
             </span>
-              }
-            </label>
-          )}
-          <div className="mt-1.5">
+          }
+        </label>
+      )}
+      <div className="mt-1.5">
+        <ClientOnly fallback={<div>LOADING...</div>}>
+          {() =>
             <Select
               id={id}
               instanceId={`instanceId-${id}`}
@@ -127,9 +125,9 @@ export default function MultiSelectMenu<T>({
                 },
               })}
             />
-          </div>
-        </div>
-      </ClientOnly>
-    </Suspense>
+          }
+        </ClientOnly>
+      </div>
+    </div>
   );
 }
