@@ -5,7 +5,6 @@ import {
   useActionData,
   useCatch,
   useLoaderData,
-  useMatches,
   useTransition,
 } from '@remix-run/react';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
@@ -17,15 +16,17 @@ import { deleteSystem } from '~/lib/form-actions/profile/delete-system.server';
 import { editSystem } from '~/lib/form-actions/profile/edit-system.server';
 import { metaTags } from '~/lib/meta-tags';
 // import type { SteamGenre } from '~/interfaces/database';
-import type { SerializedRootLoaderData } from '~/root';
 import TopSpacer from '~/components/Layout/PageWrapper/TopSpacer';
+import { useSteamUserOwnedApps, useSteamUserSystemSpecs } from '~/lib/hooks/useMatchesData';
 
 interface ProfileLoaderData {
-  isLoggedIn: boolean;
-  contextData: {
-    steamUserId?: string | null;
-    displayName?: string | null;
-    avatarFull?: string | null,
+  steamUserData: {
+    contextData: {
+      isLoggedIn: boolean;
+      steamUserId?: string | null;
+      displayName?: string | null;
+      avatarFull?: string | null,
+    }
   }
 }
 
@@ -38,17 +39,22 @@ export async function loader({ context }: LoaderArgs) {
       avatarFull,
     } = steamUser;
     return json<ProfileLoaderData>({
-      isLoggedIn: true,
-      contextData: {
-        steamUserId,
-        displayName,
-        avatarFull,
+      steamUserData: {
+        contextData: {
+          isLoggedIn: true,
+          steamUserId,
+          displayName,
+          avatarFull,
+        },
       },
     });
   }
   return json<ProfileLoaderData>({
-    isLoggedIn: false,
-    contextData: {},
+    steamUserData: {
+      contextData: {
+        isLoggedIn: false,
+      },
+    },
   });
 }
 
@@ -127,8 +133,8 @@ export async function action({ request, context }: ActionArgs) {
 }
 
 export const meta: MetaFunction = ({ data }: { data: ProfileLoaderData }) => {
-  if (data && data.isLoggedIn && data.contextData) {
-    const { displayName } = data.contextData;
+  if (data.steamUserData.contextData.displayName) {
+    const { displayName } = data.steamUserData.contextData;
     return {
       title: displayName ? `${metaTags.title} - Profile - ${displayName}` : `Profile`,
     };
@@ -140,17 +146,18 @@ export const meta: MetaFunction = ({ data }: { data: ProfileLoaderData }) => {
 
 export default function ProfilePage() {
   const {
-    isLoggedIn,
-    contextData,
+    steamUserData: {
+      contextData: {
+        isLoggedIn,
+        avatarFull,
+        displayName,
+      },
+    },
   } = useLoaderData<ProfileLoaderData>();
-  const {
-    avatarFull,
-    displayName,
-  } = contextData;
-  const match = useMatches();
-  const rootLoaderData = match[0].data as SerializedRootLoaderData;
-  const ownedApps = rootLoaderData.prismaData ? rootLoaderData.prismaData.ownedApps : [];
-  const systemSpecs = rootLoaderData.prismaData ? rootLoaderData.prismaData.systemSpecs : [];
+  const steamUserOwnedApps = useSteamUserOwnedApps();
+  const ownedApps = steamUserOwnedApps ? steamUserOwnedApps : [];
+  const steamUserSystemSpecs = useSteamUserSystemSpecs();
+  const systemSpecs = steamUserSystemSpecs ? steamUserSystemSpecs : [];
   const actionData = useActionData<ProfileActionData>();
   const transition = useTransition();
 

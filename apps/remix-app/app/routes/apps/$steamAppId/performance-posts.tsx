@@ -1,13 +1,12 @@
 import type { LoaderArgs, ActionArgs } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
-import { useActionData, useCatch, useLoaderData, useMatches, useTransition } from '@remix-run/react';
+import { useActionData, useCatch, useLoaderData, useTransition } from '@remix-run/react';
 import PerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForm';
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import type { PostTag, GamepadMetadata, SteamPerformancePost, GamepadRating } from '~/interfaces/database';
 import { createPerformancePost, findPerformancePostsBySteamAppId } from '~/models/steamPerformancePost.server';
 import { findPostTags } from '~/models/postTag.server';
-import type { SerializedRootLoaderData } from '~/root';
 import { doesSteamUserOwnApp } from '~/models/steamUser.server';
 import {
   validatePostText,
@@ -23,6 +22,7 @@ import {
 import { validateSystemName } from '~/lib/form-validators/profile';
 import { validateSteamAppId } from '~/lib/loader-functions/params-validators.server';
 import { findAllGamepads } from '~/models/gamepadMetadata.server';
+import { useSteamUserSystemSpecs } from '~/lib/hooks/useMatchesData';
 
 // These are all possible tags that can be used when
 // creating a performance post
@@ -40,7 +40,7 @@ interface PerformancePostLoaderData {
     isLoggedIn: boolean;
     ownsApp: boolean;
     postTags: UserSelectPostTag[];
-    gamepads: UserSelectGamepad[]
+    gamepads: UserSelectGamepad[];
   }
   steamAppId: SteamPerformancePost['steamAppId'];
   performancePosts: {
@@ -225,13 +225,11 @@ export default function PerformancePostsRoute() {
     postTags,
     gamepads,
   } = steamUserData;
-  const matches = useMatches();
-  const rootLoaderData = matches[0].data as SerializedRootLoaderData;
-  const { prismaData } = rootLoaderData;
-  // let ownsApp = false;
+  const systemSpecs = useSteamUserSystemSpecs();
+
   let systemNames: string[] = [];
-  if (prismaData && isLoggedIn) {
-    systemNames = prismaData.systemSpecs.map((systemSpec) => systemSpec.systemName);
+  if (systemSpecs && isLoggedIn) {
+    systemNames = systemSpecs.map((systemSpec) => systemSpec.systemName);
   }
 
   const actionData = useActionData<CreatePerformancePostActionData>();
