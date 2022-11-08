@@ -39,6 +39,9 @@ export default function ProfileDisplay({
               alt="sign in with steam"
               width={114}
               height={43}
+              onError={(e) => {
+                e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
+              }}
             />
           </a>
         </>

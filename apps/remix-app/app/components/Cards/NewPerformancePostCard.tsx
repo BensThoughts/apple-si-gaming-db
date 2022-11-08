@@ -40,6 +40,9 @@ export default function NewPerformancePostCard({
                 width={64}
                 height={64}
                 className="rounded-full"
+                onError={(e) => {
+                  e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
+                }}
               />
             </div>
             // </div>
