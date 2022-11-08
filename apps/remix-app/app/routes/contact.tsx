@@ -38,28 +38,52 @@ export default function ContactRoute() {
             <RedditIcon size={40} /> Message me on Reddit
           </a>
         </div>
-        <div className="bg-tertiary w-full max-w-lg px-8 pb-8 pt-6 rounded-lg border-1 border-secondary-highlight">
-          <AsideCard title="Suggestions" iconBackground="bg-tertiary">
-            The site is currently pre-alpha.  Please join the Discord or
-            fill out the suggestion form below if you have any suggestions
-            to improve it.
+        {/* Small Screens */}
+        <div className="md:hidden px-2">
+          <AsideCard title="Suggestions" iconBackground="bg-app-bg">
+            <div className="flex flex-col gap-6">
+              <p>
+                The site is currently pre-alpha.  Please join the Discord or
+                click the button below to fill out a suggestion form.
+              </p>
+              <div className="flex justify-center w-full">
+                <a
+                  href="https://forms.gle/zwbr9cdKUZgEopnDA"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="inline-flex py-2 px-4 bg-secondary hover:bg-secondary-highlight rounded-lg focus:show-ring"
+                >
+                  I have suggestions!
+                </a>
+              </div>
+
+            </div>
           </AsideCard>
         </div>
-        <div className="flex justify-center items-center w-full bg-transparent">
-          <iframe
-            title="Google Suggestion Form"
-            src="https://docs.google.com/forms/d/e/1FAIpQLScqU74BFS0uzbw8N7HDVhVY8EH5cY0ttsKHA1jLUhuCMnugew/viewform?embedded=true"
-            width="640"
-            height="1740"
-            frameBorder="0"
-            className="relative inset-0 bg-transparent rounded-lg border-2 border-secondary-highlight"
-            marginHeight={0}
-            marginWidth={0}
-            style={{ backgroundColor: 'transparent' }}
-          >Loading…</iframe>
+
+        {/* Medium Screens */}
+        <div className="hidden md:flex md:justify-center bg-tertiary w-full max-w-2xl px-8 pb-8 pt-6 rounded-lg border-1 border-secondary-highlight">
+          <AsideCard title="Suggestions" iconBackground="bg-tertiary" className="w-full max-w-md">
+            <div className="flex flex-col gap-6">
+              <p>
+                The site is currently pre-alpha.  Please join the Discord or
+                click the button below to fill out a suggestion form.
+              </p>
+              <div className="flex justify-center w-full">
+                <a
+                  href="https://forms.gle/zwbr9cdKUZgEopnDA"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="inline-flex py-2 px-4 bg-secondary hover:bg-secondary-highlight rounded-lg focus:show-ring"
+                >
+                  I have suggestions!
+                </a>
+              </div>
+
+            </div>
+          </AsideCard>
         </div>
       </div>
-
     </PageWrapper>
   );
 }
