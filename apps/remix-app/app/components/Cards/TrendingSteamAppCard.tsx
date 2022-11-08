@@ -30,6 +30,7 @@ export default function TrendingSteamAppCard({
             alt={name}
             width={460}
             height={215}
+            loading="lazy"
             onError={(e) => {
               e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
             }}

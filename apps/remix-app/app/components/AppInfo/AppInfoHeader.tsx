@@ -33,6 +33,7 @@ export default function AppInfoHeader({
             width={460}
             height={215}
             className="rounded-md"
+            loading="lazy"
             onError={(e) => {
               e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
             }}

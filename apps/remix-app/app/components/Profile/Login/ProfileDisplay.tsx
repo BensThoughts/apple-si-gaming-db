@@ -19,7 +19,11 @@ export default function ProfileDisplay({
           <h2><strong>{displayName}</strong></h2>
           {avatarFull && <img
             src={avatarFull}
-            alt={`User Profile`}
+            alt="Current User Avatar"
+            loading="lazy"
+            onError={(e) => {
+              e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
+            }}
           />}
           <a
             href="/api/auth/steam/logout"
@@ -39,6 +43,7 @@ export default function ProfileDisplay({
               alt="sign in with steam"
               width={114}
               height={43}
+              loading="lazy"
               onError={(e) => {
                 e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
               }}
