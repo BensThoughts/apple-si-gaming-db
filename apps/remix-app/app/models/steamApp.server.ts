@@ -10,6 +10,7 @@ import type {
   SteamGenre,
   SteamCategory,
 } from '~/interfaces/database';
+import type { TrendingSteamApp } from '~/interfaces';
 
 import prisma from '~/lib/database/db.server';
 
@@ -165,19 +166,9 @@ export async function searchReleasedSteamAppsByName(
   });
 }
 
-export interface TrendingSteamApp {
-  steamAppId: number;
-  name: string;
-  headerImage: string | null;
-  releaseDate: string | null;
-  _count: {
-    performancePosts: number,
-  }
-}
-
 export async function findTrendingSteamApps(
     numTrendingApps: number,
-) {
+): Promise<TrendingSteamApp[]> {
   return prisma.steamApp.findMany({
     where: {
       performancePosts: {
@@ -188,7 +179,6 @@ export async function findTrendingSteamApps(
       steamAppId: true,
       name: true,
       headerImage: true,
-      releaseDate: true,
       _count: {
         select: {
           performancePosts: true,

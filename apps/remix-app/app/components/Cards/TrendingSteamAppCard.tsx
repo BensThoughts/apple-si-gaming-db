@@ -4,7 +4,6 @@ interface TrendingSteamAppProps {
   steamAppId: number;
   name: string;
   headerImage: string | null;
-  releaseDate: string | null;
   numNewPerformancePosts: number;
 }
 
@@ -12,7 +11,6 @@ export default function TrendingSteamAppCard({
   steamAppId,
   name,
   headerImage, // 460W x 215H
-  releaseDate,
   numNewPerformancePosts,
 }: TrendingSteamAppProps) {
   return (

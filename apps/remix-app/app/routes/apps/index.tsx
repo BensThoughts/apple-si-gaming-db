@@ -3,25 +3,15 @@ import { useCatch, useLoaderData } from '@remix-run/react';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import { findTrendingSteamApps } from '~/models/steamApp.server';
 import { findNewestPerformancePosts } from '~/models/steamPerformancePost.server';
-import type { TrendingSteamApp } from '~/models/steamApp.server';
-import type { RatingMedal } from '~/interfaces/database';
+import type { TrendingSteamApp, PerformancePostBrief } from '~/interfaces';
+
 import { Fragment } from 'react';
 import NewPerformancePostCard from '~/components/Cards/NewPerformancePostCard';
 import TrendingSteamAppCard from '~/components/Cards/TrendingSteamAppCard';
 
 interface LoaderData {
   trendingSteamApps: TrendingSteamApp[];
-  newPerformancePosts: {
-    id: string;
-    steamAppId: number;
-    steamApp: {
-      name: string;
-    };
-    postText: string;
-    displayName: string | null;
-    avatarMedium: string | null;
-    ratingMedal: RatingMedal;
-  }[]
+  newPerformancePosts: PerformancePostBrief[];
 }
 
 export async function loader() {
@@ -48,7 +38,6 @@ export default function SteamAppIdIndexRoute() {
                 steamAppId,
                 name,
                 headerImage,
-                releaseDate,
                 _count,
               }) => (
                 <Fragment key={steamAppId}>
@@ -56,7 +45,6 @@ export default function SteamAppIdIndexRoute() {
                     steamAppId={steamAppId}
                     name={name}
                     headerImage={headerImage}
-                    releaseDate={releaseDate}
                     numNewPerformancePosts={_count.performancePosts}
                   />
                 </Fragment>
