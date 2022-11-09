@@ -1,7 +1,7 @@
 
 import { lazy, Suspense } from 'react';
 import type { StylesConfig } from 'react-select';
-import { ClientOnly } from '~/components/ClientOnly';
+import { ClientOnly } from '~/components/ClientOnlyBackup';
 // import Select from 'react-select';
 const Select = lazy(() => import('react-select'));
 
