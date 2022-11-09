@@ -15,7 +15,6 @@ import { createSystem } from '~/lib/form-actions/profile/create-system.server';
 import { deleteSystem } from '~/lib/form-actions/profile/delete-system.server';
 import { editSystem } from '~/lib/form-actions/profile/edit-system.server';
 import { metaTags } from '~/lib/meta-tags';
-// import type { SteamGenre } from '~/interfaces/database';
 import { useSteamUserOwnedApps, useSteamUserSystemSpecs } from '~/lib/hooks/useMatchesData';
 
 interface ProfileLoaderData {

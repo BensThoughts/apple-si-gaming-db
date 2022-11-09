@@ -1,5 +1,5 @@
 import type { AppLoadContext } from '@remix-run/server-runtime';
-import type { AppLoadContextSteamUser, ExtendedAppLoadContext } from '~/interfaces/AppLoadContext';
+import type { AppLoadContextSteamUser, ExtendedAppLoadContext } from '~/interfaces';
 
 export function extractAppLoadContext(context: AppLoadContext): ExtendedAppLoadContext {
   const steamUser = context.steamUser ? context.steamUser as AppLoadContextSteamUser : null;

@@ -1,4 +1,4 @@
-import type { FrameRate, GamepadRating, RatingMedal } from '~/interfaces/database';
+import type { FrameRate, GamepadRating, RatingMedal } from '~/interfaces';
 import AppRatingOverview from './AppRatingOverview';
 import PerformancePostDisplay from './PerformancePostDisplay';
 

@@ -1,4 +1,4 @@
-import type { FrameRate, GamepadRating, RatingMedal } from '~/interfaces/database';
+import type { FrameRate, GamepadRating, RatingMedal } from '~/interfaces';
 
 
 export function isTypeFrameRateAverage(frameRateAverage: string): frameRateAverage is FrameRate {

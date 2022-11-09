@@ -1,4 +1,4 @@
-import type { FrameRate, RatingMedal } from '~/interfaces/database';
+import type { FrameRate, RatingMedal } from '~/interfaces';
 import { convertFrameRateToDescription, convertRatingMedalToDescription } from '~/lib/rating-conversions';
 
 interface PerformancePostMetaBarProps {

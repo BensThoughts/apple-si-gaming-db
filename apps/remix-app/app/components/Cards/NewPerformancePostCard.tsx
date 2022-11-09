@@ -1,5 +1,5 @@
 import { Link } from '@remix-run/react';
-import type { RatingMedal } from '~/interfaces/database';
+import type { RatingMedal } from '~/interfaces';
 
 interface NewPerformancePostCardProps {
   steamAppId: number;

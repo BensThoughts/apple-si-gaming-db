@@ -1,4 +1,4 @@
-import type { GamepadRating, RatingMedal, FrameRate } from '~/interfaces/database';
+import type { GamepadRating, RatingMedal, FrameRate } from '~/interfaces';
 import { isTypeFrameRateAverage, isTypeGamepadRating } from '~/lib/form-validators/posts';
 import {
   convertRatingMedalToNumber,

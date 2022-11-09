@@ -2,7 +2,7 @@ import type {
   RatingMedal,
   FrameRate,
   GamepadRating,
-} from '~/interfaces/database';
+} from '~/interfaces';
 
 export function convertRatingMedalToFullText(ratingMedal: RatingMedal) {
   switch (ratingMedal) {

@@ -1,10 +1,8 @@
 import TextPill from '~/components/TextPill';
-import type { FrameRate, GamepadRating, RatingMedal } from '~/interfaces/database';
+import type { FrameRate, GamepadRating, RatingMedal } from '~/interfaces';
 import PerformancePostMetaBar from './PerformancePostMetaBar';
 import SystemSpecsPopover from './SystemSpecsPopover';
 import { convertGamepadRatingToDescription } from '~/lib/rating-conversions';
-// import { convertRatingMedalToNumber } from '~/interfaces/database';
-// import { RatingMedalIcon } from '~/components/Icons';
 
 type PerformancePostDisplayProps = {
   postText: string;

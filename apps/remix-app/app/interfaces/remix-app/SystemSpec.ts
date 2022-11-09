@@ -1,3 +1,6 @@
+// Used on the remix server side to make parsing system
+// spec data from the FormData dump easier.  Also
+// used when creating a new system with prisma in createSystemSpecs()
 export interface SystemSpec {
   computerInformation: {
     manufacturer: string | null;
