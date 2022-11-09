@@ -30,7 +30,7 @@ import { useTheme, ThemeProvider, NonFlashOfWrongThemeEls } from './lib/context/
 import { getThemeSession } from './lib/sessions/theme-session.server';
 // import { getBannerSession } from './lib/sessions/banner-session.server';
 
-import LogRocket from 'logrocket';
+// import LogRocket from 'logrocket';
 
 
 export const links: LinksFunction = () => {
@@ -203,10 +203,10 @@ function Document({
 }) {
   const [theme] = useTheme();
 
-  LogRocket.init('apple-gaming-db/steamed-apples');
-  if (steamUserId) {
-    LogRocket.identify(steamUserId);
-  }
+  // LogRocket.init('apple-gaming-db/steamed-apples');
+  // if (steamUserId) {
+  //   LogRocket.identify(steamUserId);
+  // }
 
   return (
     <html lang="en">
