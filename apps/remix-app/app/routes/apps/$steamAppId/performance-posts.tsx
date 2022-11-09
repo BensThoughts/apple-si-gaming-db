@@ -4,7 +4,7 @@ import { useActionData, useCatch, useLoaderData, useTransition } from '@remix-ru
 import PerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForm';
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-import type { PostTag, GamepadMetadata, SteamPerformancePost, GamepadRating } from '~/interfaces/database';
+import type { GamepadRating, RatingMedal, FrameRate } from '~/interfaces/database';
 import { createPerformancePost, findPerformancePostsBySteamAppId } from '~/models/steamPerformancePost.server';
 import { findPostTags } from '~/models/postTag.server';
 import { doesSteamUserOwnApp } from '~/models/steamUser.server';
@@ -27,13 +27,13 @@ import { useSteamUserSystemSpecs } from '~/lib/hooks/useMatchesData';
 // These are all possible tags that can be used when
 // creating a performance post
 interface UserSelectPostTag {
-  postTagId: PostTag['postTagId'];
-  description: PostTag['description'];
+  postTagId: number;
+  description: string;
 }
 
 interface UserSelectGamepad {
-  gamepadId: GamepadMetadata['gamepadId'];
-  description: GamepadMetadata['description'];
+  gamepadId: number;
+  description: string;
 }
 interface PerformancePostLoaderData {
   steamUserData: {
@@ -42,27 +42,27 @@ interface PerformancePostLoaderData {
     postTags: UserSelectPostTag[];
     gamepads: UserSelectGamepad[];
   }
-  steamAppId: SteamPerformancePost['steamAppId'];
+  steamAppId: number;
   performancePosts: {
-    id: SteamPerformancePost['id'];
-    postText: SteamPerformancePost['postText'];
+    id: string;
+    postText: string;
     postTags: UserSelectPostTag[],
     gamepadMetadata: UserSelectGamepad | null,
     gamepadRating: GamepadRating | null,
-    createdAt: SteamPerformancePost['createdAt'];
-    ratingMedal: SteamPerformancePost['ratingMedal'];
-    frameRateAverage: SteamPerformancePost['frameRateAverage']
-    frameRateStutters: SteamPerformancePost['frameRateStutters'];
-    displayName: SteamPerformancePost['displayName'];
-    avatarMedium: SteamPerformancePost['avatarMedium'];
-    systemManufacturer: SteamPerformancePost['systemManufacturer'];
-    systemModel: SteamPerformancePost['systemModel'];
-    systemOsVersion: SteamPerformancePost['systemOsVersion'];
-    systemCpuBrand: SteamPerformancePost['systemCpuBrand'];
-    systemVideoDriver: SteamPerformancePost['systemVideoDriver'];
-    systemVideoDriverVersion: SteamPerformancePost['systemVideoDriverVersion'];
-    systemVideoPrimaryVRAM: SteamPerformancePost['systemVideoPrimaryVRAM'];
-    systemMemoryRAM: SteamPerformancePost['systemMemoryRAM'];
+    createdAt: Date;
+    ratingMedal: RatingMedal;
+    frameRateAverage: FrameRate | null;
+    frameRateStutters: boolean | null;
+    displayName: string | null;
+    avatarMedium: string | null;
+    systemManufacturer: string | null;
+    systemModel: string | null;
+    systemOsVersion: string | null;
+    systemCpuBrand: string | null;
+    systemVideoDriver: string | null;
+    systemVideoDriverVersion: string | null;
+    systemVideoPrimaryVRAM: string | null;
+    systemMemoryRAM: string | null;
   }[];
 }
 
@@ -105,7 +105,7 @@ export type CreatePerformancePostActionData = {
     gamepadRating?: string;
   };
   fields?: {
-    postText: SteamPerformancePost['postText'];
+    postText: string;
   };
 };
 
