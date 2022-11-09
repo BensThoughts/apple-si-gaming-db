@@ -30,6 +30,8 @@ import { useTheme, ThemeProvider, NonFlashOfWrongThemeEls } from './lib/context/
 import { getThemeSession } from './lib/sessions/theme-session.server';
 // import { getBannerSession } from './lib/sessions/banner-session.server';
 
+import LogRocket from 'logrocket';
+
 
 export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: tailwindStylesheetUrl }];
@@ -163,6 +165,7 @@ export async function loader({ request, context }: LoaderArgs) {
     }
   }
   // TODO: code for headers is duplicated before each return json()
+  profileSession.unsetAlreadyLoggedIn();
   const headers = new Headers();
   headers.append('Set-Cookie', await profileSession.commit());
   // headers.append('Set-Cookie', await bannerSession.commit());
@@ -187,16 +190,24 @@ function Document({
   children,
   title,
   isLoggedIn,
+  steamUserId,
   isSearchSubmitting,
   ssrTheme,
 }: {
   children: React.ReactNode;
   title?: string;
   isLoggedIn?: boolean;
+  steamUserId?: string | null;
   isSearchSubmitting?: boolean;
   ssrTheme: Theme | null;
 }) {
   const [theme] = useTheme();
+
+  LogRocket.init('apple-gaming-db/steamed-apples');
+  if (steamUserId) {
+    LogRocket.identify(steamUserId);
+  }
+
   return (
     <html lang="en">
       <head>
@@ -233,6 +244,7 @@ export default function App() {
     steamUserData: {
       contextData: {
         isLoggedIn,
+        steamUserId,
       },
     },
   }= useLoaderData<RootLoaderData>();
@@ -244,6 +256,7 @@ export default function App() {
     <ThemeProvider ssrCookieTheme={theme}>
       <Document
         isLoggedIn={isLoggedIn}
+        steamUserId={steamUserId}
         isSearchSubmitting={isSearchSubmitting}
         ssrTheme={theme}
       >
