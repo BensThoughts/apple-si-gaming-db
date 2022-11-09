@@ -26,6 +26,7 @@ async function getProfileSession(request: Request) {
     hasAlreadyLoggedIn: () => {
       return session.has('alreadyLoggedIn');
     },
+    unsetAlreadyLoggedIn: () => session.unset('alreadyLoggedIn'),
     setAlreadyLoggedIn: (alreadyLoggedIn: boolean) => session.set('alreadyLoggedIn', alreadyLoggedIn),
     commit: () => profileSession.commitSession(session),
   };
