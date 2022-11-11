@@ -210,6 +210,7 @@ function Document({
   useEffect(function setupFathom() {
     if (!fathomLoaded.current) {
       Fathom.load('OXJZWIXK', {
+        url: 'https://outstanding-phone.steamedapples.com/script.js',
         includedDomains: [
           'www.steamedapples.com',
           'steamedapples.com',
