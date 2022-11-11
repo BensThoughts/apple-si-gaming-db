@@ -12,6 +12,7 @@ import {
   ScrollRestoration,
   useCatch,
   useLoaderData,
+  useLocation,
   useTransition,
 } from '@remix-run/react';
 import { json } from '@remix-run/node';
@@ -30,17 +31,8 @@ import { useTheme, ThemeProvider, NonFlashOfWrongThemeEls } from './lib/context/
 import { getThemeSession } from './lib/sessions/theme-session.server';
 // import { getBannerSession } from './lib/sessions/banner-session.server';
 
-
-export const links: LinksFunction = () => {
-  return [{ rel: 'stylesheet', href: tailwindStylesheetUrl }];
-};
-
-export const meta: MetaFunction = ({ data }) => ({
-  'charset': 'utf-8',
-  'viewport': 'width=device-width,initial-scale=1',
-  'color-scheme': (data && data.theme === 'light') ? 'light dark' : 'dark light',
-  ...metaTags,
-});
+import * as Fathom from 'fathom-client';
+import { useEffect, useRef } from 'react';
 
 type RootLoaderData = {
   cookieData: {
@@ -184,6 +176,17 @@ export async function loader({ request, context }: LoaderArgs) {
   });
 }
 
+export const links: LinksFunction = () => {
+  return [{ rel: 'stylesheet', href: tailwindStylesheetUrl }];
+};
+
+export const meta: MetaFunction = ({ data }) => ({
+  'charset': 'utf-8',
+  'viewport': 'width=device-width,initial-scale=1',
+  'color-scheme': (data && data.theme === 'light') ? 'light dark' : 'dark light',
+  ...metaTags,
+});
+
 function Document({
   children,
   title,
@@ -200,6 +203,25 @@ function Document({
   ssrTheme: Theme | null;
 }) {
   const [theme] = useTheme();
+
+  const fathomLoaded = useRef(false);
+  const location = useLocation();
+
+  useEffect(function setupFathom() {
+    if (!fathomLoaded.current) {
+      Fathom.load('OXJZWIXK', {
+        includedDomains: [
+          'www.steamedapples.com',
+          'steamedapples.com',
+          'www.applesilicongaming.com',
+          'applesilicongaming.com',
+        ],
+      });
+      fathomLoaded.current = true;
+    } else {
+      Fathom.trackPageview();
+    }
+  }, [location]);
 
   return (
     <html lang="en">
@@ -220,6 +242,7 @@ function Document({
         <NonFlashOfWrongThemeEls ssrTheme={Boolean(ssrTheme)} />
         <Toaster />
         <ScrollRestoration />
+        {/* <script src="https://cdn.usefathom.com/script.js" data-spa="auto" data-site="OXJZWIXK" defer /> */}
         <Scripts />
         <LiveReload />
       </body>
