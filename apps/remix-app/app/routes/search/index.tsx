@@ -10,6 +10,7 @@ import RoundedLink from '~/components/RoundedLink';
 import { metaTags } from '~/lib/meta-tags';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
 import { getSearchOptions } from '~/lib/loader-functions/search.server';
+import { Fragment } from 'react';
 
 function validateSearchQuery(searchQuery: string) {
   if (searchQuery.length > 100) {
@@ -382,14 +383,14 @@ export default function SearchIndexRoute() {
     >
       <div className="flex flex-col gap-3 items-center w-full max-w-xl border-secondary border-1 rounded-md p-4 bg-app-bg">
         {steamApps.map(({ steamAppId, name, headerImage, releaseDate }) => (
-          <div key={steamAppId}>
+          <Fragment key={steamAppId}>
             <SearchTitleCard
               name={name}
               steamAppId={steamAppId}
               headerImageSrc={headerImage}
               releaseDate={releaseDate}
             />
-          </div>
+          </Fragment>
         ))}
         {(hasNextPage || (page > 1)) &&
           <div className="flex justify-between w-full">
