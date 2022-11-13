@@ -1,5 +1,5 @@
 import { Outlet, useCatch, useLoaderData } from '@remix-run/react';
-import type { LoaderArgs } from '@remix-run/server-runtime';
+import type { LoaderArgs, MetaFunction } from '@remix-run/server-runtime';
 // import { redirect } from '@remix-run/node';
 import { json, Response } from '@remix-run/node';
 
@@ -65,6 +65,16 @@ export async function loader({ params }: LoaderArgs) {
     steamApp,
   });
 }
+
+export const meta: MetaFunction = ({
+  data,
+}: {
+  data: LoaderData;
+}) => {
+  return {
+    title: `${data.steamApp.name} - Apple Silicon Performance Reviews`,
+  };
+};
 
 export default function AppsRoute() {
   const { steamApp } = useLoaderData<typeof loader>();
