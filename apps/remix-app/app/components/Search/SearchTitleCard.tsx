@@ -1,5 +1,4 @@
 import { Link } from '@remix-run/react';
-// import Image from 'remix-image';
 
 interface SearchTitleCardProps {
   name: string;
@@ -25,42 +24,6 @@ export default function SearchTitleCard({
       <div className="w-full flex justify-center items-center">
         {headerImageSrc && (
           <div className="rounded-lg flex items-center justify-center max-w-lg">
-            {/* Part of remix-image */}
-            {/* <Image
-              loaderUrl="/actions/image"
-              src={headerImageSrc}
-              alt={`Header for ${name}`}
-              responsive={[
-                {
-                  size: {
-                    width: 220,
-                    height: 110,
-                  },
-                  maxWidth: 380,
-                },
-                {
-                  size: {
-                    width: 300,
-                    height: 150,
-                  },
-                },
-              ]}
-              // style={{
-              //   // minWidth: 220,
-              //   // minHeight: 110,
-              //   backgroundSize: 'contain',
-              //   backgroundPosition: 'center',
-              // }}
-              dprVariants={[1, 3]}
-              options={{
-                fit: 'fill',
-                position: 'center',
-              }}
-              onError={(e) => {
-                e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
-              }}
-              className="rounded-md"
-            /> */}
             <img
               src={headerImageSrc}
               alt={`Cover art for ${name}`}

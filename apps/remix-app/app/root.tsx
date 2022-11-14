@@ -34,9 +34,6 @@ import { getThemeSession } from './lib/sessions/theme-session.server';
 import * as Fathom from 'fathom-client';
 import { useEffect, useRef } from 'react';
 
-// Part of remix-image
-// import remixImageStyles from 'remix-image/remix-image.css';
-
 type RootLoaderData = {
   cookieData: {
     theme: Theme | null;
@@ -182,8 +179,6 @@ export async function loader({ request, context }: LoaderArgs) {
 export const links: LinksFunction = () => {
   return [
     { rel: 'stylesheet', href: tailwindStylesheetUrl },
-    // part of remix-image
-    // { rel: 'stylesheet', href: remixImageStyles },
   ];
 };
 
