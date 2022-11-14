@@ -72,7 +72,7 @@ export const meta: MetaFunction = ({
   data: LoaderData;
 }) => {
   return {
-    title: `${data.steamApp.name} - Apple Silicon Performance Reviews`,
+    title: `${data.steamApp.name} - Apple Silicon Compatibility and Performance Reviews`,
   };
 };
 
