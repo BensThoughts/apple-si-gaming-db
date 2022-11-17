@@ -210,13 +210,14 @@ function Document({
   const location = useLocation();
 
   useEffect(function setupFathom() {
+    console.log(location.pathname + location.search);
     if (!fathomLoaded.current) {
       Fathom.load('OXJZWIXK', {
         url: 'https://outstanding-phone.steamedapples.com/script.js',
       });
       fathomLoaded.current = true;
     } else {
-      Fathom.trackPageview();
+      Fathom.trackPageview({ url: location.pathname + location.search });
     }
   }, [location]);
 
