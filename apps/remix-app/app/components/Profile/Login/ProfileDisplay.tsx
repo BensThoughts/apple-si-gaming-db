@@ -1,4 +1,5 @@
 import AnimatedUnderline from '~/components/AnimatedUnderline';
+import * as Fathom from 'fathom-client';
 
 export default function ProfileDisplay({
   isLoggedIn,
@@ -37,7 +38,11 @@ export default function ProfileDisplay({
           Apple Silicon on Steam requires Steam authentication to post performance reports.
           Signing in with this method accesses only information that you have intentionally
           set to be publicly visible.
-          <a href="/api/auth/steam/login" className="block w-[114px] h-[43px] mt-2">
+          <a
+            href="/api/auth/steam/login"
+            className="block w-[114px] h-[43px] mt-2"
+            onClick={() => Fathom.trackGoal('7HVQUUZ4', 1)}
+          >
             <img
               src="steam_sign_in.png"
               alt="sign in with steam"
