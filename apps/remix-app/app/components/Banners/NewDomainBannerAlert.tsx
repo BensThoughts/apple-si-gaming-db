@@ -17,7 +17,7 @@ export default function NewDomainBannerAlert({
     >
       <p>
       We are now located at{` `}
-        <a href="https://www.steamedapples.com" className="underline">
+        <a href="https://www.steamedapples.com/?ref=applesilicongaming.com" className="underline">
         https://www.steamedapples.com
         </a>
       </p>
