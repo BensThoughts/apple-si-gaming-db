@@ -210,7 +210,6 @@ function Document({
   const location = useLocation();
 
   useEffect(function setupFathom() {
-    console.log(location.pathname + location.search);
     if (!fathomLoaded.current) {
       Fathom.load('OXJZWIXK', {
         url: 'https://outstanding-phone.steamedapples.com/script.js',
