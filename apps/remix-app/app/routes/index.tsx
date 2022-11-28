@@ -7,6 +7,14 @@ import TrendingSteamAppCard from '~/components/Cards/TrendingSteamAppCard';
 import { Fragment } from 'react';
 import type { TrendingSteamApp, PerformancePostBrief } from '~/interfaces';
 import NewPerformancePostCard from '~/components/Cards/NewPerformancePostCard';
+import Card from '~/components/Cards/Card';
+import {
+  BookFlatIcon,
+  ChatFlatIcon,
+  GearSettingsFlatIcon,
+  MonitorFlatIcon,
+  SyncFlatIcon,
+} from '~/components/Icons/FlatIcons';
 
 interface LoaderData {
   trendingSteamApps: TrendingSteamApp[];
@@ -43,6 +51,23 @@ export default function IndexRoute() {
         </div>
       </div>
       <div className="flex flex-col items-center gap-12 w-full">
+        <div className="flex flex-col items-center gap-6 w-full">
+
+          <h2 className="text-secondary text-2xl">New Features</h2>
+          <div className="w-full max-w-3xl">
+            <Card>
+              <div>
+                <ul className="flex flex-col gap-4">
+                  <li className="flex items-center gap-4"><ChatFlatIcon size={32} className="inline -rotate-12 min-w-[40px] self-start md:self-center" />Added a "New Posts" section to highlight user posts</li>
+                  <li className="flex items-center gap-4"><MonitorFlatIcon size={32} className="inline rotate-12 min-w-[40px] self-start md:self-center" />Added ability to post average frame rate and stutter</li>
+                  <li className="flex items-center gap-4"><SyncFlatIcon size={32} className="inline -rotate-12 min-w-[40px] self-start md:self-center" />Added ability to re-sync Steam library from the user profile page</li>
+                  <li className="flex items-center gap-4"><BookFlatIcon size={32} className="inline rotate-12 min-w-[40px] self-start md:self-center" /> Added search filters for Apple compatibility, genres, and categories (e.g. Full Controller Support)</li>
+                  <li className="flex items-center gap-4"><GearSettingsFlatIcon size={32} className="inline -rotate-12 min-w-[40px] self-start md:self-center" /> Changed post form so that attaching system specs to a post is now optional</li>
+                </ul>
+              </div>
+            </Card>
+          </div>
+        </div>
         {(newPerformancePosts.length > 0) && (
           <div className="flex flex-col items-center gap-6 w-full">
             <h2 className="text-secondary text-2xl">New Posts</h2>
