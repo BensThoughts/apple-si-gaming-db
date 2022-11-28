@@ -4,7 +4,7 @@ type IconProps = {
   size?: number,
 } & React.SVGAttributes<SVGElement>
 
-export default function SunIcon({
+export default function CloudMoonIcon({
   viewBox = '0 0 576 512',
   size = 24,
   ...rest
