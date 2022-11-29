@@ -329,7 +329,7 @@ export default function PerformancePostForm({
         >
           <div className="text-primary-faded">
             You can choose to select a system from your&nbsp;
-            <Link to="/profile">
+            <Link to="/profile/systems">
               <AnimatedUnderline>
                 <span className="text-secondary">profile</span>
               </AnimatedUnderline>
