@@ -1,10 +1,10 @@
-import FlatIcon60 from '../FlatIcon60';
+import FlatIcon60 from '../../FlatIcon60';
 
 type IconProps = {
   size?: number,
 } & React.SVGAttributes<SVGElement>
 
-export default function BookIcon({
+export function BookBlueLinealIcon({
   size = 24,
   ...rest
 }: IconProps) {

@@ -1,10 +1,10 @@
-import FlatIcon60 from '../FlatIcon60';
+import FlatIcon60 from '../../FlatIcon60';
 
 type IconProps = {
   size?: number,
 } & React.SVGAttributes<SVGElement>
 
-export default function MonitorIcon({
+export function MonitorBlueLinealIcon({
   size = 24,
   ...rest
 }: IconProps) {

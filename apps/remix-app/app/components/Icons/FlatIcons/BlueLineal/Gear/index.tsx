@@ -1,10 +1,10 @@
-import FlatIcon60 from '../FlatIcon60';
+import FlatIcon60 from '../../FlatIcon60';
 
 type IconProps = {
   size?: number,
 } & React.SVGAttributes<SVGElement>
 
-export default function GearSettingsIcon({
+export function GearBlueLinealIcon({
   size = 24,
   ...rest
 }: IconProps) {
