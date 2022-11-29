@@ -6,6 +6,8 @@ export type {
 
   SteamUser,
   SteamUserSystemSpecs,
+  SiteAchievement,
+  SiteUserStats,
 
   // SteamPerformancePost,
   SteamPerformancePost,
