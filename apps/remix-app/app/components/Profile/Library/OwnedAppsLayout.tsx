@@ -69,7 +69,7 @@ export default function OwnedAppsLayout({
   return (
     <div className="flex flex-col items-center gap-8 w-full">
       <div
-        className="flex flex-col md:flex-row items-center justify-center gap-3
+        className="flex flex-col xl:flex-row items-center justify-center gap-3
                    bg-tertiary p-4 rounded-lg border-1 border-secondary-highlight"
       >
         <div>
