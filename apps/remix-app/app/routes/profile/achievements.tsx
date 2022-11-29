@@ -1,7 +1,7 @@
+import AchievementsLayout from '~/components/Profile/Achievements/AchievementsLayout';
+
 export default function ProfileAchievementsRoute() {
   return (
-    <div>
-      /profile/achievements route
-    </div>
+    <AchievementsLayout />
   );
 }
