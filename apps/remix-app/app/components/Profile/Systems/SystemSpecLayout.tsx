@@ -1,4 +1,4 @@
-import type { CreateSystemSpecActionData, DeleteSystemSpecActionData, EditSystemSpecActionData } from '~/routes/profile';
+import type { CreateSystemSpecActionData, DeleteSystemSpecActionData, EditSystemSpecActionData } from '~/routes/profile/systems';
 import AsideCard from '~/components/Cards/AsideCard';
 import Heading from '~/components/Heading';
 import CreateSystemForm from './CreateSystemForm';
@@ -30,7 +30,7 @@ export default function SystemSpecLayout({
   deleteSystemSpecActionData,
 }: SystemSpecLayoutProps) {
   return (
-    <div className="flex flex-col gap-6 items-center w-full max-w-3xl p-4 rounded-lg bg-tertiary border-1 border-secondary-highlight">
+    <div className="flex flex-col gap-8 items-center w-full p-4 bg-tertiary rounded-lg border-1 border-secondary-highlight">
       <Heading>Systems</Heading>
       <div className="w-full max-w-md border-1 border-secondary-highlight rounded-md p-4">
       Creating predefined systems makes it easier to attach system information
