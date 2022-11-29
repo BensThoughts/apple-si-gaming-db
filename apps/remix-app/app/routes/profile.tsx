@@ -12,6 +12,7 @@ import PageWrapper from '~/components/Layout/PageWrapper';
 import { metaTags } from '~/lib/meta-tags';
 import LoginCard from '~/components/Profile/Login/LoginCard';
 import PrivacyCard from '~/components/Profile/Login/PrivacyCard';
+import AnimatedUnderline from '~/components/AnimatedUnderline';
 
 interface ProfileLoaderData {
   steamUserData: {
@@ -96,19 +97,27 @@ export default function ProfilePage() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 min-h-screen">
 
           <div className="col-start-1 col-span-1 md:col-span-4 xl:col-span-3">
-            <div className="flex flex-col items-center w-full max-w-xs bg-tertiary rounded-md p-4">
+            <div className="flex flex-col gap-2 items-center w-full max-w-xs bg-tertiary rounded-md p-4">
               <h2 className="text-lg text-secondary">Menu</h2>
-              <Link to="/profile">
-                Profile
+              <Link to="/profile" className="focus-visible:show-ring px-1 rounded-sm font-medium text-primary">
+                <AnimatedUnderline>
+                  Profile
+                </AnimatedUnderline>
               </Link>
-              <Link to="/profile/library">
-                Library
+              <Link to="/profile/library" className="focus-visible:show-ring px-1 rounded-sm font-medium text-primary">
+                <AnimatedUnderline>
+                  Library
+                </AnimatedUnderline>
               </Link>
-              <Link to="/profile/systems">
-                Systems
+              <Link to="/profile/systems" className="focus-visible:show-ring px-1 rounded-sm font-medium text-primary">
+                <AnimatedUnderline>
+                  Systems
+                </AnimatedUnderline>
               </Link>
-              <Link to="/profile/achievements">
-                Achievements
+              <Link to="/profile/achievements" className="focus-visible:show-ring px-1 rounded-sm font-medium text-primary">
+                <AnimatedUnderline>
+                  Achievements
+                </AnimatedUnderline>
               </Link>
             </div>
           </div>
