@@ -1,6 +1,5 @@
 import RoundedButton from '~/components/RoundedButton';
 import Heading from '~/components/Heading';
-import AsideCard from '~/components/Cards/AsideCard';
 import { Form } from '@remix-run/react';
 import OwnedAppsLayout from './OwnedAppsLayout';
 
@@ -23,22 +22,27 @@ export default function LibraryLayout({
   isSubmittingUpdateGames,
 }: LibraryLayoutProps) {
   return (
-    <div className="flex flex-col gap-8 items-center w-full p-4 bg-app-bg rounded-lg border-1 border-secondary-highlight">
+    <div className="flex flex-col gap-8 items-center w-full p-4 bg-tertiary rounded-lg border-1 border-secondary-highlight">
       <Heading>Library</Heading>
 
-      <div className="flex flex-col gap-3 items-center justify-center w-full">
-        <AsideCard title="New Feature!" iconBackground="bg-app-bg" className="max-w-lg">
-        Use the update library button to re-synchronize your steam library without logging out
-        </AsideCard>
-        <Form
-          action="/profile"
-          method="post"
-        >
-          <input type="hidden" name="_profileAction" value="updateOwnedGames" />
-          <RoundedButton type="submit">
-            {isSubmittingUpdateGames ? <span>Updating...</span> : <span>Update Library</span>}
-          </RoundedButton>
-        </Form>
+      <div
+        className="flex flex-col md:flex-row items-center justify-center gap-3
+                   bg-tertiary p-4 rounded-lg border-1 border-secondary-highlight"
+      >
+        <div>
+          Resync steam library
+        </div>
+        <div>
+          <Form
+            action="/profile/library"
+            method="post"
+          >
+            <input type="hidden" name="_profileAction" value="updateOwnedGames" />
+            <RoundedButton type="submit">
+              {isSubmittingUpdateGames ? <span>Updating...</span> : <span>Update Library</span>}
+            </RoundedButton>
+          </Form>
+        </div>
       </div>
 
       {(ownedApps && ownedApps.length > 0) ? (
