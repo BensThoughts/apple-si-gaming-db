@@ -27,6 +27,30 @@ model PostTag {
   description String
 }
 
+model SiteAchievement {
+  achievementId Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  title       String
+  description String
+  imageUrl    String
+
+  steamUsersWithAchievement SteamUser[]
+}
+
+model SiteUserStats {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  steamUserId String    @unique
+  steamUser   SteamUser @relation(fields: [steamUserId], references: [steamUserId], onDelete: Cascade)
+
+  numLogins    Int @default(0)
+  numPerfPosts Int @default(0)
+}
+
 model SteamUser {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
@@ -61,9 +85,13 @@ model SteamUser {
   ownedApps        SteamApp[]
   systemSpecs      SteamUserSystemSpecs[]
 
+  siteAchievements SiteAchievement[]
+  siteUserStats    SiteUserStats?
+
   // Unused For Now
   appCount          Int?
   ownedAppsPlaytime SteamUserOwnedAppPlaytime[]
+  siteUserStatsId   String?
 }
 
 model SteamUserSystemSpecs {
