@@ -1,12 +1,12 @@
 import { redirect, json } from '@remix-run/node';
 import { createSystemSpecs, findSystemSpecSystemNames } from '~/models/steamUserSystemSpecs.server';
 import type { SteamUserSystemSpecs } from '~/interfaces/database';
-import type { CreateSystemSpecActionData, ProfileActionData } from '~/routes/profile';
+import type { CreateSystemSpecActionData, ProfileSystemsActionData } from '~/routes/profile/systems';
 import { validateNewSystemName, validateSystemInfo } from '~/lib/form-validators/profile';
 import type { SystemSpec } from '~/interfaces';
 
 const badRequest = (data: CreateSystemSpecActionData) => (
-  json<ProfileActionData>({
+  json<ProfileSystemsActionData>({
     _profileAction: {
       createSystemSpec: data,
     },
@@ -159,5 +159,5 @@ export async function createSystem(
 
   await createSystemSpecs(steamUserId, systemName, systemSpecs);
 
-  return redirect(`/profile`);
+  return redirect(`/profile/systems`);
 }

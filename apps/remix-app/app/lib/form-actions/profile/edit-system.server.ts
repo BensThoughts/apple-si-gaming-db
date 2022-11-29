@@ -1,11 +1,11 @@
 import { json, redirect } from '@remix-run/node';
 import type { SteamUserSystemSpecs } from '~/interfaces/database';
 import { findSystemSpecSystemNames, updateSteamUserSystemSpecSystemName } from '~/models/steamUserSystemSpecs.server';
-import type { EditSystemSpecActionData, ProfileActionData } from '~/routes/profile';
+import type { EditSystemSpecActionData, ProfileSystemsActionData } from '~/routes/profile/systems';
 import { validateNewSystemName, validateSystemName } from '~/lib/form-validators/profile';
 
 const badRequest = (data: EditSystemSpecActionData) => (
-  json<ProfileActionData>({
+  json<ProfileSystemsActionData>({
     _profileAction: {
       editSystemSpec: data,
     },
@@ -45,5 +45,5 @@ export async function editSystem(
 
   await updateSteamUserSystemSpecSystemName(steamUserId, systemName, updatedSystemName);
 
-  return redirect('/profile');
+  return redirect('/profile/systems');
 }

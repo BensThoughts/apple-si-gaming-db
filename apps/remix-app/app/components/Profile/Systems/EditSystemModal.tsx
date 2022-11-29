@@ -40,7 +40,7 @@ export default function EditSystemModal({
           Please choose a new name for <span className="text-secondary">{systemName}</span>
         </div>
         <Form
-          action="/profile"
+          action="/profile/systems"
           method="post"
           onSubmit={handleSubmitEvent}
           className="flex flex-col gap-4"

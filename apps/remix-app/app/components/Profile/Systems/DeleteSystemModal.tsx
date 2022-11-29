@@ -38,7 +38,7 @@ export default function DeleteSystemModal({
         </div>
         <div className="flex gap-2">
           <Form
-            action="/profile"
+            action="/profile/systems"
             method="post"
             onSubmit={handleSubmitEvent}
           >

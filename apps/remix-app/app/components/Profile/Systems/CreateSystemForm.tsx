@@ -2,7 +2,7 @@ import { Form } from '@remix-run/react';
 import Input from '~/components/FormComponents/Input';
 import TextArea from '~/components/FormComponents/TextArea';
 import RoundedButton from '~/components/RoundedButton';
-import type { CreateSystemSpecActionData } from '~/routes/profile';
+import type { CreateSystemSpecActionData } from '~/routes/profile/systems';
 import { showToast } from '~/components/Toasts';
 import { useEffect, useRef } from 'react';
 
@@ -43,7 +43,7 @@ export default function CreateSystemForm({
 
   return (
     <Form
-      action="/profile"
+      action="/profile/systems"
       method="post"
       ref={formRef}
       className="w-full max-w-lg flex flex-col items-center gap-3"
