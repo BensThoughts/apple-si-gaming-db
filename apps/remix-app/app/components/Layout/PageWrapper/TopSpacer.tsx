@@ -1,5 +1,5 @@
 export default function TopSpacer() {
   return (
-    <div className="mb-4 md:mb-12" />
+    <div className="mb-4 md:mb-6" />
   );
 }
