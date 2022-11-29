@@ -76,7 +76,11 @@ export type SerializedRootLoaderData = SerializeFrom<RootLoaderData>
 export async function loader({ request, context }: LoaderArgs) {
   const host = request.headers.get('Host');
   console.log('Request Host: ' + host);
-  const showNewDomainBanner = host?.toLowerCase().includes('steamedapples') ? false : true;
+  const showNewDomainBanner =
+    host?.toLowerCase().includes('localhost') ||
+    host?.toLowerCase().includes('steamedapples')
+    ? false
+    : true;
   const themeSession = await getThemeSession(request);
   const theme = themeSession.getTheme();
   const { steamUser } = extractAppLoadContext(context);
