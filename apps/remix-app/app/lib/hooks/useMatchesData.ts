@@ -23,7 +23,7 @@ export function useMatchesData(
 //   return user && typeof user === "object" && typeof user.email === "string";
 // }
 
-export function useRootLoaderData() {
+function useRootLoaderData() {
   const rootLoaderData = useMatchesData('root');
   if (!rootLoaderData) {
     return undefined;
@@ -45,6 +45,19 @@ function useRootPrismaLoaderData() {
     return undefined;
   }
   return prismaData;
+}
+
+export function useRootSteamUserContextData() {
+  const rootLoaderData = useRootLoaderData();
+  if (!rootLoaderData) {
+    return undefined;
+  }
+  const {
+    steamUserData: {
+      contextData,
+    },
+  } = rootLoaderData;
+  return contextData;
 }
 
 export function useSteamUserOwnedApps() {
