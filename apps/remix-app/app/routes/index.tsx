@@ -9,11 +9,11 @@ import type { TrendingSteamApp, PerformancePostBrief } from '~/interfaces';
 import NewPerformancePostCard from '~/components/Cards/NewPerformancePostCard';
 import Card from '~/components/Cards/Card';
 import {
-  BookFlatIcon,
-  ChatFlatIcon,
-  GearSettingsFlatIcon,
-  MonitorFlatIcon,
-  SyncFlatIcon,
+  GearOutlineIcon,
+  MessageOutlineIcon,
+  MonitorOutlineIcon,
+  SearchDatabaseOutlineIcon,
+  SyncOutlineIcon,
 } from '~/components/Icons/FlatIcons';
 
 interface LoaderData {
@@ -58,11 +58,11 @@ export default function IndexRoute() {
             <Card>
               <div>
                 <ul className="flex flex-col gap-4">
-                  <li className="flex items-center gap-4"><ChatFlatIcon size={32} className="inline -rotate-12 min-w-[40px] self-start md:self-center" />Added a "New Posts" section to highlight user posts</li>
-                  <li className="flex items-center gap-4"><MonitorFlatIcon size={32} className="inline rotate-12 min-w-[40px] self-start md:self-center" />Added ability to post average frame rate and stutter</li>
-                  <li className="flex items-center gap-4"><SyncFlatIcon size={32} className="inline -rotate-12 min-w-[40px] self-start md:self-center" />Added ability to re-sync Steam library from the user profile page</li>
-                  <li className="flex items-center gap-4"><BookFlatIcon size={32} className="inline rotate-12 min-w-[40px] self-start md:self-center" /> Added search filters for Apple compatibility, genres, and categories (e.g. Full Controller Support)</li>
-                  <li className="flex items-center gap-4"><GearSettingsFlatIcon size={32} className="inline -rotate-12 min-w-[40px] self-start md:self-center" /> Changed post form so that attaching system specs to a post is now optional</li>
+                  <li className="flex items-center gap-4"><MessageOutlineIcon size={32} className="inline -rotate-12 min-w-[40px] self-start md:self-center text-icon-secondary-highlight" />Added a "New Posts" section to highlight user posts</li>
+                  <li className="flex items-center gap-4"><MonitorOutlineIcon size={32} className="inline rotate-12 min-w-[40px] self-start md:self-center text-icon-secondary-highlight" />Added ability to post average frame rate and stutter</li>
+                  <li className="flex items-center gap-4"><SyncOutlineIcon size={32} className="inline -rotate-12 min-w-[40px] self-start md:self-center text-icon-secondary-highlight" />Added ability to re-sync Steam library from the user profile page</li>
+                  <li className="flex items-center gap-4"><SearchDatabaseOutlineIcon size={32} className="inline rotate-12 min-w-[40px] self-start md:self-center text-icon-secondary-highlight" /> Added search filters for Apple compatibility, genres, and categories (e.g. Full Controller Support)</li>
+                  <li className="flex items-center gap-4"><GearOutlineIcon size={32} className="inline -rotate-12 min-w-[40px] self-start md:self-center text-icon-secondary-highlight" /> Changed post form so that attaching system specs to a post is now optional</li>
                 </ul>
               </div>
             </Card>
