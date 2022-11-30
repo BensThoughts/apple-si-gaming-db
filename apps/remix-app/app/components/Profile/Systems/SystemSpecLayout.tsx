@@ -1,8 +1,8 @@
 import type { CreateSystemSpecActionData, DeleteSystemSpecActionData, EditSystemSpecActionData } from '~/routes/profile/systems';
-import AsideCard from '~/components/Cards/AsideCard';
 import Heading from '~/components/Heading';
 import CreateSystemForm from './CreateSystemForm';
 import SystemSpecDisplay from './SystemSpecDisplay';
+import CreateSystemInstructions from './CreateSystemInstructions';
 
 interface SystemSpecLayoutProps {
   systemSpecs: {
@@ -39,28 +39,6 @@ export default function SystemSpecLayout({
         &nbsp;Try it out!
         </strong>
       </div>
-      <AsideCard title="System Information" iconBackground="bg-tertiary" className="max-w-md">
-        <div className="flex flex-col gap-3">
-          <div>
-          Copy and paste your system information directly from Steam
-          to create a system
-          </div>
-          <ul className="list-disc ml-6">
-            <li>
-            In Steam go to the help menu
-            </li>
-            <li>
-            Select "System Information"
-            </li>
-            <li>
-            Right click and select "copy all text to clipboard"
-            </li>
-            <li>
-            Paste that into the system info text field below
-            </li>
-          </ul>
-        </div>
-      </AsideCard>
       <div className="w-full">
         <SystemSpecDisplay
           systemSpecs={systemSpecs}
@@ -69,11 +47,18 @@ export default function SystemSpecLayout({
         />
       </div>
       <div className="w-full flex flex-col items-center gap-3">
-        <h3 className="text-secondary">Create a New System</h3>
-        <CreateSystemForm
-          isSubmittingCreateSystemForm={isSubmittingCreateSystemForm}
-          createSystemSpecActionData={createSystemSpecActionData}
-        />
+        <h3 className="text-secondary text-lg">Create a New System</h3>
+        <div className="flex flex-col items-center xl:items-start xl:flex-row xl:justify-around w-full">
+          <div>
+            <CreateSystemInstructions />
+          </div>
+          <div className="w-full max-w-md mt-5">
+            <CreateSystemForm
+              isSubmittingCreateSystemForm={isSubmittingCreateSystemForm}
+              createSystemSpecActionData={createSystemSpecActionData}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
