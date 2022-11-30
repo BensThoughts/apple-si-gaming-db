@@ -37,6 +37,13 @@ export default function DeleteSystemModal({
           Are you sure you want to delete <span className="text-secondary">{systemName}</span>
         </div>
         <div className="flex gap-2">
+          <RoundedButton
+            type="button"
+            onClick={() => setIsOpen(false)}
+            className="text-white hover:text-white focus-visible:text-white"
+          >
+            Cancel
+          </RoundedButton>
           <Form
             action="/profile/systems"
             method="post"
@@ -46,16 +53,11 @@ export default function DeleteSystemModal({
             <input type="hidden" name="systemName" value={systemName} />
             <RoundedButton
               type="submit"
+              className="bg-error text-white hover:bg-error hover:text-white focus-visible:bg-error focus-visible:text-white"
             >
               Delete
             </RoundedButton>
           </Form>
-          <RoundedButton
-            type="button"
-            onClick={() => setIsOpen(false)}
-          >
-            Cancel
-          </RoundedButton>
         </div>
       </div>
     </SystemModal>
