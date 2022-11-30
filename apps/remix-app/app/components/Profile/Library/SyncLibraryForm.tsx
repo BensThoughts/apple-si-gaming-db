@@ -9,7 +9,7 @@ export default function SyncLibraryForm({
 }) {
   return (
     <div
-      className="flex flex-col md:flex-row items-center justify-center gap-3
+      className="flex items-center justify-center gap-3
                bg-tertiary p-4 rounded-lg border-1 border-secondary-highlight"
     >
       <div>

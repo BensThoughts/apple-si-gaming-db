@@ -5,6 +5,7 @@ import ToggleSwitch from '~/components/FormComponents/ToggleSwitch';
 import Input from '~/components/FormComponents/Input';
 import OwnedAppDisplay from './OwnedAppDisplay';
 import RoundedButton from '~/components/RoundedButton';
+import SyncLibraryForm from './SyncLibraryForm';
 
 
 interface OwnedApp {
@@ -35,8 +36,10 @@ function computeGenreOptions(ownedApps: OwnedApp[], ALL_FILTER: SelectOption) {
 
 export default function OwnedAppsLayout({
   ownedApps,
+  isSubmittingUpdateGames,
 }: {
   ownedApps: OwnedApp[]
+  isSubmittingUpdateGames: boolean;
 }) {
   const ALL_FILTER = useMemo(() => ({ name: 'All', value: 'All' }), []);
   const genreOptions = useMemo(() => computeGenreOptions(ownedApps, ALL_FILTER), [ownedApps, ALL_FILTER]);
@@ -67,10 +70,10 @@ export default function OwnedAppsLayout({
   const lastPage = paginate >= steamApps.length;
 
   return (
-    <div className="flex flex-col items-center gap-8 w-full">
+    <div className="flex flex-col items-start gap-8 w-full">
       <div
-        className="flex flex-col xl:flex-row items-center justify-center gap-3
-                   bg-tertiary p-4 rounded-lg border-1 border-secondary-highlight"
+        className="self-center flex flex-col xl:flex-row items-center justify-center gap-3
+                   bg-tertiary p-0 md:p-4 rounded-lg md:border-1 md:border-secondary-highlight"
       >
         <div>
           <Input
@@ -98,7 +101,12 @@ export default function OwnedAppsLayout({
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-center gap-3 md:gap-1 w-full">
+      <div className="self-center md:self-start">
+        <SyncLibraryForm isSubmittingUpdateGames={isSubmittingUpdateGames} />
+      </div>
+
+
+      <div className="flex flex-wrap items-center gap-3 md:gap-1 w-full">
         {paginatedSteamApps.map(({
           steamAppId,
           name,

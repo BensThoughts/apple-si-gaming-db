@@ -1,6 +1,4 @@
-import RoundedButton from '~/components/RoundedButton';
 import Heading from '~/components/Heading';
-import { Form } from '@remix-run/react';
 import OwnedAppsLayout from './OwnedAppsLayout';
 
 interface LibraryLayoutProps {
@@ -25,29 +23,12 @@ export default function LibraryLayout({
     <div className="flex flex-col gap-8 items-center w-full p-4 bg-tertiary rounded-lg border-1 border-secondary-highlight">
       <Heading>Library</Heading>
 
-      <div
-        className="flex flex-col md:flex-row items-center justify-center gap-3
-                   bg-tertiary p-4 rounded-lg border-1 border-secondary-highlight"
-      >
-        <div>
-          Resync steam library
-        </div>
-        <div>
-          <Form
-            action="/profile/library"
-            method="post"
-          >
-            <input type="hidden" name="_profileAction" value="updateOwnedGames" />
-            <RoundedButton type="submit">
-              {isSubmittingUpdateGames ? <span>Updating...</span> : <span>Update Library</span>}
-            </RoundedButton>
-          </Form>
-        </div>
-      </div>
-
+      {/* <div className="flex flex-col items-center md:flex-row gap-2 md:items-start justify-between w-full">
+        <Heading>Library</Heading>
+      </div> */}
       {(ownedApps && ownedApps.length > 0) ? (
       <div>
-        <OwnedAppsLayout ownedApps={ownedApps} />
+        <OwnedAppsLayout ownedApps={ownedApps} isSubmittingUpdateGames={isSubmittingUpdateGames} />
       </div>
     ) : (
       <div className="max-w-md">
