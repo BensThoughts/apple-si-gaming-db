@@ -8,12 +8,12 @@ import NavHider from './NavHider';
 import { menuItems } from './menuItems';
 
 import {
-  AppleIcon,
   BarsIcon,
   SteamIcon,
 } from '~/components/Icons';
 import SimpleSearchForm from '~/components/Search/SimpleSearchForm';
 import { Link } from '@remix-run/react';
+import { AppleLogoSolidIcon } from '~/components/Icons/FlatIcons';
 
 type NavBarProps = {
   className?: string;
@@ -59,7 +59,7 @@ export default function Navbar({
           {/* Medium+ Screens */}
           <div className="hidden md:flex md:justify-between md:items-center md:w-full md:pt-0 md:mx-3">
             <div className="flex gap-x-4 items-center">
-              <AppleIcon size={26} className="text-icon-secondary" />
+              <AppleLogoSolidIcon size={34} className="text-icon-secondary" />
               <div className="flex gap-3 content-between items-center pt-0">
                 {menuItems.map((menuItem) => (
                   <MenuItem animatedLink key={menuItem.href} href={menuItem.href}>{menuItem.name}</MenuItem>
