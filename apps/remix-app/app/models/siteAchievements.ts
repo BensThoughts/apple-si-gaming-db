@@ -6,7 +6,15 @@ export async function findSiteAchievementsForSteamUser(steamUserId: string) {
       steamUserId,
     },
     select: {
-      siteAchievements: true,
+      siteAchievements: {
+        select: {
+          achievementId: true,
+          title: true,
+          description: true,
+          imageUrl: true,
+          svgCode: true,
+        },
+      },
     },
   });
 }
@@ -27,4 +35,28 @@ export async function giveSteamUserAchievement(
       },
     },
   });
+}
+
+export async function giveUserAchievement(
+    steamUserId: string,
+    achievementId: number,
+) {
+  return prisma.steamUser.update({
+    where: {
+      steamUserId,
+    },
+    data: {
+      siteAchievements: {
+        connect: {
+          achievementId,
+        },
+      },
+    },
+  });
+}
+
+export async function giveUserFirstLoginAchievement(
+    steamUserId: string,
+) {
+  return giveUserAchievement(steamUserId, 1);
 }
