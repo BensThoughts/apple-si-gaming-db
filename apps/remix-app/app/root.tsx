@@ -33,6 +33,8 @@ import { getThemeSession } from './lib/sessions/theme-session.server';
 
 import * as Fathom from 'fathom-client';
 import { useEffect, useRef } from 'react';
+import { updateNumTimesLoggedIn } from './models/siteUserStats';
+import { giveUserFirstLoginAchievement } from './models/siteAchievements';
 
 type RootLoaderData = {
   cookieData: {
@@ -93,10 +95,15 @@ export async function loader({ request, context }: LoaderArgs) {
       displayName,
       avatarFull,
     } = steamUser;
-    // First time logging in need to add user to db
+    // Just logged in, need to add user or update user in db
+    // this won't run again until user logs out and back in again
     if (!profileSession.hasAlreadyLoggedIn()) {
       await upsertSteamUser(steamUser);
       await updateUserOwnedApps(steamUser.steamUserId);
+      const { numLogins } = await updateNumTimesLoggedIn(steamUser.steamUserId);
+      if (numLogins === 1) {
+        await giveUserFirstLoginAchievement(steamUser.steamUserId);
+      }
       profileSession.setAlreadyLoggedIn(true);
     }
     const userProfile = await findUserProfileData(steamUser.steamUserId);
