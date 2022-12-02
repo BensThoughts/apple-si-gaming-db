@@ -84,7 +84,7 @@ export default function PerformancePostLayout({
             systemVideoPrimaryVRAM,
             systemMemoryRAM,
           }, idx) => (
-            <div key={id} className="flex flex-col gap-6">
+            <div key={id} id={id} className="flex flex-col gap-6">
               <PerformancePostDisplay
                 createdAt={createdAt}
                 displayName={displayName}

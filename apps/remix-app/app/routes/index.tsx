@@ -84,6 +84,7 @@ export default function IndexRoute() {
                 <Fragment key={id}>
                   <NewPerformancePostCard
                     steamAppId={steamAppId}
+                    postId={id}
                     steamApp={steamApp}
                     postText={postText}
                     displayName={displayName}

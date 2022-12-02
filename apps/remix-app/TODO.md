@@ -29,6 +29,7 @@ Explicit (doesn't require db cleanup externally)
 
 ## Priority Medium
 
+- [ ] Fix scroll to on anchor links to post idx
 - [ ] Fix focus-visible (show-ring) on MultiSelect
 - [ ] Fix ring spacing on all elements with show-ring
 - [x] Refactor Icons
