@@ -35,6 +35,7 @@ model SiteAchievement {
   title       String
   description String
   imageUrl    String
+  svgCode     String
 
   steamUsersWithAchievement SteamUser[]
 }
@@ -47,8 +48,9 @@ model SiteUserStats {
   steamUserId String    @unique
   steamUser   SteamUser @relation(fields: [steamUserId], references: [steamUserId], onDelete: Cascade)
 
-  numLogins    Int @default(0)
-  numPerfPosts Int @default(0)
+  numLogins         Int @default(0)
+  numPerfPosts      Int @default(0)
+  numSystemsCreated Int @default(0)
 }
 
 model SteamUser {
