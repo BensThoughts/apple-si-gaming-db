@@ -179,7 +179,7 @@ model SteamPerformancePost {
   postText                 String
   ratingMedal              RatingMedal
   frameRateAverage         FrameRate?
-  frameRateStutters        Boolean?
+  frameRateStutters        Boolean? // @default(false)
   systemManufacturer       String?
   systemModel              String?
   systemOsVersion          String?
