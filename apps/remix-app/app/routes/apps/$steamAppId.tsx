@@ -104,6 +104,7 @@ export default function AppsRoute() {
           <div className="flex flex-col gap-3 h-full items-center">
             <AppInfoHeader
               steamAppId={steamAppId}
+              name={name}
               headerImage={headerImage}
               releaseDate={releaseDate}
               platformMac={platformMac}

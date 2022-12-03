@@ -3,10 +3,12 @@ import {
   WindowsIcon,
   LinuxIcon,
 } from '~/components/Icons';
+import AppHeaderImage from '../ImageWrappers/AppHeaderImage';
 import AppInfoExternalLinks from './AppInfoExternalLinks';
 
 export default function AppInfoHeader({
   steamAppId,
+  name,
   headerImage,
   releaseDate,
   platformMac,
@@ -14,6 +16,7 @@ export default function AppInfoHeader({
   platformWindows,
 }: {
   steamAppId: number;
+  name: string;
   headerImage?: string | null;
   releaseDate?: string | null;
   platformMac?: boolean | null;
@@ -27,16 +30,9 @@ export default function AppInfoHeader({
     >
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-center bg-primary-highlight p-[3px] md:p-[6px] rounded-lg">
-          {headerImage && <img
-            src={headerImage}
-            alt="Cover Art"
-            width={460}
-            height={215}
-            className="rounded-md"
-            loading="lazy"
-            onError={(e) => {
-              e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
-            }}
+          {headerImage && <AppHeaderImage
+            headerImageSrc={headerImage}
+            name={name}
           />}
         </div>
 
