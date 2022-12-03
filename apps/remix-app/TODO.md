@@ -29,6 +29,8 @@ Explicit (doesn't require db cleanup externally)
 
 ## Priority Medium
 
+- [ ] Create re-route logic for user not logged in trying to access
+      /profile/routes
 - [ ] Fix scroll to on anchor links to post idx
 - [ ] Fix focus-visible (show-ring) on MultiSelect
 - [ ] Fix ring spacing on all elements with show-ring
