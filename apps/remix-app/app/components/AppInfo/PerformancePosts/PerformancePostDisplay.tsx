@@ -3,6 +3,7 @@ import type { FrameRate, GamepadRating, RatingMedal } from '~/interfaces';
 import PerformancePostMetaBar from './PerformancePostMetaBar';
 import SystemSpecsPopover from './SystemSpecsPopover';
 import { convertGamepadRatingToDescription } from '~/lib/rating-conversions';
+import AvatarImage from '~/components/ImageWrappers/AvatarImage';
 
 type PerformancePostDisplayProps = {
   postText: string;
@@ -65,16 +66,7 @@ export default function PerformancePostDisplay({
         <div className="flex flex-col gap-1 items-center justify-start pr-3 border-r-2 border-r-secondary md:w-full md:max-w-[10rem]">
           {avatarMedium && (
             <div>
-              <img
-                src={avatarMedium}
-                alt="avatar"
-                width={64}
-                height={64}
-                loading="lazy"
-                onError={(e) => {
-                  e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
-                }}
-              />
+              <AvatarImage avatarMedium={avatarMedium} />
             </div>
           )}
           {displayName && <span className="text-sm">{displayName}</span>}

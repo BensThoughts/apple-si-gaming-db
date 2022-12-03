@@ -1,5 +1,6 @@
 import { Link } from '@remix-run/react';
 import type { RatingMedal } from '~/interfaces';
+import AvatarImage from '../ImageWrappers/AvatarImage';
 
 interface NewPerformancePostCardProps {
   steamAppId: number;
@@ -36,17 +37,7 @@ export default function NewPerformancePostCard({
           {avatarMedium && (
             // <div className="border-1 border-secondary-highlight rounded-full">
             <div className="w-[64px] h-[64px] rounded-full">
-              <img
-                src={avatarMedium}
-                alt={`Avatar for ${displayName}`}
-                width={64}
-                height={64}
-                className="rounded-full"
-                loading="lazy"
-                onError={(e) => {
-                  e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
-                }}
-              />
+              <AvatarImage avatarMedium={avatarMedium} />
             </div>
             // </div>
           )}
