@@ -1,4 +1,5 @@
 import { Link } from '@remix-run/react';
+import AppHeaderImage from '~/components/ImageWrappers/AppHeaderImage';
 
 export default function OwnedAppDisplay({
   name,
@@ -30,33 +31,13 @@ export default function OwnedAppDisplay({
         <div className={`rounded-lg flex items-center justify-center
                          max-w-[276px] md:max-w-[184px] max-h-[129px]
                          md:max-h-[86px]`}>
-          <img
-            src={headerImgSrc}
-            alt={`Header for ${name}`}
-            width={460}
-            height={215}
-            className="rounded-md"
-            loading="lazy"
-            onError={(e) => {
-              e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
-            }}
-          />
+          <AppHeaderImage headerImageSrc={headerImgSrc} name={name} />
         </div>
       ): (
         <div className={`rounded-lg flex items-center justify-center
                          max-w-[276px] md:max-w-[184px] max-h-[129px]
                          md:max-h-[86px]`}>
-          <img
-            src="/svg-images/no-image-placeholder.svg"
-            alt={`Header for ${name}`}
-            width={460}
-            height={215}
-            className="rounded-md"
-            loading="lazy"
-            onError={(e) => {
-              e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
-            }}
-          />
+          <AppHeaderImage headerImageSrc="/svg-images/no-image-placeholder.svg" name={name} />
         </div>
       )}
     </Link>

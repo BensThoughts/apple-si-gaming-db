@@ -1,4 +1,5 @@
 import { Link } from '@remix-run/react';
+import AppHeaderImage from '../ImageWrappers/AppHeaderImage';
 
 interface TrendingSteamAppProps {
   steamAppId: number;
@@ -23,16 +24,7 @@ export default function TrendingSteamAppCard({
     >
       {headerImage && (
         <div className="w-full max-w-[15rem]">
-          <img
-            src={headerImage}
-            alt={name}
-            width={460}
-            height={215}
-            loading="lazy"
-            onError={(e) => {
-              e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
-            }}
-          />
+          <AppHeaderImage headerImageSrc={headerImage} name={name} />
         </div>
       )}
       <div className="flex flex-col md:flex-row justify-between md:self-start w-full">
@@ -46,8 +38,6 @@ export default function TrendingSteamAppCard({
           <span className="text-primary-faded text-sm italic">
             {` `}New Posts
           </span>
-
-
         </div>
       </div>
     </Link>

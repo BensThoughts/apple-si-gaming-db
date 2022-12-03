@@ -1,4 +1,5 @@
 import { Link } from '@remix-run/react';
+import AppHeaderImage from '../ImageWrappers/AppHeaderImage';
 
 interface SearchTitleCardProps {
   name: string;
@@ -24,17 +25,7 @@ export default function SearchTitleCard({
       <div className="w-full flex justify-center items-center">
         {headerImageSrc && (
           <div className="rounded-lg flex items-center justify-center max-w-lg">
-            <img
-              src={headerImageSrc}
-              alt={`Cover art for ${name}`}
-              width={460}
-              height={215}
-              className="rounded-md"
-              loading="lazy"
-              onError={(e) => {
-                e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
-              }}
-            />
+            <AppHeaderImage headerImageSrc={headerImageSrc} name={name} />
           </div>
         )}
       </div>
