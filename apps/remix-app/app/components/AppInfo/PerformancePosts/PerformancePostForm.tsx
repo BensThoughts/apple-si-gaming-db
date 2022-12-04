@@ -16,6 +16,7 @@ import {
   convertRatingMedalToFullText,
   convertGamepadRatingToFullText,
 } from '~/lib/rating-conversions';
+import RemixUnderlineLink from '~/components/RemixUnderlineLink';
 
 const steamAppRatingOptions: SelectOption<RatingMedal | 'None'>[] = [
   {
@@ -166,11 +167,9 @@ export default function PerformancePostForm({
       <Wrapper>
         <div>
           You are not logged in. You must&nbsp;
-          <Link to="/profile">
-            <AnimatedUnderline>
-              <span className="text-secondary">login</span>
-            </AnimatedUnderline>
-          </Link>
+          <RemixUnderlineLink to="/profile">
+            login
+          </RemixUnderlineLink>
           &nbsp;to post a performance review for this app.
         </div>
       </Wrapper>
@@ -186,24 +185,6 @@ export default function PerformancePostForm({
       </Wrapper>
     );
   }
-
-  // ! Removed to avoid needing system info
-  // if (steamUserSystemNames.length < 1) {
-  //   return (
-  //     <Wrapper>
-  //       <div>
-  //         You need to add a system to your&nbsp;
-  //         <Link to="/profile">
-  //           <AnimatedUnderline>
-  //             <span className="text-secondary">profile</span>
-  //           </AnimatedUnderline>
-  //         </Link>
-  //         &nbsp;to post a performance review for this app.
-  //       </div>
-  //     </Wrapper>
-  //   );
-  // }
-
 
   const postTagOptions: MultiSelectOption<number>[] = postTags.map((tag) => (
     {
@@ -329,11 +310,9 @@ export default function PerformancePostForm({
         >
           <div className="text-primary-faded">
             You can choose to select a system from your&nbsp;
-            <Link to="/profile/systems">
-              <AnimatedUnderline>
-                <span className="text-secondary">profile</span>
-              </AnimatedUnderline>
-            </Link>
+            <RemixUnderlineLink to="/profile/systems">
+              profile
+            </RemixUnderlineLink>
             &nbsp;to easily attach system information to your post.
           </div>
           <SelectMenu

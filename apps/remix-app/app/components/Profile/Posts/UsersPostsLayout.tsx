@@ -3,6 +3,7 @@ import AppHeaderImage from '~/components/ImageWrappers/AppHeaderImage';
 import PerformancePostMetaBar from '~/components/AppInfo/PerformancePosts/PerformancePostMetaBar';
 import Heading from '~/components/Heading';
 import type { RatingMedal, FrameRate } from '~/interfaces/database';
+import RemixUnderlineLink from '~/components/RemixUnderlineLink';
 
 interface UsersPostsLayoutProps {
   steamUsersPosts: {
@@ -23,6 +24,23 @@ interface UsersPostsLayoutProps {
 export default function UsersPostsLayout({
   steamUsersPosts,
 }: UsersPostsLayoutProps) {
+  if (steamUsersPosts.length < 1) {
+    return (
+      <div className="flex flex-col gap-8 items-center w-full p-4 bg-tertiary rounded-lg border-1 border-secondary-highlight">
+        <Heading>Posts</Heading>
+        <span>
+        It look like you haven't posted yet.  Post a report for a game in your{` `}
+          <RemixUnderlineLink
+            to="/profile/library"
+          >
+            library
+          </RemixUnderlineLink>
+          {` `}to see it appear here.
+        </span>
+
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col gap-8 items-center w-full p-4 bg-tertiary rounded-lg border-1 border-secondary-highlight">
       <Heading>Posts</Heading>
