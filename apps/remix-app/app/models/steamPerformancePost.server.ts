@@ -108,7 +108,63 @@ export async function createPerformancePost({
   });
 };
 
-export async function findPerformancePostsBySteamAppId(steamAppId: SteamApp['steamAppId']) {
+export async function likePost(
+    postId: string,
+    steamUserId: string,
+) {
+  return prisma.steamPerformancePost.update({
+    where: {
+      id: postId,
+    },
+    data: {
+      usersWhoLiked: {
+        upsert: {
+          where: {
+            steamUserId_performancePostId: {
+              steamUserId,
+              performancePostId: postId,
+            },
+          },
+          update: {
+            steamUserId,
+          },
+          create: {
+            steamUserId,
+          },
+        },
+      },
+    },
+  });
+}
+
+export async function unlikePost(
+    postId: string,
+    steamUserId: string,
+) {
+  return prisma.steamPerformancePost.update({
+    where: {
+      id: postId,
+    },
+    data: {
+      usersWhoLiked: {
+        deleteMany: {
+          AND: {
+            steamUserId,
+            performancePostId: postId,
+          },
+          // steamUserId_performancePostId: {
+          //   steamUserId,
+          //   performancePostId: postId,
+          // },
+        },
+      },
+    },
+  });
+}
+
+export async function findPerformancePostsBySteamAppId(
+    steamAppId: SteamApp['steamAppId'],
+) {
   return prisma.steamPerformancePost.findMany({
     where: {
       steamAppId,
@@ -117,10 +173,24 @@ export async function findPerformancePostsBySteamAppId(steamAppId: SteamApp['ste
       createdAt: 'desc',
     },
     select: {
+      _count: {
+        select: {
+          usersWhoLiked: true,
+        },
+      },
       id: true,
       createdAt: true,
       avatarMedium: true,
       displayName: true,
+      frameRateAverage: true,
+      frameRateStutters: true,
+      gamepadMetadata: {
+        select: {
+          gamepadId: true,
+          description: true,
+        },
+      },
+      gamepadRating: true,
       postText: true,
       postTags: {
         select: {
@@ -128,21 +198,7 @@ export async function findPerformancePostsBySteamAppId(steamAppId: SteamApp['ste
           description: true,
         },
       },
-      // TODO: Decide if we should use explicit vs. implicit
-      // ! WITH JOIN TABLE
-      // postTags: {
-      //   select: {
-      //     postTag: {
-      //       select: {
-      //         id: true,
-      //         description: true,
-      //       },
-      //     },
-      //   },
-      // },
       ratingMedal: true,
-      frameRateAverage: true,
-      frameRateStutters: true,
       systemManufacturer: true,
       systemModel: true,
       systemOsVersion: true,
@@ -151,13 +207,6 @@ export async function findPerformancePostsBySteamAppId(steamAppId: SteamApp['ste
       systemVideoDriverVersion: true,
       systemVideoPrimaryVRAM: true,
       systemMemoryRAM: true,
-      gamepadMetadata: {
-        select: {
-          gamepadId: true,
-          description: true,
-        },
-      },
-      gamepadRating: true,
     },
   });
 }
