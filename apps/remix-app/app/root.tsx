@@ -51,6 +51,7 @@ type RootLoaderData = {
       avatarFull?: string | null,
     };
     prismaData?: {
+      likedPerformancePostIds: string[];
       ownedApps: {
         steamAppId: number;
         name: string;
@@ -111,7 +112,9 @@ export async function loader({ request, context }: LoaderArgs) {
       const {
         ownedApps,
         systemSpecs,
+        likedPerformancePosts,
       } = userProfile;
+      const likedPerformancePostIds = likedPerformancePosts.map((performancePost) => performancePost.performancePostId);
       // const systemNames = systemSpecs.map((systemSpec) =>
       // systemSpec.systemName);
       // TODO: code for headers is duplicated before each return json()
@@ -135,6 +138,7 @@ export async function loader({ request, context }: LoaderArgs) {
           prismaData: {
             ownedApps,
             systemSpecs,
+            likedPerformancePostIds,
           },
         },
       }, {
@@ -204,14 +208,12 @@ function Document({
   children,
   title,
   isLoggedIn,
-  steamUserId,
   isSearchSubmitting,
   ssrTheme,
 }: {
   children: React.ReactNode;
   title?: string;
   isLoggedIn?: boolean;
-  steamUserId?: string | null;
   isSearchSubmitting?: boolean;
   ssrTheme: Theme | null;
 }) {
@@ -268,7 +270,6 @@ export default function App() {
     steamUserData: {
       contextData: {
         isLoggedIn,
-        steamUserId,
       },
     },
   }= useLoaderData<RootLoaderData>();
@@ -280,7 +281,6 @@ export default function App() {
     <ThemeProvider ssrCookieTheme={theme}>
       <Document
         isLoggedIn={isLoggedIn}
-        steamUserId={steamUserId}
         isSearchSubmitting={isSearchSubmitting}
         ssrTheme={theme}
       >
