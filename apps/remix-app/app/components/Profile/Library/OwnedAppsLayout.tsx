@@ -70,7 +70,7 @@ export default function OwnedAppsLayout({
   const lastPage = paginate >= steamApps.length;
 
   return (
-    <div className="flex flex-col items-start gap-8 w-full">
+    <div className="flex flex-col items-center gap-8">
       <div
         className="self-center flex flex-col xl:flex-row items-center justify-center gap-3
                    bg-tertiary p-0 md:p-4 rounded-lg md:border-1 md:border-secondary-highlight"
@@ -101,27 +101,29 @@ export default function OwnedAppsLayout({
         </div>
       </div>
 
-      <div className="self-center md:self-start">
-        <SyncLibraryForm isSubmittingUpdateGames={isSubmittingUpdateGames} />
-      </div>
+      <div className="flex flex-col items-center justify-center self-center gap-8 w-full">
+        <div className="">
+          <SyncLibraryForm isSubmittingUpdateGames={isSubmittingUpdateGames} />
+        </div>
 
 
-      <div className="flex flex-wrap items-center gap-3 md:gap-1 w-full">
-        {paginatedSteamApps.map(({
-          steamAppId,
-          name,
-          headerImage,
-        }) => (
-          <div key={steamAppId}>
-            <OwnedAppDisplay
-              steamAppId={steamAppId}
-              name={name}
-              headerImgSrc={headerImage}
-            />
-          </div>
-        ))}
+        <div className="flex flex-wrap justify-center items-center gap-3 md:gap-1">
+          {paginatedSteamApps.map(({
+            steamAppId,
+            name,
+            headerImage,
+          }) => (
+            <div key={steamAppId}>
+              <OwnedAppDisplay
+                steamAppId={steamAppId}
+                name={name}
+                headerImgSrc={headerImage}
+              />
+            </div>
+          ))}
+        </div>
+        {!lastPage && <RoundedButton onClick={() => loadMore()}>Load More...</RoundedButton>}
       </div>
-      {!lastPage && <RoundedButton onClick={() => loadMore()}>Load More...</RoundedButton>}
     </div>
   );
 }
