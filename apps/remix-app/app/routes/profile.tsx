@@ -119,6 +119,11 @@ export default function ProfilePage() {
                   Posts
                 </AnimatedUnderline>
               </Link>
+              <Link to="/profile/liked-posts" className="focus-visible:show-ring px-1 rounded-sm font-medium text-primary">
+                <AnimatedUnderline>
+                  Liked Posts
+                </AnimatedUnderline>
+              </Link>
               <Link to="/profile/achievements" className="focus-visible:show-ring px-1 rounded-sm font-medium text-primary">
                 <AnimatedUnderline>
                   Achievements
