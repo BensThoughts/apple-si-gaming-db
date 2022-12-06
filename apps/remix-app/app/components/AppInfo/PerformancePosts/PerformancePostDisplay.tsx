@@ -6,6 +6,7 @@ import { convertGamepadRatingToDescription } from '~/lib/rating-conversions';
 import AvatarImage from '~/components/ImageWrappers/AvatarImage';
 
 type PerformancePostDisplayProps = {
+  postId: string;
   postText: string;
   postTags: {
     postTagId: number;
@@ -17,6 +18,9 @@ type PerformancePostDisplayProps = {
   } | null;
   gamepadRating?: GamepadRating | null;
   createdAt: Date;
+  isUserLoggedIn: boolean;
+  numLikes: number;
+  hasLoggedInUserLiked: boolean;
   ratingMedal: RatingMedal;
   frameRateAverage?: FrameRate | null;
   frameRateStutters?: boolean | null;
@@ -33,9 +37,13 @@ type PerformancePostDisplayProps = {
 } & React.HTMLAttributes<HTMLDivElement>
 
 export default function PerformancePostDisplay({
+  postId,
   createdAt,
   displayName,
   avatarMedium,
+  isUserLoggedIn,
+  numLikes,
+  hasLoggedInUserLiked,
   postText,
   postTags,
   gamepadMetadata,
@@ -61,6 +69,12 @@ export default function PerformancePostDisplay({
         ratingMedal={ratingMedal}
         frameRateAverage={frameRateAverage}
         frameRateStutters={frameRateStutters}
+        likeButtonData={{
+          postId,
+          numLikes,
+          isUserLoggedIn,
+          hasLoggedInUserLiked,
+        }}
       />
       <div className="flex flex-row w-full gap-[1px]" {...rest}>
         <div className="flex flex-col gap-1 items-center justify-start pr-3 border-r-2 border-r-secondary md:w-full md:max-w-[10rem]">
