@@ -1,5 +1,5 @@
 import { redirect } from '@remix-run/node';
-import type { ActionArgs } from '@remix-run/node';
+import type { ActionArgs, LoaderArgs } from '@remix-run/node';
 import { useActionData, useTransition } from '@remix-run/react';
 import SystemSpecLayout from '~/components/Profile/Systems/SystemSpecLayout';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
@@ -7,6 +7,13 @@ import { createSystem } from '~/lib/form-actions/profile/create-system.server';
 import { deleteSystem } from '~/lib/form-actions/profile/delete-system.server';
 import { editSystem } from '~/lib/form-actions/profile/edit-system.server';
 import { useSteamUserSystemSpecs } from '~/lib/hooks/useMatchesData';
+
+export async function loader({ context }: LoaderArgs) {
+  const { steamUser } = extractAppLoadContext(context);
+  if (!steamUser) {
+    return redirect('/profile');
+  }
+}
 
 export type CreateSystemSpecActionData = {
   formError?: string;

@@ -1,10 +1,17 @@
 import { redirect } from '@remix-run/node';
-import type { ActionArgs } from '@remix-run/node';
+import type { ActionArgs, LoaderArgs } from '@remix-run/node';
 import { useTransition } from '@remix-run/react';
 import LibraryLayout from '~/components/Profile/Library/LibraryLayout';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import { useSteamUserOwnedApps } from '~/lib/hooks/useMatchesData';
 import { doesSteamUserExist, updateUserOwnedApps, upsertSteamUser } from '~/models/steamUser.server';
+
+export async function loader({ context }: LoaderArgs) {
+  const { steamUser } = extractAppLoadContext(context);
+  if (!steamUser) {
+    return redirect('/profile');
+  }
+}
 
 export async function action({ request, context }: ActionArgs) {
   const { steamUser } = extractAppLoadContext(context);
