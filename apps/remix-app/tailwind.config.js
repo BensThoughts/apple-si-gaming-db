@@ -10,9 +10,17 @@ const generateColorClass = (variable) => {
 };
 
 module.exports = {
-  darkMode: 'class',
   content: ['./app/**/*.{ts,tsx,jsx,js}'],
   theme: {
+    screens: {
+      'sm': '640px',
+      'md': '768px',
+      'navBarQuery': '960px',
+      'lg': '1024px',
+      'postMetaBarQuery': '1040px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
     colors: {
       'app-bg': generateColorClass('color-bg-primary'),
       'app-bg-secondary': generateColorClass('color-bg-secondary'),
@@ -25,12 +33,12 @@ module.exports = {
       'error': generateColorClass('color-app-error'),
       'danger': generateColorClass('color-app-danger'),
       'danger-light': generateColorClass('color-app-danger-light'),
+      'heart': generateColorClass('color-app-heart'),
       'modal': generateColorClass('color-bg-modal'),
       'primary-text': generateColorClass('color-text-primary'),
       'primary-text-highlight': generateColorClass('color-text-primary-highlight'),
       'primary-text-faded': generateColorClass('color-text-primary-faded'),
       'secondary-text': generateColorClass('color-text-secondary'),
-      'color-error': generateColorClass('color-app-error'),
       'black': colors.black,
       'white': colors.white,
       'current': colors.current,
@@ -43,6 +51,7 @@ module.exports = {
         'primary-faded': generateColorClass('color-text-primary-faded'),
         'secondary': generateColorClass('color-text-secondary'),
         'color-error': generateColorClass('color-text-error'),
+        'color-snackbar-error': generateColorClass('color-text-snackbar-error'),
         'icon-primary': generateColorClass('color-app-primary'),
         'icon-primary-highlight': generateColorClass('color-app-primary-highlight'),
         'icon-secondary': generateColorClass('color-app-secondary'),
@@ -85,5 +94,6 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/line-clamp'),
+    require('@tailwindcss/container-queries'),
   ],
 };
