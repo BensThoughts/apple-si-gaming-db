@@ -1,5 +1,6 @@
 import Heading from '~/components/Heading';
 import OwnedAppsLayout from './OwnedAppsLayout';
+import SyncLibraryForm from './SyncLibraryForm';
 
 interface LibraryLayoutProps {
   ownedApps: {
@@ -40,7 +41,10 @@ export default function LibraryLayout({
           <div>
             You are logged in but appear to have no apps owned. Is your Steam profile
             set to public?  Please set your steam profile to public and then use the
-            update games button or logout and back in.
+            re-sync library button or logout and back in.
+          </div>
+          <div>
+            <SyncLibraryForm isSubmittingUpdateGames={isSubmittingUpdateGames} />
           </div>
         </div>
       </div>
