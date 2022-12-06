@@ -156,6 +156,11 @@ export async function findUserProfileData(steamUserId: SteamUser['steamUserId'])
       steamUserId,
     },
     include: {
+      likedPerformancePosts: {
+        select: {
+          performancePostId: true,
+        },
+      },
       systemSpecs: {
         select: {
           systemName: true,
@@ -208,6 +213,11 @@ export async function findSteamUsersPerformancePosts(
           createdAt: 'desc',
         },
         select: {
+          _count: {
+            select: {
+              usersWhoLiked: true,
+            },
+          },
           id: true,
           steamAppId: true,
           createdAt: true,
@@ -219,6 +229,44 @@ export async function findSteamUsersPerformancePosts(
             select: {
               name: true,
               headerImage: true,
+            },
+          },
+        },
+      },
+    },
+  });
+}
+
+export async function findSteamUserLikedPosts(
+    steamUserId: string,
+) {
+  return prisma.steamUser.findUnique({
+    where: {
+      steamUserId,
+    },
+    select: {
+      likedPerformancePosts: {
+        select: {
+          steamPerformancePost: {
+            select: {
+              _count: {
+                select: {
+                  usersWhoLiked: true,
+                },
+              },
+              id: true,
+              steamAppId: true,
+              createdAt: true,
+              ratingMedal: true,
+              postText: true,
+              frameRateAverage: true,
+              frameRateStutters: true,
+              steamApp: {
+                select: {
+                  name: true,
+                  headerImage: true,
+                },
+              },
             },
           },
         },
