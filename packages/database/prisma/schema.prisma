@@ -90,10 +90,25 @@ model SteamUser {
   siteAchievements SiteAchievement[]
   siteUserStats    SiteUserStats?
 
+  likedPerformancePosts LikedPostByUser[]
+
   // Unused For Now
   appCount          Int?
   ownedAppsPlaytime SteamUserOwnedAppPlaytime[]
   siteUserStatsId   String?
+}
+
+model LikedPostByUser {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  steamUserId          String
+  steamUser            SteamUser            @relation(fields: [steamUserId], references: [steamUserId], onDelete: Cascade)
+  performancePostId    String
+  steamPerformancePost SteamPerformancePost @relation(fields: [performancePostId], references: [id], onDelete: Cascade)
+
+  @@unique([steamUserId, performancePostId])
 }
 
 model SteamUserSystemSpecs {
@@ -191,11 +206,9 @@ model SteamPerformancePost {
 
   postTags        PostTag[]
   gamepadId       Int?
-  gamepadMetadata GamepadMetadata? @relation(fields: [gamepadId], references: [gamepadId], onDelete: SetNull)
+  gamepadMetadata GamepadMetadata?  @relation(fields: [gamepadId], references: [gamepadId], onDelete: SetNull)
   gamepadRating   GamepadRating?
-  // TODO: Decide if we should use explicit vs. implicit
-  // ! WITH JOIN TABLE
-  // postTagsOnPerformancePosts PostTagsOnPerformancePosts[]
+  usersWhoLiked   LikedPostByUser[]
 }
 
 // TODO: Decide if we should use explicit vs. implicit
