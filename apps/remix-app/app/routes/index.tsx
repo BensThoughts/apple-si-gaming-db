@@ -9,7 +9,8 @@ import type { TrendingSteamApp, PerformancePostBrief } from '~/interfaces';
 import NewPerformancePostCard from '~/components/Cards/NewPerformancePostCard';
 import Card from '~/components/Cards/Card';
 import {
-  GearOutlineIcon,
+  CommentsOutlineIcon,
+  BleedingHeartOutlineIcon,
   MessageOutlineIcon,
   MonitorOutlineIcon,
   SearchDatabaseOutlineIcon,
@@ -58,11 +59,13 @@ export default function IndexRoute() {
             <Card>
               <div>
                 <ul className="flex flex-col gap-4">
+                  <li className="flex items-center gap-4"><BleedingHeartOutlineIcon userLiked={false} size={36} className="inline -rotate-12 min-w-[40px] self-start md:self-center text-icon-secondary-highlight" />Added ability to like posts and see all the posts you liked in your profile</li>
+                  <li className="flex items-center gap-4"><CommentsOutlineIcon size={32} className="inline rotate-12 min-w-[40px] self-start md:self-center text-icon-secondary-highlight" />Added section in profile to view all posts</li>
                   <li className="flex items-center gap-4"><MessageOutlineIcon size={32} className="inline -rotate-12 min-w-[40px] self-start md:self-center text-icon-secondary-highlight" />Added a "New Posts" section to highlight user posts</li>
                   <li className="flex items-center gap-4"><MonitorOutlineIcon size={32} className="inline rotate-12 min-w-[40px] self-start md:self-center text-icon-secondary-highlight" />Added ability to post average frame rate and stutter</li>
                   <li className="flex items-center gap-4"><SyncOutlineIcon size={32} className="inline -rotate-12 min-w-[40px] self-start md:self-center text-icon-secondary-highlight" />Added ability to re-sync Steam library from the user profile page</li>
                   <li className="flex items-center gap-4"><SearchDatabaseOutlineIcon size={32} className="inline rotate-12 min-w-[40px] self-start md:self-center text-icon-secondary-highlight" /> Added search filters for Apple compatibility, genres, and categories (e.g. Full Controller Support)</li>
-                  <li className="flex items-center gap-4"><GearOutlineIcon size={32} className="inline -rotate-12 min-w-[40px] self-start md:self-center text-icon-secondary-highlight" /> Changed post form so that attaching system specs to a post is now optional</li>
+                  {/* <li className="flex items-center gap-4"><GearOutlineIcon size={32} className="inline -rotate-12 min-w-[40px] self-start md:self-center text-icon-secondary-highlight" /> Changed post form so that attaching system specs to a post is now optional</li> */}
                 </ul>
               </div>
             </Card>
