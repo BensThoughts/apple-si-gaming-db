@@ -10,7 +10,7 @@ export default function SyncLibraryForm({
   return (
     <div
       className="flex items-center justify-center gap-3
-               bg-tertiary p-4 rounded-lg border-1 border-secondary-highlight"
+                 bg-tertiary p-4 rounded-lg border-1 border-secondary-highlight"
     >
       <div>
         <SyncOutlineIcon size={38} className="text-icon-secondary-highlight" />
