@@ -1,10 +1,9 @@
-import { Form, Link } from '@remix-run/react';
+import { Form } from '@remix-run/react';
 import RoundedButton from '~/components/RoundedButton';
 import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { SelectOption } from '~/components/FormComponents/SelectMenu';
 import type { CreatePerformancePostActionData } from '~/routes/apps/$steamAppId/performance-posts';
 import type { FrameRate, GamepadRating, RatingMedal } from '~/interfaces';
-import AnimatedUnderline from '~/components/AnimatedUnderline';
 import React, { useEffect, useRef, useState } from 'react';
 import TextArea from '~/components/FormComponents/TextArea';
 import ToggleSwitch from '~/components/FormComponents/ToggleSwitch';
