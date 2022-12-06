@@ -22,7 +22,7 @@ import {
 import { validateSystemName } from '~/lib/form-validators/profile';
 import { validateSteamAppId } from '~/lib/loader-functions/params-validators.server';
 import { findAllGamepads } from '~/models/gamepadMetadata.server';
-import { useSteamUserSystemSpecs } from '~/lib/hooks/useMatchesData';
+import { useSteamUserLikedPostIds, useSteamUserSystemSpecs } from '~/lib/hooks/useMatchesData';
 
 // These are all possible tags that can be used when
 // creating a performance post
@@ -44,6 +44,9 @@ interface PerformancePostLoaderData {
   }
   steamAppId: number;
   performancePosts: {
+    _count: {
+      usersWhoLiked: number;
+    },
     id: string;
     postText: string;
     postTags: UserSelectPostTag[],
@@ -226,6 +229,8 @@ export default function PerformancePostsRoute() {
     gamepads,
   } = steamUserData;
   const systemSpecs = useSteamUserSystemSpecs();
+  const steamUserLikedPostIds = useSteamUserLikedPostIds();
+  const likedPerformancePostIds = steamUserLikedPostIds ? steamUserLikedPostIds : [];
 
   let systemNames: string[] = [];
   if (systemSpecs && isLoggedIn) {
@@ -241,10 +246,15 @@ export default function PerformancePostsRoute() {
   return (
     <div className="flex flex-col gap-3">
       <div className="w-full">
-        <PerformancePostLayout performancePosts={performancePosts.map((post) => ({
-          ...post,
-          createdAt: new Date(post.createdAt),
-        }))} />
+        <PerformancePostLayout
+          isUserLoggedIn={isLoggedIn}
+          likedPerformancePostIds={likedPerformancePostIds}
+          performancePosts={performancePosts.map((post) => ({
+            ...post,
+            numLikes: post._count.usersWhoLiked,
+            createdAt: new Date(post.createdAt),
+          }))}
+        />
       </div>
       <div className="w-full">
         <PerformancePostForm
