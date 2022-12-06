@@ -1,4 +1,4 @@
-import { redirect } from '@remix-run/node';
+import { json, redirect } from '@remix-run/node';
 import type { ActionArgs, LoaderArgs } from '@remix-run/node';
 import { useTransition } from '@remix-run/react';
 import LibraryLayout from '~/components/Profile/Library/LibraryLayout';
@@ -11,6 +11,7 @@ export async function loader({ context }: LoaderArgs) {
   if (!steamUser) {
     return redirect('/profile');
   }
+  return json({});
 }
 
 export async function action({ request, context }: ActionArgs) {

@@ -1,4 +1,4 @@
-import { redirect } from '@remix-run/node';
+import { redirect, json } from '@remix-run/node';
 import type { ActionArgs, LoaderArgs } from '@remix-run/node';
 import { useActionData, useTransition } from '@remix-run/react';
 import SystemSpecLayout from '~/components/Profile/Systems/SystemSpecLayout';
@@ -13,6 +13,7 @@ export async function loader({ context }: LoaderArgs) {
   if (!steamUser) {
     return redirect('/profile');
   }
+  return json({});
 }
 
 export type CreateSystemSpecActionData = {
