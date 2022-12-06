@@ -11,54 +11,6 @@
   }
 }
 
-/*
-html.light {
-  --color-bg-primary: 224, 251, 253;
-  --color-bg-secondary: 152, 193, 218;
-  --color-bg-modal: 243, 248, 251;
-
-  --color-app-primary: 248, 240, 227;
-  --color-app-primary-highlight: 246, 231, 211;
-  --color-app-secondary: 80, 149, 213;
-  --color-app-secondary-highlight: 49, 130, 206;
-  --color-app-tertiary: 243, 248, 251;
-  --color-app-tertiary-highlight: 222, 236, 244;
-
-  --color-app-error: 176, 0, 32;
-  --color-app-danger: 222, 53, 11;
-  --color-app-danger-light: 255, 189, 173;
-
-  --color-text-primary: 45, 45, 45;
-  --color-text-primary-highlight: 23, 23, 23;
-  --color-text-primary-faded: 90, 90, 90;
-  --color-text-secondary: 32, 88, 139;
-  --color-text-error: 176, 0, 32;
-}
-
-html.dark {
-  --color-bg-primary: 0, 0, 0;
-  --color-bg-secondary: 22, 40, 62;
-  --color-bg-modal: 57, 75, 95;
-
-  --color-app-primary: 37, 49, 62;
-  --color-app-primary-highlight: 57, 75, 95;
-  --color-app-secondary: 49, 130, 206;
-  --color-app-secondary-highlight: 78, 147, 212;
-  --color-app-tertiary: 3, 24, 47;
-  --color-app-tertiary-highlight: 10, 40, 74;
-
-  --color-app-error: 176, 0, 32;
-  --color-app-danger: 222, 53, 11;
-  --color-app-danger-light: 255, 189, 173;
-
-  --color-text-primary: 207, 207, 207;
-  --color-text-primary-highlight: 250, 250, 250;
-  --color-text-primary-faded: 175, 175, 175;
-  --color-text-secondary: 255, 107, 0;
-  --color-text-error: 207, 102, 121;
-}
-*/
-
 body {
   font-family: var(--font-body);
   line-height: 1.5;
@@ -81,15 +33,18 @@ body[data-theme="light"] {
   --color-app-tertiary: 243, 248, 251;
   --color-app-tertiary-highlight: 222, 236, 244;
 
-  --color-app-error: 176, 0, 32;
+  --color-app-error: 181, 5, 37;
   --color-app-danger: 222, 53, 11;
   --color-app-danger-light: 255, 189, 173;
+
+  --color-app-heart: 255, 62, 58;
 
   --color-text-primary: 45, 45, 45;
   --color-text-primary-highlight: 23, 23, 23;
   --color-text-primary-faded: 90, 90, 90;
   --color-text-secondary: 32, 88, 139;
   --color-text-error: 176, 0, 32;
+  --color-text-snackbar-error: 207, 207, 207;
 }
 
 body[data-theme="dark"] {
@@ -105,12 +60,17 @@ body[data-theme="dark"] {
   --color-app-tertiary-highlight: 10, 40, 74;
 
   --color-app-error: 176, 0, 32;
+
+  /* --color-app-error: 176, 0, 32; */
   --color-app-danger: 222, 53, 11;
   --color-app-danger-light: 255, 189, 173;
+
+  --color-app-heart: 255, 62, 58;
 
   --color-text-primary: 207, 207, 207;
   --color-text-primary-highlight: 250, 250, 250;
   --color-text-primary-faded: 175, 175, 175;
   --color-text-secondary: 255, 107, 0;
   --color-text-error: 207, 102, 121;
+  --color-text-snackbar-error: 207, 207, 207;
 }
