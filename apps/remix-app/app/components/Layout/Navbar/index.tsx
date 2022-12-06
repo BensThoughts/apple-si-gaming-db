@@ -68,15 +68,16 @@ export default function Navbar({
                   componentSize="small"
                   isSubmitting={isSearchSubmitting}
                 />
-
               </div>
             </div>
             <div className="flex gap-x-4 justify-end items-center">
               <ThemeToggle />
-              <span>{isLoggedIn ? 'Logged In' : 'Logged Out'}</span>
-              <Link to="/profile" className="focus-visible:show-ring block rounded-md h-[40px] w-[40px] bg-primary hover:bg-primary-highlight p-px group">
-                <SteamIcon className="text-icon-secondary rounded-md w-full h-full group-hover:text-icon-secondary-highlight" />
-              </Link>
+              <div className="hidden navBarQuery:flex gap-x-4 items-center">
+                <span>{isLoggedIn ? 'Logged In' : 'Logged Out'}</span>
+                <Link to="/profile" className="block focus-visible:show-ring rounded-md h-[40px] w-[40px] bg-primary hover:bg-primary-highlight p-px group">
+                  <SteamIcon className="text-icon-secondary rounded-md w-full h-full group-hover:text-icon-secondary-highlight" />
+                </Link>
+              </div>
             </div>
           </div>
 
