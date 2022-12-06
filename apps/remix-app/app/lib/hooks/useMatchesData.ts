@@ -94,3 +94,11 @@ export function useBannerData() {
   }
   return rootCookieData.banners;
 }
+
+export function useSteamUserLikedPostIds() {
+  const prismaUserData = useRootPrismaLoaderData();
+  if (!prismaUserData) {
+    return undefined;
+  }
+  return prismaUserData.likedPerformancePostIds;
+}
