@@ -93,29 +93,41 @@ export default function AppRatingOverview({ performancePosts }: AppRatingOvervie
       <div className="text-center">
         <h2 className="text-xl text-secondary">Overall Ratings</h2>
       </div>
-      <div>
-        {`[ `}
-        {avgMedalInt}
-        {` ] `}
-        <span className="text-primary-faded">- Overall Medal Rating</span>
+      <div className="flex gap-1 md:gap-2">
+        <div>
+          {`[ `}
+          {avgMedalInt}
+          {` ] `}
+        </div>
+        <span className="text-primary-faded">Overall Medal Rating</span>
       </div>
-      <div>
-        {`[ `}
-        {avgFrameRate ? convertFrameRateToDescription(avgFrameRate) : 'None Given Yet'}
-        {` ] `}
-        <span className="text-primary-faded">- Average Frame Rate</span>
+      <div className="flex gap-1 md:gap-2">
+        <div>
+          {`[ `}
+          {avgFrameRate ? convertFrameRateToDescription(avgFrameRate) : 'None Given Yet'}
+          {` ] `}
+        </div>
+        <span className="text-primary-faded"> Average Frame Rate</span>
       </div>
-      <div>
-        {`[ `}
-        {percentStutters}{`%`}
-        {` ] `}
-        <span className="text-primary-faded">- Posts Where Frame Rate Stutters</span>
+      <div className="flex gap-1 md:gap-2">
+        <div className="w-fit whitespace-nowrap">
+          <span>
+            {`[ `}
+            {percentStutters}{`%`}
+            {` ]`}
+          </span>
+        </div>
+        <div>
+          <span className="text-primary-faded">Posts Where Frame Rate Stutters</span>
+        </div>
       </div>
-      <div>
-        {`[ `}
-        {avgGamepadRating ? convertGamepadRatingToMedalText(avgGamepadRating) : 'None Given Yet'}
-        {` ] `}
-        <span className="text-primary-faded">- Average Controller Rating</span>
+      <div className="flex gap-1 md:gap-2">
+        <div>
+          {`[ `}
+          {avgGamepadRating ? convertGamepadRatingToMedalText(avgGamepadRating) : 'None Given Yet'}
+          {` ] `}
+        </div>
+        <span className="text-primary-faded">Average Controller Rating</span>
       </div>
     </div>
   );
