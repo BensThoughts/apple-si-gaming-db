@@ -4,6 +4,8 @@ import PerformancePostDisplay from './PerformancePostDisplay';
 
 type PerformancePostLayoutProps =
 {
+  isUserLoggedIn: boolean;
+  likedPerformancePostIds: string[];
   performancePosts: {
     id: string;
     postText: string;
@@ -17,6 +19,7 @@ type PerformancePostLayoutProps =
     } | null,
     gamepadRating: GamepadRating | null;
     createdAt: Date;
+    numLikes: number;
     ratingMedal: RatingMedal;
     frameRateAverage?: FrameRate | null;
     frameRateStutters?: boolean | null;
@@ -45,6 +48,8 @@ function PostLayoutCard({ children }: { children: React.ReactNode }) {
 }
 
 export default function PerformancePostLayout({
+  isUserLoggedIn,
+  likedPerformancePostIds,
   performancePosts,
 }: PerformancePostLayoutProps) {
   if (performancePosts.length < 1) {
@@ -66,6 +71,7 @@ export default function PerformancePostLayout({
           {performancePosts.map(({
             id,
             createdAt,
+            numLikes,
             displayName,
             avatarMedium,
             postText,
@@ -83,33 +89,40 @@ export default function PerformancePostLayout({
             systemVideoDriverVersion,
             systemVideoPrimaryVRAM,
             systemMemoryRAM,
-          }, idx) => (
-            <div key={id} id={id} className="flex flex-col gap-6">
-              <PerformancePostDisplay
-                createdAt={createdAt}
-                displayName={displayName}
-                postText={postText}
-                postTags={postTags}
-                gamepadMetadata={gamepadMetadata}
-                gamepadRating={gamepadRating}
-                ratingMedal={ratingMedal}
-                frameRateAverage={frameRateAverage}
-                frameRateStutters={frameRateStutters}
-                avatarMedium={avatarMedium}
-                systemManufacturer={systemManufacturer}
-                systemModel={systemModel}
-                systemOsVersion={systemOsVersion}
-                systemCpuBrand={systemCpuBrand}
-                systemVideoDriver={systemVideoDriver}
-                systemVideoDriverVersion={systemVideoDriverVersion}
-                systemVideoPrimaryVRAM={systemVideoPrimaryVRAM}
-                systemMemoryRAM={systemMemoryRAM}
-              />
-              {(performancePosts.length - 1 > idx) &&
+          }, idx) => {
+            const hasLoggedInUserLiked = likedPerformancePostIds.includes(id);
+            return (
+              <div key={id} id={id} className="flex flex-col gap-6">
+                <PerformancePostDisplay
+                  postId={id}
+                  createdAt={createdAt}
+                  isUserLoggedIn={isUserLoggedIn}
+                  numLikes={numLikes}
+                  hasLoggedInUserLiked={hasLoggedInUserLiked}
+                  displayName={displayName}
+                  postText={postText}
+                  postTags={postTags}
+                  gamepadMetadata={gamepadMetadata}
+                  gamepadRating={gamepadRating}
+                  ratingMedal={ratingMedal}
+                  frameRateAverage={frameRateAverage}
+                  frameRateStutters={frameRateStutters}
+                  avatarMedium={avatarMedium}
+                  systemManufacturer={systemManufacturer}
+                  systemModel={systemModel}
+                  systemOsVersion={systemOsVersion}
+                  systemCpuBrand={systemCpuBrand}
+                  systemVideoDriver={systemVideoDriver}
+                  systemVideoDriverVersion={systemVideoDriverVersion}
+                  systemVideoPrimaryVRAM={systemVideoPrimaryVRAM}
+                  systemMemoryRAM={systemMemoryRAM}
+                />
+                {(performancePosts.length - 1 > idx) &&
                 <hr className="text-secondary" />
-              }
-            </div>
-          ))}
+                }
+              </div>
+            );
+          })}
         </div>
       </PostLayoutCard>
     </div>
