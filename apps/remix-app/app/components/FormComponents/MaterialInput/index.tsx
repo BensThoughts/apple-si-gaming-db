@@ -4,7 +4,7 @@ type InputProps = {
   componentSize?: 'large' | 'small';
 } & React.InputHTMLAttributes<HTMLInputElement>
 
-export default function Input({
+export default function MaterialInput({
   id,
   name,
   defaultValue = '',
