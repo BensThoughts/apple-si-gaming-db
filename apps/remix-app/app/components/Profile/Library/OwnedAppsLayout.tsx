@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { SelectOption } from '~/components/FormComponents/SelectMenu';
 import ToggleSwitch from '~/components/FormComponents/ToggleSwitch';
-import Input from '~/components/FormComponents/Input';
+import MaterialInput from '~/components/FormComponents/MaterialInput';
 import OwnedAppDisplay from './OwnedAppDisplay';
 import RoundedButton from '~/components/RoundedButton';
 import SyncLibraryForm from './SyncLibraryForm';
@@ -76,7 +76,7 @@ export default function OwnedAppsLayout({
                    bg-tertiary p-0 md:p-4 rounded-lg md:border-1 md:border-secondary-highlight"
       >
         <div>
-          <Input
+          <MaterialInput
             id="profileSearch"
             name="profileSearch"
             label="Search by name..."
