@@ -65,7 +65,6 @@ export default function Navbar({
                   <MenuItem animatedLink key={menuItem.href} href={menuItem.href}>{menuItem.name}</MenuItem>
                 ))}
                 <SimpleSearchForm
-                  componentSize="small"
                   isSubmitting={isSearchSubmitting}
                 />
               </div>
