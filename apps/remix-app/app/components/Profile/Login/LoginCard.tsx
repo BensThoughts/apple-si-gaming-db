@@ -1,4 +1,4 @@
-import * as Fathom from 'fathom-client';
+// import * as Fathom from 'fathom-client';
 
 export default function LoginCard() {
   return (
@@ -13,7 +13,7 @@ export default function LoginCard() {
       <a
         href="/api/auth/steam/login"
         className="block w-[114px] h-[43px] mt-2"
-        onClick={() => Fathom.trackGoal('7HVQUUZ4', 1)}
+        // onClick={() => Fathom.trackGoal('7HVQUUZ4', 1)}
       >
         <img
           src="steam_sign_in.png"
