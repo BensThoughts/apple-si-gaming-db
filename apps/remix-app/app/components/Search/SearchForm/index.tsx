@@ -1,5 +1,5 @@
 import RoundedButton from '../../RoundedButton';
-import Input from '~/components/FormComponents/Input';
+import MaterialInput from '~/components/FormComponents/MaterialInput';
 import { Form } from '@remix-run/react';
 import { useEffect, useRef } from 'react';
 import { showToast } from '~/components/Toasts';
@@ -14,7 +14,6 @@ import type {
 const FORM_NAME = 'game-search-form';
 
 type SearchInputProps = {
-  componentSize: 'large' | 'small';
   formError?: string;
   fieldErrors?: SearchFormFieldErrors;
   fields?: SearchFormFields;
@@ -23,21 +22,16 @@ type SearchInputProps = {
   categoryOptions: MultiSelectOption<number>[];
 } & React.InputHTMLAttributes<HTMLInputElement>
 
-export default function SearchInputForm({
+export default function SearchForm({
   genreOptions,
   categoryOptions,
   isSubmitting,
   formError,
   fieldErrors,
   fields,
-  componentSize = 'large',
   ...rest
 }: SearchInputProps) {
   const formRef = useRef<HTMLFormElement>(null);
-  let buttonHeight = 'h-[46px]';
-  if (componentSize === 'small') {
-    buttonHeight = 'h-[38px]';
-  }
 
   let defaultGenreOptions: MultiSelectOption<string>[] | undefined = undefined;
   let defaultCategoryOptions: MultiSelectOption<number>[] | undefined = undefined;
@@ -84,12 +78,12 @@ export default function SearchInputForm({
         <input type="hidden" name="page" value="1" className="hidden"/>
         <div className="flex flex-col items-center gap-4 w-full">
           <div className={`flex flex-col md:flex-row md:justify-between w-full justify-center items-center gap-4 md:gap-2`}>
-            <Input
+            <MaterialInput
               name="searchQuery"
               id="searchQuery"
               label="Search Games..."
               defaultValue={fields ? fields.searchQuery : ''}
-              componentSize={componentSize}
+              componentSize="large"
               fieldError={fieldErrors ? fieldErrors.searchQuery : undefined}
               // minLength={2}
               maxLength={100}
@@ -105,7 +99,7 @@ export default function SearchInputForm({
                 labelPosition="left"
               />
               <RoundedButton
-                className={`${buttonHeight} w-[89.66px]`}
+                className={`h-[38px] md:h-[46px] w-[89.66px]`}
                 type="submit"
                 disabled={isSubmitting}
               >
