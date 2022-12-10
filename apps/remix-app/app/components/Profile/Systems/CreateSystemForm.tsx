@@ -1,5 +1,5 @@
 import { Form } from '@remix-run/react';
-import Input from '~/components/FormComponents/Input';
+import MaterialInput from '~/components/FormComponents/MaterialInput';
 import TextArea from '~/components/FormComponents/TextArea';
 import RoundedButton from '~/components/RoundedButton';
 import type { CreateSystemSpecActionData } from '~/routes/profile/systems';
@@ -49,7 +49,7 @@ export default function CreateSystemForm({
       className="w-full max-w-lg flex flex-col items-center gap-3"
     >
       <input type="hidden" name="_profileAction" value="createSystem" />
-      <Input
+      <MaterialInput
         name="systemName"
         label="System Name..."
         defaultValue={
