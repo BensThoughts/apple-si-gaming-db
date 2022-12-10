@@ -4,7 +4,7 @@ import DeleteSystemModal from './DeleteSystemModal';
 import EditSystemModal from './EditSystemModal';
 import SystemSpecsPopover from '~/components/AppInfo/PerformancePosts/SystemSpecsPopover';
 import { showToast } from '~/components/Toasts';
-import type { DeleteSystemSpecActionData, EditSystemSpecActionData } from '~/routes/profile';
+import type { DeleteSystemSpecActionData, EditSystemSpecActionData } from '~/routes/profile/systems';
 
 interface SystemSpecDisplayProps {
   systemSpecs: {
