@@ -1,7 +1,11 @@
 
 import { ClientOnly } from 'remix-utils';
-import type { StylesConfig } from 'react-select';
-import Select from 'react-select';
+import type {
+  StylesConfig,
+  // Props,
+  InputProps,
+} from 'react-select';
+import Select, { components } from 'react-select';
 
 const styles: StylesConfig = {
   clearIndicator: (styles, state) => ({ ...styles }),
@@ -48,6 +52,19 @@ function SelectFallback() {
     </div>
   );
 }
+
+const Input = ({ children, ...props }: InputProps) => {
+  return (
+    <components.Input
+      data-gramm="false"
+      data-gramm_editor="false"
+      data-enable-grammarly="false"
+      {...props}
+    >
+      {children}
+    </components.Input>
+  );
+};
 
 export default function MultiSelectMenu<T>({
   name,
@@ -98,6 +115,7 @@ export default function MultiSelectMenu<T>({
         <ClientOnly fallback={<SelectFallback />}>
           {() =>
             <Select
+              components={{ Input }}
               id={id}
               instanceId={`instanceId-${id}`}
               inputId={`inputId-${id}`}
