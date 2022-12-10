@@ -2,7 +2,6 @@ import type { LoaderArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useCatch, useLoaderData, useTransition } from '@remix-run/react';
 import { searchReleasedSteamAppsByName } from '~/models/steamApp.server';
-import { useMediaIsWide } from '~/lib/hooks/useMedia';
 import SearchTitleCard from '~/components/Search/SearchTitleCard';
 import LoadingComponent from '~/components/LoadingComponent';
 import SearchForm from '~/components/Search/SearchForm';
@@ -247,14 +246,12 @@ function SearchIndexWrap({
   fields?: SearchFormFields;
   children?: React.ReactNode;
 }) {
-  const { isWide } = useMediaIsWide();
   return (
     <div className="flex flex-col gap-6 justify-center items-center w-full">
       <SearchForm
         genreOptions={searchOptions.genreOptions}
         categoryOptions={searchOptions.categoryOptions}
         isSubmitting={isSubmitting}
-        componentSize={isWide ? 'large' : 'small'}
         formError={formError}
         fieldErrors={fieldErrors}
         fields={fields}
