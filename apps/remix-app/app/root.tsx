@@ -12,7 +12,7 @@ import {
   ScrollRestoration,
   useCatch,
   useLoaderData,
-  useLocation,
+  // useLocation,
   useTransition,
 } from '@remix-run/react';
 import { json } from '@remix-run/node';
@@ -31,10 +31,12 @@ import { useTheme, ThemeProvider, NonFlashOfWrongThemeEls } from './lib/context/
 import { getThemeSession } from './lib/sessions/theme-session.server';
 // import { getBannerSession } from './lib/sessions/banner-session.server';
 
-import * as Fathom from 'fathom-client';
-import { useEffect, useRef } from 'react';
+// import { load, trackPageview} from 'fathom-client';
+// import { useEffect } from 'react';
+// import { useEffect, useRef } from 'react';
 import { updateNumTimesLoggedIn } from './models/siteUserStats';
 import { giveUserFirstLoginAchievement } from './models/siteAchievements';
+// import Fathom from './components/Fathom';
 
 type RootLoaderData = {
   cookieData: {
@@ -219,36 +221,49 @@ function Document({
 }) {
   const [theme] = useTheme();
 
-  const fathomLoaded = useRef(false);
-  const location = useLocation();
+  // const fathomLoaded = useRef(false);
+  // const location = useLocation();
 
-  useEffect(function setupFathom() {
-    if (!fathomLoaded.current) {
-      Fathom.load('OXJZWIXK', {
-        url: 'https://outstanding-phone.steamedapples.com/script.js',
-        includedDomains: [
-          'www.steamedapples.com',
-          'steamedapples.com',
-          '*.steamedapples.com',
-          'www.applesilicongaming.com',
-          'applesilicongaming.com',
-          '*.applesilicongaming.com',
-        ],
-      });
-      fathomLoaded.current = true;
-    } else {
-      Fathom.trackPageview({ url: location.pathname + location.search });
-    }
-  }, [location]);
+  // useEffect(function setupFathom() {
+  //   if (!fathomLoaded.current) {
+  //     Fathom.load('OXJZWIXK', {
+  //       url: 'https://outstanding-phone.steamedapples.com/script.js',
+  //       includedDomains: [
+  //         'www.steamedapples.com',
+  //         'steamedapples.com',
+  //         '*.steamedapples.com',
+  //         'www.applesilicongaming.com',
+  //         'applesilicongaming.com',
+  //         '*.applesilicongaming.com',
+  //       ],
+  //     });
+  //     fathomLoaded.current = true;
+  //   } else {
+  //     Fathom.trackPageview({ url: location.pathname + location.search });
+  //   }
+  // }, [location]);
 
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      data-gramm="false"
+      data-gramm_editor="false"
+      data-enable-grammarly="false"
+    >
       <head>
         {title ? <title>{title}</title> : null}
+        <script src="https://outstanding-phone.steamedapples.com/script.js" data-spa="auto" data-site="OXJZWIXK" defer></script>
         <Meta />
         <Links />
       </head>
-      <body className="min-h-screen bg-app-bg" data-theme={theme ? theme : ''} >
+      <body
+        className="min-h-screen bg-app-bg"
+        data-theme={theme ? theme : ''}
+        data-gramm="false"
+        data-gramm_editor="false"
+        data-enable-grammarly="false"
+      >
+        {/* <Fathom /> */}
         <Navbar
           isLoggedIn={isLoggedIn ? isLoggedIn : false}
           isSearchSubmitting={isSearchSubmitting ? isSearchSubmitting : false}
