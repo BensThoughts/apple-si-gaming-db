@@ -7,7 +7,7 @@ import { json, Response } from '@remix-run/node';
 // import { createPerformancePost } from '~/models/performancePost.server';
 import { getSteamAppDetailsRequest } from '~/lib/data-utils/steamApi.server';
 import {
-  searchSteamAppByAppId,
+  findSteamAppByAppId,
   updateSteamApp,
   convertSteamApiDataToPrisma,
 } from '~/models/steamApp.server';
@@ -40,20 +40,41 @@ interface LoaderData {
   };
 }
 
+function isMoreThanDaysAgo(dateToTest: Date, daysAgo: number) {
+  //                   days  hours min  sec  ms
+  const daysAgoInMs = daysAgo * 24 * 60 * 60 * 1000;
+  const timestampDaysAgo = new Date().getTime() - daysAgoInMs;
+
+  if (timestampDaysAgo > dateToTest.getTime()) {
+    console.log(`date is more than ${daysAgo} days into the past`);
+    return true;
+  } else {
+    console.log(`date is NOT more than ${daysAgo} days into the past`);
+    return false;
+  }
+}
+
 export async function loader({ params }: LoaderArgs) {
   const steamAppId = validateSteamAppId(params);
-  let steamApp = await searchSteamAppByAppId(steamAppId);
+  let steamApp = await findSteamAppByAppId(steamAppId);
   if (!steamApp) {
     throw new Response('App Not Found!', {
       status: 404,
     });
   }
-  if (!steamApp.dataDownloadAttempted || !steamApp.dataDownloaded) {
+  if (
+    !steamApp.dataDownloadAttempted ||
+    !steamApp.dataDownloaded ||
+    (
+      steamApp.dataDownloadAttemptedAt &&
+      isMoreThanDaysAgo(steamApp.dataDownloadAttemptedAt, 7)
+    )
+  ) {
     const steamApiApp = await getSteamAppDetailsRequest(steamApp.steamAppId);
     if (steamApiApp.data) {
       const prismaSteamApp = convertSteamApiDataToPrisma(steamApiApp.data);
       await updateSteamApp(prismaSteamApp);
-      steamApp = await searchSteamAppByAppId(steamAppId);
+      steamApp = await findSteamAppByAppId(steamAppId);
     }
     if (!steamApp) {
       throw new Response('App Not Found!', {
@@ -66,14 +87,17 @@ export async function loader({ params }: LoaderArgs) {
   });
 }
 
-export const meta: MetaFunction = ({
+export const meta: MetaFunction<LoaderData> = ({
   data,
 }: {
-  data: LoaderData;
+  data?: Partial<LoaderData>;
 }) => {
-  return {
-    title: `${data.steamApp.name} - Apple Silicon Compatibility and Performance Reviews`,
-  };
+  if (data && data.steamApp) {
+    return {
+      title: `${data.steamApp.name} - Apple Silicon Compatibility and Performance Reviews`,
+    };
+  }
+  return { title: 'Apple Silicon Compatibility and Performance Reviews' };
 };
 
 export default function AppsRoute() {
