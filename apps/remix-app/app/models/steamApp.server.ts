@@ -20,22 +20,28 @@ export {
   convertSteamApiDataToPrisma,
 };
 
-export async function searchAllAppsByAppIds(
+/**
+ * Filter to keep only appIds that exist in db. The steam api
+ * may return app ids for some users that do not exist in the db
+ * and would throw an error when trying to connect records.
+ * @param  {number[]} steamAppIds
+ * @return {Promise<number[]>}
+ */
+export async function filterAppIdsExistInDatabase(
     steamAppIds: SteamApp['steamAppId'][],
 ) {
-  return prisma.steamApp.findMany({
+  const steamAppIdsInDB = await prisma.steamApp.findMany({
     where: {
       steamAppId: { in: steamAppIds },
     },
     select: {
       steamAppId: true,
-      // name: true,
-      // headerImage: true,
     },
   });
+  return steamAppIdsInDB.map((app) => app.steamAppId);
 }
 
-export async function searchSteamAppByAppId(
+export async function findSteamAppByAppId(
     steamAppId: SteamApp['steamAppId'],
 ) {
   return prisma.steamApp.findUnique({
@@ -44,21 +50,22 @@ export async function searchSteamAppByAppId(
     },
     select: {
       steamAppId: true,
-      name: true,
+      categories: true,
       dataDownloadAttempted: true,
+      dataDownloadAttemptedAt: true,
       dataDownloaded: true,
+      genres: true,
       headerImage: true,
+      name: true,
+      platformLinux: true,
+      platformMac: true,
+      platformWindows: true,
+      releaseDate: true,
       requiredAge: true,
       shortDescription: true,
-      releaseDate: true,
-      platformMac: true,
-      platformLinux: true,
-      platformWindows: true,
       pcRequirementsMinimum: true,
       macRequirementsMinimum: true,
       linuxRequirementsMinimum: true,
-      genres: true,
-      categories: true,
     },
   });
 }
@@ -116,9 +123,11 @@ export async function searchReleasedSteamAppsByName(
     }
     whereInput = {
       platformMac,
-      // TODO: This is exclusive, must meet all tags
+
+      // * This is exclusive, must meet all tags
       AND: andClause.length > 0 ? andClause : undefined,
-      // TODO: This is inclusive meats any of the tags
+
+      // * This is inclusive meats any of the tags
       // genres: genreIds ? {
       //   some: {
       //     OR: genreIds.map((genreId) => ({
@@ -143,9 +152,9 @@ export async function searchReleasedSteamAppsByName(
         contains: searchQuery,
         mode: 'insensitive',
       },
-      comingSoon: {
-        equals: false,
-      },
+      // comingSoon: {
+      //   equals: false,
+      // },
       type: {
         contains: 'game',
         mode: 'insensitive',
