@@ -8,7 +8,7 @@ import type { PassportSteamUser } from '~/interfaces';
 
 import prisma from '~/lib/database/db.server';
 import { getSteamPlayerOwnedGamesRequest } from '@apple-si-gaming-db/steam-api';
-import { searchAllAppsByAppIds } from './steamApp.server';
+import { filterAppIdsExistInDatabase } from './steamApp.server';
 
 export async function findSteamUserSystemsByUserId(
     steamUserId: SteamUser['steamUserId'],
@@ -20,15 +20,15 @@ export async function findSteamUserSystemsByUserId(
     select: {
       systemSpecs: {
         select: {
-          systemName: true,
+          cpuBrand: true,
           manufacturer: true,
+          memoryRAM: true,
           model: true,
           osVersion: true,
-          cpuBrand: true,
+          systemName: true,
           videoDriver: true,
           videoDriverVersion: true,
           videoPrimaryVRAM: true,
-          memoryRAM: true,
         },
       },
     },
@@ -62,25 +62,26 @@ export function convertPassportSteamUserToPrismaSteamUser(
 ): Prisma.SteamUserCreateInput {
   return {
     steamUserId: passportSteamUser._json.steamid,
-    displayName: passportSteamUser.displayName,
-    communityVisibilityState: passportSteamUser._json.communityvisibilitystate,
-    profileState: passportSteamUser._json.profilestate,
-    personaName: passportSteamUser._json.personaname,
-    commentPermission: passportSteamUser._json.commentpermission,
-    profileUrl: passportSteamUser._json.profileurl,
+
     avatar: passportSteamUser._json.avatar,
-    avatarMedium: passportSteamUser._json.avatarmedium,
     avatarFull: passportSteamUser._json.avatarfull,
     avatarHash: passportSteamUser._json.avatarhash,
+    avatarMedium: passportSteamUser._json.avatarmedium,
+    commentPermission: passportSteamUser._json.commentpermission,
+    communityVisibilityState: passportSteamUser._json.communityvisibilitystate,
+    displayName: passportSteamUser.displayName,
     lastLogoff: passportSteamUser._json.lastlogoff,
-    personaState: passportSteamUser._json.personastate,
-    realName: passportSteamUser._json.realname,
-    primaryClanId: passportSteamUser._json.primaryclanid,
-    timeCreated: passportSteamUser._json.timecreated,
-    personaStateFlags: passportSteamUser._json.personastateflags,
+    locCityId: passportSteamUser._json.loccityid,
     locCountryCode: passportSteamUser._json.loccountrycode,
     locStateCode: passportSteamUser._json.locstatecode,
-    locCityId: passportSteamUser._json.loccityid,
+    personaName: passportSteamUser._json.personaname,
+    personaState: passportSteamUser._json.personastate,
+    personaStateFlags: passportSteamUser._json.personastateflags,
+    primaryClanId: passportSteamUser._json.primaryclanid,
+    profileState: passportSteamUser._json.profilestate,
+    profileUrl: passportSteamUser._json.profileurl,
+    realName: passportSteamUser._json.realname,
+    timeCreated: passportSteamUser._json.timecreated,
   };
 }
 
@@ -101,8 +102,7 @@ export async function updateUserOwnedApps(
   const { games } = await getSteamPlayerOwnedGamesRequest(steamUserId);
   if (games) {
     const ownedAppIds = games.map((app) => app.appid);
-    const ownedAppsInDB = await searchAllAppsByAppIds(ownedAppIds);
-    const ownedAppIdsInDB = ownedAppsInDB.map((app) => app.steamAppId);
+    const ownedAppIdsInDB = await filterAppIdsExistInDatabase(ownedAppIds);
     await updateUserOwnedAppsInDatabase(ownedAppIdsInDB, steamUserId);
   }
 }
@@ -129,6 +129,16 @@ export async function doesSteamUserOwnApp(
     steamUserId: SteamUser['steamUserId'],
     steamAppId: SteamApp['steamAppId'],
 ) {
+  // const testCount = await prisma.steamUser.count({
+  //   where: {
+  //     steamUserId,
+  //     ownedApps: {
+  //       some: {
+  //         steamAppId,
+  //       },
+  //     },
+  //   },
+  // });
   const steamUser = await prisma.steamUser.findUnique({
     where: {
       steamUserId,
@@ -155,26 +165,10 @@ export async function findUserProfileData(steamUserId: SteamUser['steamUserId'])
     where: {
       steamUserId,
     },
-    include: {
+    select: {
       likedPerformancePosts: {
         select: {
           performancePostId: true,
-        },
-      },
-      systemSpecs: {
-        select: {
-          systemName: true,
-          manufacturer: true,
-          model: true,
-          osVersion: true,
-          cpuBrand: true,
-          videoDriver: true,
-          videoDriverVersion: true,
-          videoPrimaryVRAM: true,
-          memoryRAM: true,
-        },
-        orderBy: {
-          id: 'asc',
         },
       },
       ownedApps: {
@@ -187,13 +181,31 @@ export async function findUserProfileData(steamUserId: SteamUser['steamUserId'])
             mode: 'insensitive',
           },
         },
+        orderBy: {
+          name: 'asc',
+        },
         select: {
           steamAppId: true,
-          name: true,
-          headerImage: true,
-          platformMac: true,
           genres: true,
-          // categories: true,
+          headerImage: true,
+          name: true,
+          platformMac: true,
+        },
+      },
+      systemSpecs: {
+        select: {
+          cpuBrand: true,
+          manufacturer: true,
+          memoryRAM: true,
+          model: true,
+          osVersion: true,
+          systemName: true,
+          videoDriver: true,
+          videoDriverVersion: true,
+          videoPrimaryVRAM: true,
+        },
+        orderBy: {
+          createdAt: 'asc',
         },
       },
     },
@@ -213,22 +225,22 @@ export async function findSteamUsersPerformancePosts(
           createdAt: 'desc',
         },
         select: {
+          id: true,
+          steamAppId: true,
+          createdAt: true,
           _count: {
             select: {
               usersWhoLiked: true,
             },
           },
-          id: true,
-          steamAppId: true,
-          createdAt: true,
-          ratingMedal: true,
-          postText: true,
           frameRateAverage: true,
           frameRateStutters: true,
+          postText: true,
+          ratingMedal: true,
           steamApp: {
             select: {
-              name: true,
               headerImage: true,
+              name: true,
             },
           },
         },
@@ -246,21 +258,24 @@ export async function findSteamUserLikedPosts(
     },
     select: {
       likedPerformancePosts: {
+        orderBy: {
+          updatedAt: 'desc',
+        },
         select: {
           steamPerformancePost: {
             select: {
+              id: true,
+              steamAppId: true,
+              createdAt: true,
               _count: {
                 select: {
                   usersWhoLiked: true,
                 },
               },
-              id: true,
-              steamAppId: true,
-              createdAt: true,
-              ratingMedal: true,
-              postText: true,
               frameRateAverage: true,
               frameRateStutters: true,
+              postText: true,
+              ratingMedal: true,
               steamApp: {
                 select: {
                   name: true,
