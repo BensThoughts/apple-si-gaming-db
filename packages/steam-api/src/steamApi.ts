@@ -19,6 +19,7 @@ export async function getSteamAppDetailsRequest(
     const response = await axios.get<SteamApiResponse>('https://store.steampowered.com/api/appdetails/', {
       params: {
         appids: steamAppId,
+        l: 'english',
       },
       responseType: 'json',
     });
