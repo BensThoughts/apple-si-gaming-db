@@ -199,10 +199,12 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export const meta: MetaFunction = ({ data }) => ({
+export const meta: MetaFunction = ({ data }: {
+  data?: Partial<RootLoaderData>;
+}) => ({
   'charset': 'utf-8',
   'viewport': 'width=device-width,initial-scale=1',
-  'color-scheme': (data && data.theme === 'light') ? 'light dark' : 'dark light',
+  'color-scheme': (data?.cookieData?.theme === 'light') ? 'light dark' : 'dark light',
   ...metaTags,
 });
 

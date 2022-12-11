@@ -217,8 +217,8 @@ export async function loader({
   });
 }
 
-export const meta: MetaFunction = ({ data }: { data: SearchPageLoaderData }) => {
-  if (data.searchFormState?.fields?.searchQuery) {
+export const meta: MetaFunction = ({ data }: { data?: Partial<SearchPageLoaderData> }) => {
+  if (data?.searchFormState?.fields?.searchQuery) {
     return {
       'title': `${metaTags.title} - Search - ${data.searchFormState.fields.searchQuery}`,
     };

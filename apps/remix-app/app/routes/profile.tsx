@@ -53,8 +53,8 @@ export async function loader({ context }: LoaderArgs) {
   });
 }
 
-export const meta: MetaFunction = ({ data }: { data: ProfileLoaderData }) => {
-  if (data.steamUserData.contextData.displayName) {
+export const meta: MetaFunction = ({ data }: { data?: Partial<ProfileLoaderData> }) => {
+  if (data?.steamUserData?.contextData.displayName) {
     const { displayName } = data.steamUserData.contextData;
     return {
       title: displayName ? `${metaTags.title} - Profile - ${displayName}` : `Profile`,
