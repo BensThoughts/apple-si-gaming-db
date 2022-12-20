@@ -22,7 +22,7 @@ export function validateNewSystemName(systemName: string, systemNames: string[])
 
 export function validateSystemInfo(systemSpec: SystemSpec) {
   if (!systemSpec.computerInformation) {
-    return `Could not find Computer Information: section, was it the first section, followed by Processor Information: section`;
+    return `Could not find "Computer Information:" section. It must be at the top and followed by "Processor Information:" section.`;
   }
   if (!systemSpec.computerInformation.manufacturer) {
     return `Cannot validate manufacturer property`;
@@ -34,7 +34,7 @@ export function validateSystemInfo(systemSpec: SystemSpec) {
     return `Cannot validate form factor property`;
   }
   if (!systemSpec.processorInformation) {
-    return `Could not find Processor Information: section, it must be right before Operating System Version: section`;
+    return `Could not find "Processor Information:" section. It must be right before "Operating System Version:" section.`;
   }
   if (!systemSpec.processorInformation.cpuVendor) {
     return `Cannot validate cpu vendor property`;
@@ -61,7 +61,7 @@ export function validateSystemInfo(systemSpec: SystemSpec) {
     return `Cannot validate os version property`;
   }
   if (!systemSpec.videoCard) {
-    return `Could not find Video Card: section, it must be right before Memory: section`;
+    return `Could not find "Video Card:" section. It must be right before "Memory:" section`;
   }
   if (!systemSpec.videoCard.videoDriver) {
     return `Cannot validate video driver property`;
