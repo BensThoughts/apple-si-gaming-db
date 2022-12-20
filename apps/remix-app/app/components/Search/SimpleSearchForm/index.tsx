@@ -1,5 +1,5 @@
 import RoundedButton from '../../RoundedButton';
-import Input from '~/components/FormComponents/MaterialInput';
+import MaterialInputOutlined from '~/components/FormComponents/MaterialInputOutlined';
 import { Form } from '@remix-run/react';
 import { useEffect, useRef } from 'react';
 import { showToast } from '~/components/Toasts';
@@ -49,7 +49,7 @@ export default function SimpleSearchForm({
       <div className={`flex justify-center items-center gap-2`}>
         <div>
           <input type="hidden" name="page" value="1" />
-          <Input
+          <MaterialInputOutlined
             name="searchQuery"
             id="searchQuery"
             label="Search Games..."

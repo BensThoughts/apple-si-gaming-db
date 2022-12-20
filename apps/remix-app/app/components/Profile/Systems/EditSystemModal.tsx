@@ -1,6 +1,6 @@
 import { Form, useSubmit } from '@remix-run/react';
 import React from 'react';
-import MaterialInput from '~/components/FormComponents/MaterialInput';
+import MaterialInputOutlined from '~/components/FormComponents/MaterialInputOutlined';
 import RoundedButton from '~/components/RoundedButton';
 import SystemModal from './SystemModal';
 
@@ -49,7 +49,7 @@ export default function EditSystemModal({
             <input type="hidden" name="_profileAction" value="editSystem" />
             <input type="hidden" name="systemName" value={systemName} />
             <input type="hidden" name="systemNames" value={systemNames} />
-            <MaterialInput
+            <MaterialInputOutlined
               name="updatedSystemName"
               label="System Name..."
               required

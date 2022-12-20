@@ -4,7 +4,7 @@ type InputProps = {
   componentSize?: 'large' | 'small';
 } & React.InputHTMLAttributes<HTMLInputElement>
 
-export default function MaterialInput({
+export default function MaterialInputOutlined({
   id,
   name,
   defaultValue = '',

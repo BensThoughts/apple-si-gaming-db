@@ -1,5 +1,5 @@
 import RoundedButton from '../../RoundedButton';
-import MaterialInput from '~/components/FormComponents/MaterialInput';
+import MaterialInputOutlined from '~/components/FormComponents/MaterialInputOutlined';
 import { Form } from '@remix-run/react';
 import { useEffect, useRef } from 'react';
 import { showToast } from '~/components/Toasts';
@@ -78,7 +78,7 @@ export default function SearchForm({
         <input type="hidden" name="page" value="1" className="hidden"/>
         <div className="flex flex-col items-center gap-4 w-full">
           <div className={`flex flex-col md:flex-row md:justify-between w-full justify-center items-center gap-4 md:gap-2`}>
-            <MaterialInput
+            <MaterialInputOutlined
               name="searchQuery"
               id="searchQuery"
               label="Search Games..."
