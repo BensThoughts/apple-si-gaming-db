@@ -56,6 +56,7 @@ export default function SystemSpecLayout({
             <CreateSystemForm
               isSubmittingCreateSystemForm={isSubmittingCreateSystemForm}
               createSystemSpecActionData={createSystemSpecActionData}
+              currentSystemNames={systemSpecs.map((systemSpec) => systemSpec.systemName)}
             />
           </div>
         </div>

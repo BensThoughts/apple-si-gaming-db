@@ -124,7 +124,7 @@ export default function SystemSpecDisplay({
           isOpen={isEditModalOpen}
           setIsOpen={setEditModalIsOpen}
           systemName={editModalSystemName}
-          systemNames={systemNames}
+          currentSystemNames={systemNames}
         />
       }
 
