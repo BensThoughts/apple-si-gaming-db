@@ -5,18 +5,20 @@
   "sideEffects": false,
   "scripts": {
     "build": "run-s 'build:*'",
-    "build:css": "npm run generate:css -- --minify",
+    "build:remove": "yarn run remove:build",
+    "build:css": "yarn run generate:css -- --minify",
     "build:remix": "remix build",
     "build:server": "esbuild --platform=node --format=cjs ./server.ts --outdir=build --bundle",
-    "dev": "run-p 'dev:*'",
-    "dev:build": "cross-env NODE_ENV=development npm run build:server -- --watch",
-    "dev:css": "cross-env NODE_ENV=development npm run generate:css -- --watch",
+    "dev": "run-p dev:*",
+    "dev:build": "cross-env NODE_ENV=development yarn run build:server -- --watch",
+    "dev:css": "cross-env NODE_ENV=development yarn run generate:css -- --watch",
     "dev:remix": "cross-env NODE_ENV=development remix watch",
     "dev:server": "cross-env NODE_ENV=development node --inspect --require ../../node_modules/dotenv/config ./build/server.js",
     "generate:css": "tailwindcss -i ./app/styles/global.css -o ./app/styles/tailwind.css",
     "start": "cross-env NODE_ENV=production node ./build/server.js",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
-    "type-check": "tsc --noEmit --skipLibCheck"
+    "type-check": "tsc --noEmit --skipLibCheck",
+    "remove:build": "rimraf ./build ./public/build"
   },
   "dependencies": {
     "@apple-si-gaming-db/database": "*",
@@ -65,6 +67,7 @@
     "nodemon": "^2.0.19",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.16",
+    "rimraf": "^3.0.2",
     "tailwindcss": "^3.2.4",
     "typescript": "^4.7.4"
   },
