@@ -1,24 +1,39 @@
 import { Form } from '@remix-run/react';
-import MaterialInputOutlined from '~/components/FormComponents/MaterialInputOutlined';
-import TextArea from '~/components/FormComponents/TextArea';
+import MaterialInputOutlinedV2 from '~/components/FormComponents/MaterialInputOutlinedV2';
+// import MaterialInputOutlined from '~/components/FormComponents/MaterialInputOutlined';
+// import TextArea from '~/components/FormComponents/TextArea';
+import MaterialTextAreaOutlined from '~/components/FormComponents/MaterialTextAreaOutlined';
 import RoundedButton from '~/components/RoundedButton';
 import type { CreateSystemSpecActionData } from '~/routes/profile/systems';
 import { showToast } from '~/components/Toasts';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
+import { validateNewSystemName, validateSystemInfo } from '~/lib/form-validators/profile';
 
 interface CreateSystemFormProps {
   isSubmittingCreateSystemForm: boolean;
   createSystemSpecActionData?: CreateSystemSpecActionData;
+  currentSystemNames: string[];
 }
 
 export default function CreateSystemForm({
   isSubmittingCreateSystemForm,
   createSystemSpecActionData,
+  currentSystemNames,
 }: CreateSystemFormProps) {
+  const [systemNameValue, setSystemNameValue] = useState('');
+  const [touchedNameField, setTouchedNameField] = useState(false);
+  const [systemInfoValue, setSystemInfoValue] = useState('');
+  const [touchedSystemInfoField, setTouchedSystemInfoField] = useState(false);
+  const systemNameErrorMessage = validateNewSystemName(systemNameValue, currentSystemNames);
+  const systemInfoErrorMessage = validateSystemInfo(systemInfoValue);
+  const displayNameError = touchedNameField && Boolean(systemNameErrorMessage);
+  const displaySystemInfoError = touchedSystemInfoField && Boolean(systemInfoErrorMessage);
+
   useEffect(() => {
     if (createSystemSpecActionData) {
       const {
         fieldErrors,
+        fields,
         formError,
       } = createSystemSpecActionData;
       if (formError) {
@@ -30,14 +45,22 @@ export default function CreateSystemForm({
       if (fieldErrors && fieldErrors.systemInfo) {
         showToast.error(fieldErrors.systemInfo);
       }
+      if (fields) {
+        setSystemNameValue(fields.systemName);
+        setSystemInfoValue(fields.systemInfo);
+      }
     }
   }, [createSystemSpecActionData]);
 
-  const formRef = useRef<HTMLFormElement>(null);
+  // const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     if (isSubmittingCreateSystemForm) {
-      formRef.current?.reset();
+      // formRef.current?.reset();
+      setSystemNameValue('');
+      setSystemInfoValue('');
+      setTouchedNameField(false);
+      setTouchedSystemInfoField(false);
     }
   }, [isSubmittingCreateSystemForm]);
 
@@ -45,40 +68,39 @@ export default function CreateSystemForm({
     <Form
       action="/profile/systems"
       method="post"
-      ref={formRef}
-      className="w-full max-w-lg flex flex-col items-center gap-3"
+      // ref={formRef}
+      className="flex flex-col gap-3 items-center w-full max-w-lg"
     >
       <input type="hidden" name="_profileAction" value="createSystem" />
-      <MaterialInputOutlined
+      <MaterialInputOutlinedV2
+        label="System Name"
         name="systemName"
-        label="System Name..."
-        defaultValue={
-          createSystemSpecActionData?.fields
-          ? createSystemSpecActionData.fields.systemName
-          : ''
-        }
-        fieldError={
-          (createSystemSpecActionData && createSystemSpecActionData.fieldErrors)
-          ? createSystemSpecActionData.fieldErrors.systemName
-          : undefined
-        }
-        // required
-        // minLength={3}
-        // maxLength={25}
+        value={systemNameValue}
+        onChange={(e) => setSystemNameValue(e.currentTarget.value)}
+        onBlur={() => setTouchedNameField(true)}
+        errorMessage={displayNameError ? systemNameErrorMessage : undefined}
+        type="text"
+        required
+        minLength={3}
+        maxLength={25}
       />
-      <TextArea
-        labelText="System Info"
+      <MaterialTextAreaOutlined
+        label="System Information"
         name="systemInfo"
-        defaultValue={
-          createSystemSpecActionData?.fields
-          ? createSystemSpecActionData.fields.systemInfo
-          : ''
-        }
-        fieldError={
-          (createSystemSpecActionData && createSystemSpecActionData.fieldErrors)
-          ? createSystemSpecActionData.fieldErrors.systemInfo
-          : undefined
-        }
+        value={systemInfoValue}
+        onChange={(e) => setSystemInfoValue(e.currentTarget.value)}
+        onBlur={() => setTouchedSystemInfoField(true)}
+        errorMessage={displaySystemInfoError ? systemInfoErrorMessage : undefined}
+        // defaultValue={
+        //   createSystemSpecActionData?.fields
+        //   ? createSystemSpecActionData.fields.systemInfo
+        //   : ''
+        // }
+        // errorMessage={
+        //   (createSystemSpecActionData && createSystemSpecActionData.fieldErrors)
+        //   ? createSystemSpecActionData.fieldErrors.systemInfo
+        //   : undefined
+        // }
       />
       <RoundedButton
         disabled={isSubmittingCreateSystemForm}
