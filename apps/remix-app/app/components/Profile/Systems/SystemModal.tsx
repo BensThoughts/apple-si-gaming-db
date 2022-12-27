@@ -6,14 +6,16 @@ interface SystemModalProps {
   description?: string,
   children: React.ReactNode,
   isOpen: boolean
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  // setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  onClose(): void;
 }
 
 export default function SystemModal({
   title,
   children,
   isOpen,
-  setIsOpen,
+  // setIsOpen,
+  onClose,
 }: SystemModalProps) {
   return (
     <Transition show={isOpen} as={Fragment}>
@@ -21,7 +23,7 @@ export default function SystemModal({
         as="div"
         // className="relative z-50"
         className="overflow-y-auto fixed inset-0 z-50"
-        onClose={() => setIsOpen(false)}
+        onClose={onClose}
         open={isOpen}
       >
         <Transition.Child

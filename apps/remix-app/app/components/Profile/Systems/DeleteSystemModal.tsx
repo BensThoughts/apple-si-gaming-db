@@ -29,7 +29,10 @@ export default function DeleteSystemModal({
   return (
     <SystemModal
       isOpen={isOpen}
-      setIsOpen={setIsOpen}
+      onClose={() => {
+        setIsOpen(false);
+      }}
+      // setIsOpen={setIsOpen}
       title={title}
     >
       <div className="flex flex-col gap-4">
@@ -53,7 +56,7 @@ export default function DeleteSystemModal({
             <input type="hidden" name="systemName" value={systemName} />
             <RoundedButton
               type="submit"
-              className="bg-error text-white hover:bg-error hover:text-white focus-visible:bg-error focus-visible:text-white"
+              className="text-white bg-error hover:bg-error hover:text-white focus-visible:bg-error focus-visible:text-white"
             >
               Delete
             </RoundedButton>
