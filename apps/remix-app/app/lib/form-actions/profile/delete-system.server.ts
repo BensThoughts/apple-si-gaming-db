@@ -2,7 +2,7 @@ import type { SteamUserSystemSpecs } from '~/interfaces/database';
 import { json, redirect } from '@remix-run/node';
 import { deleteSystemSpecs } from '~/models/steamUserSystemSpecs.server';
 import type { DeleteSystemSpecActionData, ProfileSystemsActionData } from '~/routes/profile/systems';
-import { validateSystemName } from '~/lib/form-validators/profile';
+// import { validateSystemName } from '~/lib/form-validators/profile';
 
 const badRequest = (data: DeleteSystemSpecActionData) => (
   json<ProfileSystemsActionData>({
@@ -22,7 +22,7 @@ export async function deleteSystem(
   }
 
   const fieldErrors = {
-    systemName: validateSystemName(systemName),
+    // systemName: validateSystemName(systemName),
   };
   const fields = {
     systemName,
