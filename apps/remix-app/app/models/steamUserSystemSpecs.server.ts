@@ -75,12 +75,14 @@ export async function deleteSystemSpecs(
     steamUserId: SteamUserSystemSpecs['steamUserId'],
     systemName: SteamUserSystemSpecs['systemName'],
 ) {
-  return prisma.steamUserSystemSpecs.delete({
+  return prisma.steamUserSystemSpecs.deleteMany({
     where: {
-      systemName_steamUserId: {
-        steamUserId,
-        systemName,
-      },
+      systemName,
+      steamUserId,
+      // systemName_steamUserId: {
+      //   steamUserId,
+      //   systemName,
+      // },
     },
   });
 }
