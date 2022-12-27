@@ -71,6 +71,6 @@ body[data-theme="dark"] {
   --color-text-primary-highlight: 250, 250, 250;
   --color-text-primary-faded: 175, 175, 175;
   --color-text-secondary: 255, 107, 0;
-  --color-text-error: 207, 102, 121;
+  --color-text-error: 225, 49, 81;
   --color-text-snackbar-error: 207, 207, 207;
 }
