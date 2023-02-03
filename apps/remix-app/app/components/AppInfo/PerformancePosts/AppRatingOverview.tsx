@@ -91,7 +91,7 @@ export default function AppRatingOverview({ performancePosts }: AppRatingOvervie
     <div className="flex flex-col items-center gap-2 w-full bg-tertiary border-solid
                     border-2 border-secondary p-3 rounded-lg text-primary-highlight">
       <div className="text-center">
-        <h2 className="text-xl text-secondary">Overall Ratings</h2>
+        <h2 className="text-xl text-secondary">Apple Compatibility Score</h2>
       </div>
       <div className="flex gap-1 md:gap-2">
         <div>
