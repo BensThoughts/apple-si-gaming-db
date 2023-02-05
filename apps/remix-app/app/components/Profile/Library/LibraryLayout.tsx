@@ -28,27 +28,27 @@ export default function LibraryLayout({
         <Heading>Library</Heading>
       </div> */}
       {(ownedApps && ownedApps.length > 0) ? (
-      <div>
-        <OwnedAppsLayout ownedApps={ownedApps} isSubmittingUpdateGames={isSubmittingUpdateGames} />
-      </div>
-    ) : (
-      <div className="max-w-md">
-        <div
-          className="flex flex-col gap-3 px-6 py-8 border-1 border-secondary-highlight
-                     rounded-md bg-primary text-primary"
-        >
-          <strong className="font-bold">No Apps Found</strong>
-          <div>
-            You are logged in but appear to have no apps owned. Is your Steam profile
-            set to public?  Please set your steam profile to public and then use the
-            re-sync library button or logout and back in.
-          </div>
-          <div>
-            <SyncLibraryForm isSubmittingUpdateGames={isSubmittingUpdateGames} />
+        <div>
+          <OwnedAppsLayout ownedApps={ownedApps} isSubmittingUpdateGames={isSubmittingUpdateGames} />
+        </div>
+      ) : (
+        <div className="max-w-md">
+          <div
+            className="flex flex-col gap-3 px-6 py-8 border-1 border-secondary-highlight
+                       rounded-md bg-primary text-primary"
+          >
+            <strong className="font-bold">No Apps Found</strong>
+            <div>
+              You are logged in but appear to have no apps owned. Is your Steam profile
+              set to public?  Please set your steam profile to public and then use the
+              re-sync library button or logout and back in.
+            </div>
+            <div>
+              <SyncLibraryForm isSubmittingUpdateGames={isSubmittingUpdateGames} />
+            </div>
           </div>
         </div>
-      </div>
-    )}
+      )}
     </div>
   );
 }
