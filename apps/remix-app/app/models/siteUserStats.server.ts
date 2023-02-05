@@ -11,7 +11,7 @@ export function findSiteUserStatsForSteamUser(steamUserId: string) {
   });
 }
 
-export async function updateNumTimesLoggedIn(steamUserId: string) {
+export async function addOneToNumTimesLoggedIn(steamUserId: string) {
   return prisma.siteUserStats.upsert({
     where: {
       steamUserId,
