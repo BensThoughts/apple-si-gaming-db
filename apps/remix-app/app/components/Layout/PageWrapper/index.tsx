@@ -4,7 +4,6 @@ import { useBannerData } from '~/lib/hooks/useMatchesData';
 import PageFooter from './PageFooter';
 import PageHeader from './PageHeader';
 import PageMain from './PageMain';
-import TopSpacer from './TopSpacer';
 
 function Background() {
   const [currentTheme] = useTheme();
@@ -51,8 +50,8 @@ export default function PageWrapper({
           </div>
         </div>
 
+        {topSpacer && <div className="mb-4 md:mb-6" />}
 
-        {topSpacer && <TopSpacer />}
         <PageMain>
           {children}
         </PageMain>
