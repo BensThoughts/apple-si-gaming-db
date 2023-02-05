@@ -4,12 +4,12 @@ export const menuItems = [
     href: '/',
   },
   {
-    name: 'Search',
-    href: '/search',
+    name: 'Games',
+    href: '/apps',
   },
   {
-    name: 'Apps',
-    href: '/apps',
+    name: 'Search',
+    href: '/search',
   },
   {
     name: 'Contact',
