@@ -202,3 +202,25 @@ export async function findTrendingSteamApps(
     take: numTrendingApps,
   });
 }
+
+export function findSteamAppsWherePostsExist() {
+  return prisma.steamApp.findMany({
+    where: {
+      performancePosts: {
+        some: {},
+      },
+    },
+    select: {
+      steamAppId: true,
+      name: true,
+      headerImage: true,
+      platformMac: true,
+      genres: {
+        select: {
+          genreId: true,
+          description: true,
+        },
+      },
+    },
+  });
+}
