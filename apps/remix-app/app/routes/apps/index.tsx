@@ -1,17 +1,20 @@
 import { json } from '@remix-run/node';
 import { useCatch, useLoaderData } from '@remix-run/react';
 import PageWrapper from '~/components/Layout/PageWrapper';
-import { findTrendingSteamApps } from '~/models/steamApp.server';
+import { findSteamAppsWherePostsExist, findTrendingSteamApps } from '~/models/steamApp.server';
 import { findNewestPerformancePosts } from '~/models/steamPerformancePost.server';
 import type { TrendingSteamApp, PerformancePostBrief } from '~/interfaces';
 
 import { Fragment } from 'react';
 import NewPerformancePostCard from '~/components/Cards/NewPerformancePostCard';
 import TrendingSteamAppCard from '~/components/Cards/TrendingSteamAppCard';
+import type { SteamAppForSmallDisplayCard } from '~/components/Cards/SmallAppsCard';
+import SmallAppsCard from '~/components/Cards/SmallAppsCard';
 
 interface LoaderData {
   trendingSteamApps: TrendingSteamApp[];
   newPerformancePosts: PerformancePostBrief[];
+  steamAppsWherePostsExist: SteamAppForSmallDisplayCard[];
 }
 
 export async function loader() {
@@ -19,17 +22,24 @@ export async function loader() {
   const NUM_RECENT_POSTS = 15;
   const trendingSteamApps = await findTrendingSteamApps(NUM_TRENDING_APPS);
   const newPerformancePosts = await findNewestPerformancePosts(NUM_RECENT_POSTS);
+  const steamAppsWherePostsExist = await findSteamAppsWherePostsExist();
   return json<LoaderData>({
     trendingSteamApps,
     newPerformancePosts,
+    steamAppsWherePostsExist,
   });
 }
 
 export default function SteamAppIdIndexRoute() {
-  const { trendingSteamApps, newPerformancePosts } = useLoaderData<typeof loader>();
+  const {
+    trendingSteamApps,
+    newPerformancePosts,
+    steamAppsWherePostsExist,
+  } = useLoaderData<typeof loader>();
   return (
     <PageWrapper currentRoute="/apps">
       <div className="flex flex-col items-center gap-12 w-full mt-6">
+        <SmallAppsCard steamApps={steamAppsWherePostsExist} />
         {(trendingSteamApps.length > 0) && (
           <div className="flex flex-col items-center gap-6 px-6 py-8 bg-tertiary rounded-lg shadow-md w-full max-w-2xl">
             <h2 className="text-secondary text-2xl">Top 10 Trending Apps</h2>
