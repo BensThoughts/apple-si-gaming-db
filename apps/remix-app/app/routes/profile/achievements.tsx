@@ -3,7 +3,7 @@ import { redirect, json } from '@remix-run/node';
 import type { SiteAchievement } from '~/interfaces/database';
 import AchievementsLayout from '~/components/Profile/Achievements/AchievementsLayout';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-import { findSiteAchievementsForSteamUser } from '~/models/siteAchievements';
+import { findSiteAchievementsForSteamUser } from '~/models/siteAchievements.server';
 import { useLoaderData } from '@remix-run/react';
 
 type ProfileAchievementsLoaderData = {
