@@ -34,8 +34,8 @@ import { getThemeSession } from './lib/sessions/theme-session.server';
 // import { load, trackPageview} from 'fathom-client';
 // import { useEffect } from 'react';
 // import { useEffect, useRef } from 'react';
-import { updateNumTimesLoggedIn } from './models/siteUserStats';
-import { giveUserFirstLoginAchievement } from './models/siteAchievements';
+import { addOneToNumTimesLoggedIn } from './models/siteUserStats.server';
+import { giveUserFirstLoginAchievement } from './models/siteAchievements.server';
 // import Fathom from './components/Fathom';
 
 type RootLoaderData = {
@@ -103,7 +103,7 @@ export async function loader({ request, context }: LoaderArgs) {
     if (!profileSession.hasAlreadyLoggedIn()) {
       await upsertSteamUser(steamUser);
       await updateUserOwnedApps(steamUser.steamUserId);
-      const { numLogins } = await updateNumTimesLoggedIn(steamUser.steamUserId);
+      const { numLogins } = await addOneToNumTimesLoggedIn(steamUser.steamUserId);
       if (numLogins === 1) {
         await giveUserFirstLoginAchievement(steamUser.steamUserId);
       }
