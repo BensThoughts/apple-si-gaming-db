@@ -4,7 +4,7 @@ import { useActionData, useCatch, useLoaderData, useTransition } from '@remix-ru
 import PerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForm';
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-import type { GamepadRating, RatingMedal, FrameRate } from '~/interfaces/database';
+// import type { GamepadRating, RatingMedal, FrameRate } from '~/interfaces/database';
 import { createPerformancePost, findPerformancePostsBySteamAppId } from '~/models/steamPerformancePost.server';
 import { findPostTags } from '~/models/postTag.server';
 import { doesSteamUserOwnApp } from '~/models/steamUser.server';
@@ -38,35 +38,38 @@ interface UserSelectGamepad {
 interface PerformancePostLoaderData {
   steamUserData: {
     isLoggedIn: boolean;
+    steamUserId?: string;
     ownsApp: boolean;
     postTags: UserSelectPostTag[];
     gamepads: UserSelectGamepad[];
   }
   steamAppId: number;
-  performancePosts: {
-    _count: {
-      usersWhoLiked: number;
-    },
-    id: string;
-    postText: string;
-    postTags: UserSelectPostTag[],
-    gamepadMetadata: UserSelectGamepad | null,
-    gamepadRating: GamepadRating | null,
-    createdAt: Date;
-    ratingMedal: RatingMedal;
-    frameRateAverage: FrameRate | null;
-    frameRateStutters: boolean | null;
-    displayName: string | null;
-    avatarMedium: string | null;
-    systemManufacturer: string | null;
-    systemModel: string | null;
-    systemOsVersion: string | null;
-    systemCpuBrand: string | null;
-    systemVideoDriver: string | null;
-    systemVideoDriverVersion: string | null;
-    systemVideoPrimaryVRAM: string | null;
-    systemMemoryRAM: string | null;
-  }[];
+  performancePosts: Awaited<ReturnType<typeof findPerformancePostsBySteamAppId>>;
+  // performancePosts: {
+  //   _count: {
+  //     usersWhoLiked: number;
+  //   },
+  //   id: string;
+  //   postText: string;
+  //   postTags: UserSelectPostTag[],
+  //   gamepadMetadata: UserSelectGamepad | null,
+  //   gamepadRating: GamepadRating | null,
+  //   createdAt: Date;
+  //   ratingMedal: RatingMedal;
+  //   frameRateAverage: FrameRate | null;
+  //   frameRateStutters: boolean | null;
+  //   displayName: string | null;
+  //   avatarMedium: string | null;
+  //   steamUserId: string;
+  //   systemManufacturer: string | null;
+  //   systemModel: string | null;
+  //   systemOsVersion: string | null;
+  //   systemCpuBrand: string | null;
+  //   systemVideoDriver: string | null;
+  //   systemVideoDriverVersion: string | null;
+  //   systemVideoPrimaryVRAM: string | null;
+  //   systemMemoryRAM: string | null;
+  // }[];
 }
 
 export async function loader({ params, context }: LoaderArgs) {
@@ -75,11 +78,13 @@ export async function loader({ params, context }: LoaderArgs) {
   const performancePosts = await findPerformancePostsBySteamAppId(steamAppId);
 
   let isLoggedIn = false;
+  let steamUserId: string | undefined = undefined;
   let ownsApp = false;
   let postTags: UserSelectPostTag[] = [];
   let gamepads: UserSelectGamepad[] = [];
   if (steamUser) {
     isLoggedIn = true;
+    steamUserId = steamUser.steamUserId;
     ownsApp = await doesSteamUserOwnApp(steamUser.steamUserId, steamAppId);
     postTags = await findPostTags();
     gamepads = await findAllGamepads();
@@ -87,6 +92,7 @@ export async function loader({ params, context }: LoaderArgs) {
   return json<PerformancePostLoaderData>({
     steamUserData: {
       isLoggedIn,
+      steamUserId,
       ownsApp,
       postTags,
       gamepads,
@@ -224,6 +230,7 @@ export default function PerformancePostsRoute() {
   } = useLoaderData<PerformancePostLoaderData>();
   const {
     isLoggedIn,
+    steamUserId,
     ownsApp,
     postTags,
     gamepads,
@@ -247,12 +254,34 @@ export default function PerformancePostsRoute() {
     <div className="flex flex-col gap-3">
       <div className="w-full">
         <PerformancePostLayout
-          isUserLoggedIn={isLoggedIn}
-          likedPerformancePostIds={likedPerformancePostIds}
+          currentUserSession={{
+            isUserLoggedIn: isLoggedIn,
+            steamUserId,
+            likedPerformancePostIds,
+          }}
           performancePosts={performancePosts.map((post) => ({
-            ...post,
-            numLikes: post._count.usersWhoLiked,
+            postId: post.id,
             createdAt: new Date(post.createdAt),
+            postText: post.postText,
+            numLikes: post._count.usersWhoLiked,
+            postTags: post.postTags,
+            userWhoCreatedPost: {
+              steamUserId: post.steamUserId,
+              displayName: post.displayName,
+              avatarMedium: post.avatarMedium,
+            },
+            rating: {
+              ratingMedal: post.ratingMedal,
+              frameRateAverage: post.frameRateAverage,
+              frameRateStutters: post.frameRateStutters,
+              gamepadRating: post.gamepadRating,
+              gamepadMetadata: post.gamepadMetadata,
+            },
+            system: {
+              manufacturer: post.systemManufacturer,
+              model: post.systemModel,
+              osVersion: post.systemOsVersion,
+            },
           }))}
         />
       </div>
