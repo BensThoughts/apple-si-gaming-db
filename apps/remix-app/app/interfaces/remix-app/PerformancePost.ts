@@ -1,23 +1,12 @@
 import type { FrameRate, GamepadRating, RatingMedal } from '~/interfaces/database';
 
 /*
-  These are the Performance Post interfaces for the frontend. The shape of the
+  These are the Universal Performance Post interfaces for the frontend. The shape of the
   data in the db is slightly different than it is on the front end.
+  PerformancePostBase & {...} is used to build out the needed portions of
+  a performance post throughout the app depending on the front end components
+  data needs.  For example, some components need the rating, others do not.
 */
-
-// export interface PerformancePostBrief {
-//   id: string;
-//   steamApp: {
-//     steamAppId: number;
-//   };
-//   postText: string;
-//   userWhoCreatedPost: {
-
-//   }
-//   displayName: string | null;
-//   avatarMedium: string | null;
-//   ratingMedal: RatingMedal;
-// }
 
 export interface PerformancePostRating {
   ratingMedal: RatingMedal;
@@ -30,34 +19,52 @@ export interface PerformancePostRating {
   } | null,
 }
 
-export interface PerformancePost {
+export interface PerformancePostSystem {
+  manufacturer?: string | null;
+  model?: string | null;
+  osVersion?: string | null;
+  cpuBrand?: string | null;
+  videoDriver?: string | null;
+  videoDriverVersion?: string | null;
+  videoPrimaryVRAM?: string | null;
+  memoryRAM?: string | null;
+}
+
+export interface PerformancePostSteamApp {
+  steamAppId: number;
+  name: string;
+  headerImage?: string | null;
+}
+
+export interface PerformancePostUserWhoCreated {
+  steamUserId: string;
+  displayName?: string | null;
+  avatarMedium?: string | null;
+}
+
+export interface PerformancePostTag {
+  postTagId: number;
+  description: string;
+}
+
+export interface PerformancePostLikes {
+  numLikes: number;
+}
+
+export interface PerformancePostBase {
     postId: string;
     createdAt: Date;
-    userWhoCreatedPost?: {
-      steamUserId: string;
-      displayName?: string | null;
-      avatarMedium?: string | null;
-    };
     postText: string;
-    numLikes: number;
-    postTags?: {
-      postTagId: number;
-      description: string;
-    }[];
-    rating: PerformancePostRating;
-    steamApp: {
-      steamAppId: number;
-      name: string;
-      headerImage?: string | null;
-    };
-    system?: {
-      manufacturer?: string | null;
-      model?: string | null;
-      osVersion?: string | null;
-      cpuBrand?: string | null;
-      videoDriver?: string | null;
-      videoDriverVersion?: string | null;
-      videoPrimaryVRAM?: string | null;
-      memoryRAM?: string | null;
-    }
 }
+
+// export interface PerformancePostBrief {
+//   id: string;
+//   steamApp: {
+//     steamAppId: number;
+//     name: string;
+//   };
+//   postText: string;
+//   displayName: string | null;
+//   avatarMedium: string | null;
+//   ratingMedal: RatingMedal;
+// }
