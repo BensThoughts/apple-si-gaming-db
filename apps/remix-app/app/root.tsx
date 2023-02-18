@@ -16,8 +16,8 @@ import {
   useTransition,
 } from '@remix-run/react';
 import { json } from '@remix-run/node';
-import type { SteamGenre } from '~/interfaces/database';
-import tailwindStylesheetUrl from './styles/tailwind.css';
+import type { PrismaSteamGenre } from '~/interfaces/database';
+import globalStylesheetUrl from './styles/global.css';
 import { metaTags } from './lib/meta-tags';
 import { extractAppLoadContext } from './lib/data-utils/appLoadContext.server';
 import Navbar from '~/components/Layout/Navbar';
@@ -35,7 +35,7 @@ import { getThemeSession } from './lib/sessions/theme-session.server';
 // import { useEffect } from 'react';
 // import { useEffect, useRef } from 'react';
 import { addOneToNumTimesLoggedIn } from './models/siteUserStats.server';
-import { giveUserFirstLoginAchievement } from './models/siteAchievements.server';
+// import { giveUserFirstLoginAchievement } from './models/siteAchievements.server';
 // import Fathom from './components/Fathom';
 
 type RootLoaderData = {
@@ -59,7 +59,7 @@ type RootLoaderData = {
         name: string;
         headerImage: string | null;
         platformMac: boolean | null;
-        genres: SteamGenre[];
+        genres: PrismaSteamGenre[];
       }[],
       systemSpecs: {
         systemName: string;
@@ -103,10 +103,12 @@ export async function loader({ request, context }: LoaderArgs) {
     if (!profileSession.hasAlreadyLoggedIn()) {
       await upsertSteamUser(steamUser);
       await updateUserOwnedApps(steamUser.steamUserId);
-      const { numLogins } = await addOneToNumTimesLoggedIn(steamUser.steamUserId);
-      if (numLogins === 1) {
-        await giveUserFirstLoginAchievement(steamUser.steamUserId);
-      }
+      await addOneToNumTimesLoggedIn(steamUser.steamUserId);
+
+      // const { numLogins } = await addOneToNumTimesLoggedIn(steamUser.steamUserId);
+      // if (numLogins === 1) {
+      //   await giveUserFirstLoginAchievement(steamUser.steamUserId);
+      // }
       profileSession.setAlreadyLoggedIn(true);
     }
     const userProfile = await findUserProfileData(steamUser.steamUserId);
@@ -195,7 +197,7 @@ export async function loader({ request, context }: LoaderArgs) {
 
 export const links: LinksFunction = () => {
   return [
-    { rel: 'stylesheet', href: tailwindStylesheetUrl },
+    { rel: 'stylesheet', href: globalStylesheetUrl },
   ];
 };
 
