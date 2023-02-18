@@ -17,7 +17,7 @@ module.exports = {
       'md': '768px',
       'navBarQuery': '960px',
       'lg': '1024px',
-      'postMetaBarQuery': '1040px',
+      'postMetaBarQuery': '1100px',
       'xl': '1280px',
       '2xl': '1536px',
     },
