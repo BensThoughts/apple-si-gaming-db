@@ -1,31 +1,35 @@
 import { Link } from '@remix-run/react';
-import type { RatingMedal } from '~/interfaces';
+import type {
+  PerformancePostBase,
+  PerformancePostRating,
+  PerformancePostSteamApp,
+  PerformancePostUserWhoCreated,
+} from '~/interfaces';
 import AvatarImage from '../ImageWrappers/AvatarImage';
 
-interface NewPerformancePostCardProps {
-  steamAppId: number;
-  postId: string;
-  steamApp: {
-    name: string;
-  };
-  postText: string;
-  avatarMedium: string | null;
-  displayName: string | null;
-  ratingMedal: RatingMedal;
+type NewPerformancePostCardProps = PerformancePostBase & {
+  steamApp: PerformancePostSteamApp;
+  userWhoCreatedPost: PerformancePostUserWhoCreated;
+  rating: PerformancePostRating;
 }
 
 export default function NewPerformancePostCard({
-  steamAppId,
   postId,
   steamApp,
   postText,
-  avatarMedium,
-  displayName,
-  ratingMedal,
+  userWhoCreatedPost,
+  rating,
 }: NewPerformancePostCardProps) {
+  const {
+    displayName,
+    avatarMedium,
+  } = userWhoCreatedPost;
+  const {
+    ratingMedal,
+  } = rating;
   return (
     <Link
-      to={`/apps/${steamAppId}/performance-posts#${postId}`}
+      to={`/apps/${steamApp.steamAppId}/performance-posts#${postId}`}
       className="border-1 border-secondary-highlight rounded-md
                  p-4 bg-tertiary hover:bg-tertiary-highlight
                  focus:show-ring w-full max-w-xl h-full max-h-[165px]

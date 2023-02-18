@@ -3,7 +3,13 @@ import { useCatch, useLoaderData } from '@remix-run/react';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import { findSteamAppsWherePostsExist, findTrendingSteamApps } from '~/models/steamApp.server';
 import { findNewestPerformancePosts } from '~/models/steamPerformancePost.server';
-import type { TrendingSteamApp, PerformancePostBrief } from '~/interfaces';
+import type {
+  TrendingSteamApp,
+  PerformancePostBase,
+  PerformancePostSteamApp,
+  PerformancePostRating,
+  PerformancePostUserWhoCreated,
+} from '~/interfaces';
 
 import { Fragment } from 'react';
 import NewPerformancePostCard from '~/components/Cards/NewPerformancePostCard';
@@ -13,7 +19,11 @@ import SmallAppsCard from '~/components/Cards/SmallAppsCard';
 
 interface LoaderData {
   trendingSteamApps: TrendingSteamApp[];
-  newPerformancePosts: PerformancePostBrief[];
+  newPerformancePosts: (PerformancePostBase & {
+    steamApp: PerformancePostSteamApp;
+    rating: PerformancePostRating;
+    userWhoCreatedPost: PerformancePostUserWhoCreated;
+  })[];
   steamAppsWherePostsExist: SteamAppForSmallDisplayCard[];
 }
 
@@ -25,8 +35,36 @@ export async function loader() {
   const steamAppsWherePostsExist = await findSteamAppsWherePostsExist();
   return json<LoaderData>({
     trendingSteamApps,
-    newPerformancePosts,
     steamAppsWherePostsExist,
+    newPerformancePosts: newPerformancePosts.map(({
+      id,
+      createdAt,
+      postText,
+      steamApp: {
+        steamAppId,
+        name,
+      },
+      ratingMedal,
+      steamUserId,
+      displayName,
+      avatarMedium,
+    }) => ({
+      postId: id,
+      createdAt,
+      postText,
+      steamApp: {
+        steamAppId,
+        name,
+      },
+      rating: {
+        ratingMedal,
+      },
+      userWhoCreatedPost: {
+        steamUserId,
+        displayName,
+        avatarMedium,
+      },
+    })),
   });
 }
 
@@ -67,23 +105,21 @@ export default function SteamAppIdIndexRoute() {
             <h2 className="text-secondary text-2xl">Top 15 New Posts</h2>
             <div className="w-full flex flex-col items-center gap-4">
               {newPerformancePosts.map(({
-                id,
-                steamAppId,
+                postId,
+                createdAt,
                 steamApp,
                 postText,
-                displayName,
-                avatarMedium,
-                ratingMedal,
+                userWhoCreatedPost,
+                rating,
               }) => (
-                <Fragment key={id}>
+                <Fragment key={postId}>
                   <NewPerformancePostCard
-                    steamAppId={steamAppId}
-                    postId={id}
+                    postId={postId}
+                    createdAt={new Date(createdAt)}
                     steamApp={steamApp}
                     postText={postText}
-                    displayName={displayName}
-                    avatarMedium={avatarMedium}
-                    ratingMedal={ratingMedal}
+                    userWhoCreatedPost={userWhoCreatedPost}
+                    rating={rating}
                   />
                 </Fragment>
               ))}

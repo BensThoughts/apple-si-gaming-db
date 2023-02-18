@@ -1,39 +1,30 @@
-import type { FrameRate, GamepadRating, RatingMedal } from '~/interfaces';
 import AppRatingOverview from './AppRatingOverview';
 import PerformancePostDisplay from './PerformancePostDisplay';
+import type {
+  PerformancePostBase,
+  PerformancePostSteamApp,
+  PerformancePostRating,
+  PerformancePostSystem,
+  PerformancePostUserWhoCreated,
+  PerformancePostTag,
+  PerformancePostLikes,
+} from '~/interfaces';
 
 type PerformancePostLayoutProps =
 {
-  isUserLoggedIn: boolean;
-  likedPerformancePostIds: string[];
-  performancePosts: {
-    id: string;
-    postText: string;
-    postTags: {
-      postTagId: number;
-      description: string;
-    }[],
-    gamepadMetadata: {
-      gamepadId: number;
-      description: string;
-    } | null,
-    gamepadRating: GamepadRating | null;
-    createdAt: Date;
-    numLikes: number;
-    ratingMedal: RatingMedal;
-    frameRateAverage?: FrameRate | null;
-    frameRateStutters?: boolean | null;
-    displayName?: string | null;
-    avatarMedium?: string | null;
-    systemManufacturer?: string | null;
-    systemModel?: string | null;
-    systemOsVersion?: string | null;
-    systemCpuBrand?: string | null;
-    systemVideoDriver?: string | null;
-    systemVideoDriverVersion?: string | null;
-    systemVideoPrimaryVRAM?: string | null;
-    systemMemoryRAM?: string | null;
-  }[];
+  userSession: {
+    isUserLoggedIn: boolean;
+    steamUserId?: string;
+    likedPerformancePostIds: string[];
+  };
+  performancePosts: (PerformancePostBase & {
+    steamApp: PerformancePostSteamApp;
+    rating: PerformancePostRating;
+    likes: PerformancePostLikes;
+    system: PerformancePostSystem;
+    userWhoCreatedPost: PerformancePostUserWhoCreated;
+    postTags: PerformancePostTag[];
+  })[];
 }
 
 function PostLayoutCard({ children }: { children: React.ReactNode }) {
@@ -48,8 +39,7 @@ function PostLayoutCard({ children }: { children: React.ReactNode }) {
 }
 
 export default function PerformancePostLayout({
-  isUserLoggedIn,
-  likedPerformancePostIds,
+  userSession,
   performancePosts,
 }: PerformancePostLayoutProps) {
   if (performancePosts.length < 1) {
@@ -65,57 +55,23 @@ export default function PerformancePostLayout({
 
   return (
     <div className="flex flex-col items-center justify-center gap-2">
-      <AppRatingOverview performancePosts={performancePosts} />
+      <AppRatingOverview performancePostRatings={performancePosts.map((post) => post.rating)} />
       <PostLayoutCard>
         <div className="flex flex-col gap-6 w-full">
-          {performancePosts.map(({
-            id,
-            createdAt,
-            numLikes,
-            displayName,
-            avatarMedium,
-            postText,
-            postTags,
-            gamepadMetadata,
-            gamepadRating,
-            ratingMedal,
-            frameRateAverage,
-            frameRateStutters,
-            systemManufacturer,
-            systemModel,
-            systemOsVersion,
-            systemCpuBrand,
-            systemVideoDriver,
-            systemVideoDriverVersion,
-            systemVideoPrimaryVRAM,
-            systemMemoryRAM,
-          }, idx) => {
-            const hasLoggedInUserLiked = likedPerformancePostIds.includes(id);
+          {performancePosts.map((performancePost, idx) => {
+            const hasLoggedInUserLiked =
+              userSession.likedPerformancePostIds.includes(performancePost.postId);
+            const didLoggedInUserCreatePost =
+              performancePost.userWhoCreatedPost?.steamUserId === userSession.steamUserId;
             return (
-              <div key={id} id={id} className="flex flex-col gap-6">
+              <div key={performancePost.postId} id={performancePost.postId} className="flex flex-col gap-6">
                 <PerformancePostDisplay
-                  postId={id}
-                  createdAt={createdAt}
-                  isUserLoggedIn={isUserLoggedIn}
-                  numLikes={numLikes}
-                  hasLoggedInUserLiked={hasLoggedInUserLiked}
-                  displayName={displayName}
-                  postText={postText}
-                  postTags={postTags}
-                  gamepadMetadata={gamepadMetadata}
-                  gamepadRating={gamepadRating}
-                  ratingMedal={ratingMedal}
-                  frameRateAverage={frameRateAverage}
-                  frameRateStutters={frameRateStutters}
-                  avatarMedium={avatarMedium}
-                  systemManufacturer={systemManufacturer}
-                  systemModel={systemModel}
-                  systemOsVersion={systemOsVersion}
-                  systemCpuBrand={systemCpuBrand}
-                  systemVideoDriver={systemVideoDriver}
-                  systemVideoDriverVersion={systemVideoDriverVersion}
-                  systemVideoPrimaryVRAM={systemVideoPrimaryVRAM}
-                  systemMemoryRAM={systemMemoryRAM}
+                  performancePost={performancePost}
+                  userSession={{
+                    isUserLoggedIn: userSession.isUserLoggedIn,
+                    hasLoggedInUserLiked,
+                    didLoggedInUserCreatePost,
+                  }}
                 />
                 {(performancePosts.length - 1 > idx) &&
                 <hr className="text-secondary" />

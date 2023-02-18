@@ -1,109 +1,114 @@
 import TextPill from '~/components/TextPill';
-import type { FrameRate, GamepadRating, RatingMedal } from '~/interfaces';
 import PerformancePostMetaBar from './PerformancePostMetaBar';
 import SystemSpecsPopover from './SystemSpecsPopover';
-import { convertGamepadRatingToDescription } from '~/lib/rating-conversions';
+import { convertGamepadRatingToDescription } from '~/lib/conversions/rating-conversions';
 import AvatarImage from '~/components/ImageWrappers/AvatarImage';
+import type {
+  PerformancePostBase,
+  PerformancePostRating,
+  PerformancePostSteamApp,
+  PerformancePostSystem,
+  PerformancePostUserWhoCreated,
+  PerformancePostTag,
+  PerformancePostLikes,
+} from '~/interfaces';
 
 type PerformancePostDisplayProps = {
-  postId: string;
-  postText: string;
-  postTags: {
-    postTagId: number;
-    description: string;
-  }[];
-  gamepadMetadata?: {
-    gamepadId: number;
-    description: string;
-  } | null;
-  gamepadRating?: GamepadRating | null;
-  createdAt: Date;
-  isUserLoggedIn: boolean;
-  numLikes: number;
-  hasLoggedInUserLiked: boolean;
-  ratingMedal: RatingMedal;
-  frameRateAverage?: FrameRate | null;
-  frameRateStutters?: boolean | null;
-  avatarMedium?: string | null;
-  displayName?: string | null;
-  systemManufacturer?: string | null;
-  systemModel?: string | null;
-  systemOsVersion?: string | null;
-  systemCpuBrand?: string | null;
-  systemVideoDriver?: string | null;
-  systemVideoDriverVersion?: string | null;
-  systemVideoPrimaryVRAM?: string | null;
-  systemMemoryRAM?: string | null;
+  performancePost: PerformancePostBase & {
+    steamApp: PerformancePostSteamApp;
+    rating: PerformancePostRating;
+    likes: PerformancePostLikes;
+    system: PerformancePostSystem;
+    userWhoCreatedPost: PerformancePostUserWhoCreated;
+    postTags: PerformancePostTag[];
+  };
+  userSession: {
+    isUserLoggedIn: boolean;
+    hasLoggedInUserLiked: boolean;
+    didLoggedInUserCreatePost: boolean;
+  }
 } & React.HTMLAttributes<HTMLDivElement>
 
 export default function PerformancePostDisplay({
-  postId,
-  createdAt,
-  displayName,
-  avatarMedium,
-  isUserLoggedIn,
-  numLikes,
-  hasLoggedInUserLiked,
-  postText,
-  postTags,
-  gamepadMetadata,
-  gamepadRating,
-  ratingMedal,
-  frameRateAverage,
-  frameRateStutters,
-  systemManufacturer,
-  systemModel,
-  systemOsVersion,
-  systemCpuBrand,
-  systemVideoDriver,
-  systemVideoDriverVersion,
-  systemVideoPrimaryVRAM,
-  systemMemoryRAM,
+  performancePost,
+  userSession,
   ...rest
 }: PerformancePostDisplayProps) {
   // const ratingNum = convertRatingMedalToNumber(ratingMedal);
+  const {
+    postId,
+    createdAt,
+    postText,
+    userWhoCreatedPost,
+    rating: {
+      ratingMedal,
+      frameRateAverage,
+      frameRateStutters,
+      gamepadRating,
+      gamepadMetadata,
+    },
+    likes: {
+      numLikes,
+    },
+    system,
+    postTags,
+    steamApp: {
+      steamAppId,
+    },
+  } = performancePost;
+  const {
+    isUserLoggedIn,
+    didLoggedInUserCreatePost,
+    hasLoggedInUserLiked,
+  } = userSession;
   return (
     <div className="flex flex-col w-full gap-3">
       <PerformancePostMetaBar
+        steamAppId={steamAppId}
+        postId={postId}
         createdAt={createdAt}
         ratingMedal={ratingMedal}
         frameRateAverage={frameRateAverage}
         frameRateStutters={frameRateStutters}
-        likeButtonData={{
-          postId,
-          numLikes,
+        userSession={{
           isUserLoggedIn,
+          didLoggedInUserCreatePost,
+        }}
+        likeButtonData={{
+          numLikes,
           hasLoggedInUserLiked,
         }}
       />
       <div className="flex flex-row w-full gap-[1px]" {...rest}>
         <div className="flex flex-col gap-1 items-center justify-start pr-3 border-r-2 border-r-secondary md:w-full md:max-w-[10rem]">
-          {avatarMedium && (
+          {userWhoCreatedPost.avatarMedium && (
             <div>
-              <AvatarImage avatarMedium={avatarMedium} />
+              <AvatarImage avatarMedium={userWhoCreatedPost.avatarMedium} />
             </div>
           )}
-          {displayName && <span className="text-sm">{displayName}</span>}
+          {userWhoCreatedPost.displayName && (
+            <span className="text-sm">{userWhoCreatedPost.displayName}</span>
+          )}
           {/* // ! Below Added to allow for no system specs on a post */}
           {(
-            systemManufacturer ||
-            systemModel ||
-            systemOsVersion ||
-            systemCpuBrand ||
-            systemVideoDriver ||
-            systemVideoDriverVersion ||
-            systemVideoPrimaryVRAM ||
-            systemMemoryRAM
+            system.manufacturer ||
+            system.model ||
+            system.osVersion ||
+            system.cpuBrand ||
+            system.videoDriver ||
+            system.videoDriverVersion ||
+            system.videoPrimaryVRAM ||
+            system.memoryRAM
           ) &&
             <SystemSpecsPopover
-              systemManufacturer={systemManufacturer}
-              systemModel={systemModel}
-              systemOsVersion={systemOsVersion}
-              systemCpuBrand={systemCpuBrand}
-              systemVideoDriver={systemVideoDriver}
-              systemVideoDriverVersion={systemVideoDriverVersion}
-              systemVideoPrimaryVRAM={systemVideoPrimaryVRAM}
-              systemMemoryRAM={systemMemoryRAM}
+              systemManufacturer={system.manufacturer}
+              systemModel={system.model}
+              systemOsVersion={system.osVersion}
+              systemCpuBrand={system.cpuBrand}
+              systemVideoDriver={system.videoDriver}
+              systemVideoDriverVersion={system.videoDriverVersion}
+              systemVideoPrimaryVRAM={system.videoPrimaryVRAM}
+              systemMemoryRAM={system.memoryRAM}
             >
               <span className="underline underline-offset-4 hover:text-icon-secondary
                                transition-colors duration-200 text-sm">
@@ -116,12 +121,16 @@ export default function PerformancePostDisplay({
             <div className="md:hidden flex flex-col whitespace-nowrap gap-1 w-full justify-start">
               {(gamepadMetadata && gamepadRating) &&
                 <div>
-                  <TextPill className="bg-primary hover:bg-primary-highlight">{`${gamepadMetadata.description}`}</TextPill>
+                  <TextPill className="bg-primary hover:bg-primary-highlight">
+                    {`${gamepadMetadata.description}`}
+                  </TextPill>
                 </div>
               }
               {postTags.map((tag) => (
                 <div key={tag.postTagId}>
-                  <TextPill className="hover:bg-tertiary-highlight">{tag.description}</TextPill>
+                  <TextPill className="hover:bg-tertiary-highlight">
+                    {tag.description}
+                  </TextPill>
                 </div>
               ))}
             </div>

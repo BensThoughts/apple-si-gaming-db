@@ -3,27 +3,21 @@ import { redirect, json } from '@remix-run/node';
 import UsersPostsLayout from '~/components/Profile/Posts/UsersPostsLayout';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import { findSteamUsersPerformancePosts } from '~/models/steamUser.server';
-import type { SteamPerformancePost, SteamApp } from '~/interfaces/database';
 import { useLoaderData } from '@remix-run/react';
 import { useSteamUserLikedPostIds } from '~/lib/hooks/useMatchesData';
+import type {
+  PerformancePostBase,
+  PerformancePostLikes,
+  PerformancePostRating,
+  PerformancePostSteamApp,
+} from '~/interfaces';
 
 interface ProfilePostsRouteLoaderData {
-  steamUsersPosts: {
-    _count: {
-      usersWhoLiked: number;
-    },
-    id: SteamPerformancePost['id'];
-    steamAppId: SteamPerformancePost['steamAppId'];
-    createdAt: SteamPerformancePost['createdAt'];
-    ratingMedal: SteamPerformancePost['ratingMedal'];
-    frameRateAverage: SteamPerformancePost['frameRateAverage'];
-    frameRateStutters: SteamPerformancePost['frameRateStutters'];
-    postText: SteamPerformancePost['postText'];
-    steamApp: {
-      name: SteamApp['name'];
-      headerImage: SteamApp['headerImage'];
-    }
-  }[]
+  steamUsersPosts: (PerformancePostBase & {
+    steamApp: PerformancePostSteamApp;
+    rating: PerformancePostRating;
+    likes: PerformancePostLikes;
+  })[]
 }
 
 export async function loader({ context }: LoaderArgs) {
@@ -32,14 +26,49 @@ export async function loader({ context }: LoaderArgs) {
   if (!steamUser) {
     return redirect('/profile');
   }
-  const steamUsersPosts = await findSteamUsersPerformancePosts(steamUser.steamUserId);
-  if (!steamUsersPosts) {
+  const prismaSteamUser = await findSteamUsersPerformancePosts(steamUser.steamUserId);
+  if (!prismaSteamUser) {
     return json<ProfilePostsRouteLoaderData>({
       steamUsersPosts: [],
     });
   }
+  const prismaPerformancePosts = prismaSteamUser.PerformancePosts;
+  const steamUsersPosts =
+    prismaPerformancePosts.map(({
+      id,
+      createdAt,
+      postText,
+      _count: {
+        usersWhoLiked,
+      },
+      ratingMedal,
+      frameRateAverage,
+      frameRateStutters,
+      steamApp: {
+        steamAppId,
+        name,
+        headerImage,
+      },
+    }) => ({
+      postId: id,
+      createdAt,
+      postText,
+      likes: {
+        numLikes: usersWhoLiked,
+      },
+      rating: {
+        ratingMedal,
+        frameRateAverage,
+        frameRateStutters,
+      },
+      steamApp: {
+        steamAppId,
+        name,
+        headerImage,
+      },
+    }));
   return json<ProfilePostsRouteLoaderData>({
-    steamUsersPosts: steamUsersPosts.PerformancePosts,
+    steamUsersPosts,
   });
 }
 
@@ -48,11 +77,9 @@ export default function ProfilePostsRoute() {
   const likedPerformancePostIds = useSteamUserLikedPostIds();
   return (
     <UsersPostsLayout
-      isUserLoggedIn={true}
-      likedPerformancePostIds={likedPerformancePostIds ? likedPerformancePostIds : []}
+      userSession={{ likedPerformancePostIds }}
       steamUsersPosts={steamUsersPosts.map((performancePost) => ({
         ...performancePost,
-        numLikes: performancePost._count.usersWhoLiked,
         createdAt: new Date(performancePost.createdAt),
       }))}
     />

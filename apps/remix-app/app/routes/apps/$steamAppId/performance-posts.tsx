@@ -5,24 +5,15 @@ import PerformancePostForm from '~/components/AppInfo/PerformancePosts/Performan
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 // import type { GamepadRating, RatingMedal, FrameRate } from '~/interfaces/database';
-import { createPerformancePost, findPerformancePostsBySteamAppId } from '~/models/steamPerformancePost.server';
+import { findPerformancePostsBySteamAppId } from '~/models/steamPerformancePost.server';
 import { findPostTags } from '~/models/postTag.server';
 import { doesSteamUserOwnApp } from '~/models/steamUser.server';
-import {
-  validatePostText,
-  isTypeFrameRateAverage,
-  validatePostFrameRateAverage,
-  isTypeRatingMedal,
-  validatePostRatingMedal,
-  validatePostTagIds,
-  validatePostGamepadId,
-  validateGamepadRating,
-  isTypeGamepadRating,
-} from '~/lib/form-validators/posts';
-import { validateSystemName } from '~/lib/form-validators/profile';
 import { validateSteamAppId } from '~/lib/loader-functions/params-validators.server';
 import { findAllGamepads } from '~/models/gamepadMetadata.server';
 import { useSteamUserLikedPostIds, useSteamUserSystemSpecs } from '~/lib/hooks/useMatchesData';
+import { createPerformancePostAction } from '~/lib/form-actions/performance-post/create-post.server';
+import { deletePerformancePostAction } from '~/lib/form-actions/performance-post/delete-post.server';
+import type { PerformancePostBase, PerformancePostLikes, PerformancePostRating, PerformancePostSteamApp, PerformancePostSystem, PerformancePostTag, PerformancePostUserWhoCreated } from '~/interfaces';
 
 // These are all possible tags that can be used when
 // creating a performance post
@@ -44,38 +35,83 @@ interface PerformancePostLoaderData {
     gamepads: UserSelectGamepad[];
   }
   steamAppId: number;
-  performancePosts: Awaited<ReturnType<typeof findPerformancePostsBySteamAppId>>;
-  // performancePosts: {
-  //   _count: {
-  //     usersWhoLiked: number;
-  //   },
-  //   id: string;
-  //   postText: string;
-  //   postTags: UserSelectPostTag[],
-  //   gamepadMetadata: UserSelectGamepad | null,
-  //   gamepadRating: GamepadRating | null,
-  //   createdAt: Date;
-  //   ratingMedal: RatingMedal;
-  //   frameRateAverage: FrameRate | null;
-  //   frameRateStutters: boolean | null;
-  //   displayName: string | null;
-  //   avatarMedium: string | null;
-  //   steamUserId: string;
-  //   systemManufacturer: string | null;
-  //   systemModel: string | null;
-  //   systemOsVersion: string | null;
-  //   systemCpuBrand: string | null;
-  //   systemVideoDriver: string | null;
-  //   systemVideoDriverVersion: string | null;
-  //   systemVideoPrimaryVRAM: string | null;
-  //   systemMemoryRAM: string | null;
-  // }[];
+  performancePosts: (PerformancePostBase & {
+    steamApp: PerformancePostSteamApp;
+    rating: PerformancePostRating;
+    likes: PerformancePostLikes;
+    userWhoCreatedPost: PerformancePostUserWhoCreated;
+    system: PerformancePostSystem;
+    postTags: PerformancePostTag[];
+  })[];
 }
 
 export async function loader({ params, context }: LoaderArgs) {
   const steamAppId = validateSteamAppId(params);
   const steamUser = extractAppLoadContext(context).steamUser;
-  const performancePosts = await findPerformancePostsBySteamAppId(steamAppId);
+  const performancePosts =
+    (await findPerformancePostsBySteamAppId(steamAppId))
+        .map(({
+          id,
+          steamUserId,
+          displayName,
+          avatarMedium,
+          createdAt,
+          postText,
+          _count: {
+            usersWhoLiked,
+          },
+          postTags,
+          ratingMedal,
+          frameRateAverage,
+          frameRateStutters,
+          gamepadRating,
+          gamepadMetadata,
+          steamApp: {
+            name,
+          },
+          systemManufacturer,
+          systemModel,
+          systemOsVersion,
+          systemCpuBrand,
+          systemVideoDriver,
+          systemVideoDriverVersion,
+          systemVideoPrimaryVRAM,
+          systemMemoryRAM,
+        }) => ({
+          postId: id,
+          createdAt,
+          userWhoCreatedPost: {
+            steamUserId,
+            displayName,
+            avatarMedium,
+          },
+          postText,
+          likes: {
+            numLikes: usersWhoLiked,
+          },
+          postTags,
+          rating: {
+            ratingMedal,
+            frameRateAverage,
+            frameRateStutters,
+            gamepadRating,
+            gamepadMetadata,
+          },
+          steamApp: {
+            steamAppId,
+            name,
+          },
+          system: {
+            manufacturer: systemManufacturer,
+            model: systemModel,
+            osVersion: systemOsVersion,
+            cpuBrand: systemCpuBrand,
+            videoDriver: systemVideoDriver,
+            videoDriverVersion: systemVideoDriverVersion,
+            videoPrimaryVRAM: systemVideoPrimaryVRAM,
+            memoryRAM: systemMemoryRAM,
+          },
+        }));
 
   let isLoggedIn = false;
   let steamUserId: string | undefined = undefined;
@@ -118,7 +154,12 @@ export type CreatePerformancePostActionData = {
   };
 };
 
-const badRequest = (data: CreatePerformancePostActionData) => json(data, { status: 400 });
+export type DeletePerformancePostActionData = {
+  formError?: string;
+  fields?: {
+    postId: string;
+  }
+}
 
 
 export async function action({
@@ -135,90 +176,25 @@ export async function action({
   const displayName = steamUser.displayName;
   const avatarMedium = steamUser.avatarMedium;
   const formData = await request.formData();
-  const postText = formData.get('performancePostText');
-  const frameRateAverage = formData.get('performancePostFrameRateAverage[value]');
-  const frameRateStutters = formData.get('performancePostFrameRateStutters');
-  const ratingMedal = formData.get('performancePostRatingMedal[value]');
-  const systemName = formData.get('performancePostSystemName[value]');
-  const postTagIdsData = formData.getAll('performancePostTags');
-  const gamepadIdData = formData.get('performancePostGamepadId');
-  const gamepadRating = formData.get('performancePostGamepadRating[value]');
+  const action = formData.get('_performancePostAction');
 
-  if (
-    typeof postText !== 'string' ||
-    typeof frameRateAverage !== 'string' ||
-    typeof ratingMedal !== 'string' ||
-    typeof systemName !== 'string' ||
-    typeof gamepadIdData !== 'string' ||
-    typeof gamepadRating !== 'string' ||
-    postTagIdsData.some((tagId) => typeof tagId !== 'string')
-  ) {
-    return badRequest({
-      formError: `Form not submitted correctly.`,
-    });
+  switch (action) {
+    case 'createPerformancePost': {
+      return createPerformancePostAction({
+        steamAppId,
+        steamUserId,
+        displayName,
+        avatarMedium,
+        formData,
+      });
+    }
+    case 'deletePerformancePost': {
+      return deletePerformancePostAction(steamUserId, steamAppId, formData);
+    }
+    default: {
+      throw new Error(`Unexpected action in /apps/${steamAppId}/performance-posts`);
+    }
   }
-
-
-  let postTagIds: number[] = [];
-  if (postTagIdsData[0] !== '') {
-    postTagIds = postTagIdsData.map((tagId) => Number(tagId.toString()));
-  }
-  const gamepadId = Number(gamepadIdData);
-
-  const fieldErrors = {
-    postText: validatePostText(postText),
-    ratingMedal: validatePostRatingMedal(ratingMedal),
-    gamepadId: validatePostGamepadId(gamepadId, gamepadRating),
-    gamepadRating: validateGamepadRating(gamepadRating, gamepadId),
-    postTags: validatePostTagIds(postTagIds),
-    frameRateAverage: validatePostFrameRateAverage(frameRateAverage),
-    systemName: validateSystemName(systemName),
-  };
-  const fields = {
-    postText,
-  };
-
-  if (Object.values(fieldErrors).some(Boolean)) {
-    return badRequest({ fieldErrors, fields });
-  }
-
-  // This should never return true (used for Typescript type validation)
-  if (
-    frameRateAverage !== 'None' &&
-    !isTypeFrameRateAverage(frameRateAverage)
-  ) {
-    return badRequest({ fieldErrors, fields });
-  }
-
-  // This should never return true (used for Typescript type validation)
-  if (!isTypeRatingMedal(ratingMedal)) {
-    return badRequest({ fieldErrors, fields });
-  }
-
-  // This should never return true (used for Typescript type validation)
-  if (
-    gamepadRating !== 'None' &&
-    !isTypeGamepadRating(gamepadRating)
-  ) {
-    return badRequest({ fieldErrors, fields });
-  }
-
-  await createPerformancePost({
-    steamUserId,
-    avatarMedium,
-    displayName,
-    steamAppId,
-    postText,
-    frameRateAverage: frameRateAverage === 'None' ? undefined : frameRateAverage,
-    frameRateStutters: frameRateStutters ? true : false,
-    ratingMedal,
-    systemName,
-    postTagIds,
-    gamepadId: gamepadId < 1 ? undefined : gamepadId,
-    gamepadRating: gamepadRating === 'None' ? undefined : gamepadRating,
-  });
-
-  return redirect(`/apps/${steamAppId}/performance-posts`);
 }
 
 
@@ -254,34 +230,14 @@ export default function PerformancePostsRoute() {
     <div className="flex flex-col gap-3">
       <div className="w-full">
         <PerformancePostLayout
-          currentUserSession={{
+          userSession={{
             isUserLoggedIn: isLoggedIn,
             steamUserId,
             likedPerformancePostIds,
           }}
           performancePosts={performancePosts.map((post) => ({
-            postId: post.id,
+            ...post,
             createdAt: new Date(post.createdAt),
-            postText: post.postText,
-            numLikes: post._count.usersWhoLiked,
-            postTags: post.postTags,
-            userWhoCreatedPost: {
-              steamUserId: post.steamUserId,
-              displayName: post.displayName,
-              avatarMedium: post.avatarMedium,
-            },
-            rating: {
-              ratingMedal: post.ratingMedal,
-              frameRateAverage: post.frameRateAverage,
-              frameRateStutters: post.frameRateStutters,
-              gamepadRating: post.gamepadRating,
-              gamepadMetadata: post.gamepadMetadata,
-            },
-            system: {
-              manufacturer: post.systemManufacturer,
-              model: post.systemModel,
-              osVersion: post.systemOsVersion,
-            },
           }))}
         />
       </div>

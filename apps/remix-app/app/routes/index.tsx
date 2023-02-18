@@ -5,7 +5,7 @@ import { findTrendingSteamApps } from '~/models/steamApp.server';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import TrendingSteamAppCard from '~/components/Cards/TrendingSteamAppCard';
 import { Fragment } from 'react';
-import type { TrendingSteamApp, PerformancePostBrief } from '~/interfaces';
+import type { TrendingSteamApp, PerformancePostBase, PerformancePostSteamApp, PerformancePostRating, PerformancePostUserWhoCreated } from '~/interfaces';
 import NewPerformancePostCard from '~/components/Cards/NewPerformancePostCard';
 import Card from '~/components/Cards/Card';
 import {
@@ -19,7 +19,11 @@ import {
 
 interface LoaderData {
   trendingSteamApps: TrendingSteamApp[];
-  newPerformancePosts: PerformancePostBrief[];
+  newPerformancePosts: (PerformancePostBase & {
+    steamApp: PerformancePostSteamApp;
+    rating: PerformancePostRating;
+    userWhoCreatedPost: PerformancePostUserWhoCreated;
+  })[];
 }
 
 export async function loader() {
@@ -29,7 +33,35 @@ export async function loader() {
   const newPerformancePosts = await findNewestPerformancePosts(NUM_RECENT_POSTS);
   return json<LoaderData>({
     trendingSteamApps,
-    newPerformancePosts,
+    newPerformancePosts: newPerformancePosts.map(({
+      id,
+      postText,
+      createdAt,
+      steamApp: {
+        steamAppId,
+        name,
+      },
+      ratingMedal,
+      steamUserId,
+      displayName,
+      avatarMedium,
+    }) => ({
+      postId: id,
+      createdAt,
+      postText,
+      steamApp: {
+        steamAppId,
+        name,
+      },
+      rating: {
+        ratingMedal,
+      },
+      userWhoCreatedPost: {
+        steamUserId,
+        displayName,
+        avatarMedium,
+      },
+    })),
   });
 }
 
@@ -76,23 +108,21 @@ export default function IndexRoute() {
             <h2 className="text-secondary text-2xl">New Posts</h2>
             <div className="w-full flex flex-col items-center gap-4">
               {newPerformancePosts.map(({
-                id,
-                steamAppId,
+                postId,
+                createdAt,
                 steamApp,
                 postText,
-                displayName,
-                avatarMedium,
-                ratingMedal,
+                rating,
+                userWhoCreatedPost,
               }) => (
-                <Fragment key={id}>
+                <Fragment key={postId}>
                   <NewPerformancePostCard
-                    steamAppId={steamAppId}
-                    postId={id}
+                    postId={postId}
+                    createdAt={new Date(createdAt)}
                     steamApp={steamApp}
                     postText={postText}
-                    displayName={displayName}
-                    avatarMedium={avatarMedium}
-                    ratingMedal={ratingMedal}
+                    rating={rating}
+                    userWhoCreatedPost={userWhoCreatedPost}
                   />
                 </Fragment>
               ))}
