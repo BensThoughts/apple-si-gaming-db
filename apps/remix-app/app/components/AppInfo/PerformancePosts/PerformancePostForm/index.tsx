@@ -14,7 +14,7 @@ import {
   steamAppRatingOptions,
   frameRateAverageOptions,
   gamepadRatingOptions,
-} from './formOptions';
+} from './ratingOptions';
 
 interface PerformancePostFormProps {
   steamAppId: number;
