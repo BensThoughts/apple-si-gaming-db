@@ -1,6 +1,6 @@
 export * from './AppLoadContext';
 export * from './PassportSteamUser';
-export * from './PerformancePostPartials';
+export * from './PerformancePost';
 export * from './SteamAppPartials';
 export * from './SystemSpec';
 
