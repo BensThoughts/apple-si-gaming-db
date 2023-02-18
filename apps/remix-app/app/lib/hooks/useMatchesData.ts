@@ -98,7 +98,10 @@ export function useBannerData() {
 export function useSteamUserLikedPostIds() {
   const prismaUserData = useRootPrismaLoaderData();
   if (!prismaUserData) {
-    return undefined;
+    return [];
+  }
+  if (!prismaUserData.likedPerformancePostIds) {
+    return [];
   }
   return prismaUserData.likedPerformancePostIds;
 }
