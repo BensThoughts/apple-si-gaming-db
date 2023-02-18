@@ -4,7 +4,7 @@ import MaterialInputOutlinedV2 from '~/components/FormComponents/MaterialInputOu
 // import MaterialInputOutlinedNew from '~/components/FormComponents/MaterialInputOutlinedNew';
 import RoundedButton from '~/components/RoundedButton';
 import { validateNewSystemName } from '~/lib/form-validators/profile';
-import SystemModal from './SystemModal';
+import BasicModal from '~/components/BasicModal';
 
 interface EditSystemModalProps {
   systemName: string,
@@ -38,7 +38,7 @@ export default function EditSystemModal({
   }
 
   return (
-    <SystemModal
+    <BasicModal
       isOpen={isOpen}
       onClose={() => {
         setSystemNameValue('');
@@ -108,6 +108,6 @@ export default function EditSystemModal({
 
         </Form>
       </div>
-    </SystemModal>
+    </BasicModal>
   );
 }

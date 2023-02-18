@@ -1,7 +1,7 @@
 import { Form, useSubmit } from '@remix-run/react';
 import React from 'react';
 import RoundedButton from '~/components/RoundedButton';
-import SystemModal from './SystemModal';
+import BasicModal from '~/components/BasicModal';
 
 interface DeleteSystemModalProps {
   systemName: string,
@@ -27,7 +27,7 @@ export default function DeleteSystemModal({
   }
 
   return (
-    <SystemModal
+    <BasicModal
       isOpen={isOpen}
       onClose={() => {
         setIsOpen(false);
@@ -63,6 +63,6 @@ export default function DeleteSystemModal({
           </Form>
         </div>
       </div>
-    </SystemModal>
+    </BasicModal>
   );
 }
