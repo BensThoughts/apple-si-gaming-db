@@ -14,7 +14,7 @@ import {
   convertFrameRateToDescription,
   convertRatingMedalToFullText,
   convertGamepadRatingToFullText,
-} from '~/lib/rating-conversions';
+} from '~/lib/conversions/rating-conversions';
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
 
 const steamAppRatingOptions: SelectOption<RatingMedal | 'None'>[] = [
@@ -225,7 +225,7 @@ export default function PerformancePostForm({
         className="flex flex-col items-center gap-8 w-full max-w-lg"
         action={`/apps/${steamAppId}/performance-posts`}
       >
-        <input type="hidden" name="_performancePostAction" value="createPost" />
+        <input type="hidden" name="_performancePostAction" value="createPerformancePost" />
         <TextArea
           id="performancePostText"
           name="performancePostText"
