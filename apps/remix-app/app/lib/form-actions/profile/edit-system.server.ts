@@ -1,5 +1,5 @@
 import { json, redirect } from '@remix-run/node';
-import type { SteamUserSystemSpecs } from '~/interfaces/database';
+import type { PrismaSteamUserSystemSpecs } from '~/interfaces/database';
 import { findSystemSpecSystemNames, updateSteamUserSystemSpecSystemName } from '~/models/steamUserSystemSpecs.server';
 import type { EditSystemSpecActionData, ProfileSystemsActionData } from '~/routes/profile/systems';
 import { validateNewSystemName, validateSystemName } from '~/lib/form-validators/profile';
@@ -13,7 +13,7 @@ const badRequest = (data: EditSystemSpecActionData) => (
 );
 
 export async function editSystem(
-    steamUserId: SteamUserSystemSpecs['steamUserId'],
+    steamUserId: PrismaSteamUserSystemSpecs['steamUserId'],
     formData: FormData,
 ) {
   const systemName = formData.get('systemName');

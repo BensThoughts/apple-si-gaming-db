@@ -1,10 +1,10 @@
-import type { SteamUserSystemSpecs } from '~/interfaces/database';
+import type { PrismaSteamUserSystemSpecs } from '~/interfaces/database';
 import type { SystemSpec } from '~/interfaces';
 import prisma from '~/lib/database/db.server';
 
 export async function createSystemSpecs(
-    steamUserId: SteamUserSystemSpecs['steamUserId'],
-    systemName: SteamUserSystemSpecs['systemName'],
+    steamUserId: PrismaSteamUserSystemSpecs['steamUserId'],
+    systemName: PrismaSteamUserSystemSpecs['systemName'],
     systemSpec: SystemSpec,
 ) {
   // TODO: We know computerInformation, processorInformation, etc.
@@ -72,8 +72,8 @@ export async function createSystemSpecs(
 }
 
 export async function deleteSystemSpecs(
-    steamUserId: SteamUserSystemSpecs['steamUserId'],
-    systemName: SteamUserSystemSpecs['systemName'],
+    steamUserId: PrismaSteamUserSystemSpecs['steamUserId'],
+    systemName: PrismaSteamUserSystemSpecs['systemName'],
 ) {
   return prisma.steamUserSystemSpecs.deleteMany({
     where: {
@@ -88,7 +88,7 @@ export async function deleteSystemSpecs(
 }
 
 export async function findSystemSpecSystemNames(
-    steamUserId: SteamUserSystemSpecs['steamUserId'],
+    steamUserId: PrismaSteamUserSystemSpecs['steamUserId'],
 ) {
   const sysSpecs = await prisma.steamUser.findUnique({
     where: {
@@ -109,9 +109,9 @@ export async function findSystemSpecSystemNames(
 }
 
 export async function updateSteamUserSystemSpecSystemName(
-    steamUserId: SteamUserSystemSpecs['steamUserId'],
-    systemName: SteamUserSystemSpecs['systemName'],
-    updatedSystemName: SteamUserSystemSpecs['systemName'],
+    steamUserId: PrismaSteamUserSystemSpecs['steamUserId'],
+    systemName: PrismaSteamUserSystemSpecs['systemName'],
+    updatedSystemName: PrismaSteamUserSystemSpecs['systemName'],
 ) {
   return prisma.steamUserSystemSpecs.update({
     where: {
@@ -127,8 +127,8 @@ export async function updateSteamUserSystemSpecSystemName(
 }
 
 export async function findUniqueSystemSpecForPost(
-    steamUserId: SteamUserSystemSpecs['steamUserId'],
-    systemName: SteamUserSystemSpecs['systemName'],
+    steamUserId: PrismaSteamUserSystemSpecs['steamUserId'],
+    systemName: PrismaSteamUserSystemSpecs['systemName'],
 ) {
   return prisma.steamUserSystemSpecs.findUnique({
     where: {

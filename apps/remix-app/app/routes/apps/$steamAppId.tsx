@@ -11,7 +11,7 @@ import {
   updateSteamApp,
   convertSteamApiDataToPrisma,
 } from '~/models/steamApp.server';
-import type { SteamCategory, SteamGenre } from '~/interfaces/database';
+import type { PrismaSteamCategory, PrismaSteamGenre } from '~/interfaces/database';
 
 import AppInfoTags from '~/components/AppInfo/AppInfoTags';
 // import LoadingComponent from '~/components/LoadingComponent';
@@ -35,8 +35,8 @@ interface LoaderData {
     pcRequirementsMinimum: string | null;
     macRequirementsMinimum: string | null;
     linuxRequirementsMinimum: string | null;
-    genres: SteamGenre[];
-    categories: SteamCategory[];
+    genres: PrismaSteamGenre[];
+    categories: PrismaSteamCategory[];
   };
 }
 

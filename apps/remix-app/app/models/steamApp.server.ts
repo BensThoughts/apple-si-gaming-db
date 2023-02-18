@@ -6,9 +6,9 @@ import {
 
 import type {
   Prisma,
-  SteamApp,
-  SteamGenre,
-  SteamCategory,
+  PrismaSteamApp,
+  PrismaSteamGenre,
+  PrismaSteamCategory,
 } from '~/interfaces/database';
 import type { TrendingSteamApp } from '~/interfaces';
 
@@ -28,7 +28,7 @@ export {
  * @return {Promise<number[]>}
  */
 export async function filterAppIdsExistInDatabase(
-    steamAppIds: SteamApp['steamAppId'][],
+    steamAppIds: PrismaSteamApp['steamAppId'][],
 ) {
   const steamAppIdsInDB = await prisma.steamApp.findMany({
     where: {
@@ -42,7 +42,7 @@ export async function filterAppIdsExistInDatabase(
 }
 
 export async function findSteamAppByAppId(
-    steamAppId: SteamApp['steamAppId'],
+    steamAppId: PrismaSteamApp['steamAppId'],
 ) {
   return prisma.steamApp.findUnique({
     where: {
@@ -72,13 +72,13 @@ export async function findSteamAppByAppId(
 
 
 interface SearchReleasedSteamAppsByNameProps {
-  searchQuery: SteamApp['name'];
+  searchQuery: PrismaSteamApp['name'];
   skip: number;
   take: number;
   whereOptions?: {
-    platformMac?: SteamApp['platformMac'];
-    genreIds?: SteamGenre['genreId'][];
-    categoryIds?: SteamCategory['categoryId'][];
+    platformMac?: PrismaSteamApp['platformMac'];
+    genreIds?: PrismaSteamGenre['genreId'][];
+    categoryIds?: PrismaSteamCategory['categoryId'][];
   },
 }
 

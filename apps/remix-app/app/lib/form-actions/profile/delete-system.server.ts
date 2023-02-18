@@ -1,4 +1,4 @@
-import type { SteamUserSystemSpecs } from '~/interfaces/database';
+import type { PrismaSteamUserSystemSpecs } from '~/interfaces/database';
 import { json, redirect } from '@remix-run/node';
 import { deleteSystemSpecs } from '~/models/steamUserSystemSpecs.server';
 import type { DeleteSystemSpecActionData, ProfileSystemsActionData } from '~/routes/profile/systems';
@@ -13,7 +13,7 @@ const badRequest = (data: DeleteSystemSpecActionData) => (
 );
 
 export async function deleteSystem(
-    steamUserId: SteamUserSystemSpecs['steamUserId'],
+    steamUserId: PrismaSteamUserSystemSpecs['steamUserId'],
     formData: FormData,
 ) {
   const systemName = formData.get('systemName');

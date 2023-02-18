@@ -1,7 +1,7 @@
 import type {
   Prisma,
-  SteamApp,
-  SteamUser,
+  PrismaSteamApp,
+  PrismaSteamUser,
 } from '~/interfaces/database';
 
 import type { PassportSteamUser } from '~/interfaces';
@@ -11,7 +11,7 @@ import { getSteamPlayerOwnedGamesRequest } from '@apple-si-gaming-db/steam-api';
 import { filterAppIdsExistInDatabase } from './steamApp.server';
 
 export async function findSteamUserSystemsByUserId(
-    steamUserId: SteamUser['steamUserId'],
+    steamUserId: PrismaSteamUser['steamUserId'],
 ) {
   const steamUserSystems = await prisma.steamUser.findUnique({
     where: {
@@ -37,7 +37,7 @@ export async function findSteamUserSystemsByUserId(
 }
 
 export async function findSteamUserSystemNamesByUserId(
-    steamUserId: SteamUser['steamUserId'],
+    steamUserId: PrismaSteamUser['steamUserId'],
 ) {
   const user = await prisma.steamUser.findUnique({
     where: {
@@ -86,7 +86,7 @@ export function convertPassportSteamUserToPrismaSteamUser(
 }
 
 export async function doesSteamUserExist(
-    steamUserId: SteamUser['steamUserId'],
+    steamUserId:PrismaSteamUser['steamUserId'],
 ) {
   const steamUser = await prisma.steamUser.count({
     where: {
@@ -97,7 +97,7 @@ export async function doesSteamUserExist(
 }
 
 export async function updateUserOwnedApps(
-    steamUserId: SteamUser['steamUserId'],
+    steamUserId: PrismaSteamUser['steamUserId'],
 ) {
   const { games } = await getSteamPlayerOwnedGamesRequest(steamUserId);
   if (games) {
@@ -108,8 +108,8 @@ export async function updateUserOwnedApps(
 }
 
 export async function updateUserOwnedAppsInDatabase(
-    steamAppIds: SteamApp['steamAppId'][],
-    steamUserId: SteamUser['steamUserId'],
+    steamAppIds: PrismaSteamApp['steamAppId'][],
+    steamUserId: PrismaSteamUser['steamUserId'],
 ) {
   return prisma.steamUser.update({
     where: {
@@ -126,8 +126,8 @@ export async function updateUserOwnedAppsInDatabase(
 }
 
 export async function doesSteamUserOwnApp(
-    steamUserId: SteamUser['steamUserId'],
-    steamAppId: SteamApp['steamAppId'],
+    steamUserId: PrismaSteamUser['steamUserId'],
+    steamAppId: PrismaSteamApp['steamAppId'],
 ) {
   // const testCount = await prisma.steamUser.count({
   //   where: {
@@ -160,7 +160,7 @@ export async function doesSteamUserOwnApp(
   return steamUser.ownedApps.map((app) => app.steamAppId).includes(steamAppId);
 }
 
-export async function findUserProfileData(steamUserId: SteamUser['steamUserId']) {
+export async function findUserProfileData(steamUserId: PrismaSteamUser['steamUserId']) {
   return prisma.steamUser.findUnique({
     where: {
       steamUserId,
@@ -213,7 +213,7 @@ export async function findUserProfileData(steamUserId: SteamUser['steamUserId'])
 }
 
 export async function findSteamUsersPerformancePosts(
-    steamUserId: SteamUser['steamUserId'],
+    steamUserId: PrismaSteamUser['steamUserId'],
 ) {
   return prisma.steamUser.findUnique({
     where: {
@@ -226,8 +226,8 @@ export async function findSteamUsersPerformancePosts(
         },
         select: {
           id: true,
-          steamAppId: true,
           createdAt: true,
+          postText: true,
           _count: {
             select: {
               usersWhoLiked: true,
@@ -235,10 +235,10 @@ export async function findSteamUsersPerformancePosts(
           },
           frameRateAverage: true,
           frameRateStutters: true,
-          postText: true,
           ratingMedal: true,
           steamApp: {
             select: {
+              steamAppId: true,
               headerImage: true,
               name: true,
             },
@@ -265,7 +265,6 @@ export async function findSteamUserLikedPosts(
           steamPerformancePost: {
             select: {
               id: true,
-              steamAppId: true,
               createdAt: true,
               _count: {
                 select: {
@@ -278,6 +277,7 @@ export async function findSteamUserLikedPosts(
               ratingMedal: true,
               steamApp: {
                 select: {
+                  steamAppId: true,
                   name: true,
                   headerImage: true,
                 },

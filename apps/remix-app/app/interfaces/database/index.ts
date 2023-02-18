@@ -1,21 +1,21 @@
 export type {
   Prisma,
-  SteamApp,
-  SteamGenre,
-  SteamCategory,
+  SteamApp as PrismaSteamApp,
+  SteamGenre as PrismaSteamGenre,
+  SteamCategory as PrismaSteamCategory,
 
-  SteamUser,
-  SteamUserSystemSpecs,
-  SiteAchievement,
-  SiteUserStats,
+  SteamUser as PrismaSteamUser,
+  SteamUserSystemSpecs as PrismaSteamUserSystemSpecs,
+  SiteAchievement as PrismaSiteAchievement,
+  SiteUserStats as PrismaSiteUserStats,
 
   // SteamPerformancePost,
-  SteamPerformancePost,
+  SteamPerformancePost as PrismaSteamPerformancePost,
   RatingMedal,
   FrameRate,
 
-  GamepadMetadata,
+  GamepadMetadata as PrismaGamepadMetadata,
   GamepadRating,
 
-  PostTag,
+  PostTag as PrismaPostTag,
 } from '@apple-si-gaming-db/database';
