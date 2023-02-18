@@ -1,30 +1,36 @@
 import LikeButton from '~/components/LikeButton';
 import type { FrameRate, RatingMedal } from '~/interfaces';
-import { convertFrameRateToDescription, convertRatingMedalToDescription } from '~/lib/rating-conversions';
+import { convertFrameRateToDescription, convertRatingMedalToDescription } from '~/lib/conversions/rating-conversions';
+import EditAndDeleteButtons from './EditAndDeleteButtons';
 
 interface PerformancePostMetaBarProps {
+  steamAppId: number;
+  postId: string;
   createdAt: Date;
   ratingMedal: RatingMedal;
   frameRateAverage?: FrameRate | null;
   frameRateStutters?: boolean | null;
+  userSession: {
+    isUserLoggedIn: boolean;
+    didLoggedInUserCreatePost: boolean;
+  };
   likeButtonData: {
     numLikes: number;
-    postId: string;
-    isUserLoggedIn: boolean;
     hasLoggedInUserLiked: boolean;
   }
 }
 
 export default function PerformancePostMetaBar({
+  steamAppId,
+  postId,
   createdAt,
+  userSession = { isUserLoggedIn: false, didLoggedInUserCreatePost: false },
   ratingMedal,
   frameRateAverage,
   frameRateStutters,
   likeButtonData,
 }: PerformancePostMetaBarProps) {
   const {
-    postId,
-    isUserLoggedIn,
     hasLoggedInUserLiked,
     numLikes,
   } = likeButtonData;
@@ -32,13 +38,13 @@ export default function PerformancePostMetaBar({
     <div className="@container">
       <div className="flex flex-col gap-1 items-start justify-between text-sm px-3 py-1
                       rounded-sm bg-primary w-full text-primary-faded
-                      @[600px]:gap-0 @[600px]:flex-row @[600px]:items-center
+                      @[650px]:gap-0 @[650px]:flex-row @[650px]:items-center
                       supports-[not(container-type:inline-size)]:postMetaBarQuery:gap-0
                       supports-[not(container-type:inline-size)]:postMetaBarQuery:flex-row
                       supports-[not(container-type:inline-size)]:postMetaBarQuery:items-center"
       >
         <div className="flex flex-col gap-2 items-start justify-center
-                        @[600px]:items-center @[600px]:flex-row @[600px]:gap-3
+                        @[650px]:items-center @[650px]:flex-row @[650px]:gap-3
                         supports-[not(container-type:inline-size)]:postMetaBarQuery:gap-3
                         supports-[not(container-type:inline-size)]:postMetaBarQuery:flex-row
                         supports-[not(container-type:inline-size)]:postMetaBarQuery:items-center"
@@ -50,7 +56,7 @@ export default function PerformancePostMetaBar({
           <LikeButton
             postId={postId}
             numLikes={numLikes}
-            isUserLoggedIn={isUserLoggedIn}
+            isUserLoggedIn={userSession.isUserLoggedIn}
             hasLoggedInUserLiked={hasLoggedInUserLiked}
           />
           {/* </Form> */}
@@ -74,7 +80,14 @@ export default function PerformancePostMetaBar({
             </span>}
             </div>
           </div>
+          {userSession.didLoggedInUserCreatePost && (
+            <EditAndDeleteButtons
+              steamAppId={steamAppId}
+              postId={postId}
+            />
+          )}
         </div>
+
 
         <i className="italic">
           {createdAt.toDateString()}
