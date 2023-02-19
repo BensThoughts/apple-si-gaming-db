@@ -202,6 +202,7 @@ export async function findPerformancePostsBySteamAppId(
       steamApp: {
         select: {
           name: true,
+          steamAppId: true,
         },
       },
       steamUserId: true,
@@ -275,6 +276,76 @@ export async function deletePerformancePost(postId: PrismaSteamPerformancePost['
   });
 }
 
+export async function updatePerformancePost({
+  steamUserId,
+  postId,
+  postText,
+  frameRateAverage,
+  frameRateStutters,
+  ratingMedal,
+  systemName,
+  postTagIds,
+  gamepadId,
+  gamepadRating,
+}: {
+  steamUserId: PrismaSteamPerformancePost['steamUserId'];
+  postId: PrismaSteamPerformancePost['id'];
+  postText: PrismaSteamPerformancePost['postText'];
+  frameRateAverage?: FrameRate;
+  frameRateStutters: boolean;
+  ratingMedal: PrismaSteamPerformancePost['ratingMedal'];
+  systemName: PrismaSteamUserSystemSpecs['systemName'];
+  postTagIds: PrismaPostTag['postTagId'][];
+  gamepadId?: PrismaGamepadMetadata['gamepadId'];
+  gamepadRating?: GamepadRating;
+}) {
+  const performancePostData: Prisma.SteamPerformancePostUpdateInput = {
+    postText,
+    frameRateAverage,
+    frameRateStutters,
+    ratingMedal,
+    gamepadMetadata: gamepadId ? {
+      connect: {
+        gamepadId,
+      },
+    } : undefined,
+    gamepadRating,
+    postTags: {
+      connect: postTagIds.map((postTagId) => ({
+        postTagId,
+      })),
+    },
+  };
+
+  const systemSpecs = await findUniqueSystemSpecForPost(steamUserId, systemName);
+
+  if (!systemSpecs) {
+    return prisma.steamPerformancePost.update({
+      where: {
+        id: postId,
+      },
+      data: performancePostData,
+    });
+  }
+
+  return prisma.steamPerformancePost.update({
+    where: {
+      id: postId,
+    },
+    data: {
+      ...performancePostData,
+      systemManufacturer: systemSpecs.manufacturer,
+      systemModel: systemSpecs.model,
+      systemOsVersion: systemSpecs.osVersion,
+      systemCpuBrand: systemSpecs.cpuBrand,
+      systemVideoDriver: systemSpecs.videoDriver,
+      systemVideoDriverVersion: systemSpecs.videoDriverVersion,
+      systemVideoPrimaryVRAM: systemSpecs.videoPrimaryVRAM,
+      systemMemoryRAM: systemSpecs.memoryRAM,
+    },
+  });
+}
+
 export async function findPerformancePostByPostId(
     postId: string,
 ) {
@@ -283,20 +354,18 @@ export async function findPerformancePostByPostId(
       id: postId,
     },
     select: {
-      postText: true,
+      _count: {
+        select: {
+          usersWhoLiked: true,
+        },
+      },
+      id: true,
       createdAt: true,
-      postTags: {
-        select: {
-          postTagId: true,
-          description: true,
-        },
-      },
-      steamApp: {
-        select: {
-          steamAppId: true,
-          name: true,
-        },
-      },
+      steamUserId: true,
+      avatarMedium: true,
+      displayName: true,
+      frameRateAverage: true,
+      frameRateStutters: true,
       gamepadMetadata: {
         select: {
           gamepadId: true,
@@ -304,9 +373,28 @@ export async function findPerformancePostByPostId(
         },
       },
       gamepadRating: true,
+      postText: true,
+      postTags: {
+        select: {
+          postTagId: true,
+          description: true,
+        },
+      },
       ratingMedal: true,
-      frameRateAverage: true,
-      frameRateStutters: true,
+      steamApp: {
+        select: {
+          name: true,
+          steamAppId: true,
+        },
+      },
+      systemManufacturer: true,
+      systemModel: true,
+      systemOsVersion: true,
+      systemCpuBrand: true,
+      systemVideoDriver: true,
+      systemVideoDriverVersion: true,
+      systemVideoPrimaryVRAM: true,
+      systemMemoryRAM: true,
     },
   });
 }
