@@ -86,14 +86,14 @@ export default function SteamAppIdIndexRoute() {
                 steamAppId,
                 name,
                 headerImage,
-                _count,
+                numPerformancePosts,
               }) => (
                 <Fragment key={steamAppId}>
                   <TrendingSteamAppCard
                     steamAppId={steamAppId}
                     name={name}
                     headerImage={headerImage}
-                    numNewPerformancePosts={_count.performancePosts}
+                    numPerformancePosts={numPerformancePosts}
                   />
                 </Fragment>
               ))}

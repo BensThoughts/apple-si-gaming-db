@@ -5,7 +5,13 @@ import { findTrendingSteamApps } from '~/models/steamApp.server';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import TrendingSteamAppCard from '~/components/Cards/TrendingSteamAppCard';
 import { Fragment } from 'react';
-import type { TrendingSteamApp, PerformancePostBase, PerformancePostSteamApp, PerformancePostRating, PerformancePostUserWhoCreated } from '~/interfaces';
+import type {
+  TrendingSteamApp,
+  PerformancePostBase,
+  PerformancePostSteamApp,
+  PerformancePostRating,
+  PerformancePostUserWhoCreated,
+} from '~/interfaces';
 import NewPerformancePostCard from '~/components/Cards/NewPerformancePostCard';
 import Card from '~/components/Cards/Card';
 import {
@@ -137,14 +143,14 @@ export default function IndexRoute() {
                 steamAppId,
                 name,
                 headerImage,
-                _count,
+                numPerformancePosts,
               }) => (
                 <Fragment key={steamAppId}>
                   <TrendingSteamAppCard
                     steamAppId={steamAppId}
                     name={name}
                     headerImage={headerImage}
-                    numNewPerformancePosts={_count.performancePosts}
+                    numPerformancePosts={numPerformancePosts}
                   />
                 </Fragment>
               ))}

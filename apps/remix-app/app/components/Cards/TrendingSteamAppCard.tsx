@@ -1,18 +1,14 @@
 import { Link } from '@remix-run/react';
+import type { TrendingSteamApp } from '~/interfaces';
 import AppHeaderImage from '../ImageWrappers/AppHeaderImage';
 
-interface TrendingSteamAppProps {
-  steamAppId: number;
-  name: string;
-  headerImage: string | null;
-  numNewPerformancePosts: number;
-}
+type TrendingSteamAppProps = TrendingSteamApp;
 
 export default function TrendingSteamAppCard({
   steamAppId,
   name,
   headerImage, // 460W x 215H
-  numNewPerformancePosts,
+  numPerformancePosts,
 }: TrendingSteamAppProps) {
   return (
     <Link
@@ -33,7 +29,7 @@ export default function TrendingSteamAppCard({
         </div>
         <div className="text-center md:text-right justify-self-end">
           <span className="text-primary-highlight font-semibold">
-            {numNewPerformancePosts}
+            {numPerformancePosts}
           </span>
           <span className="text-primary-faded text-sm italic">
             {` `}New Posts

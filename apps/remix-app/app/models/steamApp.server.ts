@@ -178,7 +178,7 @@ export async function searchReleasedSteamAppsByName(
 export async function findTrendingSteamApps(
     numTrendingApps: number,
 ): Promise<TrendingSteamApp[]> {
-  return prisma.steamApp.findMany({
+  const trendingSteamApps = await prisma.steamApp.findMany({
     where: {
       performancePosts: {
         some: {},
@@ -201,6 +201,19 @@ export async function findTrendingSteamApps(
     },
     take: numTrendingApps,
   });
+  return trendingSteamApps.map(({
+    steamAppId,
+    name,
+    headerImage,
+    _count: {
+      performancePosts,
+    },
+  }) => ({
+    steamAppId,
+    name,
+    headerImage,
+    numPerformancePosts: performancePosts,
+  }));
 }
 
 export function findSteamAppsWherePostsExist() {
