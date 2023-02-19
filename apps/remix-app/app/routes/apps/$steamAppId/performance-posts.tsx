@@ -17,14 +17,12 @@ import CreatePerformancePostForm from '~/components/AppInfo/PerformancePosts/Per
 import type { PostTagOption, GamepadOption } from '~/interfaces';
 
 interface PerformancePostLoaderData {
-  steamUserData: {
+  steamAppId: number;
+  userSession: {
     isLoggedIn: boolean;
     steamUserId?: string;
     ownsApp: boolean;
-    postTagOptions: PostTagOption[];
-    gamepadOptions: GamepadOption[];
-  }
-  steamAppId: number;
+  };
   performancePosts: (PerformancePostBase & {
     steamApp: PerformancePostSteamApp;
     rating: PerformancePostRating;
@@ -33,6 +31,8 @@ interface PerformancePostLoaderData {
     system: PerformancePostSystem;
     postTags: PerformancePostTag[];
   })[];
+  postTagOptions: PostTagOption[];
+  gamepadOptions: GamepadOption[];
 }
 
 export async function loader({ params, context }: LoaderArgs) {
@@ -116,15 +116,15 @@ export async function loader({ params, context }: LoaderArgs) {
     gamepadOptions = await findAllGamepads();
   }
   return json<PerformancePostLoaderData>({
-    steamUserData: {
+    steamAppId,
+    userSession: {
       isLoggedIn,
       steamUserId,
       ownsApp,
-      postTagOptions,
-      gamepadOptions,
     },
-    steamAppId,
     performancePosts,
+    postTagOptions,
+    gamepadOptions,
   });
 }
 
@@ -190,17 +190,17 @@ export async function action({
 
 export default function PerformancePostsRoute() {
   const {
-    steamUserData,
+    userSession,
     steamAppId,
     performancePosts,
+    postTagOptions,
+    gamepadOptions,
   } = useLoaderData<PerformancePostLoaderData>();
   const {
     isLoggedIn,
     steamUserId,
     ownsApp,
-    postTagOptions,
-    gamepadOptions,
-  } = steamUserData;
+  } = userSession;
   const systemSpecs = useSteamUserSystemSpecs();
   const likedPerformancePostIds = useSteamUserLikedPostIds();
 
