@@ -1,3 +1,4 @@
+import { Link } from '@remix-run/react';
 import { useState } from 'react';
 import { EditIcon, TrashIcon } from '~/components/Icons';
 import DeletePostModal from './DeletePostModal';
@@ -22,12 +23,12 @@ export default function EditAndDeleteButtons({
         isOpen={isDeleteModalOpen}
         setIsOpen={setDeleteModalIsOpen}
       />
-      <button
-        onClick={() => setDeleteModalIsOpen(true)}
+      <Link
+        to={`/apps/${steamAppId}/performance-posts/edit/${postId}`}
         className="hover:text-primary-highlight"
       >
         <EditIcon />
-      </button>
+      </Link>
       <div className="border-l-2 border-secondary-highlight border-solid" />
       <button
         onClick={() => setDeleteModalIsOpen(true)}
