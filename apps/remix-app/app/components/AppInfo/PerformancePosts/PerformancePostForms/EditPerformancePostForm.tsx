@@ -7,13 +7,14 @@ import RemixUnderlineLink from '~/components/RemixUnderlineLink';
 import type { FrameRate, RatingMedal, GamepadRating } from '~/interfaces';
 import PerformancePostFormWrapper from './PerformancePostFormWrapper';
 import BasePerformancePostFormFields from './BasePerformancePostFormFields';
+import RemixRoundedLink from '~/components/RemixRoundedLink';
 
 interface EditPerformancePostFormProps {
   postId: string;
   steamAppId: number;
   steamUserSession: {
     isLoggedIn: boolean;
-    ownsApp: boolean;
+    loggedInUserCreatedPost: boolean;
     systemNames: string[];
   }
   fields?: { // used for defaultValue options
@@ -60,7 +61,7 @@ export default function EditPerformancePostForm({
 }: EditPerformancePostFormProps) {
   const {
     isLoggedIn,
-    ownsApp,
+    loggedInUserCreatedPost,
     systemNames,
   } = steamUserSession;
 
@@ -86,18 +87,18 @@ export default function EditPerformancePostForm({
           <RemixUnderlineLink to="/profile">
             login
           </RemixUnderlineLink>
-          &nbsp;to post a performance review for this app.
+          &nbsp;to edit a performance review.
         </div>
       </PerformancePostFormWrapper>
     );
   }
 
-  if (!ownsApp) {
+  if (!loggedInUserCreatedPost) {
     return (
       <PerformancePostFormWrapper>
         <div className="w-full">
-          It looks like you do not own this app yet. Please add it to your steam library to leave a
-          performance review.
+          It looks like you did not create this post. You must be the creator of a post to
+          edit it.
         </div>
       </PerformancePostFormWrapper>
     );
@@ -127,7 +128,8 @@ export default function EditPerformancePostForm({
         className="flex flex-col items-center gap-8 w-full max-w-lg"
         action={`/apps/${steamAppId}/performance-posts/edit/${postId}`}
       >
-        <input type="hidden" name="_performancePostAction" value="createPerformancePost" />
+        <input type="hidden" name="_performancePostAction" value="editPerformancePost" />
+        <input type="hidden" name="postId" value={postId} />
         <BasePerformancePostFormFields
           systemNames={systemNames}
           gamepadOptions={gamepadOptions}
@@ -135,9 +137,15 @@ export default function EditPerformancePostForm({
           fields={fields}
           fieldErrors={fieldErrors}
         />
-        <RoundedButton type="submit" className="max-w-xs">
-          {isSubmittingForm ? 'Submitting' : 'Edit'}
-        </RoundedButton>
+        <div className="w-full flex gap-x-3 justify-around">
+          <RemixRoundedLink to={`/apps/${steamAppId}/performance-posts/`}>
+            Cancel
+          </RemixRoundedLink>
+          <RoundedButton type="submit" className="max-w-xs">
+            {isSubmittingForm ? 'Submitting' : 'Edit'}
+          </RoundedButton>
+        </div>
+
       </Form>
     </PerformancePostFormWrapper>
   );
