@@ -11,8 +11,6 @@ import {
   updateSteamApp,
   convertSteamApiDataToPrisma,
 } from '~/models/steamApp.server';
-import type { PrismaSteamCategory, PrismaSteamGenre } from '~/interfaces/database';
-
 import AppInfoTags from '~/components/AppInfo/AppInfoTags';
 // import LoadingComponent from '~/components/LoadingComponent';
 import AppInfoMainAppCard from '~/components/AppInfo/AppInfoMainAppCard';
@@ -20,24 +18,10 @@ import AppInfoHeader from '~/components/AppInfo/AppInfoHeader';
 import AppInfoRequirements from '~/components/AppInfo/AppInfoRequirements';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import { validateSteamAppId } from '~/lib/loader-functions/params-validators.server';
+import type { SteamAppSidebarData } from '~/interfaces';
 
 interface LoaderData {
-  steamApp: {
-    steamAppId: number;
-    name: string;
-    headerImage: string | null;
-    requiredAge: string | null;
-    shortDescription: string | null;
-    releaseDate: string | null;
-    platformMac: boolean | null;
-    platformLinux: boolean | null;
-    platformWindows: boolean | null;
-    pcRequirementsMinimum: string | null;
-    macRequirementsMinimum: string | null;
-    linuxRequirementsMinimum: string | null;
-    genres: PrismaSteamGenre[];
-    categories: PrismaSteamCategory[];
-  };
+  steamApp: SteamAppSidebarData;
 }
 
 function isMoreThanDaysAgo(dateToTest: Date, daysAgo: number) {
