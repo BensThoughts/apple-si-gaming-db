@@ -1,6 +1,6 @@
 import type { LoaderArgs, ActionArgs } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
-import { Outlet, useActionData, useCatch, useLoaderData, useTransition } from '@remix-run/react';
+import { useActionData, useCatch, useLoaderData, useTransition } from '@remix-run/react';
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 // import type { GamepadRating, RatingMedal, FrameRate } from '~/interfaces/database';
@@ -31,8 +31,8 @@ interface PerformancePostLoaderData {
     isLoggedIn: boolean;
     steamUserId?: string;
     ownsApp: boolean;
-    postTags: UserSelectPostTag[];
-    gamepads: UserSelectGamepad[];
+    postTagOptions: UserSelectPostTag[];
+    gamepadOptions: UserSelectGamepad[];
   }
   steamAppId: number;
   performancePosts: (PerformancePostBase & {
@@ -116,22 +116,22 @@ export async function loader({ params, context }: LoaderArgs) {
   let isLoggedIn = false;
   let steamUserId: string | undefined = undefined;
   let ownsApp = false;
-  let postTags: UserSelectPostTag[] = [];
-  let gamepads: UserSelectGamepad[] = [];
+  let postTagOptions: UserSelectPostTag[] = [];
+  let gamepadOptions: UserSelectGamepad[] = [];
   if (steamUser) {
     isLoggedIn = true;
     steamUserId = steamUser.steamUserId;
     ownsApp = await doesSteamUserOwnApp(steamUser.steamUserId, steamAppId);
-    postTags = await findPostTags();
-    gamepads = await findAllGamepads();
+    postTagOptions = await findPostTags();
+    gamepadOptions = await findAllGamepads();
   }
   return json<PerformancePostLoaderData>({
     steamUserData: {
       isLoggedIn,
       steamUserId,
       ownsApp,
-      postTags,
-      gamepads,
+      postTagOptions,
+      gamepadOptions,
     },
     steamAppId,
     performancePosts,
@@ -208,21 +208,22 @@ export default function PerformancePostsRoute() {
     isLoggedIn,
     steamUserId,
     ownsApp,
-    postTags,
-    gamepads,
+    postTagOptions,
+    gamepadOptions,
   } = steamUserData;
   const systemSpecs = useSteamUserSystemSpecs();
-  const steamUserLikedPostIds = useSteamUserLikedPostIds();
-  const likedPerformancePostIds = steamUserLikedPostIds ? steamUserLikedPostIds : [];
+  const likedPerformancePostIds = useSteamUserLikedPostIds();
 
   let systemNames: string[] = [];
   if (systemSpecs && isLoggedIn) {
     systemNames = systemSpecs.map((systemSpec) => systemSpec.systemName);
   }
 
+  // TODO: useActionData type is wrong, what is DeletePostActionData
+  // TODO: is passed through?
   const actionData = useActionData<CreatePerformancePostActionData>();
   const transition = useTransition();
-  const isSubmittingPerformancePost =
+  const isSubmittingCreatePerformancePost =
     transition.state === 'submitting' &&
     transition.submission.formData.get('_performancePostAction') === 'createPost';
 
@@ -242,18 +243,15 @@ export default function PerformancePostsRoute() {
         />
       </div>
       <div className="w-full">
-        <Outlet />
-      </div>
-      <div className="w-full">
         <CreatePerformancePostForm
           steamAppId={steamAppId}
           steamUserSession={{ isLoggedIn, ownsApp, systemNames }}
           formError={actionData?.formError}
           fieldErrors={actionData?.fieldErrors}
           fields={actionData?.fields}
-          isSubmittingForm={isSubmittingPerformancePost}
-          postTagOptions={postTags}
-          gamepadOptions={gamepads}
+          isSubmittingForm={isSubmittingCreatePerformancePost}
+          postTagOptions={postTagOptions}
+          gamepadOptions={gamepadOptions}
         />
       </div>
     </div>
