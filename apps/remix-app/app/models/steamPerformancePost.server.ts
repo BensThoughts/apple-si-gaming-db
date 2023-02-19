@@ -274,3 +274,39 @@ export async function deletePerformancePost(postId: PrismaSteamPerformancePost['
     },
   });
 }
+
+export async function findPerformancePostByPostId(
+    postId: string,
+) {
+  return prisma.steamPerformancePost.findUnique({
+    where: {
+      id: postId,
+    },
+    select: {
+      postText: true,
+      createdAt: true,
+      postTags: {
+        select: {
+          postTagId: true,
+          description: true,
+        },
+      },
+      steamApp: {
+        select: {
+          steamAppId: true,
+          name: true,
+        },
+      },
+      gamepadMetadata: {
+        select: {
+          gamepadId: true,
+          description: true,
+        },
+      },
+      gamepadRating: true,
+      ratingMedal: true,
+      frameRateAverage: true,
+      frameRateStutters: true,
+    },
+  });
+}
