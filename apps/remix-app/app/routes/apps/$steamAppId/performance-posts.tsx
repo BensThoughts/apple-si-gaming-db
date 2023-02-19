@@ -1,7 +1,6 @@
 import type { LoaderArgs, ActionArgs } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
-import { useActionData, useCatch, useLoaderData, useTransition } from '@remix-run/react';
-import PerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForm';
+import { Outlet, useActionData, useCatch, useLoaderData, useTransition } from '@remix-run/react';
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 // import type { GamepadRating, RatingMedal, FrameRate } from '~/interfaces/database';
@@ -14,6 +13,7 @@ import { useSteamUserLikedPostIds, useSteamUserSystemSpecs } from '~/lib/hooks/u
 import { createPerformancePostAction } from '~/lib/form-actions/performance-post/create-post.server';
 import { deletePerformancePostAction } from '~/lib/form-actions/performance-post/delete-post.server';
 import type { PerformancePostBase, PerformancePostLikes, PerformancePostRating, PerformancePostSteamApp, PerformancePostSystem, PerformancePostTag, PerformancePostUserWhoCreated } from '~/interfaces';
+import CreatePerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForms/CreatePerformancePostForm';
 
 // These are all possible tags that can be used when
 // creating a performance post
@@ -242,15 +242,18 @@ export default function PerformancePostsRoute() {
         />
       </div>
       <div className="w-full">
-        <PerformancePostForm
+        <Outlet />
+      </div>
+      <div className="w-full">
+        <CreatePerformancePostForm
           steamAppId={steamAppId}
-          steamUser={{ isLoggedIn, ownsApp, systemNames }}
+          steamUserSession={{ isLoggedIn, ownsApp, systemNames }}
           formError={actionData?.formError}
           fieldErrors={actionData?.fieldErrors}
           fields={actionData?.fields}
           isSubmittingForm={isSubmittingPerformancePost}
-          postTags={postTags}
-          gamepads={gamepads}
+          postTagOptions={postTags}
+          gamepadOptions={gamepads}
         />
       </div>
     </div>
