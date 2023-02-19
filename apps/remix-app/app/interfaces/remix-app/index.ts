@@ -1,7 +1,7 @@
 export * from './AppLoadContext';
 export * from './PassportSteamUser';
 export * from './PerformancePost';
-export * from './SteamAppPartials';
+export * from './SteamApp';
 export * from './SystemSpec';
 
 // Re-Exporting database enums from here so that we have
