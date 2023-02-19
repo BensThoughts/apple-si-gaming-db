@@ -187,13 +187,15 @@ model SteamPerformancePost {
   steamApp   SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
   steamAppId Int
 
-  steamUserId              String
-  avatarMedium             String?
-  displayName              String?
-  postText                 String
-  ratingMedal              RatingMedal
-  frameRateAverage         FrameRate?
-  frameRateStutters        Boolean? // @default(false)
+  steamUserId       String
+  avatarMedium      String?
+  displayName       String?
+  postText          String
+  ratingMedal       RatingMedal
+  frameRateAverage  FrameRate?
+  frameRateStutters Boolean? // @default(false)
+
+  systemId                 String?
   systemManufacturer       String?
   systemModel              String?
   systemOsVersion          String?
