@@ -57,14 +57,12 @@ export interface PerformancePostBase {
     postText: string;
 }
 
-// export interface PerformancePostBrief {
-//   id: string;
-//   steamApp: {
-//     steamAppId: number;
-//     name: string;
-//   };
-//   postText: string;
-//   displayName: string | null;
-//   avatarMedium: string | null;
-//   ratingMedal: RatingMedal;
-// }
+export interface GamepadOption {
+  gamepadId: number;
+  description: string;
+}
+
+export interface PostTagOption {
+  postTagId: number;
+  description: string;
+}

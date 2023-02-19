@@ -14,16 +14,7 @@ import EditPerformancePostForm from '~/components/AppInfo/PerformancePosts/Perfo
 import PerformancePostDisplay from '~/components/AppInfo/PerformancePosts/PerformancePostDisplay';
 import PostLayoutCard from '~/components/AppInfo/PerformancePosts/PerformancePostLayoutCard';
 import { editPerformancePostAction } from '~/lib/form-actions/performance-post/edit-post.server';
-
-interface UserSelectPostTag {
-  postTagId: number;
-  description: string;
-}
-
-interface UserSelectGamepad {
-  gamepadId: number;
-  description: string;
-}
+import type { PostTagOption, GamepadOption } from '~/interfaces';
 
 type EditPostLoaderData = {
   steamAppId: number;
@@ -39,8 +30,8 @@ type EditPostLoaderData = {
     userWhoCreatedPost: PerformancePostUserWhoCreated;
     postTags: PerformancePostTag[];
   };
-  postTagOptions: UserSelectPostTag[];
-  gamepadOptions: UserSelectGamepad[];
+  postTagOptions: PostTagOption[];
+  gamepadOptions: GamepadOption[];
 }
 
 export async function loader({ params, context }: LoaderArgs) {
@@ -61,8 +52,8 @@ export async function loader({ params, context }: LoaderArgs) {
   //   return redirect(`/apps/${steamAppId}/performance-posts/`);
   // }
 
-  const postTagOptions: UserSelectPostTag[] = await findPostTags();
-  const gamepadOptions: UserSelectGamepad[] = await findAllGamepads();
+  const postTagOptions: PostTagOption[] = await findPostTags();
+  const gamepadOptions: GamepadOption[] = await findAllGamepads();
   const performancePost = await findPerformancePostByPostId(postId);
   if (!performancePost) {
     throw Error(`Post with ${postId} not found in database`);

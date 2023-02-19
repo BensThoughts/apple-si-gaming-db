@@ -14,25 +14,15 @@ import { createPerformancePostAction } from '~/lib/form-actions/performance-post
 import { deletePerformancePostAction } from '~/lib/form-actions/performance-post/delete-post.server';
 import type { PerformancePostBase, PerformancePostLikes, PerformancePostRating, PerformancePostSteamApp, PerformancePostSystem, PerformancePostTag, PerformancePostUserWhoCreated } from '~/interfaces';
 import CreatePerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForms/CreatePerformancePostForm';
+import type { PostTagOption, GamepadOption } from '~/interfaces';
 
-// These are all possible tags that can be used when
-// creating a performance post
-interface UserSelectPostTag {
-  postTagId: number;
-  description: string;
-}
-
-interface UserSelectGamepad {
-  gamepadId: number;
-  description: string;
-}
 interface PerformancePostLoaderData {
   steamUserData: {
     isLoggedIn: boolean;
     steamUserId?: string;
     ownsApp: boolean;
-    postTagOptions: UserSelectPostTag[];
-    gamepadOptions: UserSelectGamepad[];
+    postTagOptions: PostTagOption[];
+    gamepadOptions: GamepadOption[];
   }
   steamAppId: number;
   performancePosts: (PerformancePostBase & {
@@ -116,8 +106,8 @@ export async function loader({ params, context }: LoaderArgs) {
   let isLoggedIn = false;
   let steamUserId: string | undefined = undefined;
   let ownsApp = false;
-  let postTagOptions: UserSelectPostTag[] = [];
-  let gamepadOptions: UserSelectGamepad[] = [];
+  let postTagOptions: PostTagOption[] = [];
+  let gamepadOptions: GamepadOption[] = [];
   if (steamUser) {
     isLoggedIn = true;
     steamUserId = steamUser.steamUserId;
