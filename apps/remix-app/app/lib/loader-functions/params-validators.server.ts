@@ -10,3 +10,12 @@ export function validateSteamAppId(params: Params) {
   }
   return steamAppId;
 }
+
+export function validatePostId(params: Params) {
+  if (!params.postId) {
+    throw new Response('Expected params.postId', { status: 400 });
+  }
+  return params.postId;
+}
+
+
