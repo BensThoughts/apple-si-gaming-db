@@ -79,10 +79,8 @@ model SteamUser {
   //   value: string;
   // }[];
 
-  // TODO: Fix capitalization with safe copy migrate
-  PerformancePosts SteamPerformancePost[]
-  ownedApps        SteamApp[]
-  systemSpecs      SteamUserSystemSpecs[]
+  ownedApps   SteamApp[]
+  systemSpecs SteamUserSystemSpecs[]
 
   siteAchievements SiteAchievement[]
   siteUserStats    SiteUserStats?
@@ -179,9 +177,6 @@ model SteamPerformancePost {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  steamUser               SteamUser? @relation(fields: [steamUserIdForSteamUser], references: [steamUserId], onDelete: SetNull)
-  steamUserIdForSteamUser String?
-
   steamApp   SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
   steamAppId Int
 
@@ -193,7 +188,8 @@ model SteamPerformancePost {
   frameRateAverage  FrameRate?
   frameRateStutters Boolean? // @default(false)
 
-  systemId                 String?
+  systemId String?
+
   systemManufacturer       String?
   systemModel              String?
   systemOsVersion          String?
