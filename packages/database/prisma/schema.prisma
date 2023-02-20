@@ -117,7 +117,7 @@ model SteamUserSystemSpecs {
 
   // performancePosts  SteamPerformancePost[]
 
-  systemName         String  @unique
+  systemName         String // Unique constraint is [systemName, steamUserId]
   manufacturer       String?
   model              String?
   formFactor         String?
