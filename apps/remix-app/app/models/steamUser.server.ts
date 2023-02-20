@@ -212,43 +212,6 @@ export async function findUserProfileData(steamUserId: PrismaSteamUser['steamUse
   });
 }
 
-export async function findSteamUsersPerformancePosts(
-    steamUserId: PrismaSteamUser['steamUserId'],
-) {
-  return prisma.steamUser.findUnique({
-    where: {
-      steamUserId,
-    },
-    select: {
-      PerformancePosts: {
-        orderBy: {
-          createdAt: 'desc',
-        },
-        select: {
-          id: true,
-          createdAt: true,
-          postText: true,
-          _count: {
-            select: {
-              usersWhoLiked: true,
-            },
-          },
-          frameRateAverage: true,
-          frameRateStutters: true,
-          ratingMedal: true,
-          steamApp: {
-            select: {
-              steamAppId: true,
-              headerImage: true,
-              name: true,
-            },
-          },
-        },
-      },
-    },
-  });
-}
-
 export async function findSteamUserLikedPosts(
     steamUserId: string,
 ) {
