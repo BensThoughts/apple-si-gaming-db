@@ -115,8 +115,9 @@ model SteamUserSystemSpecs {
   steamUserId String
   steamUser   SteamUser @relation(fields: [steamUserId], references: [steamUserId], onDelete: Cascade)
 
-  systemName String
+  // performancePosts  SteamPerformancePost[]
 
+  systemName         String  @unique
   manufacturer       String?
   model              String?
   formFactor         String?
@@ -189,6 +190,7 @@ model SteamPerformancePost {
   frameRateStutters Boolean? // @default(false)
 
   systemId String?
+  // steamUserSystem SteamUserSystemSpecs?  @relation(fields: [systemId], references: [id])
 
   systemManufacturer       String?
   systemModel              String?
