@@ -46,11 +46,6 @@ export async function createPerformancePost({
         steamAppId,
       },
     },
-    steamUser: {
-      connect: {
-        steamUserId,
-      },
-    },
     steamUserId,
     displayName,
     avatarMedium,
@@ -214,6 +209,39 @@ export async function findPerformancePostsBySteamAppId(
       systemVideoDriverVersion: true,
       systemVideoPrimaryVRAM: true,
       systemMemoryRAM: true,
+    },
+  });
+}
+
+export async function findPerformancePostsBySteamUserId(
+    steamUserId: string,
+) {
+  return prisma.steamPerformancePost.findMany({
+    where: {
+      steamUserId,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    select: {
+      id: true,
+      createdAt: true,
+      postText: true,
+      _count: {
+        select: {
+          usersWhoLiked: true,
+        },
+      },
+      frameRateAverage: true,
+      frameRateStutters: true,
+      ratingMedal: true,
+      steamApp: {
+        select: {
+          steamAppId: true,
+          headerImage: true,
+          name: true,
+        },
+      },
     },
   });
 }
