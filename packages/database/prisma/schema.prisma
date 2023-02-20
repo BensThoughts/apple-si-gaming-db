@@ -12,18 +12,16 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model PostTag {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model PerformancePostTag {
+  postTagId   Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  description String
 
   performancePosts SteamPerformancePost[]
   // TODO: Decide if we should use explicit vs. implicit
   // ! WITH JOIN TABLE
   // performancePostOnPostTag PostTagsOnPerformancePosts[]
-
-  postTagId   Int    @unique @default(autoincrement())
-  description String
 }
 
 model SiteAchievement {
@@ -205,7 +203,7 @@ model SteamPerformancePost {
   systemVideoPrimaryVRAM   String?
   systemMemoryRAM          String?
 
-  postTags        PostTag[]
+  postTags        PerformancePostTag[]
   gamepadId       Int?
   gamepadMetadata GamepadMetadata?      @relation(fields: [gamepadId], references: [gamepadId], onDelete: SetNull)
   gamepadRating   GamepadRating?

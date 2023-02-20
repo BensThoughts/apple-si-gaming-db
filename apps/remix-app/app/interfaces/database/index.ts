@@ -17,5 +17,5 @@ export type {
   GamepadMetadata as PrismaGamepadMetadata,
   GamepadRating,
 
-  PostTag as PrismaPostTag,
+  PerformancePostTag as PrismaPostTag,
 } from '@apple-si-gaming-db/database';

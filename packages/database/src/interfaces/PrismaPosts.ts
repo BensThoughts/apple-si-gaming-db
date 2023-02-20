@@ -6,5 +6,5 @@ export type {
   GamepadMetadata,
   GamepadRating,
 
-  PostTag,
+  PerformancePostTag,
 } from '@prisma/client';
