@@ -5,64 +5,64 @@ import { getSteamAppListRequest } from '@apple-si-gaming-db/steam-api';
 
 const gamepadData: Prisma.GamepadMetadataCreateManyInput[] = [
   {
-    gamepadId: 1,
+    id: 1,
     manufacturer: 'Microsoft',
     model: 'XBox One',
     description: 'XBox One',
   },
   {
-    gamepadId: 2,
+    id: 2,
     manufacturer: 'Microsoft',
     model: 'XBox Elite I',
     description: 'XBox Elite I',
   },
   {
-    gamepadId: 3,
+    id: 3,
     manufacturer: 'Microsoft',
     model: 'XBox Elite II',
     description: 'XBox Elite II',
   },
   {
-    gamepadId: 4,
+    id: 4,
     manufacturer: 'Nintendo',
     model: 'Switch Pro',
     description: 'Switch Pro',
   },
   {
-    gamepadId: 5,
+    id: 5,
     manufacturer: 'Nintendo',
     model: 'Switch',
     description: 'Switch',
   },
   {
-    gamepadId: 6,
+    id: 6,
     manufacturer: 'Sony',
     model: 'Playstation 4',
     description: 'Playstation 4',
   },
   {
-    gamepadId: 7,
+    id: 7,
     manufacturer: 'Sony',
     model: 'Playstation 5',
     description: 'Playstation 5',
   },
 ];
 
-const postTagData: Prisma.PostTagCreateManyInput[] = [
+const postTagData: Prisma.PerformancePostTagCreateManyInput[] = [
   {
-    postTagId: 1,
+    id: 1,
     description: 'Native',
   },
   {
-    postTagId: 2,
+    id: 2,
     description: 'Parallels',
   },
   {
-    postTagId: 3,
+    id: 3,
     description: 'CrossOver',
   },
   {
-    postTagId: 4,
+    id: 4,
     description: 'VirtualBox',
   },
 ];
@@ -86,10 +86,10 @@ async function seed() {
   logger.info('creating SteamApps finished');
 
   logger.info('started deleting PostTags');
-  await prisma.postTag.deleteMany();
+  await prisma.performancePostTag.deleteMany();
   logger.info('finished deleting PostTags');
   logger.info('creating PostTags');
-  await prisma.postTag.createMany({
+  await prisma.performancePostTag.createMany({
     data: postTagData,
   });
   logger.info('finished creating PostTags');

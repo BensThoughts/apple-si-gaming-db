@@ -1,7 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// TODO: rename models to Steam<ModelName> e.g. PerformancePost and PostTag
 datasource db {
   provider     = "postgresql"
   url          = env("DATABASE_URL")
@@ -12,110 +11,31 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model PerformancePostTag {
-  postTagId   Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  description String
-
-  performancePosts SteamPerformancePost[]
-  // TODO: Decide if we should use explicit vs. implicit
-  // ! WITH JOIN TABLE
-  // performancePostOnPostTag PostTagsOnPerformancePosts[]
-}
-
-model SiteAchievement {
-  achievementId Int      @id @default(autoincrement())
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  title       String
-  description String
-  imageUrl    String
-  svgCode     String
-
-  steamUsersWithAchievement SteamUser[]
-}
-
-model SiteUserStats {
-  id        String   @id @default(cuid())
+//-----------------------------
+// Models Specific to Steamed Apples Website
+//-----------------------------
+model UserProfile {
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  steamUserId String    @unique
-  steamUser   SteamUser @relation(fields: [steamUserId], references: [steamUserId], onDelete: Cascade)
-
-  numLogins         Int @default(0)
-  numPerfPosts      Int @default(0)
-  numSystemsCreated Int @default(0)
-}
-
-model SteamUser {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  steamUserId              String  @unique
-  displayName              String?
-  communityVisibilityState Int?
-  profileState             Int?
-  personaName              String?
-  commentPermission        Int?
-  profileUrl               String?
-  avatar                   String?
-  avatarMedium             String?
-  avatarFull               String?
-  avatarHash               String?
-  lastLogoff               Int?
-  personaState             Int?
-  realName                 String?
-  primaryClanId            String?
-  timeCreated              Int?
-  personaStateFlags        Int?
-  locCountryCode           String?
-  locStateCode             String?
-  locCityId                Int?
-  // photos?: {
-  //   value: string;
-  // }[];
-
-  ownedApps   SteamApp[]
-  systemSpecs SteamUserSystemSpecs[]
-
-  siteAchievements SiteAchievement[]
-  siteUserStats    SiteUserStats?
-
+  userStats             UserStats?
+  userSystemSpecs       UserSystemSpecs[]
   likedPerformancePosts PerformancePostLike[]
 
-  // Unused For Now
-  appCount          Int?
-  ownedAppsPlaytime SteamUserOwnedAppPlaytime[]
-  siteUserStatsId   String?
+  steamUserId64    BigInt?           @unique
+  steamUserProfile SteamUserProfile? @relation(fields: [steamUserId64], references: [steamUserId64], onDelete: SetNull)
 }
 
-model PerformancePostLike {
-  performancePostLikeId String   @id @default(cuid())
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
-
-  steamUserId          String
-  steamUser            SteamUser            @relation(fields: [steamUserId], references: [steamUserId], onDelete: Cascade)
-  performancePostId    String
-  steamPerformancePost SteamPerformancePost @relation(fields: [performancePostId], references: [id], onDelete: Cascade)
-
-  @@unique([steamUserId, performancePostId])
-}
-
-model SteamUserSystemSpecs {
-  id        String   @id @default(cuid())
+model UserSystemSpecs {
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Unused For Now
-  steamUserId String
-  steamUser   SteamUser @relation(fields: [steamUserId], references: [steamUserId], onDelete: Cascade)
+  userProfileId Int
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
 
-  // performancePosts  SteamPerformancePost[]
+  performancePosts PerformancePost[]
 
   systemName         String // Unique constraint is [systemName, steamUserId]
   manufacturer       String?
@@ -136,62 +56,60 @@ model SteamUserSystemSpecs {
   videoPrimaryVRAM   String?
   memoryRAM          String?
 
-  @@unique([systemName, steamUserId])
+  @@unique([systemName, userProfileId])
 }
 
-model SteamUserOwnedAppPlaytime {
+model UserStats {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userProfileId Int         @unique
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
+
+  numLogins         Int @default(0)
+  numPerfPosts      Int @default(0)
+  numSystemsCreated Int @default(0)
+}
+
+model PerformancePostLike {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  steamUserId String
-  steamUser   SteamUser @relation(fields: [steamUserId], references: [steamUserId])
+  performancePostId String
+  performancePost   PerformancePost @relation(fields: [performancePostId], references: [id], onDelete: Cascade)
+  userProfileId     Int
+  userProfile       UserProfile     @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
 
-  steamAppId             Int
-  playtimeTwoWeeks       Int
-  playtimeForever        Int
-  playtimeWindowsForever Int
-  playtimeMacForever     Int
-  playtimeLinuxForever   Int
-  rTimeLastPlayed        Int
+  @@unique([userProfileId, performancePostId])
 }
 
-// Named GamepadMetadata so as not to confuse with built in
-// typescript type Gamepad
-model GamepadMetadata {
+// Some fields in PerformancePost are marked not set as relation.
+// This is to protect from if a user profile or system gets deleted
+// the information is still available about who wrote the post and
+// what system was used.
+model PerformancePost {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  gamepadId    Int    @unique @default(autoincrement())
-  manufacturer String
-  model        String
-  description  String
+  // Steam Specific Data
+  steamApp      SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
+  steamAppId    Int
+  steamUserId64 BigInt // Not set as relation
+  avatarMedium  String? // Not set as relation
+  displayName   String? // Not set as relation
 
-  steamPerformancePosts SteamPerformancePost[]
-
-  @@unique([manufacturer, model])
-}
-
-model SteamPerformancePost {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  steamApp   SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
-  steamAppId Int
-
-  steamUserId       String
-  avatarMedium      String?
-  displayName       String?
   postText          String
   ratingMedal       RatingMedal
   frameRateAverage  FrameRate?
-  frameRateStutters Boolean? // @default(false)
+  frameRateStutters Boolean     @default(false)
 
-  systemId String?
-  // steamUserSystem SteamUserSystemSpecs?  @relation(fields: [systemId], references: [id])
+  userSystemSpecsId Int?
+  userSystemSpecs   UserSystemSpecs? @relation(fields: [userSystemSpecsId], references: [id], onDelete: SetNull)
 
+  // sustem... Not set as relation
   systemManufacturer       String?
   systemModel              String?
   systemOsVersion          String?
@@ -203,31 +121,34 @@ model SteamPerformancePost {
 
   postTags        PerformancePostTag[]
   gamepadId       Int?
-  gamepadMetadata GamepadMetadata?      @relation(fields: [gamepadId], references: [gamepadId], onDelete: SetNull)
+  gamepadMetadata GamepadMetadata?      @relation(fields: [gamepadId], references: [id], onDelete: SetNull)
   gamepadRating   GamepadRating?
   usersWhoLiked   PerformancePostLike[]
 }
 
-// TODO: Decide if we should use explicit vs. implicit
-// ! WITH JOIN TABLE
-// model PostTagsOnPerformancePosts {
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
+model PerformancePostTag {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  description String
 
-//   performancePostId String
-//   performancePost   PerformancePost @relation(fields: [performancePostId], references: [id], onDelete: Cascade)
+  performancePosts PerformancePost[]
+}
 
-//   postTagId Int
-//   postTag   PostTag @relation(fields: [postTagId], references: [postTagId], onDelete: Cascade)
-//   @@id([performancePostId, postTagId])
-// }
+// Named GamepadMetadata so as not to confuse with built in
+// typescript type Gamepad
+model GamepadMetadata {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-enum FrameRate {
-  VeryLow
-  Low
-  Medium
-  High
-  VeryHigh
+  manufacturer String
+  model        String
+  description  String
+
+  steamPerformancePosts PerformancePost[]
+
+  @@unique([manufacturer, model])
 }
 
 enum RatingMedal {
@@ -238,6 +159,14 @@ enum RatingMedal {
   Platinum
 }
 
+enum FrameRate {
+  VeryLow
+  Low
+  Medium
+  High
+  VeryHigh
+}
+
 enum GamepadRating {
   GamepadBorked
   GamepadBronze
@@ -246,13 +175,48 @@ enum GamepadRating {
   GamepadPlatinum
 }
 
-model SteamApp {
-  id        String   @id @default(cuid())
+//-----------------------------
+// Models where data is obtained from Steam API
+//-----------------------------
+model SteamUserProfile {
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name                    String
+  steamUserId64            BigInt  @unique
+  displayName              String?
+  communityVisibilityState Int?
+  profileState             Int?
+  personaName              String?
+  commentPermission        Int?
+  profileUrl               String?
+  avatar                   String?
+  avatarMedium             String?
+  avatarFull               String?
+  avatarHash               String?
+  lastLogoff               Int?
+  personaState             Int?
+  realName                 String?
+  primaryClanId            String?
+  timeCreated              Int?
+  personaStateFlags        Int?
+  locCountryCode           String?
+  locStateCode             String?
+  locCityId                Int?
+
+  ownedSteamApps SteamApp[]
+  appCount       Int?
+
+  userProfile UserProfile?
+}
+
+model SteamApp {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   steamAppId              Int       @unique
+  name                    String
   dataDownloadAttempted   Boolean   @default(false)
   dataDownloadAttemptedAt DateTime?
   dataDownloaded          Boolean   @default(false)
@@ -279,10 +243,6 @@ model SteamApp {
   legalNotice                  String?
   developers                   String[]
   publishers                   String[]
-  demos                        SteamDemo[]
-  priceOverview                SteamPriceOverview?
-  packages                     Int[]
-  packageGroups                SteamPackageGroup[]
   platformWindows              Boolean?
   platformMac                  Boolean?
   platformLinux                Boolean?
@@ -290,11 +250,8 @@ model SteamApp {
   metacriticUrl                String?
   categories                   SteamCategory[]
   genres                       SteamGenre[]
-  screenshots                  SteamScreenshot[]
-  movies                       SteamMovie[]
   recommendationsTotal         Int?
   achievementsTotal            Int?
-  achievements                 SteamAchievement[]
   comingSoon                   Boolean?
   releaseDate                  String?
   supportUrl                   String?
@@ -304,155 +261,28 @@ model SteamApp {
   contentDescriptorIds         Int[]
   contentDescriptorNotes       String?
 
-  performancePosts SteamPerformancePost[]
-
-  // Unused For Now
-  usersWhoOwnApp SteamUser[]
+  performancePosts PerformancePost[]
+  usersWhoOwnApp   SteamUserProfile[]
 
   @@unique([steamAppId, name])
 }
 
-model SteamDemo {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  steamApp  SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
-
-  steamAppId Int
-
-  demoAppId   Int
-  description String?
-
-  @@unique([steamAppId, demoAppId])
-}
-
-model SteamPriceOverview {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  steamApp  SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
-
-  steamAppId Int @unique
-
-  currency         String?
-  initial          Int?
-  final            Int?
-  discountPercent  Int?
-  initialFormatted String?
-  finalFormatted   String?
-}
-
-model SteamPackageGroup {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  steamApp  SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
-
-  steamAppId Int
-
-  name                    String
-  title                   String?
-  description             String?
-  selectionText           String?
-  saveText                String?
-  displayType             String?
-  isRecurringSubscription String?
-  subs                    SteamPackageGroupSub[]
-
-  @@unique([steamAppId, name])
-}
-
-model SteamPackageGroupSub {
-  id                String            @id @default(cuid())
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
-  steamPackageGroup SteamPackageGroup @relation(fields: [steamAppId, packageGroupName], references: [steamAppId, name], onDelete: Cascade)
-
-  steamAppId       Int
-  packageGroupName String
-
-  packageId                Int
-  percentSavingsText       String?
-  percentSavings           Int?
-  optionText               String?
-  optionDescription        String?
-  canGetFreeLicense        String?
-  isFreeLicense            Boolean?
-  priceInCentsWithDiscount Int?
-
-  @@unique([steamAppId, packageGroupName, packageId])
-}
-
+// id is obtained from Steam API categoryId
+// which returns an Int
 model SteamCategory {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  steamApps SteamApp[]
-
-  categoryId  Int    @unique
+  id          Int        @id
   description String
+  steamApps   SteamApp[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
 
-// The steam api seems to always return categoryId as Int
-// and genreId as String (strange).
+// id is obtained from Steam API categoryId
+// which returns an String
 model SteamGenre {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  steamApps SteamApp[]
-
-  genreId     String @unique
+  id          String     @id
   description String
-}
-
-model SteamScreenshot {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  steamApp  SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
-
-  steamAppId Int
-
-  screenshotId  Int
-  pathThumbnail String?
-  pathFull      String?
-
-  @@unique([steamAppId, screenshotId])
-}
-
-model SteamMovie {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  steamApp  SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
-
-  steamAppId Int
-
-  movieId        Int
-  name           String?
-  thumbnail      String?
-  webmFourEighty String?
-  webmMax        String?
-  mp4FourEighty  String?
-  mp4Max         String?
-  highlight      Boolean?
-
-  @@unique([steamAppId, movieId])
-}
-
-model SteamAchievement {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  steamApp  SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
-
-  steamAppId Int
-
-  name        String
-  path        String?
-  highlighted Boolean?
-
-  @@unique([steamAppId, name])
+  steamApps   SteamApp[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }

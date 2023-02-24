@@ -1,7 +1,5 @@
-export * from './PrismaSteamApp';
-export * from './PrismaSteamUser';
-export * from './PrismaSiteAchievement';
-export * from './PrismaSiteUserStats';
-export * from './PrismaPosts';
-export * from './PrismaSteamUserSystemSpecs';
+export * from './Steam/SteamApp';
+export * from './Steam/SteamUser';
+export * from './SteamedApples/User';
+export * from './SteamedApples/PerformancePosts';
 export { Prisma } from '@prisma/client';

@@ -1,33 +1,14 @@
 import type {
-  SteamDemoCreateManySteamAppInput,
-  SteamPriceOverviewCreateWithoutSteamAppInput,
   SteamCategoryCreateManyInput,
   SteamGenreCreateManyInput,
-  SteamScreenshotCreateManySteamAppInput,
-  SteamMovieCreateManySteamAppInput,
-  SteamAchievementCreateManySteamAppInput,
   SteamApp,
   SteamAppCreateInput,
-  SteamPackageGroupSubCreateWithoutSteamPackageGroupInput,
 } from '../interfaces';
 import { prisma } from '../client';
 import { logger } from '@apple-si-gaming-db/logger';
 import type {
   Prisma,
-  SteamAchievement,
-  SteamDemo,
-  SteamMovie,
-  SteamPackageGroupSub,
-  SteamPriceOverview,
-  SteamScreenshot,
 } from '@prisma/client';
-
-function valueExistsOrNull<T>(v: T) {
-  if (v === null || v === undefined) {
-    return null;
-  }
-  return v;
-}
 
 export async function updateSteamAppDownloadAttempted(
     steamAppId: SteamApp['steamAppId'],
@@ -46,11 +27,9 @@ export async function updateSteamAppDownloadAttempted(
   } catch (err) {
     if (err instanceof Error) {
       logger.error('Error in updateSteamAppDownloadAttempted');
-      // const error = new Error('Error in updateSteamAppDownloadAttempted',{
-      //   cause: err,
-      // });
-      throw err;
+      logger.error(err);
       // logError(err, appIdData);
+      throw err;
     } else {
       throw err;
     }
@@ -71,14 +50,8 @@ export async function updateSteamApp(
   // const steamAppId = steamApiAppId;
   const {
     steamAppId,
-    demos,
-    priceOverview,
-    packageGroups,
     categories,
     genres,
-    screenshots,
-    movies,
-    achievements,
     ...prismaSteamApp
   } = prismaSteamAppData;
 
@@ -89,151 +62,20 @@ export async function updateSteamApp(
       },
       data: {
         ...prismaSteamApp,
-        demos: connectOrCreateDemos(steamAppId, demos),
-        priceOverview: connectOrCreatePriceOverview(steamAppId, priceOverview),
         categories: connectOrCreateCategories(categories),
         genres: connectOrCreateGenres(genres),
-        screenshots: connectOrCreateScreenshots(steamAppId, screenshots),
-        movies: connectOrCreateMovies(steamAppId, movies),
-        achievements: connectOrCreateAchievements(steamAppId, achievements),
       },
     });
   } catch (err) {
     if (err instanceof Error) {
       logger.error('Error at prisma.steamApp.update in updateSteamApp');
-      // const error = new Error('Error at prisma.steamApp.update in updateSteamApp', {
-      //   cause: err,
-      // });
-      throw err;
+      logger.error(err);
       // logError(err, appIdData);
+      throw err;
     } else {
       throw err;
     }
   }
-
-  if (packageGroups) {
-    for (let i = 0; i < packageGroups.length; i++) {
-      const packageGroup = packageGroups[i];
-      const packageGroupName = packageGroup.name;
-
-      try {
-        await prisma.steamPackageGroup.upsert({
-          where: {
-            steamAppId_name: {
-              steamAppId,
-              name: packageGroup.name,
-            },
-          },
-          create: {
-            steamAppId,
-            name: packageGroup.name,
-            title: valueExistsOrNull(packageGroup.title),
-            description: valueExistsOrNull(packageGroup.description),
-            selectionText: valueExistsOrNull(packageGroup.selectionText),
-            saveText: valueExistsOrNull(packageGroup.saveText),
-            displayType: valueExistsOrNull(packageGroup.displayType),
-            isRecurringSubscription: valueExistsOrNull(packageGroup.isRecurringSubscription),
-            subs: connectOrCreatePackageGroupSubs(steamAppId, packageGroupName, packageGroup.subs),
-          },
-          update: {
-            steamAppId,
-            name: packageGroup.name,
-            title: valueExistsOrNull(packageGroup.title),
-            description: valueExistsOrNull(packageGroup.description),
-            selectionText: valueExistsOrNull(packageGroup.selectionText),
-            saveText: valueExistsOrNull(packageGroup.saveText),
-            displayType: valueExistsOrNull(packageGroup.displayType),
-            isRecurringSubscription: valueExistsOrNull(packageGroup.isRecurringSubscription),
-            subs: connectOrCreatePackageGroupSubs(steamAppId, packageGroupName, packageGroup.subs),
-          },
-        });
-      } catch (err) {
-        if (err instanceof Error) {
-          logger.error('Error at prisma.steamPackageGroup.upsert in updateSteamApp');
-          // const error = new Error('Error at prisma.steamPackageGroup.upsert in updateSteamApp', {
-          //   cause: err,
-          // });
-          throw err;
-          // logError(err, appIdData);
-        } else {
-          throw err;
-        }
-      }
-    }
-  }
-}
-
-function connectOrCreateDemos(
-    steamAppId: SteamDemo['steamAppId'],
-    demos: SteamDemoCreateManySteamAppInput[] | null | undefined,
-): Prisma.SteamDemoCreateNestedManyWithoutSteamAppInput | undefined {
-  return demos ? {
-    connectOrCreate: demos.map((demo) => {
-      return {
-        where: {
-          steamAppId_demoAppId: {
-            steamAppId,
-            demoAppId: demo.demoAppId,
-          },
-        },
-        create: {
-          demoAppId: demo.demoAppId,
-          description: valueExistsOrNull(demo.description),
-        },
-      };
-    }),
-  } : undefined;
-}
-
-function connectOrCreatePriceOverview(
-    steamAppId: SteamPriceOverview['steamAppId'],
-    priceOverview: SteamPriceOverviewCreateWithoutSteamAppInput | null | undefined,
-): Prisma.SteamPriceOverviewUncheckedCreateNestedOneWithoutSteamAppInput | undefined {
-  return priceOverview ? {
-    connectOrCreate: {
-      where: {
-        steamAppId,
-      },
-      create: {
-        currency: valueExistsOrNull(priceOverview.currency),
-        initial: valueExistsOrNull(priceOverview.initial),
-        final: valueExistsOrNull(priceOverview.final),
-        discountPercent: valueExistsOrNull(priceOverview.discountPercent),
-        initialFormatted: valueExistsOrNull(priceOverview.initialFormatted),
-        finalFormatted: valueExistsOrNull(priceOverview.finalFormatted),
-      },
-    },
-  } : undefined;
-}
-
-function connectOrCreatePackageGroupSubs(
-    steamAppId: SteamPackageGroupSub['steamAppId'],
-    packageGroupName: SteamPackageGroupSub['packageGroupName'],
-    subs: SteamPackageGroupSubCreateWithoutSteamPackageGroupInput[] | null | undefined,
-): Prisma.SteamPackageGroupSubCreateNestedManyWithoutSteamPackageGroupInput | undefined {
-  return subs ? {
-    connectOrCreate: subs.map((sub) => {
-      return {
-        where: {
-          steamAppId_packageGroupName_packageId: {
-            steamAppId,
-            packageGroupName: packageGroupName,
-            packageId: sub.packageId,
-          },
-        },
-        create: {
-          packageId: sub.packageId,
-          percentSavingsText: valueExistsOrNull(sub.percentSavingsText),
-          percentSavings: valueExistsOrNull(sub.percentSavings),
-          optionText: valueExistsOrNull(sub.optionText),
-          optionDescription: valueExistsOrNull(sub.optionDescription),
-          canGetFreeLicense: valueExistsOrNull(sub.canGetFreeLicense),
-          isFreeLicense: valueExistsOrNull(sub.isFreeLicense),
-          priceInCentsWithDiscount: valueExistsOrNull(sub.priceInCentsWithDiscount),
-        },
-      };
-    }),
-  } : undefined;
 }
 
 function connectOrCreateCategories(
@@ -243,10 +85,10 @@ function connectOrCreateCategories(
     connectOrCreate: categories.map((category) => {
       return {
         where: {
-          categoryId: category.categoryId,
+          id: category.id,
         },
         create: {
-          categoryId: category.categoryId,
+          id: category.id,
           description: category.description,
         },
       };
@@ -261,87 +103,13 @@ function connectOrCreateGenres(
     connectOrCreate: genres.map((genre) => {
       return {
         where: {
-          genreId: genre.genreId,
+          id: genre.id,
         },
         create: {
-          genreId: genre.genreId,
+          id: genre.id,
           description: genre.description,
         },
       };
     }),
   } : undefined;
-}
-
-function connectOrCreateScreenshots(
-    steamAppId: SteamScreenshot['steamAppId'],
-    screenshots: SteamScreenshotCreateManySteamAppInput[] | null | undefined,
-): Prisma.SteamScreenshotCreateNestedManyWithoutSteamAppInput | undefined {
-  return screenshots ? {
-    connectOrCreate: screenshots.map((screenshot) => {
-      return {
-        where: {
-          steamAppId_screenshotId: {
-            steamAppId,
-            screenshotId: screenshot.screenshotId,
-          },
-        },
-        create: {
-          screenshotId: screenshot.screenshotId,
-          pathThumbnail: valueExistsOrNull(screenshot.pathThumbnail),
-          pathFull: valueExistsOrNull(screenshot.pathFull),
-        },
-      };
-    }),
-  } : undefined;
-}
-
-function connectOrCreateMovies(
-    steamAppId: SteamMovie['steamAppId'],
-    movies: SteamMovieCreateManySteamAppInput[] | null | undefined,
-): Prisma.SteamMovieCreateNestedManyWithoutSteamAppInput | undefined {
-  return movies ? {
-    connectOrCreate: movies.map((movie) => {
-      return {
-        where: {
-          steamAppId_movieId: {
-            steamAppId,
-            movieId: movie.movieId,
-          },
-        },
-        create: {
-          movieId: movie.movieId,
-          name: valueExistsOrNull(movie.name),
-          thumbnail: valueExistsOrNull(movie.thumbnail),
-          webmFourEighty: valueExistsOrNull(movie.webmFourEighty),
-          webmMax: valueExistsOrNull(movie.webmMax),
-          mp4FourEighty: valueExistsOrNull(movie.mp4FourEighty),
-          mp4Max: valueExistsOrNull(movie.mp4Max),
-          highlight: valueExistsOrNull(movie.highlight),
-        },
-      };
-    }),
-  } : undefined;
-}
-
-function connectOrCreateAchievements(
-    steamAppId: SteamAchievement['steamAppId'],
-    achievements: SteamAchievementCreateManySteamAppInput[] | null | undefined,
-): Prisma.SteamAchievementCreateNestedManyWithoutSteamAppInput | undefined {
-  return achievements ? {
-    connectOrCreate: achievements.map((achievement) => {
-      return {
-        where: {
-          steamAppId_name: {
-            steamAppId,
-            name: achievement.name,
-          },
-        },
-        create: {
-          name: achievement.name,
-          path: valueExistsOrNull(achievement.path),
-          highlighted: valueExistsOrNull(achievement.highlighted),
-        },
-      };
-    }),
-  }: undefined;
 }

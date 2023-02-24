@@ -1,5 +1,5 @@
 export type {
-  SteamPerformancePost,
+  PerformancePost,
   RatingMedal,
   FrameRate,
 
