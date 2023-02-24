@@ -23,8 +23,11 @@ model UserProfile {
   userSystemSpecs       UserSystemSpecs[]
   likedPerformancePosts PerformancePostLike[]
 
-  steamUserId64    BigInt?           @unique
-  steamUserProfile SteamUserProfile? @relation(fields: [steamUserId64], references: [steamUserId64], onDelete: SetNull)
+  // Not optional for now, steam is the only way to login
+  // as of now. Could be made optional later on if other
+  // login methods are created
+  steamUserId64    BigInt           @unique
+  steamUserProfile SteamUserProfile @relation(fields: [steamUserId64], references: [steamUserId64])
 }
 
 model UserSystemSpecs {
