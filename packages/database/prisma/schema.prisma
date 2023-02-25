@@ -20,7 +20,7 @@ model UserProfile {
   updatedAt DateTime @updatedAt
 
   userStats             UserStats?
-  userSystemSpecs       UserSystemSpecs[]
+  userSystemSpecs       UserSystemSpec[]
   likedPerformancePosts PerformancePostLike[]
 
   // Not optional for now, steam is the only way to login
@@ -30,7 +30,7 @@ model UserProfile {
   steamUserProfile SteamUserProfile @relation(fields: [steamUserId64], references: [steamUserId64])
 }
 
-model UserSystemSpecs {
+model UserSystemSpec {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -40,7 +40,7 @@ model UserSystemSpecs {
 
   performancePosts PerformancePost[]
 
-  systemName         String // Unique constraint is [systemName, steamUserId]
+  systemName         String // Unique constraint is [systemName, userProfileId]
   manufacturer       String?
   model              String?
   formFactor         String?
@@ -109,8 +109,8 @@ model PerformancePost {
   frameRateAverage  FrameRate?
   frameRateStutters Boolean     @default(false)
 
-  userSystemSpecsId Int?
-  userSystemSpecs   UserSystemSpecs? @relation(fields: [userSystemSpecsId], references: [id], onDelete: SetNull)
+  userSystemSpecId Int?
+  userSystemSpec   UserSystemSpec? @relation(fields: [userSystemSpecId], references: [id], onDelete: SetNull)
 
   // sustem... Not set as relation
   systemManufacturer       String?
