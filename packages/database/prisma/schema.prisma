@@ -152,7 +152,7 @@ model GamepadMetadata {
   model        String
   description  String
 
-  steamPerformancePosts PerformancePost[]
+  performancePosts PerformancePost[]
 
   @@unique([manufacturer, model])
 }
