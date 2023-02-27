@@ -23,11 +23,12 @@ model UserProfile {
   userSystemSpecs       UserSystemSpec[]
   likedPerformancePosts PerformancePostLike[]
 
+  steamUserProfile SteamUserProfile?
+
   // Not optional for now, steam is the only way to login
   // as of now. Could be made optional later on if other
   // login methods are created
-  steamUserId64    BigInt           @unique
-  steamUserProfile SteamUserProfile @relation(fields: [steamUserId64], references: [steamUserId64])
+  steamUserId64 BigInt @unique
 }
 
 model UserSystemSpec {
@@ -98,9 +99,11 @@ model PerformancePost {
   updatedAt DateTime @updatedAt
 
   // Steam Specific Data
-  steamApp      SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
-  steamAppId    Int
-  steamUserId64 BigInt // Not set as relation
+  steamApp   SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
+  steamAppId Int
+
+  // TODO: this should eventually be a relation
+  steamUserId64 BigInt // Not set as relation, used to verify who wrote post
   avatarMedium  String? // Not set as relation
   displayName   String? // Not set as relation
 
@@ -112,7 +115,7 @@ model PerformancePost {
   userSystemSpecId Int?
   userSystemSpec   UserSystemSpec? @relation(fields: [userSystemSpecId], references: [id], onDelete: SetNull)
 
-  // sustem... Not set as relation
+  // system... Not set as relation
   systemManufacturer       String?
   systemModel              String?
   systemOsVersion          String?
@@ -210,7 +213,8 @@ model SteamUserProfile {
   ownedSteamApps SteamApp[]
   appCount       Int?
 
-  userProfile UserProfile?
+  userProfileId Int?         @unique
+  userProfile   UserProfile? @relation(fields: [userProfileId], references: [id])
 }
 
 model SteamApp {
@@ -273,19 +277,25 @@ model SteamApp {
 // id is obtained from Steam API categoryId
 // which returns an Int
 model SteamCategory {
-  id          Int        @id
+  // id        Int      @id @default(autoincrement())
+  id        Int      @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // categoryId  Int        @unique
   description String
   steamApps   SteamApp[]
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
 }
 
-// id is obtained from Steam API categoryId
+// id is obtained from Steam API genreId
 // which returns an String
 model SteamGenre {
-  id          String     @id
+  // id        Int      @id @default(autoincrement())
+  id        String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // genreId     String     @unique
   description String
   steamApps   SteamApp[]
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
 }
