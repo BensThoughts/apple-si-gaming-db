@@ -1,5 +1,5 @@
 export type {
   UserProfile,
   UserStats,
-  UserSystemSpecs,
+  UserSystemSpec,
 } from '@prisma/client';
