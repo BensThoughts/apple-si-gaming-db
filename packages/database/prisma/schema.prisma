@@ -288,7 +288,8 @@ model SteamCategory {
 }
 
 // id is obtained from Steam API genreId
-// which returns an String
+// which returns an String, even though it seems to
+// only ever be an Int.
 model SteamGenre {
   // id        Int      @id @default(autoincrement())
   id        String   @id
