@@ -41,7 +41,7 @@ export async function getSteamAppDetailsRequest(
  */
 
 export async function getSteamPlayerOwnedGamesRequest(
-    steamUserId: string,
+    steamUserId64: string,
 ): Promise<SteamApiGetOwnedGamesResponse['response']> {
   try {
     const apiKey = process.env.ASGD_STEAM_API_KEY;
@@ -49,7 +49,7 @@ export async function getSteamPlayerOwnedGamesRequest(
     const response = await axios.get<SteamApiGetOwnedGamesResponse>('https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/', {
       params: {
         key: apiKey,
-        steamid: steamUserId,
+        steamid: steamUserId64,
         format: 'json',
       },
       responseType: 'json',
