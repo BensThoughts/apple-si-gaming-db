@@ -12,13 +12,13 @@ CREATE TABLE "UserProfile" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "steamUserId64" BIGINT,
+    "steamUserId64" BIGINT NOT NULL,
 
     CONSTRAINT "UserProfile_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "UserSystemSpecs" (
+CREATE TABLE "UserSystemSpec" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE "UserSystemSpecs" (
     "videoPrimaryVRAM" TEXT,
     "memoryRAM" TEXT,
 
-    CONSTRAINT "UserSystemSpecs_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "UserSystemSpec_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -76,13 +76,11 @@ CREATE TABLE "PerformancePost" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "steamAppId" INTEGER NOT NULL,
     "steamUserId64" BIGINT NOT NULL,
-    "avatarMedium" TEXT,
-    "displayName" TEXT,
     "postText" TEXT NOT NULL,
     "ratingMedal" "RatingMedal" NOT NULL,
     "frameRateAverage" "FrameRate",
     "frameRateStutters" BOOLEAN NOT NULL DEFAULT false,
-    "userSystemSpecsId" INTEGER,
+    "userSystemSpecId" INTEGER,
     "systemManufacturer" TEXT,
     "systemModel" TEXT,
     "systemOsVersion" TEXT,
@@ -145,6 +143,7 @@ CREATE TABLE "SteamUserProfile" (
     "locStateCode" TEXT,
     "locCityId" INTEGER,
     "appCount" INTEGER,
+    "userProfileId" INTEGER,
 
     CONSTRAINT "SteamUserProfile_pkey" PRIMARY KEY ("id")
 );
@@ -203,9 +202,9 @@ CREATE TABLE "SteamApp" (
 -- CreateTable
 CREATE TABLE "SteamCategory" (
     "id" INTEGER NOT NULL,
-    "description" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "description" TEXT NOT NULL,
 
     CONSTRAINT "SteamCategory_pkey" PRIMARY KEY ("id")
 );
@@ -213,9 +212,9 @@ CREATE TABLE "SteamCategory" (
 -- CreateTable
 CREATE TABLE "SteamGenre" (
     "id" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "description" TEXT NOT NULL,
 
     CONSTRAINT "SteamGenre_pkey" PRIMARY KEY ("id")
 );
@@ -248,7 +247,7 @@ CREATE TABLE "_SteamAppToSteamUserProfile" (
 CREATE UNIQUE INDEX "UserProfile_steamUserId64_key" ON "UserProfile"("steamUserId64");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "UserSystemSpecs_systemName_userProfileId_key" ON "UserSystemSpecs"("systemName", "userProfileId");
+CREATE UNIQUE INDEX "UserSystemSpec_systemName_userProfileId_key" ON "UserSystemSpec"("systemName", "userProfileId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "UserStats_userProfileId_key" ON "UserStats"("userProfileId");
@@ -261,6 +260,9 @@ CREATE UNIQUE INDEX "GamepadMetadata_manufacturer_model_key" ON "GamepadMetadata
 
 -- CreateIndex
 CREATE UNIQUE INDEX "SteamUserProfile_steamUserId64_key" ON "SteamUserProfile"("steamUserId64");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "SteamUserProfile_userProfileId_key" ON "SteamUserProfile"("userProfileId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "SteamApp_steamAppId_key" ON "SteamApp"("steamAppId");
@@ -293,10 +295,7 @@ CREATE UNIQUE INDEX "_SteamAppToSteamUserProfile_AB_unique" ON "_SteamAppToSteam
 CREATE INDEX "_SteamAppToSteamUserProfile_B_index" ON "_SteamAppToSteamUserProfile"("B");
 
 -- AddForeignKey
-ALTER TABLE "UserProfile" ADD CONSTRAINT "UserProfile_steamUserId64_fkey" FOREIGN KEY ("steamUserId64") REFERENCES "SteamUserProfile"("steamUserId64") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "UserSystemSpecs" ADD CONSTRAINT "UserSystemSpecs_userProfileId_fkey" FOREIGN KEY ("userProfileId") REFERENCES "UserProfile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "UserSystemSpec" ADD CONSTRAINT "UserSystemSpec_userProfileId_fkey" FOREIGN KEY ("userProfileId") REFERENCES "UserProfile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "UserStats" ADD CONSTRAINT "UserStats_userProfileId_fkey" FOREIGN KEY ("userProfileId") REFERENCES "UserProfile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -311,10 +310,16 @@ ALTER TABLE "PerformancePostLike" ADD CONSTRAINT "PerformancePostLike_userProfil
 ALTER TABLE "PerformancePost" ADD CONSTRAINT "PerformancePost_steamAppId_fkey" FOREIGN KEY ("steamAppId") REFERENCES "SteamApp"("steamAppId") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PerformancePost" ADD CONSTRAINT "PerformancePost_userSystemSpecsId_fkey" FOREIGN KEY ("userSystemSpecsId") REFERENCES "UserSystemSpecs"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "PerformancePost" ADD CONSTRAINT "PerformancePost_steamUserId64_fkey" FOREIGN KEY ("steamUserId64") REFERENCES "SteamUserProfile"("steamUserId64") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PerformancePost" ADD CONSTRAINT "PerformancePost_userSystemSpecId_fkey" FOREIGN KEY ("userSystemSpecId") REFERENCES "UserSystemSpec"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "PerformancePost" ADD CONSTRAINT "PerformancePost_gamepadId_fkey" FOREIGN KEY ("gamepadId") REFERENCES "GamepadMetadata"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SteamUserProfile" ADD CONSTRAINT "SteamUserProfile_userProfileId_fkey" FOREIGN KEY ("userProfileId") REFERENCES "UserProfile"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_PerformancePostToPerformancePostTag" ADD CONSTRAINT "_PerformancePostToPerformancePostTag_A_fkey" FOREIGN KEY ("A") REFERENCES "PerformancePost"("id") ON DELETE CASCADE ON UPDATE CASCADE;
