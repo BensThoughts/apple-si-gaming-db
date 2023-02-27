@@ -102,10 +102,8 @@ model PerformancePost {
   steamApp   SteamApp @relation(fields: [steamAppId], references: [steamAppId], onDelete: Cascade)
   steamAppId Int
 
-  // TODO: this should eventually be a relation
-  steamUserId64 BigInt // Not set as relation, used to verify who wrote post
-  avatarMedium  String? // Not set as relation
-  displayName   String? // Not set as relation
+  steamUserId64    BigInt
+  steamUserProfile SteamUserProfile @relation(fields: [steamUserId64], references: [steamUserId64])
 
   postText          String
   ratingMedal       RatingMedal
@@ -215,6 +213,8 @@ model SteamUserProfile {
 
   userProfileId Int?         @unique
   userProfile   UserProfile? @relation(fields: [userProfileId], references: [id])
+
+  performancePosts PerformancePost[]
 }
 
 model SteamApp {
