@@ -1,5 +1,6 @@
 import MultiSelectMenu from '~/components/FormComponents/MultiSelectMenu';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
+import type { PostTagOption } from '~/interfaces';
 
 export default function PostTagMultiSelectMenu({
   formId,
@@ -8,17 +9,14 @@ export default function PostTagMultiSelectMenu({
   fieldError,
 }: {
   formId: string;
-  postTags: {
-    postTagId: number,
-    description: string,
-  }[];
+  postTags: PostTagOption[];
   defaultPostTagIds?: number[]; // defaultValue
   fieldError?: string;
 }) {
   const postTagOptions: MultiSelectOption<number>[] = postTags.map((tag) => (
     {
       label: tag.description,
-      value: tag.postTagId,
+      value: tag.id,
     }
   ));
   const defaultValue = postTagOptions.filter((option) => defaultPostTagIds?.includes(option.value));

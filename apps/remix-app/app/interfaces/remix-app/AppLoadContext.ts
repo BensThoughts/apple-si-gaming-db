@@ -1,5 +1,5 @@
 export type AppLoadContextSteamUser = {
-  steamUserId: string;
+  steamUserId64: string;
   displayName?: string | null;
   communityVisibilityState?: number | null;
   profileState?: number | null;

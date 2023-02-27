@@ -4,6 +4,7 @@ import RoundedButton from '~/components/RoundedButton';
 import BasicModal from '~/components/BasicModal';
 
 interface DeleteSystemModalProps {
+  systemSpecId: number,
   systemName: string,
   title: string,
   description?: string,
@@ -12,6 +13,7 @@ interface DeleteSystemModalProps {
 }
 
 export default function DeleteSystemModal({
+  systemSpecId,
   systemName,
   title,
   isOpen,
@@ -54,6 +56,7 @@ export default function DeleteSystemModal({
           >
             <input type="hidden" name="_profileAction" value="deleteSystem" />
             <input type="hidden" name="systemName" value={systemName} />
+            <input type="hidden" name="systemSpecId" value={systemSpecId} />
             <RoundedButton
               type="submit"
               className="text-white bg-error hover:bg-error hover:text-white focus-visible:bg-error focus-visible:text-white"

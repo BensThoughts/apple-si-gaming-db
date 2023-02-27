@@ -1,7 +1,7 @@
 import type { LoaderArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useCatch, useLoaderData, useTransition } from '@remix-run/react';
-import { searchReleasedSteamAppsByName } from '~/models/steamApp.server';
+import { searchReleasedSteamAppsByName } from '~/models/Steam/steamApp.server';
 import SearchTitleCard from '~/components/Search/SearchTitleCard';
 import LoadingComponent from '~/components/LoadingComponent';
 import SearchForm from '~/components/Search/SearchForm';

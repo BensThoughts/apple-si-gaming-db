@@ -1,20 +1,30 @@
 import { json, redirect } from '@remix-run/node';
 import type { ActionArgs } from '@remix-run/node';
 import type { LoaderArgs } from '@remix-run/node';
-import type { FrameRate, GamepadRating, PerformancePostBase, PerformancePostLikes, PerformancePostRating, PerformancePostSteamApp, PerformancePostSystem, PerformancePostTag, PerformancePostUserWhoCreated, RatingMedal } from '~/interfaces';
+import type {
+  PerformancePostBase,
+  PerformancePostLikes,
+  PerformancePostRating,
+  PerformancePostSteamApp,
+  PerformancePostSystem,
+  PerformancePostTag,
+  PerformancePostUserWhoCreated,
+  SystemSpecOption,
+} from '~/interfaces';
 import { validatePostId, validateSteamAppId } from '~/lib/loader-functions/params-validators.server';
-import { didCurrentSessionUserCreatePost, findPerformancePostByPostId } from '~/models/steamPerformancePost.server';
+import { didCurrentSessionUserCreatePost, findPerformancePostById } from '~/models/SteamedApples/performancePost.server';
 import { useActionData, useLoaderData, useTransition } from '@remix-run/react';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-import { findPostTags } from '~/models/postTag.server';
-import { findAllGamepads } from '~/models/gamepadMetadata.server';
+import { findPostTags } from '~/models/SteamedApples/performancePostTag.server';
+import { findAllGamepads } from '~/models/SteamedApples/gamepadMetadata.server';
 // import { doesSteamUserOwnApp } from '~/models/steamUser.server';
-import { useSteamUserLikedPostIds, useSteamUserSystemSpecs } from '~/lib/hooks/useMatchesData';
+import { useUserLikedPostIds, useUserSystemSpecs } from '~/lib/hooks/useMatchesData';
 import EditPerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForms/EditPerformancePostForm';
 import PerformancePostDisplay from '~/components/AppInfo/PerformancePosts/PerformancePostDisplay';
 import PostLayoutCard from '~/components/AppInfo/PerformancePosts/PerformancePostLayoutCard';
 import { editPerformancePostAction } from '~/lib/form-actions/performance-post/edit-post.server';
 import type { PostTagOption, GamepadOption } from '~/interfaces';
+import type { CreateOrEditPerformancePostActionData } from '~/lib/form-actions/performance-post/create-or-edit-action-type';
 
 type EditPostLoaderData = {
   steamAppId: number;
@@ -41,9 +51,9 @@ export async function loader({ params, context }: LoaderArgs) {
   if (!steamUser) {
     return redirect(`/apps/${steamAppId}/performance-posts/`);
   }
-  const steamUserId = steamUser.steamUserId;
+  const steamUserId64 = steamUser.steamUserId64;
   const isLoggedIn = true;
-  const loggedInUserCreatedPost = await didCurrentSessionUserCreatePost(steamUserId, postId);
+  const loggedInUserCreatedPost = await didCurrentSessionUserCreatePost(steamUserId64, postId);
   if (!loggedInUserCreatedPost) {
     return redirect(`/apps/${steamAppId}/performance-posts/`);
   }
@@ -54,7 +64,7 @@ export async function loader({ params, context }: LoaderArgs) {
 
   const postTagOptions: PostTagOption[] = await findPostTags();
   const gamepadOptions: GamepadOption[] = await findAllGamepads();
-  const performancePost = await findPerformancePostByPostId(postId);
+  const performancePost = await findPerformancePostById(postId);
   if (!performancePost) {
     throw Error(`Post with ${postId} not found in database`);
   }
@@ -68,14 +78,16 @@ export async function loader({ params, context }: LoaderArgs) {
     steamApp: {
       name,
     },
+    steamUserProfile: {
+      displayName,
+      avatarMedium,
+    },
     ratingMedal,
     frameRateAverage,
     frameRateStutters,
     gamepadRating,
     gamepadMetadata,
     postTags,
-    displayName,
-    avatarMedium,
     systemManufacturer,
     systemModel,
     systemOsVersion,
@@ -92,7 +104,7 @@ export async function loader({ params, context }: LoaderArgs) {
       loggedInUserCreatedPost,
     },
     performancePost: {
-      postId: id,
+      performancePostId: id,
       postText,
       createdAt,
       steamApp: {
@@ -110,7 +122,7 @@ export async function loader({ params, context }: LoaderArgs) {
         numLikes: usersWhoLiked,
       },
       userWhoCreatedPost: {
-        steamUserId,
+        steamUserId64,
         displayName,
         avatarMedium,
       },
@@ -131,46 +143,23 @@ export async function loader({ params, context }: LoaderArgs) {
   });
 }
 
-export type EditPerformancePostActionData = {
-  formError?: string;
-  fields?: { // used for defaultValue options
-    postText?: string;
-    frameRateAverage?: FrameRate | null;
-    frameRateStutters?: boolean;
-    ratingMedal?: RatingMedal;
-    // systemName?: string;
-    postTagsIds?: number[];
-    gamepadId?: number;
-    gamepadRating?: GamepadRating | null;
-  };
-  fieldErrors?: {
-    postText?: string;
-    frameRateAverage?: string;
-    ratingMedal?: string;
-    systemName?: string;
-    postTags?: string;
-    gamepadId?: string;
-    gamepadRating?: string;
-  };
-};
-
 export async function action({
   request,
   params,
   context,
 }: ActionArgs) {
   const steamAppId = validateSteamAppId(params);
-  const postId = validatePostId(params);
+  const performancePostId = validatePostId(params);
   const steamUser = extractAppLoadContext(context).steamUser;
   if (!steamUser) {
     return redirect(`/apps/${steamAppId}/performance-posts/`);
   }
-  const steamUserId = steamUser.steamUserId;
+  const steamUserId64 = steamUser.steamUserId64;
   const formData = await request.formData();
   return editPerformancePostAction({
-    steamUserId,
+    steamUserId64,
     steamAppId,
-    postId,
+    performancePostId,
     formData,
   });
 }
@@ -189,22 +178,22 @@ export default function EditPerformancePostRoute() {
   } = loaderData;
 
   const {
-    postId,
+    performancePostId,
     postText,
     rating,
     postTags,
   } = performancePost;
 
-  const likedPerformancePostIds = useSteamUserLikedPostIds();
-  const hasLoggedInUserLiked = likedPerformancePostIds.includes(postId);
+  const likedPerformancePostIds = useUserLikedPostIds();
+  const hasLoggedInUserLiked = likedPerformancePostIds.includes(performancePostId);
 
-  const systemSpecs = useSteamUserSystemSpecs();
-  let systemNames: string[] = [];
-  if (systemSpecs && isLoggedIn) {
-    systemNames = systemSpecs.map((systemSpec) => systemSpec.systemName);
-  }
+  const systemSpecs = useUserSystemSpecs();
+  const systemSpecOptions: SystemSpecOption[] = systemSpecs.map((systemSpec) => ({
+    id: systemSpec.systemSpecId,
+    systemName: systemSpec.systemName,
+  }));
 
-  const actionData = useActionData<EditPerformancePostActionData>();
+  const actionData = useActionData<CreateOrEditPerformancePostActionData>();
   const transition = useTransition();
   const isSubmittingEditPerformancePost =
     transition.state === 'submitting' &&
@@ -229,9 +218,9 @@ export default function EditPerformancePostRoute() {
       </PostLayoutCard>
 
       <EditPerformancePostForm
-        postId={postId}
+        postId={performancePostId}
         steamAppId={steamAppId}
-        steamUserSession={{ isLoggedIn, loggedInUserCreatedPost, systemNames }}
+        steamUserSession={{ isLoggedIn, loggedInUserCreatedPost, systemSpecOptions }}
         formError={actionData?.formError}
         fieldErrors={actionData?.fieldErrors}
         fields={actionData?.fields ? actionData.fields : {
@@ -239,9 +228,9 @@ export default function EditPerformancePostRoute() {
           ratingMedal: rating.ratingMedal,
           frameRateAverage: rating.frameRateAverage,
           frameRateStutters: rating.frameRateStutters ? rating.frameRateStutters : false,
-          gamepadId: rating.gamepadMetadata?.gamepadId,
+          gamepadId: rating.gamepadMetadata?.id,
           gamepadRating: rating.gamepadRating,
-          postTagsIds: postTags.map((tag) => tag.postTagId),
+          postTagsIds: postTags.map((tag) => tag.id),
         }}
         isSubmittingForm={isSubmittingEditPerformancePost}
         postTagOptions={postTagOptions}

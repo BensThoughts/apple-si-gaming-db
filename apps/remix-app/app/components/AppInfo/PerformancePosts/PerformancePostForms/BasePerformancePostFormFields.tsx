@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import ToggleSwitch from '~/components/FormComponents/ToggleSwitch';
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
-import type { FrameRate, RatingMedal, GamepadRating } from '~/interfaces';
+import type { FrameRate, RatingMedal, GamepadRating, SystemSpecOption, GamepadOption, PostTagOption } from '~/interfaces';
 import PerformancePostTextArea from './FormComponents/PerformancePostTextArea';
 import RatingMedalSelectMenu from './FormComponents/RatingMedalSelectMenu';
 import FrameRateAverageSelectMenu from './FormComponents/FrameRateAverageSelectMenu';
@@ -11,7 +11,6 @@ import PostTagMultiSelectMenu from './FormComponents/PostTagMultiSelectMenu';
 import SystemNameSelectMenu from './FormComponents/SystemNameSelectMenu';
 
 interface BasePerformancePostFormFieldsProps {
-  systemNames: string[];
   fields?: { // used for defaultValue options
     postText?: string;
     frameRateAverage?: FrameRate | null;
@@ -31,22 +30,17 @@ interface BasePerformancePostFormFieldsProps {
     gamepadId?: string;
     gamepadRating?: string;
   };
-  postTagOptions: {
-    postTagId: number;
-    description: string;
-  }[];
-  gamepadOptions: {
-    gamepadId: number;
-    description: string;
-  }[];
+  postTagOptions: PostTagOption[];
+  gamepadOptions: GamepadOption[];
+  systemSpecOptions: SystemSpecOption[];
 }
 
 export default function BasePerformancePostFormFields({
-  systemNames,
   fields,
   fieldErrors,
   postTagOptions,
   gamepadOptions,
+  systemSpecOptions,
 }: BasePerformancePostFormFieldsProps) {
   const [frameRateStable, setFrameRateStable] = useState(
     fields?.frameRateStutters !== undefined
@@ -85,7 +79,7 @@ export default function BasePerformancePostFormFields({
         </div>
         <div className="z-[28]">
           <GamepadMultiSelectMenu
-            formId="TODO-FIX" // TODO: Change to appropriate ID
+            // formId="TODO-FIX" // TODO: Change to appropriate ID
             gamepads={gamepadOptions}
             defaultGamepadId={fields?.gamepadId}
             fieldError={fieldErrors?.gamepadId}
@@ -118,7 +112,7 @@ export default function BasePerformancePostFormFields({
             &nbsp;to easily attach system information to your post.
         </div>
         <SystemNameSelectMenu
-          systemNames={systemNames}
+          systemSpecOptions={systemSpecOptions}
         />
       </div>
     </>

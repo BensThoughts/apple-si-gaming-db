@@ -3,11 +3,11 @@ import TailwindDisclosure from './TailwindDisclosure';
 
 interface AppInfoTagsProps {
   genres: {
-    genreId: string;
+    id: string;
     description: string
   }[];
   categories: {
-    categoryId: number;
+    id: number;
     description: string;
   }[];
 }
@@ -24,7 +24,7 @@ export default function AppInfoTags({
             <div className="flex gap-2 flex-wrap">
               Genres:
               {genres.map((genre) => (
-                <div key={genre.genreId}>
+                <div key={genre.id}>
                   <TextPill className="bg-tertiary hover:bg-tertiary-highlight">
                     {genre.description}
                   </TextPill>
@@ -36,7 +36,7 @@ export default function AppInfoTags({
             <div className="flex gap-2 flex-wrap">
               Categories:
               {categories.map((category) => (
-                <div key={category.categoryId}>
+                <div key={category.id}>
                   <TextPill className="bg-tertiary hover:bg-tertiary-highlight">
                     {category.description}
                   </TextPill>

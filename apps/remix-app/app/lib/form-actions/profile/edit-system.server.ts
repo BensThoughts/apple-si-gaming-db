@@ -1,8 +1,11 @@
 import { json, redirect } from '@remix-run/node';
-import type { PrismaSteamUserSystemSpecs } from '~/interfaces/database';
-import { findSystemSpecSystemNames, updateSteamUserSystemSpecSystemName } from '~/models/steamUserSystemSpecs.server';
+import type { PrismaUserSystemSpec } from '~/interfaces/database';
+import {
+  findSystemSpecSystemNames,
+  updateSystemSpecSystemName,
+} from '~/models/SteamedApples/userSystemSpecs.server';
 import type { EditSystemSpecActionData, ProfileSystemsActionData } from '~/routes/profile/systems';
-import { validateNewSystemName, validateSystemName } from '~/lib/form-validators/profile';
+import { validateNewSystemName, validateSystemName, validateSystemSpecIdForProfile } from '~/lib/form-validators/profile';
 
 const badRequest = (data: EditSystemSpecActionData) => (
   json<ProfileSystemsActionData>({
@@ -13,29 +16,31 @@ const badRequest = (data: EditSystemSpecActionData) => (
 );
 
 export async function editSystem(
-    steamUserId: PrismaSteamUserSystemSpecs['steamUserId'],
+    userProfileId: PrismaUserSystemSpec['userProfileId'],
     formData: FormData,
 ) {
-  const systemName = formData.get('systemName');
+  const systemSpecIdString = formData.get('systemSpecId');
+  const systemName = formData.get('systemName'); // TODO: Needed?
   const updatedSystemName = formData.get('updatedSystemName');
   if (
-    typeof systemName !== 'string' ||
+    typeof systemSpecIdString !== 'string' ||
+    typeof systemName !== 'string' || // TODO: Needed?
     typeof updatedSystemName !== 'string'
   ) {
     return badRequest({ formError: `Edit system form not submitted correctly.` });
   }
 
-  const systemNames = await findSystemSpecSystemNames(steamUserId);
-  if (!systemNames) {
-    return badRequest({ formError: `Edit system form not submitted correctly.` });
-  }
+  const systemSpecId = Number(systemSpecIdString);
+  const systemNames = await findSystemSpecSystemNames(userProfileId);
 
   const fieldErrors = {
-    systemName: validateSystemName(systemName),
+    systemSpecId: validateSystemSpecIdForProfile(systemSpecId),
+    systemName: validateSystemName(systemName), // TODO: Needed?
     updatedSystemName: validateNewSystemName(updatedSystemName, systemNames),
   };
   const fields = {
-    systemName,
+    systemSpecId,
+    systemName, // TODO: Needed?
     updatedSystemName,
   };
 
@@ -43,7 +48,7 @@ export async function editSystem(
     return badRequest({ fieldErrors, fields });
   }
 
-  await updateSteamUserSystemSpecSystemName(steamUserId, systemName, updatedSystemName);
+  await updateSystemSpecSystemName(systemSpecId, updatedSystemName);
 
   return redirect('/profile/systems');
 }

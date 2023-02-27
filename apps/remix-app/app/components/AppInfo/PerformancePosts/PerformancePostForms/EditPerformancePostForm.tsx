@@ -1,10 +1,9 @@
 import { Form } from '@remix-run/react';
 import RoundedButton from '~/components/RoundedButton';
-import type { SelectOption } from '~/components/FormComponents/SelectMenu';
 import { useEffect, useRef } from 'react';
 import { showToast } from '~/components/Toasts';
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
-import type { FrameRate, RatingMedal, GamepadRating } from '~/interfaces';
+import type { FrameRate, RatingMedal, GamepadRating, PostTagOption, GamepadOption, SystemSpecOption } from '~/interfaces';
 import PerformancePostFormWrapper from './PerformancePostFormWrapper';
 import BasePerformancePostFormFields from './BasePerformancePostFormFields';
 import RemixRoundedLink from '~/components/RemixRoundedLink';
@@ -15,8 +14,8 @@ interface EditPerformancePostFormProps {
   steamUserSession: {
     isLoggedIn: boolean;
     loggedInUserCreatedPost: boolean;
-    systemNames: string[];
-  }
+    systemSpecOptions: SystemSpecOption[];
+  };
   fields?: { // used for defaultValue options
     postText?: string;
     frameRateAverage?: FrameRate | null;
@@ -38,14 +37,8 @@ interface EditPerformancePostFormProps {
   };
   formError?: string;
   isSubmittingForm: boolean;
-  postTagOptions: {
-    postTagId: number;
-    description: string;
-  }[];
-  gamepadOptions: {
-    gamepadId: number;
-    description: string;
-  }[];
+  postTagOptions: PostTagOption[];
+  gamepadOptions: GamepadOption[];
 }
 
 export default function EditPerformancePostForm({
@@ -62,7 +55,7 @@ export default function EditPerformancePostForm({
   const {
     isLoggedIn,
     loggedInUserCreatedPost,
-    systemNames,
+    systemSpecOptions,
   } = steamUserSession;
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -104,17 +97,6 @@ export default function EditPerformancePostForm({
     );
   }
 
-  const systemNameOptions: SelectOption[] = systemNames.map((sysName) => (
-    {
-      name: sysName,
-      value: sysName,
-    }
-  ));
-  systemNameOptions.unshift({
-    name: 'None',
-    value: 'None',
-  });
-
   const formId = `${steamAppId}-EditPerformancePost`;
   return (
     <PerformancePostFormWrapper>
@@ -131,7 +113,7 @@ export default function EditPerformancePostForm({
         <input type="hidden" name="_performancePostAction" value="editPerformancePost" />
         <input type="hidden" name="postId" value={postId} />
         <BasePerformancePostFormFields
-          systemNames={systemNames}
+          systemSpecOptions={systemSpecOptions}
           gamepadOptions={gamepadOptions}
           postTagOptions={postTagOptions}
           fields={fields}

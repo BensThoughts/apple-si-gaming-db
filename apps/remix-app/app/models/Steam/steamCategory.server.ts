@@ -1,9 +1,9 @@
 import prisma from '~/lib/database/db.server';
 
-export async function findAllGenres() {
-  return prisma.steamGenre.findMany({
+export async function findAllCategories() {
+  return prisma.steamCategory.findMany({
     select: {
-      genreId: true,
+      id: true,
       description: true,
     },
   });

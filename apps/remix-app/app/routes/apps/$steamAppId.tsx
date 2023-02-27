@@ -10,7 +10,7 @@ import {
   findSteamAppByAppId,
   updateSteamApp,
   convertSteamApiDataToPrisma,
-} from '~/models/steamApp.server';
+} from '~/models/Steam/steamApp.server';
 import AppInfoTags from '~/components/AppInfo/AppInfoTags';
 // import LoadingComponent from '~/components/LoadingComponent';
 import AppInfoMainAppCard from '~/components/AppInfo/AppInfoMainAppCard';

@@ -1,6 +1,6 @@
 import { redirect, json } from '@remix-run/node';
-import { createSystemSpecs, findSystemSpecSystemNames } from '~/models/steamUserSystemSpecs.server';
-import type { PrismaSteamUserSystemSpecs } from '~/interfaces/database';
+import { createSystemSpec, findSystemSpecSystemNames } from '~/models/SteamedApples/userSystemSpecs.server';
+import type { PrismaUserSystemSpec } from '~/interfaces/database';
 import type { CreateSystemSpecActionData, ProfileSystemsActionData } from '~/routes/profile/systems';
 import { validateNewSystemName, validateSystemInfo, extractSystemSpecs } from '~/lib/form-validators/profile';
 
@@ -13,7 +13,7 @@ const badRequest = (data: CreateSystemSpecActionData) => (
 );
 
 export async function createSystem(
-    steamUserId: PrismaSteamUserSystemSpecs['steamUserId'],
+    userProfileId: PrismaUserSystemSpec['userProfileId'],
     formData: FormData,
 ) {
   const systemName = formData.get('systemName');
@@ -24,10 +24,10 @@ export async function createSystem(
   ) {
     return badRequest({ formError: `Form not submitted correctly.` });
   }
-  const systemNames = await findSystemSpecSystemNames(steamUserId);
-  if (!systemNames) {
-    return badRequest({ formError: `Could not find system names. Does user exist? steamUserId: ${steamUserId}` });
-  }
+  const systemNames = await findSystemSpecSystemNames(userProfileId);
+  // if (!systemNames) {
+  //   return badRequest({ formError: `Could not find system names. Does user exist? userProfileId: ${userProfileId}` });
+  // }
   const fieldErrors = {
     systemName: validateNewSystemName(systemName, systemNames),
     systemInfo: validateSystemInfo(systemInfo),
@@ -42,7 +42,7 @@ export async function createSystem(
   }
 
   const systemSpecs = extractSystemSpecs(systemInfo);
-  await createSystemSpecs(steamUserId, systemName.trim(), systemSpecs);
+  await createSystemSpec(userProfileId, systemName.trim(), systemSpecs);
 
   return redirect(`/profile/systems`);
 }

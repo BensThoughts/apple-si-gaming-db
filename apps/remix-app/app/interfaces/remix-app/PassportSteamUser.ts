@@ -4,7 +4,7 @@ export interface PassportSteamUser {
   displayName: string;
   photos?: { value: string }[];
   _json: {
-    steamid: string;
+    steamid: string; // same as steamId64
     communityvisibilitystate: number;
     profilestate: number;
     personaname: string;

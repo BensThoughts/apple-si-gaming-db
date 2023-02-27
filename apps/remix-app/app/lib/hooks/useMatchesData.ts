@@ -31,77 +31,65 @@ function useRootLoaderData() {
   return rootLoaderData as SerializedRootLoaderData;
 }
 
-function useRootPrismaLoaderData() {
+function useRootUserProfileLoaderData() {
   const rootLoaderData = useRootLoaderData();
   if (!rootLoaderData) {
     return undefined;
   }
   const {
-    steamUserData: {
-      prismaData,
-    },
+    userProfile,
   } = rootLoaderData;
-  if (!prismaData) {
+  if (!userProfile) {
     return undefined;
   }
-  return prismaData;
+  return userProfile;
 }
 
-export function useRootSteamUserContextData() {
-  const rootLoaderData = useRootLoaderData();
-  if (!rootLoaderData) {
+export function useSteamUserProfile() {
+  const userProfile = useRootUserProfileLoaderData();
+  if (!userProfile) {
     return undefined;
   }
   const {
-    steamUserData: {
-      contextData,
-    },
-  } = rootLoaderData;
-  return contextData;
+    steamUserId64,
+    displayName,
+    avatarFull,
+    avatarMedium,
+  } = userProfile.steamUserProfile;
+  return { steamUserId64, displayName, avatarFull, avatarMedium };
 }
 
-export function useSteamUserOwnedApps() {
-  const prismaUserData = useRootPrismaLoaderData();
-  if (!prismaUserData) {
-    return undefined;
-  }
-  return prismaUserData.ownedApps;
-}
-
-export function useSteamUserSystemSpecs() {
-  const prismaUserData = useRootPrismaLoaderData();
-  if (!prismaUserData) {
-    return undefined;
-  }
-  return prismaUserData.systemSpecs;
-}
-
-function useRootCookieLoaderData() {
-  const rootLoaderData = useRootLoaderData();
-  if (!rootLoaderData) {
-    return undefined;
+export function useSteamUserOwnedSteamApps() {
+  const userProfile = useRootUserProfileLoaderData();
+  if (!userProfile) {
+    return [];
   }
   const {
-    cookieData,
-  } = rootLoaderData;
-  return cookieData;
+    steamUserProfile,
+  } = userProfile;
+  return steamUserProfile.ownedSteamApps;
+}
+
+export function useUserSystemSpecs() {
+  const userProfile = useRootUserProfileLoaderData();
+  if (!userProfile) {
+    return [];
+  }
+  return userProfile.systemSpecs;
 }
 
 export function useBannerData() {
-  const rootCookieData = useRootCookieLoaderData();
-  if (!rootCookieData) {
+  const rootLoaderData = useRootLoaderData();
+  if (!rootLoaderData) {
     return undefined;
   }
-  return rootCookieData.banners;
+  return rootLoaderData.session.banners;
 }
 
-export function useSteamUserLikedPostIds() {
-  const prismaUserData = useRootPrismaLoaderData();
-  if (!prismaUserData) {
+export function useUserLikedPostIds() {
+  const userProfile = useRootUserProfileLoaderData();
+  if (!userProfile) {
     return [];
   }
-  if (!prismaUserData.likedPerformancePostIds) {
-    return [];
-  }
-  return prismaUserData.likedPerformancePostIds;
+  return userProfile.likedPerformancePostIds;
 }

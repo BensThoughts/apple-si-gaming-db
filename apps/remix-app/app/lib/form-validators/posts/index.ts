@@ -60,13 +60,13 @@ export function validatePostGamepadId(gamepadId: number, gamepadRating: string) 
   if (!isFinite(gamepadId)) {
     return 'gamepad ID was not a valid number';
   }
-  if (gamepadId < 0) {
+  if (gamepadId < -1) {
     return 'gamepad ID was not a positive number';
   }
   // The None Case for gamepadId is value 0
   // By this point we know gamepadId is a valid >= 0 number
   if (
-    gamepadId === 0 &&
+    gamepadId === -1 &&
     isTypeGamepadRating(gamepadRating)
   ) {
     return `controller rating given with no controller selected`;
@@ -75,12 +75,23 @@ export function validatePostGamepadId(gamepadId: number, gamepadRating: string) 
 
 export function validateGamepadRating(gamepadRating: string, gamepadId: number) {
   // The None Case for gamepadId is value 0
-  if (gamepadId !== 0) {
+  if (gamepadId !== -1) {
     if (gamepadRating.toLowerCase() === 'none') {
       return `rating cannot be none when controller is selected`;
     }
     if (!isTypeGamepadRating(gamepadRating)) {
       return `rating was not a valid rating option`;
     }
+  }
+}
+
+
+// TODO: duplicate code between profile and post
+export function validateSystemSpecIdForPost(systemSpecId: number) {
+  if (!isFinite(systemSpecId)) {
+    return `The systemId ${systemSpecId} was not a valid number`;
+  }
+  if (systemSpecId < -1) {
+    return `The systemId ${systemSpecId} was not a positive number`;
   }
 }

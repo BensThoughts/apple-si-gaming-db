@@ -15,47 +15,36 @@ import PrivacyCard from '~/components/Profile/Login/PrivacyCard';
 import AnimatedUnderline from '~/components/AnimatedUnderline';
 
 interface ProfileLoaderData {
-  steamUserData: {
-    contextData: {
-      isLoggedIn: boolean;
-      steamUserId?: string | null;
-      displayName?: string | null;
-      avatarFull?: string | null,
-    }
-  }
+  session: { isLoggedIn: boolean };
+  userProfile?: {
+    displayName: string | null | undefined;
+    avatarFull: string | null | undefined;
+  };
 }
 
 export async function loader({ context }: LoaderArgs) {
   const { steamUser } = extractAppLoadContext(context);
   if (steamUser) {
     const {
-      steamUserId,
       displayName,
       avatarFull,
     } = steamUser;
     return json<ProfileLoaderData>({
-      steamUserData: {
-        contextData: {
-          isLoggedIn: true,
-          steamUserId,
-          displayName,
-          avatarFull,
-        },
+      session: { isLoggedIn: true },
+      userProfile: {
+        displayName,
+        avatarFull,
       },
     });
   }
   return json<ProfileLoaderData>({
-    steamUserData: {
-      contextData: {
-        isLoggedIn: false,
-      },
-    },
+    session: { isLoggedIn: false },
   });
 }
 
 export const meta: MetaFunction = ({ data }: { data?: Partial<ProfileLoaderData> }) => {
-  if (data?.steamUserData?.contextData.displayName) {
-    const { displayName } = data.steamUserData.contextData;
+  if (data?.userProfile?.displayName) {
+    const { displayName } = data.userProfile;
     return {
       title: displayName ? `${metaTags.title} - Profile - ${displayName}` : `Profile`,
     };
@@ -67,10 +56,8 @@ export const meta: MetaFunction = ({ data }: { data?: Partial<ProfileLoaderData>
 
 export default function ProfilePage() {
   const {
-    steamUserData: {
-      contextData: {
-        isLoggedIn,
-      },
+    session: {
+      isLoggedIn,
     },
   } = useLoaderData<ProfileLoaderData>();
 

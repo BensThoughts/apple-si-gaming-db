@@ -3,14 +3,14 @@ import { redirect, json } from '@remix-run/node';
 import UsersPostsLayout from '~/components/Profile/Posts/UsersPostsLayout';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import { useLoaderData } from '@remix-run/react';
-import { useSteamUserLikedPostIds } from '~/lib/hooks/useMatchesData';
+import { useUserLikedPostIds } from '~/lib/hooks/useMatchesData';
 import type {
   PerformancePostBase,
   PerformancePostLikes,
   PerformancePostRating,
   PerformancePostSteamApp,
 } from '~/interfaces';
-import { findPerformancePostsBySteamUserId } from '~/models/steamPerformancePost.server';
+import { findPerformancePostsBySteamUserId } from '~/models/SteamedApples/performancePost.server';
 
 interface ProfilePostsRouteLoaderData {
   steamUsersPosts: (PerformancePostBase & {
@@ -27,7 +27,7 @@ export async function loader({ context }: LoaderArgs) {
     return redirect('/profile');
   }
 
-  const prismaPerformancePosts = await findPerformancePostsBySteamUserId(steamUser.steamUserId);
+  const prismaPerformancePosts = await findPerformancePostsBySteamUserId(steamUser.steamUserId64);
 
   const steamUsersPosts =
     prismaPerformancePosts.map(({
@@ -46,7 +46,7 @@ export async function loader({ context }: LoaderArgs) {
         headerImage,
       },
     }) => ({
-      postId: id,
+      performancePostId: id,
       createdAt,
       postText,
       likes: {
@@ -70,7 +70,7 @@ export async function loader({ context }: LoaderArgs) {
 
 export default function ProfilePostsRoute() {
   const { steamUsersPosts } = useLoaderData<ProfilePostsRouteLoaderData>();
-  const likedPerformancePostIds = useSteamUserLikedPostIds();
+  const likedPerformancePostIds = useUserLikedPostIds();
   return (
     <UsersPostsLayout
       userSession={{ likedPerformancePostIds }}

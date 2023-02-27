@@ -1,9 +1,8 @@
 import type { LoaderArgs } from '@remix-run/node';
 import { redirect, json } from '@remix-run/node';
-import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-import { findSteamUserLikedPosts } from '~/models/steamUser.server';
+import { findUserProfileLikedPosts } from '~/models/SteamedApples/userProfile.server';
 import { useLoaderData } from '@remix-run/react';
-import { useSteamUserLikedPostIds } from '~/lib/hooks/useMatchesData';
+import { useUserLikedPostIds } from '~/lib/hooks/useMatchesData';
 import UserLikedPostsLayout from '~/components/Profile/LikedPosts/UserLikedPostsLayout';
 import type {
   PerformancePostBase,
@@ -11,6 +10,7 @@ import type {
   PerformancePostRating,
   PerformancePostSteamApp,
 } from '~/interfaces';
+import { getProfileSession } from '~/lib/sessions/profile-session.server';
 
 interface ProfilePostsRouteLoaderData {
   steamUserLikedPosts: (PerformancePostBase & {
@@ -20,13 +20,18 @@ interface ProfilePostsRouteLoaderData {
   })[]
 }
 
-export async function loader({ context }: LoaderArgs) {
-  const { steamUser } = extractAppLoadContext(context);
-  // TODO: This should maybe return more info about the problem
-  if (!steamUser) {
+export async function loader({ request }: LoaderArgs) {
+  // const { steamUser } = extractAppLoadContext(context);
+  // // TODO: This should maybe return more info about the problem
+  // if (!steamUser) {
+  //   return redirect('/profile');
+  // }
+  const profileSession = await getProfileSession(request);
+  const userProfileId = Number(profileSession.getUserProfileId());
+  if (!userProfileId) {
     return redirect('/profile');
   }
-  const prismaSteamUser = await findSteamUserLikedPosts(steamUser.steamUserId);
+  const prismaSteamUser = await findUserProfileLikedPosts(userProfileId);
   if (!prismaSteamUser) {
     return json<ProfilePostsRouteLoaderData>({
       steamUserLikedPosts: [],
@@ -34,7 +39,7 @@ export async function loader({ context }: LoaderArgs) {
   }
   const prismaSteamUserLikedPosts = prismaSteamUser.likedPerformancePosts;
   const steamUserLikedPosts = prismaSteamUserLikedPosts.map(({
-    steamPerformancePost: {
+    performancePost: {
       id,
       createdAt,
       _count: {
@@ -51,7 +56,7 @@ export async function loader({ context }: LoaderArgs) {
       },
     },
   }) => ({
-    postId: id,
+    performancePostId: id,
     createdAt,
     likes: {
       numLikes: usersWhoLiked,
@@ -75,7 +80,7 @@ export async function loader({ context }: LoaderArgs) {
 
 export default function ProfilePostsRoute() {
   const { steamUserLikedPosts } = useLoaderData<ProfilePostsRouteLoaderData>();
-  const likedPerformancePostIds = useSteamUserLikedPostIds();
+  const likedPerformancePostIds = useUserLikedPostIds();
   return (
     <UserLikedPostsLayout
       userSession={{ likedPerformancePostIds }}

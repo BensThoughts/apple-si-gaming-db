@@ -8,7 +8,7 @@ interface LibraryLayoutProps {
     name: string;
     headerImage?: string | null;
     genres: {
-      genreId: string;
+      id: string;
       description: string;
     }[];
     platformMac?: boolean | null;

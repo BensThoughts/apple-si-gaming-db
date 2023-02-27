@@ -1,5 +1,5 @@
 import { redirect, json } from '@remix-run/node';
-import type { EditPerformancePostActionData } from '~/routes/apps/$steamAppId/performance-posts.edit.$postId';
+import type { CreateOrEditPerformancePostActionData } from '~/lib/form-actions/performance-post/create-or-edit-action-type';
 import {
   validatePostText,
   isTypeFrameRateAverage,
@@ -10,52 +10,42 @@ import {
   validatePostGamepadId,
   validateGamepadRating,
   isTypeGamepadRating,
+  validateSystemSpecIdForPost,
 } from '~/lib/form-validators/posts';
-import { validateSystemName } from '~/lib/form-validators/profile';
-import { updatePerformancePost } from '~/models/steamPerformancePost.server';
+import { updatePerformancePost } from '~/models/SteamedApples/performancePost.server';
+import { extractFormData } from './extract-form-data';
 
 
-const badRequest = (data: EditPerformancePostActionData) => json(data, { status: 400 });
+const badRequest = (data: CreateOrEditPerformancePostActionData) => json(data, { status: 400 });
 
 export async function editPerformancePostAction({
-  steamUserId,
+  steamUserId64,
   steamAppId,
-  postId,
+  performancePostId,
   formData,
 } : {
-  steamUserId: string;
+  steamUserId64: string;
   steamAppId: number;
-  postId: string;
+  performancePostId: string;
   formData: FormData;
 }) {
-  const postText = formData.get('performancePostText');
-  const frameRateAverage = formData.get('performancePostFrameRateAverage[value]');
-  const frameRateStutters = formData.get('performancePostFrameRateStutters');
-  const ratingMedal = formData.get('performancePostRatingMedal[value]');
-  const systemName = formData.get('performancePostSystemName[value]');
-  const postTagIdsData = formData.getAll('performancePostTags');
-  const gamepadIdData = formData.get('performancePostGamepadId');
-  const gamepadRating = formData.get('performancePostGamepadRating[value]');
-
-  if (
-    typeof postText !== 'string' ||
-    typeof frameRateAverage !== 'string' ||
-    typeof ratingMedal !== 'string' ||
-    typeof systemName !== 'string' ||
-    typeof gamepadIdData !== 'string' ||
-    typeof gamepadRating !== 'string' ||
-    postTagIdsData.some((tagId) => typeof tagId !== 'string')
-  ) {
-    return badRequest({
-      formError: `Form not submitted correctly.`,
-    });
+  const {
+    formError,
+    fieldsRaw,
+  } = extractFormData(formData);
+  if (formError || !fieldsRaw) {
+    return badRequest({ formError });
   }
-
-  let postTagIds: number[] = [];
-  if (postTagIdsData[0] !== '') {
-    postTagIds = postTagIdsData.map((tagId) => Number(tagId.toString()));
-  }
-  const gamepadId = Number(gamepadIdData);
+  const {
+    postText,
+    ratingMedal,
+    frameRateAverage,
+    frameRateStutters,
+    systemSpecId,
+    postTagIds,
+    gamepadId,
+    gamepadRating,
+  } = fieldsRaw;
 
   const fieldErrors = {
     postText: validatePostText(postText),
@@ -64,7 +54,8 @@ export async function editPerformancePostAction({
     gamepadRating: validateGamepadRating(gamepadRating, gamepadId),
     postTags: validatePostTagIds(postTagIds),
     frameRateAverage: validatePostFrameRateAverage(frameRateAverage),
-    systemName: validateSystemName(systemName),
+    systemSpecId: validateSystemSpecIdForPost(systemSpecId),
+    // systemName: validateSystemName(systemName),
   };
   const fields = {
     postText,
@@ -96,15 +87,15 @@ export async function editPerformancePostAction({
   }
 
   await updatePerformancePost({
-    steamUserId,
-    postId,
+    steamUserId64,
+    performancePostId,
     postText,
     frameRateAverage: frameRateAverage === 'None' ? undefined : frameRateAverage,
-    frameRateStutters: frameRateStutters ? true : false,
+    frameRateStutters,
     ratingMedal,
-    systemName,
+    systemSpecId,
     postTagIds,
-    gamepadId: gamepadId < 1 ? undefined : gamepadId,
+    gamepadId,
     gamepadRating: gamepadRating === 'None' ? undefined : gamepadRating,
   });
 

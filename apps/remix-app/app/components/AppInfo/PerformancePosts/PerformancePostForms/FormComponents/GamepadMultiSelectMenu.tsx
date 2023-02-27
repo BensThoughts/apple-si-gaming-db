@@ -1,43 +1,46 @@
-import MultiSelectMenu from '~/components/FormComponents/MultiSelectMenu';
-import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
+import SelectMenu from '~/components/FormComponents/SelectMenu';
+import type { SelectOption } from '~/components/FormComponents/SelectMenu';
+import type { GamepadOption } from '~/interfaces';
 
 export default function GamepadMultiSelectMenu({
-  formId,
   gamepads,
   defaultGamepadId,
   fieldError,
 }: {
-  formId: string;
-  gamepads: {
-    gamepadId: number;
-    description: string;
-  }[];
+  gamepads: GamepadOption[];
   defaultGamepadId?: number; // defaultValue
   fieldError?: string;
 }) {
-  const gamepadOptions: MultiSelectOption<number>[] = gamepads.map((gamepad) => (
+  const gamepadOptions: SelectOption<number>[] = gamepads.map((gamepad) => (
     {
-      label: gamepad.description,
-      value: gamepad.gamepadId,
+      name: gamepad.description,
+      value: gamepad.id,
     }
   ));
   gamepadOptions.unshift({
-    label: 'None',
-    value: 0,
+    name: 'None',
+    value: -1,
   });
 
   const defaultValue = gamepadOptions.find((option) => option.value === defaultGamepadId);
 
   return (
-    <MultiSelectMenu
+    <SelectMenu
       name="performancePostGamepadId"
-      id={`performancePostGamepadId-${formId}`}
-      labelText="Controller"
+      defaultValue={defaultValue ? defaultValue : gamepadOptions[0]}
       options={gamepadOptions}
+      labelText="Controller"
       fieldError={fieldError}
-      isMulti={false}
-      defaultValue={defaultValue ? [defaultValue] : undefined}
-      closeMenuOnSelect={true}
     />
+    // <MultiSelectMenu
+    //   name="performancePostGamepadId"
+    //   id={`performancePostGamepadId-${formId}`}
+    //   labelText="Controller"
+    //   options={gamepadOptions}
+    //   fieldError={fieldError}
+    //   isMulti={false}
+    //   defaultValue={defaultValue ? [defaultValue] : undefined}
+    //   closeMenuOnSelect={true}
+    // />
   );
 }

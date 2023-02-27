@@ -1,7 +1,7 @@
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { findNewestPerformancePosts } from '~/models/steamPerformancePost.server';
-import { findTrendingSteamApps } from '~/models/steamApp.server';
+import { findNewestPerformancePosts } from '~/models/SteamedApples/performancePost.server';
+import { findTrendingSteamApps } from '~/models/Steam/steamApp.server';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import TrendingSteamAppCard from '~/components/Cards/TrendingSteamAppCard';
 import { Fragment } from 'react';
@@ -48,11 +48,13 @@ export async function loader() {
         name,
       },
       ratingMedal,
-      steamUserId,
-      displayName,
-      avatarMedium,
+      steamUserProfile: {
+        steamUserId64,
+        avatarMedium,
+        displayName,
+      },
     }) => ({
-      postId: id,
+      performancePostId: id,
       createdAt,
       postText,
       steamApp: {
@@ -63,7 +65,7 @@ export async function loader() {
         ratingMedal,
       },
       userWhoCreatedPost: {
-        steamUserId,
+        steamUserId64: steamUserId64.toString(),
         displayName,
         avatarMedium,
       },
@@ -114,16 +116,16 @@ export default function IndexRoute() {
             <h2 className="text-secondary text-2xl">New Posts</h2>
             <div className="w-full flex flex-col items-center gap-4">
               {newPerformancePosts.map(({
-                postId,
+                performancePostId,
                 createdAt,
                 steamApp,
                 postText,
                 rating,
                 userWhoCreatedPost,
               }) => (
-                <Fragment key={postId}>
+                <Fragment key={performancePostId}>
                   <NewPerformancePostCard
-                    postId={postId}
+                    performancePostId={performancePostId}
                     createdAt={new Date(createdAt)}
                     steamApp={steamApp}
                     postText={postText}

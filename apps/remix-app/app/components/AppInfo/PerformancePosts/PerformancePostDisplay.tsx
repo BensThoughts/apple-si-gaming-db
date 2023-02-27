@@ -36,7 +36,7 @@ export default function PerformancePostDisplay({
 }: PerformancePostDisplayProps) {
   // const ratingNum = convertRatingMedalToNumber(ratingMedal);
   const {
-    postId,
+    performancePostId,
     createdAt,
     postText,
     userWhoCreatedPost,
@@ -65,7 +65,7 @@ export default function PerformancePostDisplay({
     <div className="flex flex-col w-full gap-3">
       <PerformancePostMetaBar
         steamAppId={steamAppId}
-        postId={postId}
+        performancePostId={performancePostId}
         createdAt={createdAt}
         ratingMedal={ratingMedal}
         frameRateAverage={frameRateAverage}
@@ -127,7 +127,7 @@ export default function PerformancePostDisplay({
                 </div>
               }
               {postTags.map((tag) => (
-                <div key={tag.postTagId}>
+                <div key={tag.id}>
                   <TextPill className="hover:bg-tertiary-highlight">
                     {tag.description}
                   </TextPill>
@@ -148,7 +148,7 @@ export default function PerformancePostDisplay({
                 </div>
               }
               {postTags.map((tag) => (
-                <div key={tag.postTagId}>
+                <div key={tag.id}>
                   <TextPill className="hover:bg-tertiary-highlight">{tag.description}</TextPill>
                 </div>
               ))}

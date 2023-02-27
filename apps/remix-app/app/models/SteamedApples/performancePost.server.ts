@@ -1,8 +1,7 @@
 import type {
-  PrismaSteamPerformancePost,
+  PrismaPerformancePost,
   PrismaSteamApp,
-  PrismaSteamUser,
-  PrismaSteamUserSystemSpecs,
+  PrismaUserSystemSpec,
   FrameRate,
   PrismaPostTag,
   Prisma,
@@ -10,85 +9,73 @@ import type {
   GamepadRating,
 } from '~/interfaces/database';
 import prisma from '~/lib/database/db.server';
-import { findUniqueSystemSpecForPost } from './steamUserSystemSpecs.server';
+import { findSystemSpecForPostBySystemSpecId } from './userSystemSpecs.server';
 
 
 export async function createPerformancePost({
-  steamUserId,
-  displayName,
-  avatarMedium,
+  steamUserId64,
+  // displayName,
+  // avatarMedium,
   steamAppId,
   postText,
   frameRateAverage,
   frameRateStutters,
   ratingMedal,
-  systemName,
+  systemSpecId,
   postTagIds,
   gamepadId,
   gamepadRating,
 }: {
-  steamUserId: PrismaSteamUser['steamUserId'];
+  steamUserId64: string;
   steamAppId: PrismaSteamApp['steamAppId'];
-  postText: PrismaSteamPerformancePost['postText'];
+  postText: PrismaPerformancePost['postText'];
   frameRateAverage?: FrameRate;
   frameRateStutters: boolean;
-  ratingMedal: PrismaSteamPerformancePost['ratingMedal'];
-  avatarMedium?: PrismaSteamPerformancePost['avatarMedium'];
-  displayName?: PrismaSteamPerformancePost['displayName'];
-  systemName: PrismaSteamUserSystemSpecs['systemName'];
-  postTagIds: PrismaPostTag['postTagId'][];
-  gamepadId?: PrismaGamepadMetadata['gamepadId'];
+  ratingMedal: PrismaPerformancePost['ratingMedal'];
+  // avatarMedium?: PrismaSteamUserProfile['avatarMedium'];
+  // displayName?: PrismaSteamUserProfile['displayName'];
+  systemSpecId?: PrismaUserSystemSpec['id'];
+  postTagIds: PrismaPostTag['id'][];
+  gamepadId?: PrismaGamepadMetadata['id'];
   gamepadRating?: GamepadRating;
 }) {
-  const performancePostData: Prisma.SteamPerformancePostCreateInput = {
+  const performancePostData: Prisma.PerformancePostCreateInput = {
     steamApp: {
       connect: {
         steamAppId,
       },
     },
-    steamUserId,
-    displayName,
-    avatarMedium,
+    steamUserProfile: {
+      connect: {
+        steamUserId64: BigInt(steamUserId64),
+      },
+    },
     postText,
     frameRateAverage,
     frameRateStutters,
     ratingMedal,
     gamepadMetadata: gamepadId ? {
       connect: {
-        gamepadId,
+        id: gamepadId,
       },
     } : undefined,
     gamepadRating,
     postTags: {
-      connect: postTagIds.map((postTagId) => ({
-        postTagId,
+      connect: postTagIds.map((id) => ({
+        id,
       })),
     },
-    // TODO: Decide if we should use explicit vs. implicit
-    // ! WITH JOIN TABLE
-    // postTags: postTagIds.length > 0 ? {
-    //   create: postTagIds.map((postTagId) => ({
-    //     postTag: {
-    //       connect: {
-    //         id: postTagId,
-    //       },
-    //     },
-    //   })),
-    // } : undefined,
   };
 
-  const systemSpecs = await findUniqueSystemSpecForPost(steamUserId, systemName);
-  // TODO: Rather than throwing an error, maybe just let it pass
-  // !Removed to allow no system specs on a performance post
-  // if (!systemSpecs) {
-  //   throw new Error(`System ${systemName} was not found in the database.`);
-  // }
+  const systemSpecs =
+    systemSpecId
+      ? await findSystemSpecForPostBySystemSpecId(systemSpecId)
+      : null;
 
-  // !Added to allow no system specs on performance posts
   if (!systemSpecs) {
-    return prisma.steamPerformancePost.create({ data: performancePostData });
+    return prisma.performancePost.create({ data: performancePostData });
   }
-  return prisma.steamPerformancePost.create({
+  return prisma.performancePost.create({
     data: {
       ...performancePostData,
       systemManufacturer: systemSpecs.manufacturer,
@@ -104,27 +91,27 @@ export async function createPerformancePost({
 };
 
 export async function likePost(
-    postId: string,
-    steamUserId: string,
+    performancePostId: string,
+    userProfileId: number,
 ) {
-  return prisma.steamPerformancePost.update({
+  return prisma.performancePost.update({
     where: {
-      id: postId,
+      id: performancePostId,
     },
     data: {
       usersWhoLiked: {
         upsert: {
           where: {
-            steamUserId_performancePostId: {
-              steamUserId,
-              performancePostId: postId,
+            userProfileId_performancePostId: {
+              userProfileId,
+              performancePostId,
             },
           },
           update: {
-            steamUserId,
+            userProfileId,
           },
           create: {
-            steamUserId,
+            userProfileId,
           },
         },
       },
@@ -133,24 +120,20 @@ export async function likePost(
 }
 
 export async function unlikePost(
-    postId: string,
-    steamUserId: string,
+    performancePostId: string,
+    userProfileId: number,
 ) {
-  return prisma.steamPerformancePost.update({
+  return prisma.performancePost.update({
     where: {
-      id: postId,
+      id: performancePostId,
     },
     data: {
       usersWhoLiked: {
         deleteMany: {
           AND: {
-            steamUserId,
-            performancePostId: postId,
+            userProfileId,
+            performancePostId,
           },
-          // steamUserId_performancePostId: {
-          //   steamUserId,
-          //   performancePostId: postId,
-          // },
         },
       },
     },
@@ -158,9 +141,9 @@ export async function unlikePost(
 }
 
 export async function findPerformancePostsBySteamAppId(
-    steamAppId: PrismaSteamApp['steamAppId'],
+    steamAppId: PrismaPerformancePost['steamAppId'],
 ) {
-  return prisma.steamPerformancePost.findMany({
+  return prisma.performancePost.findMany({
     where: {
       steamAppId,
     },
@@ -175,13 +158,18 @@ export async function findPerformancePostsBySteamAppId(
       },
       id: true,
       createdAt: true,
-      avatarMedium: true,
-      displayName: true,
+      steamUserProfile: {
+        select: {
+          steamUserId64: true,
+          avatarMedium: true,
+          displayName: true,
+        },
+      },
       frameRateAverage: true,
       frameRateStutters: true,
       gamepadMetadata: {
         select: {
-          gamepadId: true,
+          id: true,
           description: true,
         },
       },
@@ -189,7 +177,7 @@ export async function findPerformancePostsBySteamAppId(
       postText: true,
       postTags: {
         select: {
-          postTagId: true,
+          id: true,
           description: true,
         },
       },
@@ -200,7 +188,6 @@ export async function findPerformancePostsBySteamAppId(
           steamAppId: true,
         },
       },
-      steamUserId: true,
       systemManufacturer: true,
       systemModel: true,
       systemOsVersion: true,
@@ -214,11 +201,11 @@ export async function findPerformancePostsBySteamAppId(
 }
 
 export async function findPerformancePostsBySteamUserId(
-    steamUserId: string,
+    steamUserId64: string,
 ) {
-  return prisma.steamPerformancePost.findMany({
+  return prisma.performancePost.findMany({
     where: {
-      steamUserId,
+      steamUserId64: BigInt(steamUserId64),
     },
     orderBy: {
       createdAt: 'desc',
@@ -250,7 +237,7 @@ export async function findPerformancePostsBySteamUserId(
 export async function findNewestPerformancePosts(
     numPerformancePosts: number,
 ) {
-  return prisma.steamPerformancePost.findMany({
+  return prisma.performancePost.findMany({
     select: {
       id: true,
       createdAt: true,
@@ -262,9 +249,13 @@ export async function findNewestPerformancePosts(
       },
       ratingMedal: true,
       postText: true,
-      steamUserId: true,
-      displayName: true,
-      avatarMedium: true,
+      steamUserProfile: {
+        select: {
+          steamUserId64: true,
+          displayName: true,
+          avatarMedium: true,
+        },
+      },
     },
     orderBy: {
       createdAt: 'desc',
@@ -274,21 +265,21 @@ export async function findNewestPerformancePosts(
 }
 
 export async function didCurrentSessionUserCreatePost(
-    steamUserId: string,
+    steamUserId64: string,
     postId: string,
 ) {
-  const steamUserIdThatCreatedPost = await prisma.steamPerformancePost.findUnique({
+  const steamUserIdThatCreatedPost = await prisma.performancePost.findUnique({
     where: {
       id: postId,
     },
     select: {
-      steamUserId: true,
+      steamUserId64: true,
     },
   });
   if (
     steamUserIdThatCreatedPost &&
     (
-      steamUserIdThatCreatedPost.steamUserId === steamUserId
+      steamUserIdThatCreatedPost.steamUserId64.toString() === steamUserId64
     )
   ) {
     return true;
@@ -296,8 +287,8 @@ export async function didCurrentSessionUserCreatePost(
   return false;
 }
 
-export async function deletePerformancePost(postId: PrismaSteamPerformancePost['id']) {
-  return prisma.steamPerformancePost.delete({
+export async function deletePerformancePost(postId: PrismaPerformancePost['id']) {
+  return prisma.performancePost.delete({
     where: {
       id: postId,
     },
@@ -305,81 +296,82 @@ export async function deletePerformancePost(postId: PrismaSteamPerformancePost['
 }
 
 export async function updatePerformancePost({
-  steamUserId,
-  postId,
+  steamUserId64,
+  performancePostId,
   postText,
   frameRateAverage,
   frameRateStutters,
   ratingMedal,
-  systemName,
+  systemSpecId,
   postTagIds,
   gamepadId,
   gamepadRating,
 }: {
-  steamUserId: PrismaSteamPerformancePost['steamUserId'];
-  postId: PrismaSteamPerformancePost['id'];
-  postText: PrismaSteamPerformancePost['postText'];
+  steamUserId64: string;
+  performancePostId: PrismaPerformancePost['id'];
+  postText: PrismaPerformancePost['postText'];
   frameRateAverage?: FrameRate;
   frameRateStutters: boolean;
-  ratingMedal: PrismaSteamPerformancePost['ratingMedal'];
-  systemName: PrismaSteamUserSystemSpecs['systemName'];
-  postTagIds: PrismaPostTag['postTagId'][];
-  gamepadId?: PrismaGamepadMetadata['gamepadId'];
+  ratingMedal: PrismaPerformancePost['ratingMedal'];
+  systemSpecId?: PrismaUserSystemSpec['id'];
+  postTagIds: PrismaPostTag['id'][];
+  gamepadId?: PrismaGamepadMetadata['id'];
   gamepadRating?: GamepadRating;
 }) {
-  const performancePostData: Prisma.SteamPerformancePostUpdateInput = {
+  const performancePostData: Prisma.PerformancePostUpdateInput = {
     postText,
     frameRateAverage,
     frameRateStutters,
     ratingMedal,
     gamepadMetadata: gamepadId ? {
       connect: {
-        gamepadId,
+        id: gamepadId,
       },
     } : undefined,
     gamepadRating,
     postTags: {
-      connect: postTagIds.map((postTagId) => ({
-        postTagId,
+      connect: postTagIds.map((id) => ({
+        id,
       })),
     },
   };
 
-  const systemSpecs = await findUniqueSystemSpecForPost(steamUserId, systemName);
-
-  if (!systemSpecs) {
-    return prisma.steamPerformancePost.update({
-      where: {
-        id: postId,
-      },
-      data: performancePostData,
-    });
+  if (systemSpecId) {
+    const systemSpecs = await findSystemSpecForPostBySystemSpecId(systemSpecId);
+    if (systemSpecs) {
+      return prisma.performancePost.update({
+        where: {
+          id: performancePostId,
+        },
+        data: {
+          ...performancePostData,
+          systemManufacturer: systemSpecs.manufacturer,
+          systemModel: systemSpecs.model,
+          systemOsVersion: systemSpecs.osVersion,
+          systemCpuBrand: systemSpecs.cpuBrand,
+          systemVideoDriver: systemSpecs.videoDriver,
+          systemVideoDriverVersion: systemSpecs.videoDriverVersion,
+          systemVideoPrimaryVRAM: systemSpecs.videoPrimaryVRAM,
+          systemMemoryRAM: systemSpecs.memoryRAM,
+        },
+      });
+    }
   }
 
-  return prisma.steamPerformancePost.update({
+  return prisma.performancePost.update({
     where: {
-      id: postId,
+      id: performancePostId,
     },
-    data: {
-      ...performancePostData,
-      systemManufacturer: systemSpecs.manufacturer,
-      systemModel: systemSpecs.model,
-      systemOsVersion: systemSpecs.osVersion,
-      systemCpuBrand: systemSpecs.cpuBrand,
-      systemVideoDriver: systemSpecs.videoDriver,
-      systemVideoDriverVersion: systemSpecs.videoDriverVersion,
-      systemVideoPrimaryVRAM: systemSpecs.videoPrimaryVRAM,
-      systemMemoryRAM: systemSpecs.memoryRAM,
-    },
+    data: performancePostData,
   });
 }
 
-export async function findPerformancePostByPostId(
-    postId: string,
+export async function findPerformancePostById(
+    performancePostId: string,
 ) {
-  return prisma.steamPerformancePost.findUnique({
+  return prisma.performancePost.findUnique({
     where: {
-      id: postId,
+      id: performancePostId,
     },
     select: {
       _count: {
@@ -389,14 +381,18 @@ export async function findPerformancePostByPostId(
       },
       id: true,
       createdAt: true,
-      steamUserId: true,
-      avatarMedium: true,
-      displayName: true,
+      steamUserProfile: {
+        select: {
+          // steamUserId64: true,
+          displayName: true,
+          avatarMedium: true,
+        },
+      },
       frameRateAverage: true,
       frameRateStutters: true,
       gamepadMetadata: {
         select: {
-          gamepadId: true,
+          id: true,
           description: true,
         },
       },
@@ -404,7 +400,7 @@ export async function findPerformancePostByPostId(
       postText: true,
       postTags: {
         select: {
-          postTagId: true,
+          id: true,
           description: true,
         },
       },

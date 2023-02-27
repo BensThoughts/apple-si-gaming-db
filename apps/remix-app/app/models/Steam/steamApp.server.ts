@@ -77,8 +77,8 @@ interface SearchReleasedSteamAppsByNameProps {
   take: number;
   whereOptions?: {
     platformMac?: PrismaSteamApp['platformMac'];
-    genreIds?: PrismaSteamGenre['genreId'][];
-    categoryIds?: PrismaSteamCategory['categoryId'][];
+    genreIds?: PrismaSteamGenre['id'][];
+    categoryIds?: PrismaSteamCategory['id'][];
   },
 }
 
@@ -100,22 +100,22 @@ export async function searchReleasedSteamAppsByName(
     } = whereOptions;
     const andClause: Prisma.Enumerable<Prisma.SteamAppWhereInput> = [];
     if (genreIds) {
-      genreIds.forEach((genreId) => {
+      genreIds.forEach((id) => {
         andClause.push({
           genres: {
             some: {
-              genreId,
+              id,
             },
           },
         });
       });
     }
     if (categoryIds) {
-      categoryIds.forEach((categoryId) => {
+      categoryIds.forEach((id) => {
         andClause.push({
           categories: {
             some: {
-              categoryId,
+              id,
             },
           },
         });
@@ -230,7 +230,7 @@ export function findSteamAppsWherePostsExist() {
       platformMac: true,
       genres: {
         select: {
-          genreId: true,
+          id: true,
           description: true,
         },
       },

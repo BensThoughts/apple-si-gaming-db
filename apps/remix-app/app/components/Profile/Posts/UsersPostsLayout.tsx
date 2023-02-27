@@ -49,7 +49,7 @@ export default function UsersPostsLayout({
     <div className="flex flex-col gap-8 items-center w-full p-4 bg-tertiary rounded-lg border-1 border-secondary-highlight">
       <Heading>Posts</Heading>
       {steamUsersPosts.map(({
-        postId,
+        performancePostId,
         createdAt,
         postText,
         likes: {
@@ -67,7 +67,7 @@ export default function UsersPostsLayout({
         },
       }) => (
         <div
-          key={postId}
+          key={performancePostId}
           className="border-1 border-secondary-highlight rounded-md
                    p-3 md:px-4 md:py-3 bg-tertiary
                    focus:show-ring w-full max-w-4xl
@@ -94,7 +94,7 @@ export default function UsersPostsLayout({
                   </div>
                   <div>
                     <RemixUnderlineLink
-                      to={`/apps/${steamAppId}/performance-posts#${postId}`}
+                      to={`/apps/${steamAppId}/performance-posts#${performancePostId}`}
                     >
                     View Post
                     </RemixUnderlineLink>
@@ -108,7 +108,7 @@ export default function UsersPostsLayout({
             <div className="w-full">
               <PerformancePostMetaBar
                 steamAppId={steamAppId}
-                postId={postId}
+                performancePostId={performancePostId}
                 createdAt={createdAt}
                 ratingMedal={ratingMedal}
                 frameRateAverage={frameRateAverage}
@@ -119,7 +119,7 @@ export default function UsersPostsLayout({
                 }}
                 likeButtonData={{
                   numLikes,
-                  hasLoggedInUserLiked: likedPerformancePostIds.includes(postId),
+                  hasLoggedInUserLiked: likedPerformancePostIds.includes(performancePostId),
                 }}
               />
             </div>
@@ -139,7 +139,7 @@ export default function UsersPostsLayout({
               </div>
               <div>
                 <RemixUnderlineLink
-                  to={`/apps/${steamAppId}/performance-posts#${postId}`}
+                  to={`/apps/${steamAppId}/performance-posts#${performancePostId}`}
                 >
                     View Post
                 </RemixUnderlineLink>
@@ -151,7 +151,7 @@ export default function UsersPostsLayout({
             <div className="w-full">
               <PerformancePostMetaBar
                 steamAppId={steamAppId}
-                postId={postId}
+                performancePostId={performancePostId}
                 userSession={{
                   isUserLoggedIn: true, // if they are on this page, they are logged in
                   didLoggedInUserCreatePost: false,
@@ -162,7 +162,7 @@ export default function UsersPostsLayout({
                 createdAt={createdAt}
                 likeButtonData={{
                   numLikes: numLikes ? numLikes : 0,
-                  hasLoggedInUserLiked: likedPerformancePostIds.includes(postId),
+                  hasLoggedInUserLiked: likedPerformancePostIds.includes(performancePostId),
                 }}
               />
             </div>

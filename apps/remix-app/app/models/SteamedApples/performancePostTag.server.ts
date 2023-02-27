@@ -3,11 +3,11 @@ import prisma from '~/lib/database/db.server';
 export async function findPostTags() {
   return prisma.performancePostTag.findMany({
     select: {
-      postTagId: true,
+      id: true,
       description: true,
     },
     orderBy: {
-      postTagId: 'asc',
+      id: 'asc',
     },
   });
 }

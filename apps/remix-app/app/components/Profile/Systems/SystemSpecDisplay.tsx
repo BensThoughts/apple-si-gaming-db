@@ -8,6 +8,7 @@ import type { DeleteSystemSpecActionData, EditSystemSpecActionData } from '~/rou
 
 interface SystemSpecDisplayProps {
   systemSpecs: {
+    systemSpecId: number;
     systemName: string;
     manufacturer: string | null;
     model: string | null;
@@ -41,14 +42,18 @@ export default function SystemSpecDisplay({
 }: SystemSpecDisplayProps) {
   const [isDeleteModalOpen, setDeleteModalIsOpen] = useState(false);
   const [deleteModalSystemName, setDeleteModalSystemName] = useState<string | undefined>(undefined);
+  const [deleteModalSystemSpecId, setDeleteModalSystemSpecId] = useState<number | undefined>(undefined);
 
   const [isEditModalOpen, setEditModalIsOpen] = useState(false);
   const [editModalSystemName, setEditModalSystemName] = useState<string | undefined>(undefined);
+  const [editModalSystemSpecId, setEditModalSystemSpecId] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     if (systemSpecs.length > 0) {
       setDeleteModalSystemName(systemSpecs[0].systemName);
+      setDeleteModalSystemSpecId(systemSpecs[0].systemSpecId);
       setEditModalSystemName(systemSpecs[0].systemName);
+      setEditModalSystemSpecId(systemSpecs[0].systemSpecId);
     }
   }, [systemSpecs]);
 
@@ -67,6 +72,9 @@ export default function SystemSpecDisplay({
       if (fieldErrors && fieldErrors.updatedSystemName) {
         showToast.error(fieldErrors.updatedSystemName);
       }
+      if (fieldErrors && fieldErrors.systemSpecId) {
+        showToast.error(fieldErrors.systemSpecId);
+      }
     }
   }, [editSystemSpecActionData]);
 
@@ -81,6 +89,9 @@ export default function SystemSpecDisplay({
       }
       if (fieldErrors && fieldErrors.systemName) {
         showToast.error(fieldErrors.systemName);
+      }
+      if (fieldErrors && fieldErrors.systemSpecId) {
+        showToast.error(fieldErrors.systemSpecId);
       }
     }
   }, [deleteSystemSpecActionData]);
@@ -98,37 +109,48 @@ export default function SystemSpecDisplay({
 
   const systemNames = systemSpecs.map((sysSpec) => sysSpec.systemName);
 
-  function openDeleteModal(systemName: string) {
+  function openDeleteModal(
+      systemName: string,
+      systemSpecId: number,
+  ) {
     setDeleteModalSystemName(systemName);
+    setDeleteModalSystemSpecId(systemSpecId);
     setDeleteModalIsOpen(true);
   }
 
-  function openEditModal(systemName: string) {
+  function openEditModal(
+      systemName: string,
+      systemSpecId: number,
+  ) {
     setEditModalSystemName(systemName);
+    setEditModalSystemSpecId(systemSpecId);
     setEditModalIsOpen(true);
   }
 
   return (
     <div className="w-full flex flex-col justify-center items-center gap-3">
-      {deleteModalSystemName &&
+      {(deleteModalSystemName && deleteModalSystemSpecId) &&
         <DeleteSystemModal
           title="Delete System"
           isOpen={isDeleteModalOpen}
           setIsOpen={setDeleteModalIsOpen}
           systemName={deleteModalSystemName}
+          systemSpecId={deleteModalSystemSpecId}
         />
       }
-      {editModalSystemName &&
+      {(editModalSystemName && editModalSystemSpecId) &&
         <EditSystemModal
           title="Edit Name"
           isOpen={isEditModalOpen}
           setIsOpen={setEditModalIsOpen}
           systemName={editModalSystemName}
           currentSystemNames={systemNames}
+          systemSpecId={editModalSystemSpecId}
         />
       }
 
       {systemSpecs.map(({
+        systemSpecId,
         systemName,
         manufacturer,
         model,
@@ -167,7 +189,7 @@ export default function SystemSpecDisplay({
                 className="flex gap-2"
               >
                 <button
-                  onClick={() => openEditModal(systemName)}
+                  onClick={() => openEditModal(systemName, systemSpecId)}
                   className="rounded-md py-1.5 px-2 bg-secondary hover:bg-secondary-highlight focus-visible:show-ring"
                 >
                   <EditIcon
@@ -176,7 +198,7 @@ export default function SystemSpecDisplay({
                   />
                 </button>
                 <button
-                  onClick={() => openDeleteModal(systemName)}
+                  onClick={() => openDeleteModal(systemName, systemSpecId)}
                   className="rounded-md py-1.5 px-2 bg-secondary hover:bg-secondary-highlight focus-visible:show-ring"
                 >
                   <TrashIcon

@@ -3,8 +3,15 @@ import type { ActionArgs, LoaderArgs } from '@remix-run/node';
 import { useTransition } from '@remix-run/react';
 import LibraryLayout from '~/components/Profile/Library/LibraryLayout';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-import { useSteamUserOwnedApps } from '~/lib/hooks/useMatchesData';
-import { doesSteamUserExist, updateUserOwnedApps, upsertSteamUser } from '~/models/steamUser.server';
+import { useSteamUserOwnedSteamApps } from '~/lib/hooks/useMatchesData';
+import {
+  doesUserProfileExist,
+  upsertUserProfileBySteamUserId64,
+} from '~/models/SteamedApples/userProfile.server';
+import {
+  updateSteamUserProfileOwnedSteamApps,
+} from '~/models/Steam/steamUserProfile.server';
+import { getProfileSession } from '~/lib/sessions/profile-session.server';
 
 export async function loader({ context }: LoaderArgs) {
   const { steamUser } = extractAppLoadContext(context);
@@ -15,20 +22,22 @@ export async function loader({ context }: LoaderArgs) {
 }
 
 export async function action({ request, context }: ActionArgs) {
+  const profileSession = await getProfileSession(request);
+  const profileId = Number(profileSession.getUserProfileId());
   const { steamUser } = extractAppLoadContext(context);
   // TODO: This should maybe return more info about the problem
-  if (!steamUser) {
+  if (!steamUser || !isFinite(profileId)) {
     return redirect('/profile');
   }
   const formData = await request.formData();
   const action = formData.get('_profileAction');
   switch (action) {
     case 'updateOwnedGames': {
-      const steamUserExists = await doesSteamUserExist(steamUser.steamUserId);
+      const steamUserExists = await doesUserProfileExist(profileId);
       if (!steamUserExists) {
-        await upsertSteamUser(steamUser);
+        await upsertUserProfileBySteamUserId64(steamUser.steamUserId64, steamUser);
       }
-      await updateUserOwnedApps(steamUser.steamUserId);
+      await updateSteamUserProfileOwnedSteamApps(steamUser.steamUserId64);
       return redirect('/profile/library');
     }
     default: {
@@ -38,8 +47,7 @@ export async function action({ request, context }: ActionArgs) {
 }
 
 export default function ProfileAppsRoute() {
-  const steamUserOwnedApps = useSteamUserOwnedApps();
-  const ownedApps = steamUserOwnedApps ? steamUserOwnedApps : [];
+  const userOwnedApps = useSteamUserOwnedSteamApps();
 
   const transition = useTransition();
 
@@ -49,7 +57,7 @@ export default function ProfileAppsRoute() {
 
   return (
     <LibraryLayout
-      ownedApps={ownedApps}
+      ownedApps={userOwnedApps}
       isSubmittingUpdateGames={isSubmittingUpdateGames}
     />
   );

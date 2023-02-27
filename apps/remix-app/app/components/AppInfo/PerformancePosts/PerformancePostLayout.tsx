@@ -15,7 +15,7 @@ type PerformancePostLayoutProps =
 {
   userSession: {
     isUserLoggedIn: boolean;
-    steamUserId?: string;
+    steamUserId64?: string;
     likedPerformancePostIds: string[];
   };
   performancePosts: (PerformancePostBase & {
@@ -51,11 +51,11 @@ export default function PerformancePostLayout({
         <div className="flex flex-col gap-6 w-full">
           {performancePosts.map((performancePost, idx) => {
             const hasLoggedInUserLiked =
-              userSession.likedPerformancePostIds.includes(performancePost.postId);
+              userSession.likedPerformancePostIds.includes(performancePost.performancePostId);
             const didLoggedInUserCreatePost =
-              performancePost.userWhoCreatedPost?.steamUserId === userSession.steamUserId;
+              performancePost.userWhoCreatedPost?.steamUserId64 === userSession.steamUserId64;
             return (
-              <div key={performancePost.postId} id={performancePost.postId} className="flex flex-col gap-6">
+              <div key={performancePost.performancePostId} id={performancePost.performancePostId} className="flex flex-col gap-6">
                 <PerformancePostDisplay
                   performancePost={performancePost}
                   userSession={{

@@ -48,7 +48,7 @@ export default function GamepadRatingSelectMenu({
       options={gamepadRatingOptions}
       labelText="Controller Rating"
       fieldError={fieldError}
-      menuSize="large"
+      // menuSize="large"
     />
   );
 }

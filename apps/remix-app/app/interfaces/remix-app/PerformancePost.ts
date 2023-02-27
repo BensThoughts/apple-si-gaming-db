@@ -14,7 +14,7 @@ export interface PerformancePostRating {
   frameRateStutters?: boolean | null;
   gamepadRating?: GamepadRating | null;
   gamepadMetadata?: {
-    gamepadId: number;
+    id: number;
     description: string;
   } | null,
 }
@@ -37,13 +37,13 @@ export interface PerformancePostSteamApp {
 }
 
 export interface PerformancePostUserWhoCreated {
-  steamUserId: string;
+  steamUserId64: string;
   displayName?: string | null;
   avatarMedium?: string | null;
 }
 
 export interface PerformancePostTag {
-  postTagId: number;
+  id: number;
   description: string;
 }
 
@@ -52,17 +52,23 @@ export interface PerformancePostLikes {
 }
 
 export interface PerformancePostBase {
-    postId: string;
+    performancePostId: string;
     createdAt: Date;
     postText: string;
 }
 
 export interface GamepadOption {
-  gamepadId: number;
+  id: number;
   description: string;
 }
 
 export interface PostTagOption {
-  postTagId: number;
+  id: number;
   description: string;
 }
+
+export interface SystemSpecOption {
+  id: number;
+  systemName: string;
+}
+

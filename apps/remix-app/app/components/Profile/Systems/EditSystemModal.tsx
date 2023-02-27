@@ -7,15 +7,17 @@ import { validateNewSystemName } from '~/lib/form-validators/profile';
 import BasicModal from '~/components/BasicModal';
 
 interface EditSystemModalProps {
-  systemName: string,
-  currentSystemNames: string[],
-  title: string,
-  description?: string,
-  isOpen: boolean
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  systemSpecId: number;
+  systemName: string;
+  currentSystemNames: string[];
+  title: string;
+  description?: string;
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function EditSystemModal({
+  systemSpecId,
   systemName,
   currentSystemNames,
   title,
@@ -60,6 +62,7 @@ export default function EditSystemModal({
         >
           <div>
             <input type="hidden" name="_profileAction" value="editSystem" />
+            <input type="hidden" name="systemSpecId" value={systemSpecId} />
             <input type="hidden" name="systemName" value={systemName} />
             <input type="hidden" name="systemNames" value={currentSystemNames} />
             {/* <MaterialInputOutlined

@@ -6,6 +6,7 @@ import CreateSystemInstructions from './CreateSystemInstructions';
 
 interface SystemSpecLayoutProps {
   systemSpecs: {
+    systemSpecId: number;
     systemName: string;
     manufacturer: string | null;
     model: string | null;

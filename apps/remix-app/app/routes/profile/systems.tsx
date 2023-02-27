@@ -2,15 +2,16 @@ import { redirect, json } from '@remix-run/node';
 import type { ActionArgs, LoaderArgs } from '@remix-run/node';
 import { useActionData, useTransition } from '@remix-run/react';
 import SystemSpecLayout from '~/components/Profile/Systems/SystemSpecLayout';
-import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import { createSystem } from '~/lib/form-actions/profile/create-system.server';
 import { deleteSystem } from '~/lib/form-actions/profile/delete-system.server';
 import { editSystem } from '~/lib/form-actions/profile/edit-system.server';
-import { useSteamUserSystemSpecs } from '~/lib/hooks/useMatchesData';
+import { useUserSystemSpecs } from '~/lib/hooks/useMatchesData';
+import { getProfileSession } from '~/lib/sessions/profile-session.server';
 
-export async function loader({ context }: LoaderArgs) {
-  const { steamUser } = extractAppLoadContext(context);
-  if (!steamUser) {
+export async function loader({ request }: LoaderArgs) {
+  const profileSession = await getProfileSession(request);
+  const isLoggedIn = profileSession.getIsLoggedIn();
+  if (!isLoggedIn) {
     return redirect('/profile');
   }
   return json({});
@@ -31,10 +32,12 @@ export type CreateSystemSpecActionData = {
 export type EditSystemSpecActionData = {
   formError?: string;
   fieldErrors?: {
+    systemSpecId?: string;
     systemName?: string;
     updatedSystemName?: string;
   };
   fields?: {
+    systemSpecId: number;
     systemName: string;
     updatedSystemName: string;
   }
@@ -43,9 +46,11 @@ export type EditSystemSpecActionData = {
 export type DeleteSystemSpecActionData = {
   formError?: string;
   fieldErrors?: {
+    systemSpecId?: string;
     systemName?: string;
   }
   fields?: {
+    systemSpecId: number;
     systemName: string;
   }
 }
@@ -58,23 +63,23 @@ export type ProfileSystemsActionData = {
   };
 }
 
-export async function action({ request, context }: ActionArgs) {
-  const { steamUser } = extractAppLoadContext(context);
-  // TODO: This should maybe return more info about the problem
-  if (!steamUser) {
+export async function action({ request }: ActionArgs) {
+  const profileSession = await getProfileSession(request);
+  const userProfileId = Number(profileSession.getUserProfileId());
+  if (!isFinite(userProfileId)) {
     return redirect('/profile');
   }
   const formData = await request.formData();
   const action = formData.get('_profileAction');
   switch (action) {
     case 'createSystem': {
-      return createSystem(steamUser.steamUserId, formData);
+      return createSystem(userProfileId, formData);
     }
     case 'deleteSystem': {
-      return deleteSystem(steamUser.steamUserId, formData);
+      return deleteSystem(userProfileId, formData);
     }
     case 'editSystem': {
-      return editSystem(steamUser.steamUserId, formData);
+      return editSystem(userProfileId, formData);
     }
     default: {
       throw new Error('Unexpected action in /profile');
@@ -83,8 +88,7 @@ export async function action({ request, context }: ActionArgs) {
 }
 
 export default function ProfileSystemsRoute() {
-  const steamUserSystemSpecs = useSteamUserSystemSpecs();
-  const systemSpecs = steamUserSystemSpecs ? steamUserSystemSpecs : [];
+  const userSystemSpecs = useUserSystemSpecs();
   const actionData = useActionData<ProfileSystemsActionData>();
   const transition = useTransition();
 
@@ -94,7 +98,7 @@ export default function ProfileSystemsRoute() {
 
   return (
     <SystemSpecLayout
-      systemSpecs={systemSpecs}
+      systemSpecs={userSystemSpecs}
       isSubmittingCreateSystemForm={isSubmittingCreateSystemForm}
       createSystemSpecActionData={actionData?._profileAction.createSystemSpec}
       editSystemSpecActionData={actionData?._profileAction.editSystemSpec}

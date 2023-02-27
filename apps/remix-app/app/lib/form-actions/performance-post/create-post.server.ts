@@ -1,114 +1,104 @@
 import { redirect, json } from '@remix-run/node';
-import type { CreatePerformancePostActionData } from '~/routes/apps/$steamAppId/performance-posts';
 import {
-  validatePostText,
   isTypeFrameRateAverage,
-  validatePostFrameRateAverage,
+  isTypeGamepadRating,
   isTypeRatingMedal,
+  validateGamepadRating,
+  validatePostFrameRateAverage,
+  validatePostGamepadId,
   validatePostRatingMedal,
   validatePostTagIds,
-  validatePostGamepadId,
-  validateGamepadRating,
-  isTypeGamepadRating,
+  validatePostText,
+  validateSystemSpecIdForPost,
 } from '~/lib/form-validators/posts';
-import { validateSystemName } from '~/lib/form-validators/profile';
-import { createPerformancePost } from '~/models/steamPerformancePost.server';
+import { createPerformancePost } from '~/models/SteamedApples/performancePost.server';
+import type { CreateOrEditPerformancePostActionData } from './create-or-edit-action-type';
+import { extractFormData } from './extract-form-data';
 
-
-const badRequest = (data: CreatePerformancePostActionData) => json(data, { status: 400 });
+export const badRequest = (data: CreateOrEditPerformancePostActionData) => json(data, { status: 400 });
 
 export async function createPerformancePostAction({
   steamAppId,
-  steamUserId,
+  steamUserId64,
   displayName,
   avatarMedium,
   formData,
 } : {
   steamAppId: number;
-  steamUserId: string;
+  steamUserId64: string;
   displayName?: string | null | undefined;
   avatarMedium?: string | null | undefined;
   formData: FormData;
 }) {
-  const postText = formData.get('performancePostText');
-  const frameRateAverage = formData.get('performancePostFrameRateAverage[value]');
-  const frameRateStutters = formData.get('performancePostFrameRateStutters');
-  const ratingMedal = formData.get('performancePostRatingMedal[value]');
-  const systemName = formData.get('performancePostSystemName[value]');
-  const postTagIdsData = formData.getAll('performancePostTags');
-  const gamepadIdData = formData.get('performancePostGamepadId');
-  const gamepadRating = formData.get('performancePostGamepadRating[value]');
-
-  if (
-    typeof postText !== 'string' ||
-    typeof frameRateAverage !== 'string' ||
-    typeof ratingMedal !== 'string' ||
-    typeof systemName !== 'string' ||
-    typeof gamepadIdData !== 'string' ||
-    typeof gamepadRating !== 'string' ||
-    postTagIdsData.some((tagId) => typeof tagId !== 'string')
-  ) {
-    return badRequest({
-      formError: `Form not submitted correctly.`,
-    });
+  const {
+    formError,
+    fieldsRaw,
+  } = extractFormData(formData);
+  if (formError || !fieldsRaw) {
+    return badRequest({ formError });
   }
-
-  let postTagIds: number[] = [];
-  if (postTagIdsData[0] !== '') {
-    postTagIds = postTagIdsData.map((tagId) => Number(tagId.toString()));
-  }
-  const gamepadId = Number(gamepadIdData);
+  const {
+    postText,
+    ratingMedal,
+    frameRateAverage,
+    frameRateStutters,
+    systemSpecId,
+    postTagIds,
+    gamepadId,
+    gamepadRating,
+  } = fieldsRaw;
 
   const fieldErrors = {
     postText: validatePostText(postText),
     ratingMedal: validatePostRatingMedal(ratingMedal),
     gamepadId: validatePostGamepadId(gamepadId, gamepadRating),
     gamepadRating: validateGamepadRating(gamepadRating, gamepadId),
-    postTags: validatePostTagIds(postTagIds),
+    postTagIds: validatePostTagIds(postTagIds),
     frameRateAverage: validatePostFrameRateAverage(frameRateAverage),
-    systemName: validateSystemName(systemName),
+    systemSpecId: validateSystemSpecIdForPost(systemSpecId),
   };
   const fields = {
     postText,
+    // ratingMedal,
+    // gamepadId,
+    // gamepadRating,
+    // postTagIds,
+    // frameRateAverage,
+    // frameRateStutters,
+    // systemSpecId,
   };
-
   if (Object.values(fieldErrors).some(Boolean)) {
     return badRequest({ fieldErrors, fields });
   }
-
-  // This should never return true (used for Typescript type validation)
+  // Used for Typescript type validation, should never return true by this point
+  if (!isTypeRatingMedal(ratingMedal)) {
+    return { fieldErrors, fields };
+  }
+  // Used for Typescript type validation, should never return true by this point
   if (
     frameRateAverage !== 'None' &&
     !isTypeFrameRateAverage(frameRateAverage)
   ) {
-    return badRequest({ fieldErrors, fields });
+    return { fieldErrors, fields };
   }
-
-  // This should never return true (used for Typescript type validation)
-  if (!isTypeRatingMedal(ratingMedal)) {
-    return badRequest({ fieldErrors, fields });
-  }
-
-  // This should never return true (used for Typescript type validation)
+  // Used for Typescript type validation, should never return true by this point
   if (
     gamepadRating !== 'None' &&
     !isTypeGamepadRating(gamepadRating)
   ) {
-    return badRequest({ fieldErrors, fields });
+    return { fieldErrors, fields };
   }
 
   await createPerformancePost({
-    steamUserId,
-    avatarMedium,
-    displayName,
+    steamUserId64,
     steamAppId,
     postText,
-    frameRateAverage: frameRateAverage === 'None' ? undefined : frameRateAverage,
-    frameRateStutters: frameRateStutters ? true : false,
     ratingMedal,
-    systemName,
+    frameRateAverage: frameRateAverage === 'None' ? undefined : frameRateAverage,
+    frameRateStutters,
+    systemSpecId,
     postTagIds,
-    gamepadId: gamepadId < 1 ? undefined : gamepadId,
+    gamepadId,
     gamepadRating: gamepadRating === 'None' ? undefined : gamepadRating,
   });
 

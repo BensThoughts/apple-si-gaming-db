@@ -5,7 +5,7 @@ import EditAndDeleteButtons from './EditAndDeleteButtons';
 
 interface PerformancePostMetaBarProps {
   steamAppId: number;
-  postId: string;
+  performancePostId: string;
   createdAt: Date;
   ratingMedal: RatingMedal;
   frameRateAverage?: FrameRate | null;
@@ -22,7 +22,7 @@ interface PerformancePostMetaBarProps {
 
 export default function PerformancePostMetaBar({
   steamAppId,
-  postId,
+  performancePostId,
   createdAt,
   userSession = { isUserLoggedIn: false, didLoggedInUserCreatePost: false },
   ratingMedal,
@@ -54,7 +54,7 @@ export default function PerformancePostMetaBar({
             action="/actions/like-post"
           > */}
           <LikeButton
-            postId={postId}
+            postId={performancePostId}
             numLikes={numLikes}
             isUserLoggedIn={userSession.isUserLoggedIn}
             hasLoggedInUserLiked={hasLoggedInUserLiked}
@@ -83,7 +83,7 @@ export default function PerformancePostMetaBar({
           {userSession.didLoggedInUserCreatePost && (
             <EditAndDeleteButtons
               steamAppId={steamAppId}
-              postId={postId}
+              postId={performancePostId}
             />
           )}
         </div>

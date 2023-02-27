@@ -1,7 +1,7 @@
-import type { PrismaSteamUserSystemSpecs } from '~/interfaces/database';
 import { json, redirect } from '@remix-run/node';
-import { deleteSystemSpecs } from '~/models/steamUserSystemSpecs.server';
+import { deleteSystemSpec, doesUserOwnSystemSpec } from '~/models/SteamedApples/userSystemSpecs.server';
 import type { DeleteSystemSpecActionData, ProfileSystemsActionData } from '~/routes/profile/systems';
+import { validateSystemName, validateSystemSpecIdForProfile } from '~/lib/form-validators/profile';
 // import { validateSystemName } from '~/lib/form-validators/profile';
 
 const badRequest = (data: DeleteSystemSpecActionData) => (
@@ -13,25 +13,36 @@ const badRequest = (data: DeleteSystemSpecActionData) => (
 );
 
 export async function deleteSystem(
-    steamUserId: PrismaSteamUserSystemSpecs['steamUserId'],
+    userProfileId: number,
     formData: FormData,
 ) {
   const systemName = formData.get('systemName');
-  if (typeof systemName !== 'string') {
+  const systemSpecIdString = formData.get('systemSpecId');
+  if (
+    typeof systemName !== 'string' ||
+    typeof systemSpecIdString !== 'string'
+  ) {
     return badRequest({ formError: `Delete system form not submitted correctly.` });
   }
-
+  const systemSpecId = Number(systemSpecIdString);
   const fieldErrors = {
-    // systemName: validateSystemName(systemName),
+    systemSpecId: validateSystemSpecIdForProfile(systemSpecId),
+    systemName: validateSystemName(systemName),
   };
   const fields = {
+    systemSpecId,
     systemName,
   };
-
   if (Object.values(fieldErrors).some(Boolean)) {
     return badRequest({ fieldErrors, fields });
   }
 
-  await deleteSystemSpecs(steamUserId, systemName);
+  const doesUserOwnSystem = await doesUserOwnSystemSpec(userProfileId, systemSpecId);
+  if (!doesUserOwnSystem) {
+    return badRequest({ formError: 'You are attempting to delete a system that you do not own or does not exist' });
+  }
+
+  await deleteSystemSpec(systemSpecId);
+
   return redirect('/profile/systems');
 }

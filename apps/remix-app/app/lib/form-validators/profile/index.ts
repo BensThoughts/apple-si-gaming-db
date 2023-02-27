@@ -1,5 +1,15 @@
 import type { SystemSpec } from '~/interfaces';
 
+// TODO: duplicate code between profile and post
+export function validateSystemSpecIdForProfile(systemSpecId: number) {
+  if (!isFinite(systemSpecId)) {
+    return `The systemId ${systemSpecId} was not a valid number`;
+  }
+  if (systemSpecId < 0) {
+    return `The systemId ${systemSpecId} was not a positive number`;
+  }
+}
+
 export function validateSystemName(systemName: string) {
   const systemNameTrimmed = systemName.trim();
   if (systemNameTrimmed.length < 3) {

@@ -16,64 +16,47 @@ import {
   useTransition,
 } from '@remix-run/react';
 import { json } from '@remix-run/node';
-import type { PrismaSteamGenre } from '~/interfaces/database';
 import globalStylesheetUrl from './styles/global.css';
 import { metaTags } from './lib/meta-tags';
 import { extractAppLoadContext } from './lib/data-utils/appLoadContext.server';
 import Navbar from '~/components/Layout/Navbar';
 import { Toaster } from 'react-hot-toast';
-import { findUserProfileData, updateUserOwnedApps, upsertSteamUser } from './models/steamUser.server';
+import {
+  findUserProfileData,
+  upsertUserProfileBySteamUserId64,
+} from '~/models/SteamedApples/userProfile.server';
+import {
+  updateSteamUserProfileOwnedSteamApps,
+} from '~/models/Steam/steamUserProfile.server';
 
 import type { SerializeFrom } from '@remix-run/node';
 import { getProfileSession } from './lib/sessions/profile-session.server';
 import type { Theme } from './lib/context/theme-provider';
 import { useTheme, ThemeProvider, NonFlashOfWrongThemeEls } from './lib/context/theme-provider';
 import { getThemeSession } from './lib/sessions/theme-session.server';
-// import { getBannerSession } from './lib/sessions/banner-session.server';
+import type {
+  UserProfileBase,
+  OwnedSteamApp,
+  UserProfileSystemSpec,
+  SteamUserProfile,
+} from '~/interfaces/remix-app/UserProfile';
 
-// import { load, trackPageview} from 'fathom-client';
-// import { useEffect } from 'react';
-// import { useEffect, useRef } from 'react';
-import { addOneToNumTimesLoggedIn } from './models/siteUserStats.server';
-// import { giveUserFirstLoginAchievement } from './models/siteAchievements.server';
-// import Fathom from './components/Fathom';
+export type UserProfileForRootLoaderData = UserProfileBase & {
+  steamUserProfile: SteamUserProfile & {
+    ownedSteamApps: OwnedSteamApp[];
+  }
+  systemSpecs: UserProfileSystemSpec[];
+};
 
 type RootLoaderData = {
-  cookieData: {
+  session: {
     theme: Theme | null;
+    isLoggedIn: boolean;
     banners: {
       showNewDomainBanner: boolean;
     }
-  };
-  steamUserData: {
-    contextData: {
-      isLoggedIn: boolean;
-      steamUserId?: string | null;
-      displayName?: string | null;
-      avatarFull?: string | null,
-    };
-    prismaData?: {
-      likedPerformancePostIds: string[];
-      ownedApps: {
-        steamAppId: number;
-        name: string;
-        headerImage: string | null;
-        platformMac: boolean | null;
-        genres: PrismaSteamGenre[];
-      }[],
-      systemSpecs: {
-        systemName: string;
-        manufacturer: string | null;
-        model: string | null;
-        cpuBrand: string | null;
-        osVersion: string | null;
-        videoDriver: string | null;
-        videoDriverVersion: string | null;
-        videoPrimaryVRAM: string | null;
-        memoryRAM: string | null;
-      }[],
-    }
-  };
+  },
+  userProfile?: UserProfileForRootLoaderData;
 }
 
 export type SerializedRootLoaderData = SerializeFrom<RootLoaderData>
@@ -89,105 +72,53 @@ export async function loader({ request, context }: LoaderArgs) {
   const themeSession = await getThemeSession(request);
   const theme = themeSession.getTheme();
   const { steamUser } = extractAppLoadContext(context);
-  const isLoggedIn = steamUser ? true : false;
   const profileSession = await getProfileSession(request);
 
-  if (steamUser) {
-    const {
-      steamUserId,
-      displayName,
-      avatarFull,
-    } = steamUser;
-    // Just logged in, need to add user or update user in db
-    // this won't run again until user logs out and back in again
-    if (!profileSession.hasAlreadyLoggedIn()) {
-      await upsertSteamUser(steamUser);
-      await updateUserOwnedApps(steamUser.steamUserId);
-      await addOneToNumTimesLoggedIn(steamUser.steamUserId);
-
-      // const { numLogins } = await addOneToNumTimesLoggedIn(steamUser.steamUserId);
-      // if (numLogins === 1) {
-      //   await giveUserFirstLoginAchievement(steamUser.steamUserId);
-      // }
-      profileSession.setAlreadyLoggedIn(true);
+  if (steamUser) { // if steamUser then isLoggedInWithSteam = true
+    let userProfileId = Number(profileSession.getUserProfileId()); // are we logged in to SteamedApples?
+    if (!isFinite(userProfileId)) { // Upon initial login we don't have userProfileId yet
+      const { id } = await upsertUserProfileBySteamUserId64(steamUser.steamUserId64, steamUser);
+      userProfileId = id;
+      await updateSteamUserProfileOwnedSteamApps(steamUser.steamUserId64);
+      // await addOneToNumTimesLoggedIn()
+      profileSession.login(userProfileId);
     }
-    const userProfile = await findUserProfileData(steamUser.steamUserId);
-    if (userProfile) {
-      const {
-        ownedApps,
-        systemSpecs,
-        likedPerformancePosts,
-      } = userProfile;
-      const likedPerformancePostIds = likedPerformancePosts.map((performancePost) => performancePost.performancePostId);
-      // const systemNames = systemSpecs.map((systemSpec) =>
-      // systemSpec.systemName);
-      // TODO: code for headers is duplicated before each return json()
-      const headers = new Headers();
-      headers.append('Set-Cookie', await profileSession.commit());
-      // headers.append('Set-Cookie', await bannerSession.commit());
-      return json<RootLoaderData>({
-        cookieData: {
-          theme,
-          banners: {
-            showNewDomainBanner,
-          },
+    // We are now definitely logged in and have a userProfileId
+    const userProfile = await findUserProfileData(userProfileId);
+    const headers = new Headers();
+    // TODO: code for headers is duplicated before each return json()
+    headers.append('Set-Cookie', await profileSession.commit());
+    return json<RootLoaderData>({
+      session: {
+        theme,
+        isLoggedIn: true,
+        banners: {
+          showNewDomainBanner,
         },
-        steamUserData: {
-          contextData: {
-            isLoggedIn,
-            steamUserId,
-            displayName,
-            avatarFull,
-          },
-          prismaData: {
-            ownedApps,
-            systemSpecs,
-            likedPerformancePostIds,
-          },
-        },
-      }, {
-        headers,
-      });
-    } else {
-      // TODO: code for headers is duplicated before each return json()
-      const headers = new Headers();
-      headers.append('Set-Cookie', await profileSession.commit());
-      // headers.append('Set-Cookie', await bannerSession.commit());
-      return json<RootLoaderData>({
-        cookieData: {
-          theme,
-          banners: {
-            showNewDomainBanner,
-          },
-        },
-        steamUserData: {
-          contextData: {
-            isLoggedIn,
-            steamUserId,
-            displayName,
-            avatarFull,
-          },
-        },
-      }, {
-        headers,
-      });
-    }
+      },
+      userProfile,
+    }, {
+      headers,
+    });
   }
+
+  // TODO: "It's important that you logout (or perform any mutation for that
+  // TODO: matter) in an action"
+  // TODO: "When using session.unset(), you need to be sure no
+  // TODO: other loaders in the request are going to want to read that"
+  // TODO: https://remix.run/docs/en/v1/utils/sessions
+  profileSession.logout();
+
   // TODO: code for headers is duplicated before each return json()
-  profileSession.unsetAlreadyLoggedIn();
   const headers = new Headers();
   headers.append('Set-Cookie', await profileSession.commit());
   // headers.append('Set-Cookie', await bannerSession.commit());
   return json<RootLoaderData>({
-    cookieData: {
+    session: {
       theme,
+      isLoggedIn: false,
       banners: {
         showNewDomainBanner,
-      },
-    },
-    steamUserData: {
-      contextData: {
-        isLoggedIn,
       },
     },
   }, {
@@ -206,7 +137,7 @@ export const meta: MetaFunction = ({ data }: {
 }) => ({
   'charset': 'utf-8',
   'viewport': 'width=device-width,initial-scale=1',
-  'color-scheme': (data?.cookieData?.theme === 'light') ? 'light dark' : 'dark light',
+  'color-scheme': (data?.session?.theme === 'light') ? 'light dark' : 'dark light',
   ...metaTags,
 });
 
@@ -291,13 +222,9 @@ export default function App() {
   // TODO: Getting cannot use loaderData in an error boundary errors,
   // TODO: with error being thrown on /profile, prob. because of this
   const {
-    cookieData: {
+    session: {
+      isLoggedIn,
       theme,
-    },
-    steamUserData: {
-      contextData: {
-        isLoggedIn,
-      },
     },
   }= useLoaderData<RootLoaderData>();
   const transition = useTransition();

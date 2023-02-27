@@ -14,7 +14,7 @@ interface OwnedApp {
   headerImage?: string | null;
   platformMac?: boolean | null;
   genres: {
-    genreId: string;
+    id: string;
     description: string;
   }[];
 }
