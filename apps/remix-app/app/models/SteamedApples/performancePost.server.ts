@@ -3,7 +3,7 @@ import type {
   PrismaSteamApp,
   PrismaUserSystemSpec,
   FrameRate,
-  PrismaPostTag,
+  PrismaPerformancePostTag,
   Prisma,
   PrismaGamepadMetadata,
   GamepadRating,
@@ -31,7 +31,7 @@ export async function createPerformancePost({
   frameRateStutters: boolean;
   ratingMedal: PrismaPerformancePost['ratingMedal'];
   systemSpecId?: PrismaUserSystemSpec['id'];
-  postTagIds: PrismaPostTag['id'][];
+  postTagIds: PrismaPerformancePostTag['id'][];
   gamepadId?: PrismaGamepadMetadata['id'];
   gamepadRating?: GamepadRating;
 }) {
@@ -263,10 +263,19 @@ export async function updatePerformancePost({
   frameRateStutters: boolean;
   ratingMedal: PrismaPerformancePost['ratingMedal'];
   systemSpecId?: PrismaUserSystemSpec['id'];
-  postTagIds: PrismaPostTag['id'][];
+  postTagIds: PrismaPerformancePostTag['id'][];
   gamepadId?: PrismaGamepadMetadata['id'];
   gamepadRating?: GamepadRating;
 }) {
+  const currentPerformancePost = await prisma.performancePost.findUnique({
+    where: { id: performancePostId },
+    select: { postTags: true },
+  });
+  if (!currentPerformancePost) throw Error(`Cannot find post with id: ${performancePostId}`);
+  const { postTags } = currentPerformancePost;
+  const currentPerformancePostTagIds = postTags.map((tag) => tag.id);
+  const performancePostTagIdsToDisconnect = currentPerformancePostTagIds.filter((tagId) => !postTagIds.includes(tagId));
+
   const performancePostData: Prisma.PerformancePostUpdateInput = {
     postText,
     frameRateAverage,
@@ -279,9 +288,8 @@ export async function updatePerformancePost({
     } : undefined,
     gamepadRating,
     postTags: {
-      connect: postTagIds.map((id) => ({
-        id,
-      })),
+      connect: postTagIds.map((id) => ({ id })),
+      disconnect: performancePostTagIdsToDisconnect.map((id) => ({ id })),
     },
     systemManufacturer: null,
     systemModel: null,
@@ -291,7 +299,7 @@ export async function updatePerformancePost({
     systemVideoDriverVersion: null,
     systemVideoPrimaryVRAM: null,
     systemMemoryRAM: null,
-    userSystemSpec: {
+    userSystemSpec: { // This gets overridden if there is a systemSpec found, as seen below
       disconnect: true,
     },
   };
