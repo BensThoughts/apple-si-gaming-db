@@ -6,7 +6,7 @@ import PerformancePostTextArea from './FormComponents/PerformancePostTextArea';
 import RatingMedalSelectMenu from './FormComponents/RatingMedalSelectMenu';
 import FrameRateAverageSelectMenu from './FormComponents/FrameRateAverageSelectMenu';
 import GamepadRatingSelectMenu from './FormComponents/GamepadRatingSelectMenu';
-import GamepadMultiSelectMenu from './FormComponents/GamepadMultiSelectMenu';
+import GamepadSelectMenu from './FormComponents/GamepadSelectMenu';
 import PostTagMultiSelectMenu from './FormComponents/PostTagMultiSelectMenu';
 import SystemNameSelectMenu from './FormComponents/SystemNameSelectMenu';
 
@@ -78,7 +78,7 @@ export default function BasePerformancePostFormFields({
           </div>
         </div>
         <div className="z-[28]">
-          <GamepadMultiSelectMenu
+          <GamepadSelectMenu
             // formId="TODO-FIX" // TODO: Change to appropriate ID
             gamepads={gamepadOptions}
             defaultGamepadId={fields?.gamepadId}

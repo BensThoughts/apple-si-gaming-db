@@ -2,7 +2,7 @@ import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { SelectOption } from '~/components/FormComponents/SelectMenu';
 import type { GamepadOption } from '~/interfaces';
 
-export default function GamepadMultiSelectMenu({
+export default function GamepadSelectMenu({
   gamepads,
   defaultGamepadId,
   fieldError,
