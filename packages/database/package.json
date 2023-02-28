@@ -21,7 +21,8 @@
     "prebuild": "npm run generate",
     "predev": "npm run generate",
     "studio": "prisma studio",
-    "lint": "eslint ./src/**.ts**"
+    "lint": "eslint ./src/**.ts**",
+    "type-check": "tsc --noEmit --skipLibCheck"
   },
   "prisma": {
     "seed": "tsx src/seed.ts"

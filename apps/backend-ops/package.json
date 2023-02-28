@@ -9,7 +9,8 @@
     "backend-ops:dev": "tsx ./src/index.ts",
     "start:stage": "node ./dist/index.mjs stage",
     "start:update-appids": "node ./dist/index.mjs update-appids",
-    "lint": "eslint ./src/**.ts**"
+    "lint": "eslint ./src/**.ts**",
+    "type-check": "tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
     "@apple-si-gaming-db/database": "*",
