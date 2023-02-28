@@ -90,11 +90,11 @@ model PerformancePostLike {
 }
 
 // Some fields in PerformancePost are marked not set as relation.
-// This is to protect from if a user profile or system gets deleted
-// the information is still available about who wrote the post and
-// what system was used.
+// This is to protect from if a user profile system gets deleted
+// the information is still available about what system was used.
 model PerformancePost {
   id        Int      @id @default(autoincrement())
+  // cuid      String   @unique @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
