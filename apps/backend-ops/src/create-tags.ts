@@ -2,78 +2,78 @@ import { prisma } from '@apple-si-gaming-db/database';
 import type { Prisma } from '@apple-si-gaming-db/database';
 import { logger } from '@apple-si-gaming-db/logger';
 
-const postTagCreateManyInput: Prisma.PostTagCreateManyInput[] = [
+const postTagCreateManyInput: Prisma.PerformancePostTagCreateManyInput[] = [
   {
-    postTagId: 10,
+    id: 10,
     description: 'Native',
   },
   {
-    postTagId: 100,
+    id: 100,
     description: 'Rosetta 2',
   },
   {
-    postTagId: 219,
+    id: 219,
     description: 'CrossOver 19',
   },
   {
-    postTagId: 220,
+    id: 220,
     description: 'CrossOver 20',
   },
   {
-    postTagId: 221,
+    id: 221,
     description: 'CrossOver 21',
   },
   {
-    postTagId: 222,
+    id: 222,
     description: 'CrossOver 22',
   },
   {
-    postTagId: 316,
+    id: 316,
     description: 'Parallels 16',
   },
   {
-    postTagId: 317,
+    id: 317,
     description: 'Parallels 17',
   },
   {
-    postTagId: 318,
+    id: 318,
     description: 'Parallels 18',
   },
 ];
 
 const gamepadCreateManyInput: Prisma.GamepadMetadataCreateManyInput[] = [
   {
-    gamepadId: 120,
+    id: 120,
     manufacturer: 'Microsoft',
     model: 'Elite I',
     description: 'XBox Elite I',
   },
   {
-    gamepadId: 121,
+    id: 121,
     manufacturer: 'Microsoft',
     model: 'Elite II',
     description: 'XBox Elite II',
   },
   {
-    gamepadId: 130,
+    id: 130,
     manufacturer: 'Microsoft',
     model: 'Xbox One',
     description: 'XBox One',
   },
   {
-    gamepadId: 140,
+    id: 140,
     manufacturer: 'Microsoft',
     model: 'XBox X/S',
     description: 'XBox X/S',
   },
   {
-    gamepadId: 240,
+    id: 240,
     manufacturer: 'Sony',
     model: 'Playstation 4',
     description: 'Playstation 4',
   },
   {
-    gamepadId: 250,
+    id: 250,
     manufacturer: 'Sony',
     model: 'Playstation 5',
     description: 'Playstation 5',
@@ -89,7 +89,7 @@ export async function createTags({
 }) {
   if (seedPostTags) {
     logger.info('starting post tag create many');
-    await prisma.postTag.createMany({
+    await prisma.performancePostTag.createMany({
       data: postTagCreateManyInput,
       skipDuplicates: true,
     });
