@@ -8,24 +8,24 @@ export const action: ActionFunction = async ({ request, context }) => {
   // const { steamUser } = extractAppLoadContext(context);
   const profileSession = await getProfileSession(request);
   const userProfileId = Number(profileSession.getUserProfileId());
-  if (!userProfileId) {
+  if (!userProfileId || !isFinite(userProfileId) || userProfileId < 0) {
     return json({
       success: false,
-      message: 'User not logged in',
+      message: `${userProfileId} is not a valid profile id, is user logged in?`,
     });
   }
   const requestText = await request.text();
   const searchParams = new URLSearchParams(requestText);
-  const postId = searchParams.get('postId');
-  if (!postId) {
+  const performancePostId = Number(searchParams.get('performancePostId'));
+  if (!performancePostId || !isFinite(performancePostId) || (performancePostId < 0)) {
     return json({
       success: false,
-      message: 'Not a valid postId',
+      message: `${performancePostId} Not a valid performancePostId`,
     });
   }
 
 
-  await likePost(postId, userProfileId);
+  await likePost(performancePostId, userProfileId);
 
   return json({ success: true });
 };

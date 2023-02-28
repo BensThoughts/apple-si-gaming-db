@@ -77,11 +77,11 @@ model UserStats {
 }
 
 model PerformancePostLike {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  performancePostId String
+  performancePostId Int
   performancePost   PerformancePost @relation(fields: [performancePostId], references: [id], onDelete: Cascade)
   userProfileId     Int
   userProfile       UserProfile     @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
@@ -94,7 +94,7 @@ model PerformancePostLike {
 // the information is still available about who wrote the post and
 // what system was used.
 model PerformancePost {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

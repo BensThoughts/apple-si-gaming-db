@@ -5,14 +5,14 @@ import BasicModal from '~/components/BasicModal';
 
 interface DeletePostModalProps {
   steamAppId: number;
-  postId: string;
+  performancePostId: number;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function DeletePostModal({
   steamAppId,
-  postId,
+  performancePostId,
   isOpen,
   setIsOpen,
 }: DeletePostModalProps) {
@@ -52,7 +52,7 @@ export default function DeletePostModal({
             onSubmit={handleSubmitEvent}
           >
             <input type="hidden" name="_performancePostAction" value="deletePerformancePost" />
-            <input type="hidden" name="postId" value={postId} />
+            <input type="hidden" name="performancePostId" value={performancePostId} />
             <RoundedButton
               type="submit"
               className="text-white bg-error hover:bg-error hover:text-white focus-visible:bg-error focus-visible:text-white"

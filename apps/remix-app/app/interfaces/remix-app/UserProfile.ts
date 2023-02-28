@@ -2,7 +2,7 @@ import type { PrismaSteamGenre } from '~/interfaces/database';
 
 export type UserProfileBase = {
   userProfileId: number;
-  likedPerformancePostIds: string[];
+  likedPerformancePostIds: number[];
 };
 
 export type UserProfileSystemSpec = {

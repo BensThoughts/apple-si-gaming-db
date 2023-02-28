@@ -4,7 +4,7 @@ import AvatarImage from '../ImageWrappers/AvatarImage';
 
 interface NewPerformancePostCardProps {
   steamAppId: number;
-  postId: string;
+  performancePostId: number;
   steamApp: {
     name: string;
   };
@@ -16,7 +16,7 @@ interface NewPerformancePostCardProps {
 
 export default function NewPerformancePostCardSmall({
   steamAppId,
-  postId,
+  performancePostId,
   steamApp,
   postText,
   avatarMedium,
@@ -25,7 +25,7 @@ export default function NewPerformancePostCardSmall({
 }: NewPerformancePostCardProps) {
   return (
     <Link
-      to={`/apps/${steamAppId}/performance-posts#${postId}`}
+      to={`/apps/${steamAppId}/performance-posts#${performancePostId}`}
       className="border-1 border-secondary-highlight rounded-md
                  p-4 bg-tertiary hover:bg-tertiary-highlight
                  focus:show-ring w-full max-w-xl h-full max-h-[165px]

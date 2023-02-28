@@ -9,7 +9,7 @@ import BasePerformancePostFormFields from './BasePerformancePostFormFields';
 import RemixRoundedLink from '~/components/RemixRoundedLink';
 
 interface EditPerformancePostFormProps {
-  postId: string;
+  performancePostId: number;
   steamAppId: number;
   steamUserSession: {
     isLoggedIn: boolean;
@@ -42,7 +42,7 @@ interface EditPerformancePostFormProps {
 }
 
 export default function EditPerformancePostForm({
-  postId,
+  performancePostId,
   steamAppId,
   steamUserSession,
   fields,
@@ -108,10 +108,10 @@ export default function EditPerformancePostForm({
         name="performancePost"
         ref={formRef}
         className="flex flex-col items-center gap-8 w-full max-w-lg"
-        action={`/apps/${steamAppId}/performance-posts/edit/${postId}`}
+        action={`/apps/${steamAppId}/performance-posts/edit/${performancePostId}`}
       >
         <input type="hidden" name="_performancePostAction" value="editPerformancePost" />
-        <input type="hidden" name="postId" value={postId} />
+        <input type="hidden" name="performancePostId" value={performancePostId} />
         <BasePerformancePostFormFields
           systemSpecOptions={systemSpecOptions}
           gamepadOptions={gamepadOptions}

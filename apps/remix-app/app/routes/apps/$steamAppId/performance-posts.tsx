@@ -150,7 +150,7 @@ export async function loader({ params, context }: LoaderArgs) {
 export type DeletePerformancePostActionData = {
   formError?: string;
   fields?: {
-    postId: string;
+    performancePostId: number;
   }
 }
 

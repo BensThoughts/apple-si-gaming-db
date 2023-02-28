@@ -11,7 +11,7 @@ import type {
 
 interface UsersPostsLayoutProps {
   userSession: {
-    likedPerformancePostIds: string[];
+    likedPerformancePostIds: number[];
   }
   steamUsersPosts: (PerformancePostBase & {
     steamApp: PerformancePostSteamApp;

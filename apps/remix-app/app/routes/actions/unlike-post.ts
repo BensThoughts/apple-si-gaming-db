@@ -13,18 +13,24 @@ export const action: ActionFunction = async ({ request, context }) => {
   // }
   const profileSession = await getProfileSession(request);
   const userProfileId = Number(profileSession.getUserProfileId());
-  const requestText = await request.text();
-  const searchParams = new URLSearchParams(requestText);
-  const postId = searchParams.get('postId');
-  if (!postId) {
+  if (!userProfileId || !isFinite(userProfileId) || (userProfileId < 0)) {
     return json({
       success: false,
-      message: 'Not a valid postId',
+      message: `${userProfileId} is not a valid user profile id, is user logged in?`,
+    });
+  }
+  const requestText = await request.text();
+  const searchParams = new URLSearchParams(requestText);
+  const performancePostId = Number(searchParams.get('performancePostId'));
+  if (!performancePostId || !isFinite(performancePostId) || performancePostId < 0) {
+    return json({
+      success: false,
+      message: `${performancePostId} is not a valid performancePostId`,
     });
   }
 
 
-  await unlikePost(postId, userProfileId);
+  await unlikePost(performancePostId, userProfileId);
 
   return json({ success: true });
 };

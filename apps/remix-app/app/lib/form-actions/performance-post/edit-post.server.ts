@@ -26,7 +26,7 @@ export async function editPerformancePostAction({
 } : {
   steamUserId64: string;
   steamAppId: number;
-  performancePostId: string;
+  performancePostId: number;
   formData: FormData;
 }) {
   const {

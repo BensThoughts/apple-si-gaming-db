@@ -52,7 +52,7 @@ export interface PerformancePostLikes {
 }
 
 export interface PerformancePostBase {
-    performancePostId: string;
+    performancePostId: number;
     createdAt: Date;
     postText: string;
 }

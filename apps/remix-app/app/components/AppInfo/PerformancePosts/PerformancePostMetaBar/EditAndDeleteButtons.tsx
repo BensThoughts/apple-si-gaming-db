@@ -5,12 +5,12 @@ import DeletePostModal from './DeletePostModal';
 
 interface EditAndDeleteButtonsProps {
   steamAppId: number;
-  postId: string;
+  performancePostId: number;
 }
 
 export default function EditAndDeleteButtons({
   steamAppId,
-  postId,
+  performancePostId,
 }: EditAndDeleteButtonsProps) {
   const [isDeleteModalOpen, setDeleteModalIsOpen] = useState(false);
   // const [deleteModalSystemName, setDeleteModalSystemName] = useState<string | undefined>(undefined);
@@ -19,12 +19,12 @@ export default function EditAndDeleteButtons({
     <div className="flex gap-2 py-1 px-2 rounded-full border-secondary-highlight border-solid border-1">
       <DeletePostModal
         steamAppId={steamAppId}
-        postId={postId}
+        performancePostId={performancePostId}
         isOpen={isDeleteModalOpen}
         setIsOpen={setDeleteModalIsOpen}
       />
       <Link
-        to={`/apps/${steamAppId}/performance-posts/edit/${postId}`}
+        to={`/apps/${steamAppId}/performance-posts/edit/${performancePostId}`}
         className="hover:text-primary-highlight"
       >
         <EditIcon />

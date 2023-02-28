@@ -60,10 +60,10 @@ CREATE TABLE "UserStats" (
 
 -- CreateTable
 CREATE TABLE "PerformancePostLike" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "performancePostId" TEXT NOT NULL,
+    "performancePostId" INTEGER NOT NULL,
     "userProfileId" INTEGER NOT NULL,
 
     CONSTRAINT "PerformancePostLike_pkey" PRIMARY KEY ("id")
@@ -71,7 +71,7 @@ CREATE TABLE "PerformancePostLike" (
 
 -- CreateTable
 CREATE TABLE "PerformancePost" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "steamAppId" INTEGER NOT NULL,
@@ -221,7 +221,7 @@ CREATE TABLE "SteamGenre" (
 
 -- CreateTable
 CREATE TABLE "_PerformancePostToPerformancePostTag" (
-    "A" TEXT NOT NULL,
+    "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
 

@@ -4,12 +4,12 @@ import { BleedingHeartOutlineIcon } from './Icons/FlatIcons';
 import { errorToast } from './Toasts';
 
 export default function LikeButton({
-  postId,
+  performancePostId,
   numLikes,
   isUserLoggedIn,
   hasLoggedInUserLiked,
 }: {
-  postId: string;
+  performancePostId: number;
   numLikes: number;
   isUserLoggedIn: boolean;
   hasLoggedInUserLiked: boolean;
@@ -30,13 +30,13 @@ export default function LikeButton({
         setNumLikesRaw(numLikes + 1);
         setLikedPostRaw(true);
         fetcher.submit({
-          postId,
+          performancePostId: performancePostId.toString(),
         }, { action: '/actions/like-post', method: 'post' });
       } else {
         setNumLikesRaw(numLikesRaw - 1);
         setLikedPostRaw(false);
         fetcher.submit({
-          postId,
+          performancePostId: performancePostId.toString(),
         }, { action: '/actions/unlike-post', method: 'post' });
       }
     } else {

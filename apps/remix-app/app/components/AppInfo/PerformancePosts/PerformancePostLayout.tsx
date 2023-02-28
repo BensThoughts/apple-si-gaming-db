@@ -16,7 +16,7 @@ type PerformancePostLayoutProps =
   userSession: {
     isUserLoggedIn: boolean;
     steamUserId64?: string;
-    likedPerformancePostIds: string[];
+    likedPerformancePostIds: number[];
   };
   performancePosts: (PerformancePostBase & {
     steamApp: PerformancePostSteamApp;
@@ -55,7 +55,7 @@ export default function PerformancePostLayout({
             const didLoggedInUserCreatePost =
               performancePost.userWhoCreatedPost?.steamUserId64 === userSession.steamUserId64;
             return (
-              <div key={performancePost.performancePostId} id={performancePost.performancePostId} className="flex flex-col gap-6">
+              <div key={performancePost.performancePostId} id={performancePost.performancePostId.toString()} className="flex flex-col gap-6">
                 <PerformancePostDisplay
                   performancePost={performancePost}
                   userSession={{

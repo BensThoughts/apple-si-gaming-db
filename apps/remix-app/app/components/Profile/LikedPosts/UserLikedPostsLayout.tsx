@@ -6,7 +6,7 @@ import type { PerformancePostBase, PerformancePostLikes, PerformancePostRating, 
 
 interface UserLikedPostsLayoutProps {
   userSession: {
-    likedPerformancePostIds: string[]; // sanity check. Maybe we can implement a way to
+    likedPerformancePostIds: number[]; // TODO: sanity check. Maybe we can implement a way to
                                        // unlike a post and still display it in
                                        // liked posts prior until route is
                                        // changed, so we need this too

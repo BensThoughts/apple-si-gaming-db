@@ -11,7 +11,7 @@ import type {
   PerformancePostUserWhoCreated,
   SystemSpecOption,
 } from '~/interfaces';
-import { validatePostId, validateSteamAppId } from '~/lib/loader-functions/params-validators.server';
+import { validatePerformancePostId, validateSteamAppId } from '~/lib/loader-functions/params-validators.server';
 import { didCurrentSessionUserCreatePost, findPerformancePostById } from '~/models/SteamedApples/performancePost.server';
 import { useActionData, useLoaderData, useTransition } from '@remix-run/react';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
@@ -46,7 +46,7 @@ type EditPostLoaderData = {
 
 export async function loader({ params, context }: LoaderArgs) {
   const steamAppId = validateSteamAppId(params);
-  const postId = validatePostId(params);
+  const postId = validatePerformancePostId(params);
   const steamUser = extractAppLoadContext(context).steamUser;
   if (!steamUser) {
     return redirect(`/apps/${steamAppId}/performance-posts/`);
@@ -149,7 +149,7 @@ export async function action({
   context,
 }: ActionArgs) {
   const steamAppId = validateSteamAppId(params);
-  const performancePostId = validatePostId(params);
+  const performancePostId = validatePerformancePostId(params);
   const steamUser = extractAppLoadContext(context).steamUser;
   if (!steamUser) {
     return redirect(`/apps/${steamAppId}/performance-posts/`);
@@ -218,7 +218,7 @@ export default function EditPerformancePostRoute() {
       </PostLayoutCard>
 
       <EditPerformancePostForm
-        postId={performancePostId}
+        performancePostId={performancePostId}
         steamAppId={steamAppId}
         steamUserSession={{ isLoggedIn, loggedInUserCreatedPost, systemSpecOptions }}
         formError={actionData?.formError}

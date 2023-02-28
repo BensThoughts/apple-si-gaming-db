@@ -9,16 +9,17 @@ export async function deletePerformancePostAction(
     steamAppId: number,
     formData: FormData,
 ) {
-  const postId = formData.get('postId');
-  if (typeof postId !== 'string') {
+  const performancePostId = formData.get('performancePostId');
+  if (typeof performancePostId !== 'string') {
     return badRequest({
       formError: 'Form not submitted correctly',
     });
   }
+  const performancePostIdAsNumber = Number(performancePostId);
 
-  const currentSessionUserCreatedPost = await didCurrentSessionUserCreatePost(steamUserId64, postId);
+  const currentSessionUserCreatedPost = await didCurrentSessionUserCreatePost(steamUserId64, performancePostIdAsNumber);
   if (currentSessionUserCreatedPost) {
-    await deletePerformancePost(postId);
+    await deletePerformancePost(performancePostIdAsNumber);
   }
 
   return redirect(`/apps/${steamAppId}/performance-posts`);

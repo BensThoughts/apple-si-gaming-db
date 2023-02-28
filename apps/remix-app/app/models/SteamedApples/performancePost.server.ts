@@ -91,7 +91,7 @@ export async function createPerformancePost({
 };
 
 export async function likePost(
-    performancePostId: string,
+    performancePostId: number,
     userProfileId: number,
 ) {
   return prisma.performancePost.update({
@@ -120,7 +120,7 @@ export async function likePost(
 }
 
 export async function unlikePost(
-    performancePostId: string,
+    performancePostId: number,
     userProfileId: number,
 ) {
   return prisma.performancePost.update({
@@ -266,11 +266,11 @@ export async function findNewestPerformancePosts(
 
 export async function didCurrentSessionUserCreatePost(
     steamUserId64: string,
-    postId: string,
+    performancePostId: number,
 ) {
   const steamUserIdThatCreatedPost = await prisma.performancePost.findUnique({
     where: {
-      id: postId,
+      id: performancePostId,
     },
     select: {
       steamUserId64: true,
@@ -287,10 +287,10 @@ export async function didCurrentSessionUserCreatePost(
   return false;
 }
 
-export async function deletePerformancePost(postId: PrismaPerformancePost['id']) {
+export async function deletePerformancePost(performancePostId: PrismaPerformancePost['id']) {
   return prisma.performancePost.delete({
     where: {
-      id: postId,
+      id: performancePostId,
     },
   });
 }
@@ -367,7 +367,7 @@ export async function updatePerformancePost({
 }
 
 export async function findPerformancePostById(
-    performancePostId: string,
+    performancePostId: number,
 ) {
   return prisma.performancePost.findUnique({
     where: {
