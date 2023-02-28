@@ -12,7 +12,7 @@ export type {
 
   // PerformancePost,
   PerformancePost as PrismaPerformancePost,
-  PerformancePostTag as PrismaPostTag,
+  PerformancePostTag as PrismaPerformancePostTag,
   GamepadMetadata as PrismaGamepadMetadata,
   GamepadRating,
   RatingMedal,
