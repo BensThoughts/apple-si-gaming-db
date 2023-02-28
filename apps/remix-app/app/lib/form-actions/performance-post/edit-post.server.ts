@@ -19,12 +19,10 @@ import { extractFormData } from './extract-form-data';
 const badRequest = (data: CreateOrEditPerformancePostActionData) => json(data, { status: 400 });
 
 export async function editPerformancePostAction({
-  steamUserId64,
   steamAppId,
   performancePostId,
   formData,
 } : {
-  steamUserId64: string;
   steamAppId: number;
   performancePostId: number;
   formData: FormData;
@@ -87,7 +85,6 @@ export async function editPerformancePostAction({
   }
 
   await updatePerformancePost({
-    steamUserId64,
     performancePostId,
     postText,
     frameRateAverage: frameRateAverage === 'None' ? undefined : frameRateAverage,

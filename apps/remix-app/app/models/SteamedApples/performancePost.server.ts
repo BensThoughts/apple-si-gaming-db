@@ -14,8 +14,6 @@ import { findSystemSpecForPostBySystemSpecId } from './userSystemSpecs.server';
 
 export async function createPerformancePost({
   steamUserId64,
-  // displayName,
-  // avatarMedium,
   steamAppId,
   postText,
   frameRateAverage,
@@ -32,8 +30,6 @@ export async function createPerformancePost({
   frameRateAverage?: FrameRate;
   frameRateStutters: boolean;
   ratingMedal: PrismaPerformancePost['ratingMedal'];
-  // avatarMedium?: PrismaSteamUserProfile['avatarMedium'];
-  // displayName?: PrismaSteamUserProfile['displayName'];
   systemSpecId?: PrismaUserSystemSpec['id'];
   postTagIds: PrismaPostTag['id'][];
   gamepadId?: PrismaGamepadMetadata['id'];
@@ -296,7 +292,6 @@ export async function deletePerformancePost(performancePostId: PrismaPerformance
 }
 
 export async function updatePerformancePost({
-  steamUserId64,
   performancePostId,
   postText,
   frameRateAverage,
@@ -307,7 +302,6 @@ export async function updatePerformancePost({
   gamepadId,
   gamepadRating,
 }: {
-  steamUserId64: string;
   performancePostId: PrismaPerformancePost['id'];
   postText: PrismaPerformancePost['postText'];
   frameRateAverage?: FrameRate;
