@@ -94,7 +94,7 @@ export default function CreatePerformancePostForm({
       <PerformancePostFormWrapper>
         <div className="w-full">
           It looks like you do not own this app yet. Please add it to your steam library to leave a
-          performance review.
+          performance review. (You may need to re-sync library as well)
         </div>
       </PerformancePostFormWrapper>
     );
@@ -103,7 +103,7 @@ export default function CreatePerformancePostForm({
   const formId = `${steamAppId}-CreatePerformancePost`;
   return (
     <PerformancePostFormWrapper>
-      <h2 className="text-secondary text-lg">Submit Your Own Performance Post</h2>
+      <h2 className="text-secondary text-lg">Create Post</h2>
       {formError && <div className="text-color-error">{formError}</div>}
       <Form
         id={formId}
