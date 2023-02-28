@@ -163,7 +163,7 @@ export async function action({
   const steamAppId = validateSteamAppId(params);
   const { steamUser } = extractAppLoadContext(context);
   if (!steamUser) {
-    return redirect(`/apps/${steamAppId}/performance-posts`);
+    return redirect(`/apps/${steamAppId}/posts`);
   }
   const steamUserId64 = steamUser.steamUserId64;
   const displayName = steamUser.displayName;
@@ -185,7 +185,7 @@ export async function action({
       return deletePerformancePostAction(steamUserId64, steamAppId, formData);
     }
     default: {
-      throw new Error(`Unexpected action in /apps/${steamAppId}/performance-posts`);
+      throw new Error(`Unexpected action in /apps/${steamAppId}/posts`);
     }
   }
 }
@@ -255,7 +255,7 @@ export default function PerformancePostsRoute() {
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
     <div>
-      <h1>Error in /apps/$appid/performance-posts route</h1>
+      <h1>Error in /apps/$appid/posts route</h1>
       <div>{error.message}</div>
     </div>
   );
@@ -266,7 +266,7 @@ export function CatchBoundary() {
   return (
     <div>
       <h1>Oops! - {caught.status} - {caught.data}</h1>
-      <p>Error in /apps/$steamAppId/performance-posts route</p>
+      <p>Error in /apps/$steamAppId/posts route</p>
     </div>
   );
 }

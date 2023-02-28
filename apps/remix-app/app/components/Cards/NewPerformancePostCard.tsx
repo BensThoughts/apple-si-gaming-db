@@ -29,7 +29,7 @@ export default function NewPerformancePostCard({
   } = rating;
   return (
     <Link
-      to={`/apps/${steamApp.steamAppId}/performance-posts#${performancePostId}`}
+      to={`/apps/${steamApp.steamAppId}/posts#${performancePostId}`}
       className="border-1 border-secondary-highlight rounded-md
                  p-4 bg-tertiary hover:bg-tertiary-highlight
                  focus:show-ring w-full max-w-xl h-full max-h-[165px]

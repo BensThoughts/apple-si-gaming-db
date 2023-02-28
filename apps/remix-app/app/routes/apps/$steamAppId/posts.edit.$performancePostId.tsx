@@ -49,17 +49,17 @@ export async function loader({ params, context }: LoaderArgs) {
   const performancePostId = validatePerformancePostId(params);
   const steamUser = extractAppLoadContext(context).steamUser;
   if (!steamUser) {
-    return redirect(`/apps/${steamAppId}/performance-posts/`);
+    return redirect(`/apps/${steamAppId}/posts/`);
   }
   const steamUserId64 = steamUser.steamUserId64;
   const isLoggedIn = true;
   const loggedInUserCreatedPost = await didCurrentSessionUserCreatePost(steamUserId64, performancePostId);
   if (!loggedInUserCreatedPost) {
-    return redirect(`/apps/${steamAppId}/performance-posts/`);
+    return redirect(`/apps/${steamAppId}/posts/`);
   }
   // const ownsApp = await doesSteamUserOwnApp(steamUserId, steamAppId);
   // if (!ownsApp) {
-  //   return redirect(`/apps/${steamAppId}/performance-posts/`);
+  //   return redirect(`/apps/${steamAppId}/posts/`);
   // }
 
   const postTagOptions: PostTagOption[] = await findPostTags();
@@ -154,12 +154,12 @@ export async function action({
   const performancePostId = validatePerformancePostId(params);
   const steamUser = extractAppLoadContext(context).steamUser;
   if (!steamUser) {
-    return redirect(`/apps/${steamAppId}/performance-posts/`);
+    return redirect(`/apps/${steamAppId}/posts/`);
   }
   const steamUserId64 = steamUser.steamUserId64;
   const loggedInUserCreatedPost = await didCurrentSessionUserCreatePost(steamUserId64, performancePostId);
   if (!loggedInUserCreatedPost) {
-    return redirect(`/apps/${steamAppId}/performance-posts/`);
+    return redirect(`/apps/${steamAppId}/posts/`);
   }
   const formData = await request.formData();
   return editPerformancePostAction({

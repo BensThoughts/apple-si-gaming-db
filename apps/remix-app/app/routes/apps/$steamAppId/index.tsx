@@ -5,7 +5,7 @@ import { validateSteamAppId } from '~/lib/loader-functions/params-validators.ser
 
 export async function loader({ params }: LoaderArgs) {
   const steamAppId = validateSteamAppId(params);
-  return redirect(`/apps/${steamAppId}/performance-posts`);
+  return redirect(`/apps/${steamAppId}/posts`);
 }
 
 export default function SteamAppIdIndexRoute() {

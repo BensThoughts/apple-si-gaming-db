@@ -16,7 +16,7 @@ export default function SearchTitleCard({
 }: SearchTitleCardProps) {
   return (
     <Link
-      to={`/apps/${steamAppId}/performance-posts`}
+      to={`/apps/${steamAppId}/posts`}
       className="focus-visible:show-ring bg-tertiary hover:bg-tertiary-highlight
                  rounded-lg w-full max-w-xl focus-visible:bg-tertiary-highlight
                  border-1 border-secondary-highlight p-3 md:p-2 flex flex-col md:flex-row gap-2 items-center md:items-start"

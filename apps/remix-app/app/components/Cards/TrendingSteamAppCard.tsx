@@ -12,7 +12,7 @@ export default function TrendingSteamAppCard({
 }: TrendingSteamAppProps) {
   return (
     <Link
-      to={`/apps/${steamAppId}/performance-posts`}
+      to={`/apps/${steamAppId}/posts`}
       className="flex flex-col md:flex-row gap-8 md:gap-2 items-center px-2 py-8 md:p-2 bg-tertiary
                  border-1 border-secondary-highlight rounded-md hover:bg-tertiary-highlight
                  focus-visible:show-ring w-full

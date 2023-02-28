@@ -22,5 +22,5 @@ export async function deletePerformancePostAction(
     await deletePerformancePost(performancePostIdAsNumber);
   }
 
-  return redirect(`/apps/${steamAppId}/performance-posts`);
+  return redirect(`/apps/${steamAppId}/posts`);
 }

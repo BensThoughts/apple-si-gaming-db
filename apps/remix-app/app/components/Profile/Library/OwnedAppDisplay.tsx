@@ -14,7 +14,7 @@ export default function OwnedAppDisplay({
 }) {
   return (
     <Link
-      to={`/apps/${steamAppId}/performance-posts`}
+      to={`/apps/${steamAppId}/posts`}
       className={`flex flex-col justify-center items-center gap-1 bg-tertiary p-2
                   hover:bg-tertiary-highlight rounded-lg w-full md:max-w-[210px]
                   border-1 border-secondary-highlight focus-visible:show-ring

@@ -84,7 +84,7 @@ export default function UserLikedPostsLayout({
                   </div>
                   <div>
                     <RemixUnderlineLink
-                      to={`/apps/${steamAppId}/performance-posts#${performancePostId}`}
+                      to={`/apps/${steamAppId}/posts#${performancePostId}`}
                     >
                     View Post
                     </RemixUnderlineLink>
@@ -129,7 +129,7 @@ export default function UserLikedPostsLayout({
               </div>
               <div>
                 <RemixUnderlineLink
-                  to={`/apps/${steamAppId}/performance-posts#${performancePostId}`}
+                  to={`/apps/${steamAppId}/posts#${performancePostId}`}
                 >
                     View Post
                 </RemixUnderlineLink>

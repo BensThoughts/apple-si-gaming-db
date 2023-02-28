@@ -111,7 +111,7 @@ export default function CreatePerformancePostForm({
         name="performancePost"
         ref={formRef}
         className="flex flex-col items-center gap-8 w-full max-w-lg"
-        action={`/apps/${steamAppId}/performance-posts`}
+        action={`/apps/${steamAppId}/posts`}
       >
         <input type="hidden" name="_performancePostAction" value="createPerformancePost" />
         <BasePerformancePostFormFields

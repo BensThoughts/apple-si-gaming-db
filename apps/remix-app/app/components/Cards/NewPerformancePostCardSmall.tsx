@@ -25,7 +25,7 @@ export default function NewPerformancePostCardSmall({
 }: NewPerformancePostCardProps) {
   return (
     <Link
-      to={`/apps/${steamAppId}/performance-posts#${performancePostId}`}
+      to={`/apps/${steamAppId}/posts#${performancePostId}`}
       className="border-1 border-secondary-highlight rounded-md
                  p-4 bg-tertiary hover:bg-tertiary-highlight
                  focus:show-ring w-full max-w-xl h-full max-h-[165px]

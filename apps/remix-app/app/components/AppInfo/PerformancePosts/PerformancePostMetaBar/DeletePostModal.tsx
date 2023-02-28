@@ -47,7 +47,7 @@ export default function DeletePostModal({
             Cancel
           </RoundedButton>
           <Form
-            action={`/apps/${steamAppId}/performance-posts`}
+            action={`/apps/${steamAppId}/posts`}
             method="post"
             onSubmit={handleSubmitEvent}
           >

@@ -24,7 +24,7 @@ export default function EditAndDeleteButtons({
         setIsOpen={setDeleteModalIsOpen}
       />
       <Link
-        to={`/apps/${steamAppId}/performance-posts/edit/${performancePostId}`}
+        to={`/apps/${steamAppId}/posts/edit/${performancePostId}`}
         className="hover:text-primary-highlight"
       >
         <EditIcon />

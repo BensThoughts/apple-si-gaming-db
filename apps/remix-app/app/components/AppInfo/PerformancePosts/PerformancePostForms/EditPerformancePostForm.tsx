@@ -108,7 +108,7 @@ export default function EditPerformancePostForm({
         name="performancePost"
         ref={formRef}
         className="flex flex-col items-center gap-8 w-full max-w-lg"
-        action={`/apps/${steamAppId}/performance-posts/edit/${performancePostId}`}
+        action={`/apps/${steamAppId}/posts/edit/${performancePostId}`}
       >
         <input type="hidden" name="_performancePostAction" value="editPerformancePost" />
         <input type="hidden" name="performancePostId" value={performancePostId} />
@@ -120,7 +120,7 @@ export default function EditPerformancePostForm({
           fieldErrors={fieldErrors}
         />
         <div className="w-full flex gap-x-3 justify-around">
-          <RemixRoundedLink to={`/apps/${steamAppId}/performance-posts/`}>
+          <RemixRoundedLink to={`/apps/${steamAppId}/posts/`}>
             Cancel
           </RemixRoundedLink>
           <RoundedButton type="submit" className="max-w-xs">

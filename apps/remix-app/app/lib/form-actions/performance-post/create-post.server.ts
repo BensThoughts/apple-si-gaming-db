@@ -102,5 +102,5 @@ export async function createPerformancePostAction({
     gamepadRating: gamepadRating === 'None' ? undefined : gamepadRating,
   });
 
-  return redirect(`/apps/${steamAppId}/performance-posts`);
+  return redirect(`/apps/${steamAppId}/posts`);
 }
