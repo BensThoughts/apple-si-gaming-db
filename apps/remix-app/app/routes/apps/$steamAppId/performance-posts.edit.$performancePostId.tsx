@@ -46,14 +46,14 @@ type EditPostLoaderData = {
 
 export async function loader({ params, context }: LoaderArgs) {
   const steamAppId = validateSteamAppId(params);
-  const postId = validatePerformancePostId(params);
+  const performancePostId = validatePerformancePostId(params);
   const steamUser = extractAppLoadContext(context).steamUser;
   if (!steamUser) {
     return redirect(`/apps/${steamAppId}/performance-posts/`);
   }
   const steamUserId64 = steamUser.steamUserId64;
   const isLoggedIn = true;
-  const loggedInUserCreatedPost = await didCurrentSessionUserCreatePost(steamUserId64, postId);
+  const loggedInUserCreatedPost = await didCurrentSessionUserCreatePost(steamUserId64, performancePostId);
   if (!loggedInUserCreatedPost) {
     return redirect(`/apps/${steamAppId}/performance-posts/`);
   }
@@ -64,9 +64,9 @@ export async function loader({ params, context }: LoaderArgs) {
 
   const postTagOptions: PostTagOption[] = await findPostTags();
   const gamepadOptions: GamepadOption[] = await findAllGamepads();
-  const performancePost = await findPerformancePostById(postId);
+  const performancePost = await findPerformancePostById(performancePostId);
   if (!performancePost) {
-    throw Error(`Post with ${postId} not found in database`);
+    throw Error(`Post with ${performancePostId} not found in database`);
   }
   const {
     id,
@@ -155,9 +155,12 @@ export async function action({
     return redirect(`/apps/${steamAppId}/performance-posts/`);
   }
   const steamUserId64 = steamUser.steamUserId64;
+  const loggedInUserCreatedPost = await didCurrentSessionUserCreatePost(steamUserId64, performancePostId);
+  if (!loggedInUserCreatedPost) {
+    return redirect(`/apps/${steamAppId}/performance-posts/`);
+  }
   const formData = await request.formData();
   return editPerformancePostAction({
-    steamUserId64,
     steamAppId,
     performancePostId,
     formData,
