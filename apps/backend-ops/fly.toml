@@ -1,21 +1,18 @@
-app = "apple-si-gaming-db-backend-ops"
+# fly.toml file generated for steamed-apples-backend-ops on 2023-02-27T18:49:53-07:00
 
+app = "steamed-apples-backend-ops"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
-# [build]
-  # image = "registry.fly.io/apple-si-gaming-db-backend-ops:deployment-01GCZWKMXRHPRGS85WFNJETKSN"
-
-[env]
-  NODE_ENV = "production"
-  ASGD_INITIAL_PAGE=0
-  ASGD_BATCH_SIZE=198
-  ASGD_DATA_DOWNLOAD_ATTEMPTED=0
-
 [deploy]
   release_command = "yarn run db:migrate:deploy"
 
+[env]
+  ASGD_BATCH_SIZE = 198
+  ASGD_DATA_DOWNLOAD_ATTEMPTED = 0
+  ASGD_INITIAL_PAGE = 0
+  NODE_ENV = "production"
+
 [experimental]
-  allowed_public_ports = []
   auto_rollback = true
