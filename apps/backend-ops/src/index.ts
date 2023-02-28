@@ -3,7 +3,6 @@ import { Command } from 'commander';
 import { stage } from './stage';
 import { updateAppIds } from './update-appids';
 import { logger } from '@apple-si-gaming-db/logger';
-import { createTags } from './create-tags';
 const program = new Command();
 
 program
@@ -128,30 +127,6 @@ program.command('update-appids')
     .description('Sync the appids in db with the steam-api')
     .action(async () => {
       await updateAppIds();
-    });
-
-interface CreateTagsOpts {
-  seedPostTags: boolean;
-  seedGamepads: boolean;
-}
-
-program.command('create-tags')
-    .description('Create Post Tags and/or Gamepad Metadata')
-    .option(
-        '-t, --seed-post-tags',
-        chalk.yellow('Seed post tags with prisma create many'),
-        false,
-    )
-    .option(
-        '-g --seed-gamepads',
-        chalk.yellow('Seed gamepad metadata with prisma create many'),
-        false,
-    )
-    .action(async (opts: CreateTagsOpts) => {
-      await createTags({
-        seedPostTags: opts.seedPostTags,
-        seedGamepads: opts.seedGamepads,
-      });
     });
 
 program.parse();

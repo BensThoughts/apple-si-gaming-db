@@ -3,67 +3,81 @@ import type { Prisma } from './interfaces/index';
 import { logger } from '@apple-si-gaming-db/logger';
 import { getSteamAppListRequest } from '@apple-si-gaming-db/steam-api';
 
-const gamepadData: Prisma.GamepadMetadataCreateManyInput[] = [
+const postTagCreateManyInput: Prisma.PerformancePostTagCreateManyInput[] = [
   {
-    id: 1,
-    manufacturer: 'Microsoft',
-    model: 'XBox One',
-    description: 'XBox One',
+    id: 10,
+    description: 'Native',
   },
   {
-    id: 2,
+    id: 100,
+    description: 'Rosetta 2',
+  },
+  {
+    id: 219,
+    description: 'CrossOver 19',
+  },
+  {
+    id: 220,
+    description: 'CrossOver 20',
+  },
+  {
+    id: 221,
+    description: 'CrossOver 21',
+  },
+  {
+    id: 222,
+    description: 'CrossOver 22',
+  },
+  {
+    id: 316,
+    description: 'Parallels 16',
+  },
+  {
+    id: 317,
+    description: 'Parallels 17',
+  },
+  {
+    id: 318,
+    description: 'Parallels 18',
+  },
+];
+
+const gamepadCreateManyInput: Prisma.GamepadMetadataCreateManyInput[] = [
+  {
+    id: 120,
     manufacturer: 'Microsoft',
-    model: 'XBox Elite I',
+    model: 'Elite I',
     description: 'XBox Elite I',
   },
   {
-    id: 3,
+    id: 121,
     manufacturer: 'Microsoft',
-    model: 'XBox Elite II',
+    model: 'Elite II',
     description: 'XBox Elite II',
   },
   {
-    id: 4,
-    manufacturer: 'Nintendo',
-    model: 'Switch Pro',
-    description: 'Switch Pro',
+    id: 130,
+    manufacturer: 'Microsoft',
+    model: 'Xbox One',
+    description: 'XBox One',
   },
   {
-    id: 5,
-    manufacturer: 'Nintendo',
-    model: 'Switch',
-    description: 'Switch',
+    id: 140,
+    manufacturer: 'Microsoft',
+    model: 'XBox X/S',
+    description: 'XBox X/S',
   },
   {
-    id: 6,
+    id: 240,
     manufacturer: 'Sony',
     model: 'Playstation 4',
     description: 'Playstation 4',
   },
   {
-    id: 7,
+    id: 250,
     manufacturer: 'Sony',
     model: 'Playstation 5',
     description: 'Playstation 5',
-  },
-];
-
-const postTagData: Prisma.PerformancePostTagCreateManyInput[] = [
-  {
-    id: 1,
-    description: 'Native',
-  },
-  {
-    id: 2,
-    description: 'Parallels',
-  },
-  {
-    id: 3,
-    description: 'CrossOver',
-  },
-  {
-    id: 4,
-    description: 'VirtualBox',
   },
 ];
 
@@ -90,7 +104,7 @@ async function seed() {
   logger.info('finished deleting PostTags');
   logger.info('creating PostTags');
   await prisma.performancePostTag.createMany({
-    data: postTagData,
+    data: postTagCreateManyInput,
   });
   logger.info('finished creating PostTags');
 
@@ -99,7 +113,7 @@ async function seed() {
   logger.info('finished deleting SteamGamepads');
   logger.info('started creating gamepads');
   await prisma.gamepadMetadata.createMany({
-    data: gamepadData,
+    data: gamepadCreateManyInput,
   });
   logger.info('finished creating gamepads');
 }
