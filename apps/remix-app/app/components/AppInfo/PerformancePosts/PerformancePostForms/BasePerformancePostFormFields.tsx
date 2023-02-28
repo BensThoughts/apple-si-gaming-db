@@ -8,7 +8,7 @@ import FrameRateAverageSelectMenu from './FormComponents/FrameRateAverageSelectM
 import GamepadRatingSelectMenu from './FormComponents/GamepadRatingSelectMenu';
 import GamepadSelectMenu from './FormComponents/GamepadSelectMenu';
 import PostTagMultiSelectMenu from './FormComponents/PostTagMultiSelectMenu';
-import SystemNameSelectMenu from './FormComponents/SystemNameSelectMenu';
+import SystemSelectMenu from './FormComponents/SystemSelectMenu';
 
 interface BasePerformancePostFormFieldsProps {
   fields?: { // used for defaultValue options
@@ -16,10 +16,10 @@ interface BasePerformancePostFormFieldsProps {
     frameRateAverage?: FrameRate | null;
     frameRateStutters?: boolean;
     ratingMedal?: RatingMedal;
-    // systemName?: string;
     postTagsIds?: number[];
     gamepadId?: number;
     gamepadRating?: GamepadRating | null;
+    systemSpecId?: number;
   };
   fieldErrors?: {
     postText?: string;
@@ -111,8 +111,9 @@ export default function BasePerformancePostFormFields({
           </RemixUnderlineLink>
             &nbsp;to easily attach system information to your post.
         </div>
-        <SystemNameSelectMenu
+        <SystemSelectMenu
           systemSpecOptions={systemSpecOptions}
+          defaultSystemSpecId={fields?.systemSpecId}
         />
       </div>
     </>

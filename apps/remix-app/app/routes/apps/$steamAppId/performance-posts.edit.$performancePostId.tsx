@@ -96,6 +96,7 @@ export async function loader({ params, context }: LoaderArgs) {
     systemVideoDriverVersion,
     systemVideoPrimaryVRAM,
     systemMemoryRAM,
+    userSystemSpecId,
   } = performancePost;
   return json<EditPostLoaderData>({
     steamAppId,
@@ -135,6 +136,7 @@ export async function loader({ params, context }: LoaderArgs) {
         videoDriverVersion: systemVideoDriverVersion,
         videoPrimaryVRAM: systemVideoPrimaryVRAM,
         memoryRAM: systemMemoryRAM,
+        systemSpecId: userSystemSpecId,
       },
       postTags,
     },
@@ -185,6 +187,9 @@ export default function EditPerformancePostRoute() {
     postText,
     rating,
     postTags,
+    system: {
+      systemSpecId,
+    },
   } = performancePost;
 
   const likedPerformancePostIds = useUserLikedPostIds();
@@ -234,6 +239,7 @@ export default function EditPerformancePostRoute() {
           gamepadId: rating.gamepadMetadata?.id,
           gamepadRating: rating.gamepadRating,
           postTagsIds: postTags.map((tag) => tag.id),
+          systemSpecId: systemSpecId ? systemSpecId : undefined,
         }}
         isSubmittingForm={isSubmittingEditPerformancePost}
         postTagOptions={postTagOptions}

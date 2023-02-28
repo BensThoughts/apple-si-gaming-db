@@ -21,10 +21,10 @@ interface EditPerformancePostFormProps {
     frameRateAverage?: FrameRate | null;
     frameRateStutters?: boolean;
     ratingMedal?: RatingMedal;
-    // systemName?: string;
     postTagsIds?: number[];
     gamepadId?: number;
     gamepadRating?: GamepadRating | null;
+    systemSpecId?: number;
   };
   fieldErrors?: {
     postText?: string;
@@ -100,7 +100,7 @@ export default function EditPerformancePostForm({
   const formId = `${steamAppId}-EditPerformancePost`;
   return (
     <PerformancePostFormWrapper>
-      <h2 className="text-secondary text-lg">Edit Performance Post</h2>
+      <h2 className="text-secondary text-lg">Edit Post</h2>
       {formError && <div className="text-color-error">{formError}</div>}
       <Form
         id={formId}

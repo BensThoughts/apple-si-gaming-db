@@ -28,6 +28,7 @@ export interface PerformancePostSystem {
   videoDriverVersion?: string | null;
   videoPrimaryVRAM?: string | null;
   memoryRAM?: string | null;
+  systemSpecId?: number | null;
 }
 
 export interface PerformancePostSteamApp {
