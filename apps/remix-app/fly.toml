@@ -1,19 +1,16 @@
-app = "apple-si-gaming-db-remix-app"
+# fly.toml file generated for steamed-apples-remix-app on 2023-02-27T20:24:02-07:00
 
+app = "steamed-apples-remix-app"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
-# [build]
-#   image = "registry.fly.io/apple-si-gaming-db-remix-app:deployment-01GCR6WYGHP3H5449X1YRSYAQW"
-
-[env]
-  PORT = "8080"
-  NODE_ENV = "production"
-  # ! ASGD_PASSPORT_DOMAIN = "https://www.applesilicongaming.com" (Set as Secret)
-
 [deploy]
   release_command = "yarn run db:migrate:deploy"
+
+[env]
+  NODE_ENV = "production"
+  PORT = "8080"
 
 [experimental]
   allowed_public_ports = []
@@ -24,16 +21,25 @@ processes = []
   processes = ["app"]
   protocol = "tcp"
   script_checks = []
-
   [services.concurrency]
     hard_limit = 25
     soft_limit = 20
     type = "connections"
 
+  [[services.http_checks]]
+    grace_period = "5s"
+    interval = "10s"
+    method = "get"
+    path = "/healthcheck"
+    protocol = "http"
+    timeout = "2s"
+    tls_skip_verify = false
+    [services.http_checks.headers]
+
   [[services.ports]]
+    force_https = true
     handlers = ["http"]
     port = 80
-    force_https = true
 
   [[services.ports]]
     handlers = ["tls", "http"]
@@ -44,13 +50,3 @@ processes = []
     interval = "15s"
     restart_limit = 0
     timeout = "2s"
-
-  [[services.http_checks]]
-    interval = "10s"
-    grace_period = "5s"
-    method = "get"
-    path = "/healthcheck"
-    protocol = "http"
-    timeout = "2s"
-    tls_skip_verify = false
-    [services.http_checks.headers]
