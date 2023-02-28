@@ -7,7 +7,7 @@ networks:
   apple-si-gaming-db-network:
 services:
   postgres:
-    platform: linux/amd64
+    platform: linux/arm64/v8
     image: postgres:latest
     restart: always
     container_name: postgres
@@ -47,7 +47,7 @@ services:
       - .env.stage.env
     links:
       - "postgres:db"
-    
+
   # mysql:
   #   platform: linux/amd64
   #   image: mysql:8.0.28
