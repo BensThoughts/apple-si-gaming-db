@@ -1,6 +1,6 @@
 import { redirect, json } from '@remix-run/node';
 import { deletePerformancePost, didCurrentSessionUserCreatePost } from '~/models/SteamedApples/performancePost.server';
-import type { DeletePerformancePostActionData } from '~/routes/apps/$steamAppId/performance-posts';
+import type { DeletePerformancePostActionData } from '~/routes/apps/$steamAppId/posts';
 
 const badRequest = (data: DeletePerformancePostActionData) => json(data, { status: 400 });
 
