@@ -66,7 +66,7 @@ export async function createPerformancePost({
   const systemSpecs =
     systemSpecId
       ? await findSystemSpecForPostBySystemSpecId(systemSpecId)
-      : null;
+      : undefined;
 
   if (!systemSpecs) {
     return prisma.performancePost.create({ data: performancePostData });
@@ -82,6 +82,11 @@ export async function createPerformancePost({
       systemVideoDriverVersion: systemSpecs.videoDriverVersion,
       systemVideoPrimaryVRAM: systemSpecs.videoPrimaryVRAM,
       systemMemoryRAM: systemSpecs.memoryRAM,
+      userSystemSpec: {
+        connect: {
+          id: systemSpecId,
+        },
+      },
     },
   });
 };
@@ -264,7 +269,7 @@ export async function didCurrentSessionUserCreatePost(
     steamUserId64: string,
     performancePostId: number,
 ) {
-  const steamUserIdThatCreatedPost = await prisma.performancePost.findUnique({
+  const performancePost = await prisma.performancePost.findUnique({
     where: {
       id: performancePostId,
     },
@@ -273,9 +278,9 @@ export async function didCurrentSessionUserCreatePost(
     },
   });
   if (
-    steamUserIdThatCreatedPost &&
+    performancePost &&
     (
-      steamUserIdThatCreatedPost.steamUserId64.toString() === steamUserId64
+      performancePost.steamUserId64.toString() === steamUserId64
     )
   ) {
     return true;
@@ -328,6 +333,17 @@ export async function updatePerformancePost({
         id,
       })),
     },
+    systemManufacturer: null,
+    systemModel: null,
+    systemOsVersion: null,
+    systemCpuBrand: null,
+    systemVideoDriver: null,
+    systemVideoDriverVersion: null,
+    systemVideoPrimaryVRAM: null,
+    systemMemoryRAM: null,
+    userSystemSpec: {
+      disconnect: true,
+    },
   };
 
   if (systemSpecId) {
@@ -347,6 +363,11 @@ export async function updatePerformancePost({
           systemVideoDriverVersion: systemSpecs.videoDriverVersion,
           systemVideoPrimaryVRAM: systemSpecs.videoPrimaryVRAM,
           systemMemoryRAM: systemSpecs.memoryRAM,
+          userSystemSpec: {
+            connect: {
+              id: systemSpecId,
+            },
+          },
         },
       });
     }
@@ -405,6 +426,7 @@ export async function findPerformancePostById(
           steamAppId: true,
         },
       },
+      userSystemSpecId: true,
       systemManufacturer: true,
       systemModel: true,
       systemOsVersion: true,
