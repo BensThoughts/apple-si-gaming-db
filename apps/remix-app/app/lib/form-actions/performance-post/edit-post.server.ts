@@ -93,9 +93,9 @@ export async function editPerformancePostAction({
     frameRateAverage: frameRateAverage === 'None' ? undefined : frameRateAverage,
     frameRateStutters,
     ratingMedal,
-    systemSpecId,
+    systemSpecId: systemSpecId < 0 ? undefined : systemSpecId,
     postTagIds,
-    gamepadId,
+    gamepadId: gamepadId < 0 ? undefined : gamepadId,
     gamepadRating: gamepadRating === 'None' ? undefined : gamepadRating,
   });
 
