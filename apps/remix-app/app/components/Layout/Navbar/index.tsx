@@ -5,7 +5,7 @@ import MenuDrawer from '~/components/Layout/MenuDrawer';
 import MenuItem from './MenuItem';
 import NavHider from './NavHider';
 
-import { menuItems } from './menuItems';
+import { navMenuLinks } from './navMenuLinks';
 
 import {
   BarsIcon,
@@ -14,6 +14,7 @@ import {
 import SimpleSearchForm from '~/components/Search/SimpleSearchForm';
 import { Link } from '@remix-run/react';
 import { AppleLogoSolidIcon } from '~/components/Icons/FlatIcons';
+import ProfileMenu from '../ProfileMenu';
 
 type NavBarProps = {
   className?: string;
@@ -30,16 +31,15 @@ export default function Navbar({
   const [isOpen, setIsOpen] = useState(false);
   // const authState = useSelector(selectSteamUserAuthIsLoggedIn);
 
-
   return (
     <>
       <MenuDrawer isOpen={isOpen} setIsOpen={setIsOpen} title="Menu">
         <div className="flex flex-col items-center w-full gap-6">
           <div className="flex flex-col justify-end content-between items-center pt-0 mt-7 w-full">
-            {menuItems.map((menuItem) => (
+            {navMenuLinks.map((menuItem, idx) => (
               <Link
-                key={menuItem.href}
-                to={menuItem.href}
+                key={`${menuItem.to}-${idx}`}
+                to={menuItem.to}
                 onClick={() => setIsOpen(false)}
                 className="flex items-center justify-center w-full h-10 text-xl text-center hover:bg-primary"
               >
@@ -61,8 +61,8 @@ export default function Navbar({
             <div className="flex gap-x-4 items-center">
               <AppleLogoSolidIcon size={34} className="text-icon-secondary" />
               <div className="flex gap-3 content-between items-center pt-0">
-                {menuItems.map((menuItem) => (
-                  <MenuItem animatedLink key={menuItem.href} href={menuItem.href}>{menuItem.name}</MenuItem>
+                {navMenuLinks.map((menuItem, idx) => (
+                  <MenuItem animatedLink key={`${menuItem.to}-${idx}`} href={menuItem.to}>{menuItem.name}</MenuItem>
                 ))}
                 <SimpleSearchForm
                   isSubmitting={isSearchSubmitting}
@@ -71,11 +71,12 @@ export default function Navbar({
             </div>
             <div className="flex gap-x-4 justify-end items-center">
               <ThemeToggle />
-              <div className="hidden navBarQuery:flex gap-x-4 items-center">
-                <span>{isLoggedIn ? 'Logged In' : 'Logged Out'}</span>
+              <div className="hidden navBarQuery:flex gap-x-4 items-center justify-center">
+                <ProfileMenu isLoggedIn={isLoggedIn} />
+                {/* <span>{isLoggedIn ? 'Logged In' : 'Logged Out'}</span>
                 <Link to="/profile" className="block focus-visible:show-ring rounded-md h-[40px] w-[40px] bg-primary hover:bg-primary-highlight p-px group">
                   <SteamIcon className="text-icon-secondary rounded-md w-full h-full group-hover:text-icon-secondary-highlight" />
-                </Link>
+                </Link> */}
               </div>
             </div>
           </div>
