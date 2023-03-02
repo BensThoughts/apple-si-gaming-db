@@ -1,5 +1,5 @@
 import type { MouseEventHandler, ReactNode } from 'react';
-import { Link } from '@remix-run/react';
+import { NavLink } from '@remix-run/react';
 import AnimatedUnderline from '~/components/AnimatedUnderline';
 // import Link from '~/components/Link';
 // import AnimatedUnderline from '~/components/AnimatedUnderline';
@@ -23,7 +23,7 @@ const MenuItem = ({
   ...rest
 }: MenuItemsProps) => {
   return (
-    <Link to={href} className="focus-visible:show-ring px-1 rounded-sm">
+    <NavLink to={href} className="focus-visible:show-ring px-1 rounded-sm">
       {animatedLink
         ? (
           <AnimatedUnderline className={className} onClick={onClick}>
@@ -35,7 +35,7 @@ const MenuItem = ({
           </span>
         )
       }
-    </Link>
+    </NavLink>
   );
 };
 
