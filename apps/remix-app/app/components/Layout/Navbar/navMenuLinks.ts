@@ -1,22 +1,22 @@
-export const menuItems = [
+export const navMenuLinks = [
   {
     name: 'Home',
-    href: '/',
+    to: '/',
   },
   {
     name: 'Games',
-    href: '/apps',
+    to: '/apps',
   },
   {
     name: 'Search',
-    href: '/search',
+    to: '/search',
   },
   {
     name: 'Contact',
-    href: '/contact',
+    to: '/contact',
   },
   {
     name: 'Profile',
-    href: '/profile',
+    to: '/profile',
   },
 ];
