@@ -23,25 +23,26 @@ const bannerSession = createCookieSessionStorage({
 
 async function getBannerSession(request: Request) {
   const session = await bannerSession.getSession(request.headers.get('Cookie'));
-
-  const setShowBanner =
-    (bannerName: string, showBanner: boolean) =>
-      session.set(bannerName, showBanner);
-
-  const hasShowBanner = (bannerName: string) => session.has(bannerName);
-
-  const getShowBanner = (bannerName: string) => {
-    const showNewDomainBanner = session.get(bannerName);
-    if (showNewDomainBanner) {
+  const setShowSignInBanner = () => session.flash('showSignInBanner', 'true');
+  // const setShowSignInBanner = (showBanner: boolean) => {
+  //   if (showBanner) {
+  //     session.set('showSignInBanner', 'true');
+  //   } else {
+  //     session.unset('showSignInBanner');
+  //   }
+  // };
+  const getShowSignInBanner = () => {
+    const showBanner = session.get('showSignInBanner');
+    if (showBanner) {
       return true;
     }
     return false;
   };
 
   return {
-    hasShowBanner,
-    getShowBanner,
-    setShowBanner,
+    // setShowSignInBanner,
+    setShowSignInBanner,
+    getShowSignInBanner,
     commit: () => bannerSession.commitSession(session),
   };
 }
