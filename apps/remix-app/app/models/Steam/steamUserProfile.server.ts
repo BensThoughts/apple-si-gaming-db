@@ -2,6 +2,7 @@ import { getSteamPlayerOwnedGamesRequest } from '~/lib/data-utils/steamApi.serve
 import { filterAppIdsExistInDatabase } from './steamApp.server';
 import type { PrismaSteamApp } from '~/interfaces/database';
 import prisma from '~/lib/database/db.server';
+import type { SteamProfileOwnedSteamApp } from '~/interfaces';
 
 export async function updateSteamUserProfileOwnedSteamApps(
     steamUserId64: string,
@@ -10,26 +11,28 @@ export async function updateSteamUserProfileOwnedSteamApps(
   if (games) {
     const ownedAppIds = games.map((app) => app.appid);
     const ownedAppIdsInDB = await filterAppIdsExistInDatabase(ownedAppIds);
-    await updateSteamUserProfileOwnedAppsInDatabase(ownedAppIdsInDB, steamUserId64);
+    await prisma.steamUserProfile.update({
+      where: {
+        steamUserId64: BigInt(steamUserId64),
+      },
+      data: {
+        ownedSteamApps: {
+          connect: ownedAppIdsInDB.map((steamAppId) => ({
+            steamAppId,
+          })),
+        },
+      },
+    });
   }
 }
 
-export async function updateSteamUserProfileOwnedAppsInDatabase(
-    steamAppIds: PrismaSteamApp['steamAppId'][],
-    steamUserId64: string,
-) {
-  return prisma.steamUserProfile.update({
+export async function doesSteamUserProfileExistInDB(steamUserId64: string) {
+  const steamUserProfileCount = await prisma.steamUserProfile.count({
     where: {
       steamUserId64: BigInt(steamUserId64),
     },
-    data: {
-      ownedSteamApps: {
-        connect: steamAppIds.map((steamAppId) => ({
-          steamAppId,
-        })),
-      },
-    },
   });
+  return steamUserProfileCount > 0 ? true : false;
 }
 
 export async function doesSteamUserOwnApp(
@@ -65,4 +68,39 @@ export async function doesSteamUserOwnApp(
     return false;
   }
   return steamUser.ownedSteamApps.map((app) => app.steamAppId).includes(steamAppId);
+}
+
+export async function findSteamUserProfileOwnedSteamApps(steamUserId64: string): Promise<SteamProfileOwnedSteamApp[]> {
+  const steamUserProfile = await prisma.steamUserProfile.findUnique({
+    where: {
+      steamUserId64: BigInt(steamUserId64),
+    },
+    select: {
+      ownedSteamApps: {
+        where: {
+          comingSoon: {
+            equals: false,
+          },
+          type: {
+            contains: 'game',
+            mode: 'insensitive',
+          },
+        },
+        orderBy: {
+          name: 'asc',
+        },
+        select: {
+          steamAppId: true,
+          genres: true,
+          headerImage: true,
+          name: true,
+          platformMac: true,
+        },
+      },
+    },
+  });
+  if (!steamUserProfile) {
+    return [];
+  }
+  return steamUserProfile.ownedSteamApps;
 }
