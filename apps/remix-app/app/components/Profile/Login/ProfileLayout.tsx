@@ -1,4 +1,3 @@
-import Heading from '~/components/Heading';
 import PrivacyCard from './PrivacyCard';
 import ProfileCard from './ProfileCard';
 
@@ -10,8 +9,7 @@ export default function ProfileLayout({
   avatarFull?: string | null;
 }) {
   return (
-    <div className="flex flex-col gap-8 items-center w-full p-4 bg-tertiary rounded-lg border-1 border-secondary-highlight">
-      <Heading>Profile</Heading>
+    <div className="flex flex-col gap-8 items-center p-6 bg-tertiary rounded-lg border-1 border-secondary-highlight">
       <ProfileCard avatarFull={avatarFull} displayName={displayName} />
       <PrivacyCard />
     </div>
