@@ -11,7 +11,7 @@ export default function PerformancePostTextArea({
     <TextArea
       id="performancePostText"
       name="performancePostText"
-      className="bg-primary rounded-lg p-2 w-full h-28"
+      className="bg-primary rounded-lg p-2 w-full h-44 md:h-52"
       defaultValue={defaultValue ? defaultValue : ''}
       labelText="Post Text"
       fieldError={fieldError}
