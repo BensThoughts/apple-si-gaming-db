@@ -22,24 +22,21 @@ type PerformancePostDisplayProps = {
     userWhoCreatedPost: PerformancePostUserWhoCreated;
     postTags: PerformancePostTag[];
   };
-  userSession: {
-    isUserLoggedIn: boolean;
-    hasLoggedInUserLiked: boolean;
-    didLoggedInUserCreatePost: boolean;
-  }
 } & React.HTMLAttributes<HTMLDivElement>
 
 export default function PerformancePostDisplay({
   performancePost,
-  userSession,
   ...rest
 }: PerformancePostDisplayProps) {
-  // const ratingNum = convertRatingMedalToNumber(ratingMedal);
   const {
     performancePostId,
     createdAt,
     postText,
-    userWhoCreatedPost,
+    userWhoCreatedPost: {
+      steamUserId64,
+      avatarMedium,
+      displayName,
+    },
     rating: {
       ratingMedal,
       frameRateAverage,
@@ -56,38 +53,27 @@ export default function PerformancePostDisplay({
       steamAppId,
     },
   } = performancePost;
-  const {
-    isUserLoggedIn,
-    didLoggedInUserCreatePost,
-    hasLoggedInUserLiked,
-  } = userSession;
   return (
     <div className="flex flex-col w-full gap-3">
       <PerformancePostMetaBar
-        steamAppId={steamAppId}
         performancePostId={performancePostId}
         createdAt={createdAt}
-        ratingMedal={ratingMedal}
-        frameRateAverage={frameRateAverage}
-        frameRateStutters={frameRateStutters}
-        userSession={{
-          isUserLoggedIn,
-          didLoggedInUserCreatePost,
-        }}
+        userWhoCreatedPost={{ steamUserId64 }}
+        steamApp={{ steamAppId }}
+        rating={{ ratingMedal, frameRateAverage, frameRateStutters }}
         likeButtonData={{
           numLikes,
-          hasLoggedInUserLiked,
         }}
       />
       <div className="flex flex-row w-full gap-[1px]" {...rest}>
         <div className="flex flex-col gap-1 items-center justify-start pr-3 border-r-2 border-r-secondary md:w-full md:max-w-[10rem]">
-          {userWhoCreatedPost.avatarMedium && (
+          {avatarMedium && (
             <div>
-              <AvatarImage avatarMedium={userWhoCreatedPost.avatarMedium} />
+              <AvatarImage avatarMedium={avatarMedium} />
             </div>
           )}
-          {userWhoCreatedPost.displayName && (
-            <span className="text-sm">{userWhoCreatedPost.displayName}</span>
+          {displayName && (
+            <span className="text-sm">{displayName}</span>
           )}
           {/* // ! Below Added to allow for no system specs on a post */}
           {(

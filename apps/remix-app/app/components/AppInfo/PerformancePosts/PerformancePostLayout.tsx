@@ -13,11 +13,6 @@ import PostLayoutCard from './PerformancePostLayoutCard';
 
 type PerformancePostLayoutProps =
 {
-  userSession: {
-    isUserLoggedIn: boolean;
-    steamUserId64?: string;
-    likedPerformancePostIds: number[];
-  };
   performancePosts: (PerformancePostBase & {
     steamApp: PerformancePostSteamApp;
     rating: PerformancePostRating;
@@ -30,7 +25,6 @@ type PerformancePostLayoutProps =
 
 
 export default function PerformancePostLayout({
-  userSession,
   performancePosts,
 }: PerformancePostLayoutProps) {
   if (performancePosts.length < 1) {
@@ -49,20 +43,14 @@ export default function PerformancePostLayout({
       <AppRatingOverview performancePostRatings={performancePosts.map((post) => post.rating)} />
       <PostLayoutCard>
         <div className="flex flex-col gap-6 w-full">
-          {performancePosts.map((performancePost, idx) => {
-            const hasLoggedInUserLiked =
-              userSession.likedPerformancePostIds.includes(performancePost.performancePostId);
-            const didLoggedInUserCreatePost =
-              performancePost.userWhoCreatedPost?.steamUserId64 === userSession.steamUserId64;
+          {performancePosts.map(({
+            performancePostId,
+            ...rest
+          }, idx) => {
             return (
-              <div key={performancePost.performancePostId} id={performancePost.performancePostId.toString()} className="flex flex-col gap-6">
+              <div key={performancePostId} id={performancePostId.toString()} className="flex flex-col gap-6">
                 <PerformancePostDisplay
-                  performancePost={performancePost}
-                  userSession={{
-                    isUserLoggedIn: userSession.isUserLoggedIn,
-                    hasLoggedInUserLiked,
-                    didLoggedInUserCreatePost,
-                  }}
+                  performancePost={{ performancePostId, ...rest }}
                 />
                 {(performancePosts.length - 1 > idx) &&
                 <hr className="text-secondary" />
