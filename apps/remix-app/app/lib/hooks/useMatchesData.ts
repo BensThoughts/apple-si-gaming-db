@@ -1,5 +1,6 @@
 import { useMatches } from '@remix-run/react';
 import { useMemo } from 'react';
+import type { UserProfileSystemSpec, UserSession } from '~/interfaces/remix-app/UserSession';
 import type { SerializedRootLoaderData } from '~/root';
 
 /**
@@ -31,65 +32,47 @@ function useRootLoaderData() {
   return rootLoaderData as SerializedRootLoaderData;
 }
 
-function useRootUserProfileLoaderData() {
+export function useUserSession(): UserSession {
   const rootLoaderData = useRootLoaderData();
-  if (!rootLoaderData) {
-    return undefined;
-  }
-  const {
-    userProfile,
-  } = rootLoaderData;
-  if (!userProfile) {
-    return undefined;
-  }
-  return userProfile;
-}
+  if (!rootLoaderData) return { };
 
-export function useSteamUserProfile() {
-  const userProfile = useRootUserProfileLoaderData();
-  if (!userProfile) {
-    return undefined;
-  }
-  const {
-    steamUserId64,
-    displayName,
-    avatarFull,
-    avatarMedium,
-  } = userProfile.steamUserProfile;
-  return { steamUserId64, displayName, avatarFull, avatarMedium };
-}
+  const { userSession } = rootLoaderData;
+  if (!userSession) return { };
 
-export function useSteamUserOwnedSteamApps() {
-  const userProfile = useRootUserProfileLoaderData();
-  if (!userProfile) {
-    return [];
-  }
-  const {
+  const { userProfile, steamUserProfile } = userSession;
+  if (!userProfile) return { steamUserProfile };
+
+  // TODO: Case for useMemo?
+  const likedPerformancePostIds = new Map<number, number>();
+  userProfile.likedPerformancePostIds.forEach((performancePostId) => {
+    likedPerformancePostIds.set(performancePostId, performancePostId);
+  });
+
+  return {
+    userProfile: {
+      ...userProfile,
+      likedPerformancePostIds,
+    },
     steamUserProfile,
-  } = userProfile;
-  return steamUserProfile.ownedSteamApps;
+  };
 }
 
-export function useUserSystemSpecs() {
-  const userProfile = useRootUserProfileLoaderData();
+export function useUserProfileSystemSpecs(): UserProfileSystemSpec[] {
+  const { userProfile } = useUserSession();
+  return userProfile ? userProfile.systemSpecs : [];
+}
+
+export function useLikeButtonData(performancePostId: number) {
+  const { userProfile } = useUserSession();
   if (!userProfile) {
-    return [];
+    return {
+      isUserProfileLoggedIn: false,
+      didUserProfileLikePerformancePost: false,
+    };
   }
-  return userProfile.systemSpecs;
-}
-
-export function useBannerData() {
-  const rootLoaderData = useRootLoaderData();
-  if (!rootLoaderData) {
-    return undefined;
-  }
-  return rootLoaderData.session.banners;
-}
-
-export function useUserLikedPostIds() {
-  const userProfile = useRootUserProfileLoaderData();
-  if (!userProfile) {
-    return [];
-  }
-  return userProfile.likedPerformancePostIds;
+  const didUserProfileLikePerformancePost = userProfile.likedPerformancePostIds.has(performancePostId);
+  return {
+    isUserProfileLoggedIn: true,
+    didUserProfileLikePerformancePost,
+  };
 }
