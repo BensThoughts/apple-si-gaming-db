@@ -1,10 +1,10 @@
 import AnimatedUnderline from '~/components/AnimatedUnderline';
 import Card from '~/components/Cards/Card';
 import ProfileLayout from '~/components/Profile/Login/ProfileLayout';
-import { useSteamUserProfile } from '~/lib/hooks/useMatchesData';
+import { useUserSession } from '~/lib/hooks/useMatchesData';
 
 export default function ProfileIndexRoute() {
-  const steamUserProfile = useSteamUserProfile();
+  const { steamUserProfile } = useUserSession();
   if (!steamUserProfile) {
     return (
       <Card title="No Steam User Found!">
