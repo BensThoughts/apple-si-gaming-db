@@ -16,7 +16,7 @@ export default function LoginCard() {
         // onClick={() => Fathom.trackGoal('7HVQUUZ4', 1)}
       >
         <img
-          src="steam_sign_in.png"
+          src="/steam_sign_in.png"
           alt="login with steam"
           width={114}
           height={43}
