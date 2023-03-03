@@ -18,7 +18,6 @@ export default function EditAndDeleteButtons({
   return (
     <div className="flex gap-2 py-1 px-2 rounded-full border-secondary-highlight border-solid border-1">
       <DeletePostModal
-        steamAppId={steamAppId}
         performancePostId={performancePostId}
         isOpen={isDeleteModalOpen}
         setIsOpen={setDeleteModalIsOpen}
