@@ -16,13 +16,13 @@ import {
   useTransition,
 } from '@remix-run/react';
 import { json } from '@remix-run/node';
-import globalStylesheetUrl from './styles/global.css';
-import { metaTags } from './lib/meta-tags';
-import { extractAppLoadContext } from './lib/data-utils/appLoadContext.server';
+import globalStylesheetUrl from '~/styles/global.css';
+import { metaTags } from '~/lib/meta-tags';
+import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import Navbar from '~/components/Layout/Navbar';
 import { Toaster } from 'react-hot-toast';
 import {
-  findUserProfileData,
+  findUserSessionByUserProfileId,
   upsertUserProfileBySteamUserId64,
 } from '~/models/SteamedApples/userProfile.server';
 import {
@@ -30,99 +30,67 @@ import {
 } from '~/models/Steam/steamUserProfile.server';
 
 import type { SerializeFrom } from '@remix-run/node';
-import { getProfileSession } from './lib/sessions/profile-session.server';
-import type { Theme } from './lib/context/theme-provider';
-import { useTheme, ThemeProvider, NonFlashOfWrongThemeEls } from './lib/context/theme-provider';
-import { getThemeSession } from './lib/sessions/theme-session.server';
+import { getProfileSession } from '~/lib/sessions/profile-session.server';
+// import { getBannerSession } from '~/lib/sessions/banner-session.server';
+import type { Theme } from '~/lib/context/theme-provider';
+import { useTheme, ThemeProvider, NonFlashOfWrongThemeEls } from '~/lib/context/theme-provider';
+import { getThemeSession } from '~/lib/sessions/theme-session.server';
 import type {
-  UserProfileBase,
-  OwnedSteamApp,
-  UserProfileSystemSpec,
-  SteamUserProfile,
-} from '~/interfaces/remix-app/UserProfile';
-
-export type UserProfileForRootLoaderData = UserProfileBase & {
-  steamUserProfile: SteamUserProfile & {
-    ownedSteamApps: OwnedSteamApp[];
-  }
-  systemSpecs: UserProfileSystemSpec[];
-};
+  UserSessionServerSide,
+} from '~/interfaces/remix-app/UserSession';
 
 type RootLoaderData = {
-  session: {
-    theme: Theme | null;
-    isLoggedIn: boolean;
-    banners: {
-      showNewDomainBanner: boolean;
-    }
-  },
-  userProfile?: UserProfileForRootLoaderData;
+  theme: Theme | null;
+  userSession?: UserSessionServerSide;
 }
 
 export type SerializedRootLoaderData = SerializeFrom<RootLoaderData>
 
 export async function loader({ request, context }: LoaderArgs) {
-  const host = request.headers.get('Host');
-  console.log('Request Host: ' + host);
-  const showNewDomainBanner =
-    host?.toLowerCase().includes('localhost') ||
-    host?.toLowerCase().includes('steamedapples')
-    ? false
-    : true;
   const themeSession = await getThemeSession(request);
   const theme = themeSession.getTheme();
+
   const { steamUser } = extractAppLoadContext(context);
   const profileSession = await getProfileSession(request);
 
   if (steamUser) { // if steamUser then isLoggedInWithSteam = true
-    let userProfileId = Number(profileSession.getUserProfileId()); // are we logged in to SteamedApples?
-    if (!isFinite(userProfileId)) { // Upon initial login we don't have userProfileId yet
+    let userProfileId = profileSession.getUserProfileId(); // are we logged in to SteamedApples?
+    if (!userProfileId) { // Upon initial login we don't have userProfileId yet
       const { id } = await upsertUserProfileBySteamUserId64(steamUser.steamUserId64, steamUser);
       userProfileId = id;
       await updateSteamUserProfileOwnedSteamApps(steamUser.steamUserId64);
-      // await addOneToNumTimesLoggedIn()
+      // TODO: "It's important that you logout (or perform any mutation for that
+      // TODO: matter) in an action"
+      // TODO: "When using session.unset(), you need to be sure no
+      // TODO: other loaders in the request are going to want to read that"
+      // TODO: https://remix.run/docs/en/v1/utils/sessions
       profileSession.login(userProfileId);
     }
     // We are now definitely logged in and have a userProfileId
-    const userProfile = await findUserProfileData(userProfileId);
+    const userSession = await findUserSessionByUserProfileId(userProfileId);
     const headers = new Headers();
     // TODO: code for headers is duplicated before each return json()
     headers.append('Set-Cookie', await profileSession.commit());
+    // headers.append('Set-Cookie', await bannerSession.commit());
     return json<RootLoaderData>({
-      session: {
-        theme,
-        isLoggedIn: true,
-        banners: {
-          showNewDomainBanner,
-        },
-      },
-      userProfile,
+      theme,
+      userSession,
     }, {
       headers,
     });
   }
 
-  // TODO: "It's important that you logout (or perform any mutation for that
-  // TODO: matter) in an action"
-  // TODO: "When using session.unset(), you need to be sure no
-  // TODO: other loaders in the request are going to want to read that"
-  // TODO: https://remix.run/docs/en/v1/utils/sessions
-  profileSession.logout();
+  // const bannerSession = await getBannerSession(request);
+  // bannerSession.setShowSignInBanner();
 
   // TODO: code for headers is duplicated before each return json()
-  const headers = new Headers();
-  headers.append('Set-Cookie', await profileSession.commit());
+  // const headers = new Headers();
+  // headers.append('Set-Cookie', await profileSession.commit());
   // headers.append('Set-Cookie', await bannerSession.commit());
   return json<RootLoaderData>({
-    session: {
-      theme,
-      isLoggedIn: false,
-      banners: {
-        showNewDomainBanner,
-      },
-    },
+    theme,
   }, {
-    headers,
+    // headers,
   });
 }
 
@@ -137,7 +105,7 @@ export const meta: MetaFunction = ({ data }: {
 }) => ({
   'charset': 'utf-8',
   'viewport': 'width=device-width,initial-scale=1',
-  'color-scheme': (data?.session?.theme === 'light') ? 'light dark' : 'dark light',
+  'color-scheme': (data?.theme === 'light') ? 'light dark' : 'dark light',
   ...metaTags,
 });
 
@@ -222,10 +190,8 @@ export default function App() {
   // TODO: Getting cannot use loaderData in an error boundary errors,
   // TODO: with error being thrown on /profile, prob. because of this
   const {
-    session: {
-      isLoggedIn,
-      theme,
-    },
+    theme,
+    userSession,
   }= useLoaderData<RootLoaderData>();
   const transition = useTransition();
   const isSearchSubmitting =
@@ -234,7 +200,7 @@ export default function App() {
   return (
     <ThemeProvider ssrCookieTheme={theme}>
       <Document
-        isLoggedIn={isLoggedIn}
+        isLoggedIn={userSession ? true : false}
         isSearchSubmitting={isSearchSubmitting}
         ssrTheme={theme}
       >
