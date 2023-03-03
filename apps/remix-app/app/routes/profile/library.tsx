@@ -1,40 +1,43 @@
 import { json, redirect } from '@remix-run/node';
 import type { ActionArgs, LoaderArgs } from '@remix-run/node';
-import { useTransition } from '@remix-run/react';
+import { useLoaderData, useTransition } from '@remix-run/react';
 import LibraryLayout from '~/components/Profile/Library/LibraryLayout';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-import { useSteamUserOwnedSteamApps } from '~/lib/hooks/useMatchesData';
 import {
   doesUserProfileExist,
   upsertUserProfileBySteamUserId64,
 } from '~/models/SteamedApples/userProfile.server';
 import {
+  findSteamUserProfileOwnedSteamApps,
   updateSteamUserProfileOwnedSteamApps,
 } from '~/models/Steam/steamUserProfile.server';
 import { getProfileSession } from '~/lib/sessions/profile-session.server';
 
-export async function loader({ context }: LoaderArgs) {
+export async function loader({ context, request }: LoaderArgs) {
   const { steamUser } = extractAppLoadContext(context);
-  if (!steamUser) {
+  const profileSession = await getProfileSession(request);
+  if (!steamUser || !profileSession) {
     return redirect('/profile');
   }
-  return json({});
+  const { steamUserId64 } = steamUser;
+  const ownedSteamApps = await findSteamUserProfileOwnedSteamApps(steamUserId64);
+  return json({ ownedSteamApps });
 }
 
 export async function action({ request, context }: ActionArgs) {
   const profileSession = await getProfileSession(request);
-  const profileId = Number(profileSession.getUserProfileId());
+  const profileId = profileSession.getUserProfileId();
   const { steamUser } = extractAppLoadContext(context);
   // TODO: This should maybe return more info about the problem
-  if (!steamUser || !isFinite(profileId)) {
+  if (!steamUser || !profileId) {
     return redirect('/profile');
   }
   const formData = await request.formData();
   const action = formData.get('_profileAction');
   switch (action) {
     case 'updateOwnedGames': {
-      const steamUserExists = await doesUserProfileExist(profileId);
-      if (!steamUserExists) {
+      const userProfileExists = await doesUserProfileExist(profileId);
+      if (!userProfileExists) {
         await upsertUserProfileBySteamUserId64(steamUser.steamUserId64, steamUser);
       }
       await updateSteamUserProfileOwnedSteamApps(steamUser.steamUserId64);
@@ -47,8 +50,7 @@ export async function action({ request, context }: ActionArgs) {
 }
 
 export default function ProfileAppsRoute() {
-  const userOwnedApps = useSteamUserOwnedSteamApps();
-
+  const { ownedSteamApps } = useLoaderData<typeof loader>();
   const transition = useTransition();
 
   const isSubmittingUpdateGames =
@@ -57,7 +59,7 @@ export default function ProfileAppsRoute() {
 
   return (
     <LibraryLayout
-      ownedApps={userOwnedApps}
+      ownedApps={ownedSteamApps}
       isSubmittingUpdateGames={isSubmittingUpdateGames}
     />
   );
