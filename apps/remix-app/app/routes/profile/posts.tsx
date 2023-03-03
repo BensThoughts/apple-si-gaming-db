@@ -3,17 +3,18 @@ import { redirect, json } from '@remix-run/node';
 import UsersPostsLayout from '~/components/Profile/Posts/UsersPostsLayout';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import { useLoaderData } from '@remix-run/react';
-import { useUserLikedPostIds } from '~/lib/hooks/useMatchesData';
 import type {
   PerformancePostBase,
   PerformancePostLikes,
   PerformancePostRating,
   PerformancePostSteamApp,
+  PerformancePostUserWhoCreated,
 } from '~/interfaces';
 import { findPerformancePostsBySteamUserId } from '~/models/SteamedApples/performancePost.server';
 
 interface ProfilePostsRouteLoaderData {
   steamUsersPosts: (PerformancePostBase & {
+    userWhoCreatedPost: PerformancePostUserWhoCreated;
     steamApp: PerformancePostSteamApp;
     rating: PerformancePostRating;
     likes: PerformancePostLikes;
@@ -26,43 +27,10 @@ export async function loader({ context }: LoaderArgs) {
   if (!steamUser) {
     return redirect('/profile');
   }
+  const steamUserId64 = steamUser.steamUserId64;
 
-  const prismaPerformancePosts = await findPerformancePostsBySteamUserId(steamUser.steamUserId64);
+  const steamUsersPosts = await findPerformancePostsBySteamUserId(steamUserId64);
 
-  const steamUsersPosts =
-    prismaPerformancePosts.map(({
-      id,
-      createdAt,
-      postText,
-      _count: {
-        usersWhoLiked,
-      },
-      ratingMedal,
-      frameRateAverage,
-      frameRateStutters,
-      steamApp: {
-        steamAppId,
-        name,
-        headerImage,
-      },
-    }) => ({
-      performancePostId: id,
-      createdAt,
-      postText,
-      likes: {
-        numLikes: usersWhoLiked,
-      },
-      rating: {
-        ratingMedal,
-        frameRateAverage,
-        frameRateStutters,
-      },
-      steamApp: {
-        steamAppId,
-        name,
-        headerImage,
-      },
-    }));
   return json<ProfilePostsRouteLoaderData>({
     steamUsersPosts,
   });
@@ -70,10 +38,8 @@ export async function loader({ context }: LoaderArgs) {
 
 export default function ProfilePostsRoute() {
   const { steamUsersPosts } = useLoaderData<ProfilePostsRouteLoaderData>();
-  const likedPerformancePostIds = useUserLikedPostIds();
   return (
     <UsersPostsLayout
-      userSession={{ likedPerformancePostIds }}
       steamUsersPosts={steamUsersPosts.map((performancePost) => ({
         ...performancePost,
         createdAt: new Date(performancePost.createdAt),
