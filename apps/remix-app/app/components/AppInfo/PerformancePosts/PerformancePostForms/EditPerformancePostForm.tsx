@@ -7,15 +7,12 @@ import type { FrameRate, RatingMedal, GamepadRating, PostTagOption, GamepadOptio
 import PerformancePostFormWrapper from './PerformancePostFormWrapper';
 import BasePerformancePostFormFields from './BasePerformancePostFormFields';
 import RemixRoundedLink from '~/components/RemixRoundedLink';
+import { useUserSession } from '~/lib/hooks/useMatchesData';
 
 interface EditPerformancePostFormProps {
   performancePostId: number;
   steamAppId: number;
-  steamUserSession: {
-    isLoggedIn: boolean;
-    loggedInUserCreatedPost: boolean;
-    systemSpecOptions: SystemSpecOption[];
-  };
+  formError?: string;
   fields?: { // used for defaultValue options
     postText?: string;
     frameRateAverage?: FrameRate | null;
@@ -35,7 +32,6 @@ interface EditPerformancePostFormProps {
     gamepadId?: string;
     gamepadRating?: string;
   };
-  formError?: string;
   isSubmittingForm: boolean;
   postTagOptions: PostTagOption[];
   gamepadOptions: GamepadOption[];
@@ -44,7 +40,6 @@ interface EditPerformancePostFormProps {
 export default function EditPerformancePostForm({
   performancePostId,
   steamAppId,
-  steamUserSession,
   fields,
   formError,
   fieldErrors,
@@ -52,11 +47,7 @@ export default function EditPerformancePostForm({
   postTagOptions,
   gamepadOptions,
 }: EditPerformancePostFormProps) {
-  const {
-    isLoggedIn,
-    loggedInUserCreatedPost,
-    systemSpecOptions,
-  } = steamUserSession;
+  const { userProfile, steamUserProfile } = useUserSession();
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -72,7 +63,9 @@ export default function EditPerformancePostForm({
     }
   }, [formError]);
 
-  if (!isLoggedIn) {
+  // This should never trigger, the server redirects
+  // on the route that shows this form if this is the case
+  if (!steamUserProfile || !userProfile) {
     return (
       <PerformancePostFormWrapper>
         <div>
@@ -86,16 +79,8 @@ export default function EditPerformancePostForm({
     );
   }
 
-  if (!loggedInUserCreatedPost) {
-    return (
-      <PerformancePostFormWrapper>
-        <div className="w-full">
-          It looks like you did not create this post. You must be the creator of a post to
-          edit it.
-        </div>
-      </PerformancePostFormWrapper>
-    );
-  }
+  const systemSpecOptions: SystemSpecOption[] = userProfile.systemSpecs
+      .map(({ systemSpecId, systemName }) => ({ id: systemSpecId, systemName }));
 
   const formId = `${steamAppId}-EditPerformancePost`;
   return (

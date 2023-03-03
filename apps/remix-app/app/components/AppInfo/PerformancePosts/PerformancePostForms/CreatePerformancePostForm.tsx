@@ -6,14 +6,10 @@ import RemixUnderlineLink from '~/components/RemixUnderlineLink';
 import type { FrameRate, RatingMedal, GamepadRating, SystemSpecOption } from '~/interfaces';
 import PerformancePostFormWrapper from './PerformancePostFormWrapper';
 import BasePerformancePostFormFields from './BasePerformancePostFormFields';
+import { useUserSession } from '~/lib/hooks/useMatchesData';
 
 interface CreatePerformancePostFormProps {
   steamAppId: number;
-  userSession: {
-    isLoggedIn: boolean;
-    ownsApp: boolean;
-    systemSpecOptions: SystemSpecOption[];
-  }
   fields?: { // used for defaultValue options
     postText?: string;
     frameRateAverage?: FrameRate | null;
@@ -43,23 +39,20 @@ interface CreatePerformancePostFormProps {
     id: number;
     description: string;
   }[];
+  steamUserProfileOwnsApp: boolean;
 }
 
 export default function CreatePerformancePostForm({
   steamAppId,
-  userSession,
   fields,
   formError,
   fieldErrors,
   isSubmittingForm,
   postTagOptions,
   gamepadOptions,
+  steamUserProfileOwnsApp,
 }: CreatePerformancePostFormProps) {
-  const {
-    isLoggedIn,
-    ownsApp,
-    systemSpecOptions,
-  } = userSession;
+  const { userProfile, steamUserProfile } = useUserSession();
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -75,11 +68,11 @@ export default function CreatePerformancePostForm({
     }
   }, [formError]);
 
-  if (!isLoggedIn) {
+  if (!steamUserProfile || !userProfile) {
     return (
       <PerformancePostFormWrapper>
         <div>
-          You are not logged in. You must&nbsp;
+          You are not logged in with Steam. You must&nbsp;
           <RemixUnderlineLink to="/profile">
             login
           </RemixUnderlineLink>
@@ -89,7 +82,7 @@ export default function CreatePerformancePostForm({
     );
   }
 
-  if (!ownsApp) {
+  if (!steamUserProfileOwnsApp) {
     return (
       <PerformancePostFormWrapper>
         <div className="w-full">
@@ -99,6 +92,9 @@ export default function CreatePerformancePostForm({
       </PerformancePostFormWrapper>
     );
   }
+
+  const systemSpecOptions: SystemSpecOption[] = userProfile.systemSpecs
+      .map(({ systemSpecId, systemName }) => ({ id: systemSpecId, systemName }));
 
   const formId = `${steamAppId}-CreatePerformancePost`;
   return (
