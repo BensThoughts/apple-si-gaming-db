@@ -24,3 +24,10 @@ export type SteamAppSidebarData = SteamAppBase & {
   genres: PrismaSteamGenre[];
   categories: PrismaSteamCategory[];
 }
+
+export type SteamProfileOwnedSteamApp = SteamAppBase & {
+  headerImage: string | null;
+  platformMac: boolean | null;
+  genres: PrismaSteamGenre[];
+}
+

@@ -1,7 +1,8 @@
+// System Spec as copy/pasted directly from Steam system information panel
 // Used on the remix server side to make parsing system
 // spec data from the FormData dump easier.  Also
 // used when creating a new system with prisma in createSystemSpecs()
-export interface SystemSpec {
+export interface SteamSystemSpec {
   computerInformation: {
     manufacturer: string | null;
     model: string | null;
