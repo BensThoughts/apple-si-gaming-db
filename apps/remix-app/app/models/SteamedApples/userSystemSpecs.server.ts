@@ -1,5 +1,5 @@
 import type { PrismaUserSystemSpec } from '~/interfaces/database';
-import type { SystemSpec } from '~/interfaces';
+import type { SteamSystemSpec } from '~/interfaces';
 import prisma from '~/lib/database/db.server';
 import type { UserSystemSpec } from '@apple-si-gaming-db/database';
 
@@ -10,7 +10,7 @@ import type { UserSystemSpec } from '@apple-si-gaming-db/database';
 export async function createSystemSpec(
     userProfileId: PrismaUserSystemSpec['userProfileId'],
     systemName: PrismaUserSystemSpec['systemName'],
-    systemSpec: SystemSpec,
+    systemSpec: SteamSystemSpec,
 ) {
   // TODO: We know computerInformation, processorInformation, etc.
   // TODO: will not be null by this point because of validation includes
