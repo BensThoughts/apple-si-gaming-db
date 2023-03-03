@@ -78,7 +78,7 @@ export default function ProfileMenu({
                       </span>
                       <img
                         src="/steam_sign_in.png"
-                        alt="sign in with steam"
+                        alt="login with steam"
                         width={85.5}
                         height={32.25}
                         loading="lazy"

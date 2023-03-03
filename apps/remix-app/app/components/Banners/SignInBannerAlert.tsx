@@ -29,7 +29,7 @@ export default function SignInBannerAlert({
         <div className="flex items-center gap-2 w-full">
           <div className=""><InformationCircleIcon size={24} /></div>
           <div className="flex items-center justify-between w-full gap-1">
-            <p className="font-bold text-lg text-primary-highlight">Sign in with Steam today!</p>
+            <p className="font-bold text-lg text-primary-highlight">Login with Steam today!</p>
           </div>
         </div>
         <div className="flex items-center justify-center gap-6">
@@ -40,7 +40,7 @@ export default function SignInBannerAlert({
           >
             <img
               src="/steam_sign_in.png"
-              alt="sign in with steam"
+              alt="login with steam"
               width={114}
               height={43}
               loading="lazy"

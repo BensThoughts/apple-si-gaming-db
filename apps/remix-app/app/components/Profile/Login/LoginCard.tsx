@@ -6,7 +6,7 @@ export default function LoginCard() {
                      border-secondary-highlight border-solid
                      border-y-2 md:border-x-2 w-full max-w-md
                      rounded-lg`}>
-      <h2 className="text-center"><strong>Sign In</strong></h2>
+      <h2 className="text-center"><strong>Login</strong></h2>
         Apple Silicon on Steam requires Steam authentication to post performance reports.
         Signing in with this method accesses only information that you have intentionally
         set to be publicly visible.
@@ -17,7 +17,7 @@ export default function LoginCard() {
       >
         <img
           src="steam_sign_in.png"
-          alt="sign in with steam"
+          alt="login with steam"
           width={114}
           height={43}
           loading="lazy"
