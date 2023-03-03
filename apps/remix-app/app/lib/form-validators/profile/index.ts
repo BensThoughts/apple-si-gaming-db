@@ -1,4 +1,4 @@
-import type { SystemSpec } from '~/interfaces';
+import type { SteamSystemSpec } from '~/interfaces';
 
 // TODO: duplicate code between profile and post
 export function validateSystemSpecIdForProfile(systemSpecId: number) {
@@ -150,7 +150,7 @@ function extractVideoCard(vidCardInfo: string) {
 
 export function extractSystemSpecs(
     systemData: string,
-): SystemSpec {
+): SteamSystemSpec {
   // TODO: this could still get messed up if someone puts Video Card: section
   // TODO: between Computer Information: and Processor Information: section
 
