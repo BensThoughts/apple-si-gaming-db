@@ -1,5 +1,8 @@
 import { Menu, Transition } from '@headlessui/react';
-import { NavLink } from '@remix-run/react';
+import {
+  NavLink,
+  useFetcher,
+} from '@remix-run/react';
 import { Fragment } from 'react';
 import { SteamIcon } from '~/components/Icons';
 import { loggedInMenuLinks } from './profileMenuLinks';
@@ -9,6 +12,7 @@ export default function ProfileMenu({
 }: {
   isLoggedIn: boolean;
 }) {
+  const fetcher = useFetcher();
   return (
     <div className="flex items-center text-right">
       <Menu as="div" className="relative inline-block text-left">
@@ -28,9 +32,8 @@ export default function ProfileMenu({
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-secondary border-1 border-x-1 border-secondary-highlight rounded-md bg-primary shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-secondary rounded-md bg-primary shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
             <div className="px-1 py-1">
-              {/* {isLoggedIn ? <LoggedInMenu /> : <LoggedOutMenu />} */}
               {isLoggedIn ? (
                 <>
                   {loggedInMenuLinks.map((link) => (
@@ -39,20 +42,9 @@ export default function ProfileMenu({
                         <NavLink
                           to={link.to}
                           className={`${
-                          active ? 'bg-primary-highlight text-primary-highlight' : 'text-primary'
+                            active ? 'bg-primary-highlight text-primary-highlight' : 'text-primary'
                           } flex w-full items-center rounded-md px-2 py-2 text-base hover:bg-primary-highlight hover:text-primary-highlight`}
                         >
-                          {/* {active ? (
-                          <EditActiveIcon
-                            className="mr-2 h-5 w-5"
-                            aria-hidden="true"
-                          />
-                        ) : (
-                          <EditInactiveIcon
-                            className="mr-2 h-5 w-5"
-                            aria-hidden="true"
-                          />
-                        )} */}
                           {link.title}
                         </NavLink>
                       )}
@@ -60,14 +52,15 @@ export default function ProfileMenu({
                   ))}
                   <Menu.Item>
                     {({ active }) => (
-                      <a
-                        href="/api/auth/steam/logout"
+                      <button
+                        onClick={() => fetcher.submit({}, { action: '/actions/logout', method: 'post' })}
+                        // href="/api/auth/steam/logout"
                         className={`${
-                    active ? 'bg-primary-highlight text-primary-highlight' : 'text-primary'
+                          active ? 'bg-primary-highlight text-primary-highlight' : 'text-primary'
                         } flex w-full items-center rounded-md px-2 py-2 text-base hover:bg-primary-highlight hover:text-primary-highlight`}
                       >
-                        Sign Out
-                      </a>
+                        Logout
+                      </button>
                     )}
                   </Menu.Item>
                 </>
@@ -77,10 +70,22 @@ export default function ProfileMenu({
                     <a
                       href="/api/auth/steam/login"
                       className={`${
-                    active ? 'bg-primary-highlight text-primary-highlight' : 'text-primary'
-                      } flex w-full items-center rounded-md px-2 py-2 text-base hover:bg-primary-highlight hover:text-primary-highlight`}
+                        active ? 'bg-primary-highlight text-primary-highlight' : 'text-primary'
+                      } flex w-full items-center justify-between rounded-md px-2 py-2 text-base hover:bg-primary-highlight hover:text-primary-highlight`}
                     >
-                      Sign In
+                      <span>
+                        Login
+                      </span>
+                      <img
+                        src="/steam_sign_in.png"
+                        alt="sign in with steam"
+                        width={85.5}
+                        height={32.25}
+                        loading="lazy"
+                        onError={(e) => {
+                          e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
+                        }}
+                      />
                     </a>
                   )}
                 </Menu.Item>
