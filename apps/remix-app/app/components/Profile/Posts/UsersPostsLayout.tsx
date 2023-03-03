@@ -7,13 +7,12 @@ import type {
   PerformancePostLikes,
   PerformancePostRating,
   PerformancePostSteamApp,
+  PerformancePostUserWhoCreated,
 } from '~/interfaces';
 
 interface UsersPostsLayoutProps {
-  userSession: {
-    likedPerformancePostIds: number[];
-  }
   steamUsersPosts: (PerformancePostBase & {
+    userWhoCreatedPost: PerformancePostUserWhoCreated;
     steamApp: PerformancePostSteamApp;
     rating: PerformancePostRating;
     likes: PerformancePostLikes;
@@ -21,12 +20,8 @@ interface UsersPostsLayoutProps {
 }
 
 export default function UsersPostsLayout({
-  userSession,
   steamUsersPosts,
 }: UsersPostsLayoutProps) {
-  const {
-    likedPerformancePostIds,
-  } = userSession;
   if (steamUsersPosts.length < 1) {
     return (
       <div className="flex flex-col gap-8 items-center w-full p-4 bg-tertiary rounded-lg border-1 border-secondary-highlight">
@@ -65,10 +60,13 @@ export default function UsersPostsLayout({
           name,
           headerImage,
         },
+        userWhoCreatedPost: {
+          steamUserId64,
+        },
       }) => (
         <div
           key={performancePostId}
-          className="border-1 border-secondary-highlight rounded-md
+          className="md:border-1 md:border-secondary-highlight rounded-md
                    p-3 md:px-4 md:py-3 bg-tertiary
                    focus:show-ring w-full max-w-4xl
                    flex items-center justify-start"
@@ -107,19 +105,13 @@ export default function UsersPostsLayout({
             </div>
             <div className="w-full">
               <PerformancePostMetaBar
-                steamAppId={steamAppId}
                 performancePostId={performancePostId}
                 createdAt={createdAt}
-                ratingMedal={ratingMedal}
-                frameRateAverage={frameRateAverage}
-                frameRateStutters={frameRateStutters}
-                userSession={{
-                  isUserLoggedIn: true, // if they are on this page, they are logged in
-                  didLoggedInUserCreatePost: false,
-                }}
+                steamApp={{ steamAppId }}
+                userWhoCreatedPost={{ steamUserId64 }}
+                rating={{ ratingMedal, frameRateAverage, frameRateStutters }}
                 likeButtonData={{
                   numLikes,
-                  hasLoggedInUserLiked: likedPerformancePostIds.includes(performancePostId),
                 }}
               />
             </div>
@@ -130,7 +122,7 @@ export default function UsersPostsLayout({
           <div
             className="md:hidden flex flex-col gap-2 justify-center w-full"
           >
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-start">
               <div>
                 <span className="font-semibold">
                   {name}
@@ -141,7 +133,7 @@ export default function UsersPostsLayout({
                 <RemixUnderlineLink
                   to={`/apps/${steamAppId}/posts#${performancePostId}`}
                 >
-                    View Post
+                    View
                 </RemixUnderlineLink>
               </div>
             </div>
@@ -150,19 +142,13 @@ export default function UsersPostsLayout({
             </div>
             <div className="w-full">
               <PerformancePostMetaBar
-                steamAppId={steamAppId}
                 performancePostId={performancePostId}
-                userSession={{
-                  isUserLoggedIn: true, // if they are on this page, they are logged in
-                  didLoggedInUserCreatePost: false,
-                }}
-                ratingMedal={ratingMedal}
-                frameRateAverage={frameRateAverage}
-                frameRateStutters={frameRateStutters}
                 createdAt={createdAt}
+                steamApp={{ steamAppId }}
+                userWhoCreatedPost={{ steamUserId64 }}
+                rating={{ ratingMedal, frameRateAverage, frameRateStutters }}
                 likeButtonData={{
-                  numLikes: numLikes ? numLikes : 0,
-                  hasLoggedInUserLiked: likedPerformancePostIds.includes(performancePostId),
+                  numLikes,
                 }}
               />
             </div>
