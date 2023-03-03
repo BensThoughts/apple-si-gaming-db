@@ -1,27 +1,29 @@
-import { Form, useSubmit } from '@remix-run/react';
+import { useFetcher } from '@remix-run/react';
 import React from 'react';
 import RoundedButton from '~/components/RoundedButton';
 import BasicModal from '~/components/BasicModal';
 
 interface DeletePostModalProps {
-  steamAppId: number;
   performancePostId: number;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function DeletePostModal({
-  steamAppId,
   performancePostId,
   isOpen,
   setIsOpen,
 }: DeletePostModalProps) {
-  const submit = useSubmit();
+  // const submit = useSubmit();
+  const fetcher = useFetcher();
 
   // Form must be submitted prior to closing the modal
   // or errors occur.  So we use useSubmit()
-  function handleSubmitEvent(event: React.FormEvent<HTMLFormElement>) {
-    submit(event.currentTarget, { replace: true });
+  function onClick() {
+    fetcher.submit({
+      performancePostId: performancePostId.toString(),
+    }, { action: '/actions/delete-post', method: 'post' });
+    // submit(event.currentTarget, { replace: true });
     setIsOpen(false);
   }
 
@@ -46,20 +48,13 @@ export default function DeletePostModal({
           >
             Cancel
           </RoundedButton>
-          <Form
-            action={`/apps/${steamAppId}/posts`}
-            method="post"
-            onSubmit={handleSubmitEvent}
+
+          <RoundedButton
+            onClick={onClick}
+            className="text-white bg-error hover:bg-error hover:text-white focus-visible:bg-error focus-visible:text-white"
           >
-            <input type="hidden" name="_performancePostAction" value="deletePerformancePost" />
-            <input type="hidden" name="performancePostId" value={performancePostId} />
-            <RoundedButton
-              type="submit"
-              className="text-white bg-error hover:bg-error hover:text-white focus-visible:bg-error focus-visible:text-white"
-            >
               Delete
-            </RoundedButton>
-          </Form>
+          </RoundedButton>
         </div>
       </div>
     </BasicModal>
