@@ -39,37 +39,7 @@ export async function loader() {
   const newPerformancePosts = await findNewestPerformancePosts(NUM_RECENT_POSTS);
   return json<LoaderData>({
     trendingSteamApps,
-    newPerformancePosts: newPerformancePosts.map(({
-      id,
-      postText,
-      createdAt,
-      steamApp: {
-        steamAppId,
-        name,
-      },
-      ratingMedal,
-      steamUserProfile: {
-        steamUserId64,
-        avatarMedium,
-        displayName,
-      },
-    }) => ({
-      performancePostId: id,
-      createdAt,
-      postText,
-      steamApp: {
-        steamAppId,
-        name,
-      },
-      rating: {
-        ratingMedal,
-      },
-      userWhoCreatedPost: {
-        steamUserId64: steamUserId64.toString(),
-        displayName,
-        avatarMedium,
-      },
-    })),
+    newPerformancePosts,
   });
 }
 
