@@ -41,7 +41,7 @@ export async function action({ request, context }: ActionArgs) {
         await upsertUserProfileBySteamUserId64(steamUser.steamUserId64, steamUser);
       }
       await updateSteamUserProfileOwnedSteamApps(steamUser.steamUserId64);
-      return redirect('/profile/library');
+      return json({});
     }
     default: {
       throw new Error('Unexpected action in /profile/library');

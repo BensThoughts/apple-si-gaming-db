@@ -1,4 +1,4 @@
-import { json, redirect } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import { deleteSystemSpec, doesUserOwnSystemSpec } from '~/models/SteamedApples/userSystemSpecs.server';
 import type { DeleteSystemSpecActionData, ProfileSystemsActionData } from '~/routes/profile/systems';
 import { validateSystemName, validateSystemSpecIdForProfile } from '~/lib/form-validators/profile';
@@ -44,5 +44,5 @@ export async function deleteSystem(
 
   await deleteSystemSpec(systemSpecId);
 
-  return redirect('/profile/systems');
+  return json<ProfileSystemsActionData>({ _profileAction: {} });
 }

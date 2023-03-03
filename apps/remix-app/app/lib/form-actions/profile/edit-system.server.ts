@@ -1,4 +1,4 @@
-import { json, redirect } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import type { PrismaUserSystemSpec } from '~/interfaces/database';
 import {
   findSystemSpecSystemNames,
@@ -50,5 +50,5 @@ export async function editSystem(
 
   await updateSystemSpecSystemName(systemSpecId, updatedSystemName);
 
-  return redirect('/profile/systems');
+  return json<ProfileSystemsActionData>({ _profileAction: {} });
 }
