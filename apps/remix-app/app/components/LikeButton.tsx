@@ -1,20 +1,22 @@
 import { useFetcher } from '@remix-run/react';
 import { useState } from 'react';
+import { useLikeButtonData } from '~/lib/hooks/useMatchesData';
 import { BleedingHeartOutlineIcon } from './Icons/FlatIcons';
 import { errorToast } from './Toasts';
 
 export default function LikeButton({
   performancePostId,
   numLikes,
-  isUserLoggedIn,
-  hasLoggedInUserLiked,
 }: {
   performancePostId: number;
   numLikes: number;
-  isUserLoggedIn: boolean;
-  hasLoggedInUserLiked: boolean;
 }) {
-  const [likedPostRaw, setLikedPostRaw] = useState(hasLoggedInUserLiked);
+  const {
+    isUserProfileLoggedIn,
+    didUserProfileLikePerformancePost,
+  } = useLikeButtonData(performancePostId);
+  // without a userProfileId we can safely assume no logged in user, so no like
+  const [likedPostRaw, setLikedPostRaw] = useState(didUserProfileLikePerformancePost);
   const [numLikesRaw, setNumLikesRaw] = useState(numLikes);
 
   const fetcher = useFetcher();
@@ -25,7 +27,7 @@ export default function LikeButton({
   // const isLoading = fetcher.state === 'loading';
 
   function onLikeClick() {
-    if (isUserLoggedIn) {
+    if (isUserProfileLoggedIn) {
       if (!likedPostRaw) {
         setNumLikesRaw(numLikes + 1);
         setLikedPostRaw(true);
