@@ -318,8 +318,16 @@ export async function findPerformancePostsBySteamUserId(
 
 export async function findNewestPerformancePosts(
     numPerformancePosts: number,
-) {
-  return prisma.performancePost.findMany({
+): Promise<
+  (
+    PerformancePostBase & {
+      steamApp: PerformancePostSteamApp;
+      rating: PerformancePostRating;
+      userWhoCreatedPost: PerformancePostUserWhoCreated;
+    }
+  )[]
+> {
+  const performancePosts = await prisma.performancePost.findMany({
     select: {
       id: true,
       createdAt: true,
@@ -344,6 +352,37 @@ export async function findNewestPerformancePosts(
     },
     take: numPerformancePosts,
   });
+  return performancePosts.map(({
+    id,
+    createdAt,
+    postText,
+    steamApp: {
+      steamAppId,
+      name,
+    },
+    ratingMedal,
+    steamUserProfile: {
+      steamUserId64,
+      displayName,
+      avatarMedium,
+    },
+  }) => ({
+    performancePostId: id,
+    createdAt,
+    postText,
+    steamApp: {
+      steamAppId,
+      name,
+    },
+    rating: {
+      ratingMedal,
+    },
+    userWhoCreatedPost: {
+      steamUserId64: steamUserId64.toString(),
+      displayName,
+      avatarMedium,
+    },
+  }));
 }
 
 // We use steamUserId64 as the source of truth for who created the post
