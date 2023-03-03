@@ -2,7 +2,7 @@ import { useFetcher } from '@remix-run/react';
 import { useState } from 'react';
 import { useLikeButtonData } from '~/lib/hooks/useMatchesData';
 import { BleedingHeartOutlineIcon } from './Icons/FlatIcons';
-import { errorToast } from './Toasts';
+import { showToast } from './Toasts';
 
 export default function LikeButton({
   performancePostId,
@@ -42,7 +42,7 @@ export default function LikeButton({
         }, { action: '/actions/unlike-post', method: 'post' });
       }
     } else {
-      errorToast('You must log in to like posts');
+      showToast.login('You must login to like posts');
     }
   }
 
