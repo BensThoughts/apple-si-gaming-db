@@ -1,6 +1,5 @@
-import NewDomainBannerAlert from '~/components/Banners/NewDomainBannerAlert';
+// import SignInBannerAlert from '~/components/Banners/SignInBannerAlert';
 import { useTheme } from '~/lib/context/theme-provider';
-import { useBannerData } from '~/lib/hooks/useMatchesData';
 import PageFooter from './PageFooter';
 import PageHeader from './PageHeader';
 import PageMain from './PageMain';
@@ -34,21 +33,15 @@ export default function PageWrapper({
   topSpacer = false,
   children,
 }: PageProps) {
-  const bannerData = useBannerData();
-  const showNewDomainBanner = bannerData ? bannerData.showNewDomainBanner : true;
-
   return (
     <div className="flex flex-col justify-between h-[calc(100vh_-_3.5rem)]">
       <div className="relative">
         {title && <PageHeader title={title} titlePosition="left" />}
-        <div className="flex justify-center items-center w-full">
-          <div className="px-4 max-w-5xl mt-2 w-full">
-            <NewDomainBannerAlert
-              showBanner={showNewDomainBanner}
-              redirectTo={currentRoute}
-            />
+        {/* <div className="sticky z-[999] top-[3.5rem] flex justify-center items-center w-full">
+          <div className="w-full max-w-5xl px-4 mt-2">
+            <SignInBannerAlert showBanner={true} />
           </div>
-        </div>
+        </div> */}
 
         {topSpacer && <div className="mb-4 md:mb-6" />}
 
