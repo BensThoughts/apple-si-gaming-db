@@ -5,13 +5,13 @@ import SystemSpecLayout from '~/components/Profile/Systems/SystemSpecLayout';
 import { createSystem } from '~/lib/form-actions/profile/create-system.server';
 import { deleteSystem } from '~/lib/form-actions/profile/delete-system.server';
 import { editSystem } from '~/lib/form-actions/profile/edit-system.server';
-import { useUserSystemSpecs } from '~/lib/hooks/useMatchesData';
+import { useUserProfileSystemSpecs } from '~/lib/hooks/useMatchesData';
 import { getProfileSession } from '~/lib/sessions/profile-session.server';
 
 export async function loader({ request }: LoaderArgs) {
   const profileSession = await getProfileSession(request);
-  const isLoggedIn = profileSession.getIsLoggedIn();
-  if (!isLoggedIn) {
+  const userProfileId = profileSession.getUserProfileId();
+  if (!userProfileId) {
     return redirect('/profile');
   }
   return json({});
@@ -88,7 +88,7 @@ export async function action({ request }: ActionArgs) {
 }
 
 export default function ProfileSystemsRoute() {
-  const userSystemSpecs = useUserSystemSpecs();
+  const userProfileSystemSpecs = useUserProfileSystemSpecs();
   const actionData = useActionData<ProfileSystemsActionData>();
   const transition = useTransition();
 
@@ -98,7 +98,7 @@ export default function ProfileSystemsRoute() {
 
   return (
     <SystemSpecLayout
-      systemSpecs={userSystemSpecs}
+      systemSpecs={userProfileSystemSpecs}
       isSubmittingCreateSystemForm={isSubmittingCreateSystemForm}
       createSystemSpecActionData={actionData?._profileAction.createSystemSpec}
       editSystemSpecActionData={actionData?._profileAction.editSystemSpec}
