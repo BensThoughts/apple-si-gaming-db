@@ -2,10 +2,10 @@ import type {
   PrismaUserProfile,
 } from '~/interfaces/database';
 
-import type { AppLoadContextSteamUser } from '~/interfaces';
+import type { AppLoadContextSteamUser, PerformancePostBase, PerformancePostLikes, PerformancePostRating, PerformancePostSteamApp, PerformancePostUserWhoCreated } from '~/interfaces';
 
 import prisma from '~/lib/database/db.server';
-import type { UserProfileForRootLoaderData } from '~/root';
+import type { UserSessionServerSide } from '~/interfaces/remix-app/UserSession';
 
 export async function findUserSystemsBySteamUserId64(
     steamUserId64: PrismaUserProfile['steamUserId64'],
@@ -45,9 +45,9 @@ export async function doesUserProfileExist(
   return userProfileCount > 0 ? true : false;
 }
 
-export async function findUserProfileData(
+export async function findUserSessionByUserProfileId(
     userProfileId: PrismaUserProfile['id'],
-): Promise<UserProfileForRootLoaderData | undefined> {
+): Promise<UserSessionServerSide | undefined> {
   const userProfile = await prisma.userProfile.findUnique({
     where: {
       id: userProfileId,
@@ -81,27 +81,6 @@ export async function findUserProfileData(
           displayName: true,
           avatarFull: true,
           avatarMedium: true,
-          ownedSteamApps: {
-            where: {
-              comingSoon: {
-                equals: false,
-              },
-              type: {
-                contains: 'game',
-                mode: 'insensitive',
-              },
-            },
-            orderBy: {
-              name: 'asc',
-            },
-            select: {
-              steamAppId: true,
-              genres: true,
-              headerImage: true,
-              name: true,
-              platformMac: true,
-            },
-          },
         },
       },
     },
@@ -111,42 +90,55 @@ export async function findUserProfileData(
   }
   const {
     steamUserProfile,
+    userSystemSpecs,
+    likedPerformancePosts,
   } = userProfile;
   if (!steamUserProfile) {
     return undefined;
   }
+  const likedPerformancePostIds = likedPerformancePosts.map(({ performancePostId }) => performancePostId);
+  // const likedPerformancePostIds = new Map<number, number>();
+  // likedPerformancePosts
+  //     .forEach(({ performancePostId }) => likedPerformancePostIds.set(performancePostId, performancePostId));
+  const systemSpecs = userSystemSpecs
+      .map((systemSpec) => ({ ...systemSpec, systemSpecId: systemSpec.id }));
   const {
     steamUserId64,
     displayName,
     avatarFull,
     avatarMedium,
-    ownedSteamApps,
   } = steamUserProfile;
-  // const ownedSteamApps = userProfile.steamUserProfile ? userProfile.steamUserProfile.ownedSteamApps : [];
+  // const ownedSteamApps = new Map();
+  // steamUserProfile.ownedSteamApps.forEach((steamApp) => ownedSteamApps.set(steamApp.steamAppId, steamApp));
   return {
-    userProfileId,
+    userProfile: {
+      userProfileId,
+      likedPerformancePostIds,
+      systemSpecs,
+    },
     steamUserProfile: {
       // TODO: needs JSON.stringify? https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields
+      steamUserId64: steamUserId64.toString(),
       displayName,
       avatarFull,
       avatarMedium,
-      steamUserId64: steamUserId64.toString(),
-      ownedSteamApps,
     },
-    likedPerformancePostIds: userProfile.likedPerformancePosts
-        .map((performancePost) => performancePost.performancePostId),
-    systemSpecs: userProfile.userSystemSpecs
-        .map((systemSpec) => ({
-          ...systemSpec,
-          systemSpecId: systemSpec.id,
-        })),
   };
 }
 
 export async function findUserProfileLikedPosts(
     userProfileId: number,
-) {
-  return prisma.userProfile.findUnique({
+): Promise<
+  (
+    PerformancePostBase & {
+      userWhoCreatedPost: PerformancePostUserWhoCreated;
+      steamApp: PerformancePostSteamApp;
+      rating: PerformancePostRating;
+      likes: PerformancePostLikes;
+    }
+  )[]
+> {
+  const userProfile = await prisma.userProfile.findUnique({
     where: {
       id: userProfileId,
     },
@@ -176,12 +168,70 @@ export async function findUserProfileLikedPosts(
                   headerImage: true,
                 },
               },
+              steamUserProfile: {
+                select: {
+                  steamUserId64: true,
+                  displayName: true,
+                  avatarMedium: true,
+                },
+              },
             },
           },
         },
       },
     },
   });
+  if (!userProfile) {
+    return [];
+  }
+  const {
+    likedPerformancePosts,
+  } = userProfile;
+  return likedPerformancePosts.map(({
+    performancePost: {
+      id,
+      createdAt,
+      _count: {
+        usersWhoLiked,
+      },
+      ratingMedal,
+      frameRateAverage,
+      frameRateStutters,
+      postText,
+      steamApp: {
+        steamAppId,
+        name,
+        headerImage,
+      },
+      steamUserProfile: {
+        steamUserId64,
+        avatarMedium,
+        displayName,
+      },
+    },
+  }) => ({
+    performancePostId: id,
+    createdAt,
+    likes: {
+      numLikes: usersWhoLiked,
+    },
+    rating: {
+      ratingMedal,
+      frameRateAverage,
+      frameRateStutters,
+    },
+    postText,
+    steamApp: {
+      steamAppId,
+      name,
+      headerImage,
+    },
+    userWhoCreatedPost: {
+      steamUserId64: steamUserId64.toString(),
+      displayName,
+      avatarMedium,
+    },
+  }));
 }
 
 export async function upsertUserProfileBySteamUserId64(
@@ -221,7 +271,6 @@ export async function upsertUserProfileBySteamUserId64(
     },
     select: {
       id: true,
-      steamUserId64: true,
     },
   });
 }
