@@ -1,39 +1,45 @@
 import LikeButton from '~/components/LikeButton';
-import type { FrameRate, RatingMedal } from '~/interfaces';
+import type {
+  PerformancePostBase,
+  PerformancePostRating,
+  PerformancePostSteamApp,
+  PerformancePostUserWhoCreated,
+} from '~/interfaces';
 import { convertFrameRateToDescription, convertRatingMedalToDescription } from '~/lib/conversions/rating-conversions';
+import { useUserSession } from '~/lib/hooks/useMatchesData';
 import EditAndDeleteButtons from './EditAndDeleteButtons';
 
-interface PerformancePostMetaBarProps {
-  steamAppId: number;
-  performancePostId: number;
-  createdAt: Date;
-  ratingMedal: RatingMedal;
-  frameRateAverage?: FrameRate | null;
-  frameRateStutters?: boolean | null;
-  userSession: {
-    isUserLoggedIn: boolean;
-    didLoggedInUserCreatePost: boolean;
-  };
+type PerformancePostMetaBarProps = Pick<PerformancePostBase, 'performancePostId' | 'createdAt'> & {
+  steamApp: Pick<PerformancePostSteamApp, 'steamAppId'>;
+  userWhoCreatedPost: Pick<PerformancePostUserWhoCreated, 'steamUserId64'>;
+  rating: Pick<PerformancePostRating, 'ratingMedal' | 'frameRateAverage' | 'frameRateStutters'>;
   likeButtonData: {
     numLikes: number;
-    hasLoggedInUserLiked: boolean;
   }
 }
 
 export default function PerformancePostMetaBar({
-  steamAppId,
   performancePostId,
   createdAt,
-  userSession = { isUserLoggedIn: false, didLoggedInUserCreatePost: false },
-  ratingMedal,
-  frameRateAverage,
-  frameRateStutters,
-  likeButtonData,
-}: PerformancePostMetaBarProps) {
-  const {
-    hasLoggedInUserLiked,
+  userWhoCreatedPost,
+  steamApp: {
+    steamAppId,
+  },
+  rating: {
+    ratingMedal,
+    frameRateAverage,
+    frameRateStutters,
+  },
+  likeButtonData: {
     numLikes,
-  } = likeButtonData;
+  },
+}: PerformancePostMetaBarProps) {
+  const { steamUserProfile } = useUserSession();
+
+  const didSteamUserCreatePost = steamUserProfile
+    ? userWhoCreatedPost.steamUserId64 === steamUserProfile.steamUserId64
+    : false;
+
   return (
     <div className="@container">
       <div className="flex flex-col gap-1 items-start justify-between text-sm px-3 py-1
@@ -56,8 +62,6 @@ export default function PerformancePostMetaBar({
           <LikeButton
             performancePostId={performancePostId}
             numLikes={numLikes}
-            isUserLoggedIn={userSession.isUserLoggedIn}
-            hasLoggedInUserLiked={hasLoggedInUserLiked}
           />
           {/* </Form> */}
           <div className="flex flex-col gap-1 md:flex-row md:gap-2">
@@ -80,14 +84,13 @@ export default function PerformancePostMetaBar({
             </span>}
             </div>
           </div>
-          {userSession.didLoggedInUserCreatePost && (
+          {didSteamUserCreatePost && (
             <EditAndDeleteButtons
               steamAppId={steamAppId}
               performancePostId={performancePostId}
             />
           )}
         </div>
-
 
         <i className="italic">
           {createdAt.toDateString()}
