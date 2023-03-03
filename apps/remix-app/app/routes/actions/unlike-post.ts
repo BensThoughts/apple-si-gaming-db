@@ -5,8 +5,8 @@ import { getProfileSession } from '~/lib/sessions/profile-session.server';
 
 export const action: ActionFunction = async ({ request, context }) => {
   const profileSession = await getProfileSession(request);
-  const userProfileId = Number(profileSession.getUserProfileId());
-  if (!userProfileId || !isFinite(userProfileId) || (userProfileId < 0)) {
+  const userProfileId = profileSession.getUserProfileId(); // TODO: should be requireUserProfileId() app wide
+  if (!userProfileId || (userProfileId < 0)) {
     return json({
       success: false,
       message: `${userProfileId} is not a valid user profile id, is user logged in?`,
