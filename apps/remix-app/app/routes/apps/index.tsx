@@ -1,4 +1,5 @@
 import { json } from '@remix-run/node';
+import type { MetaFunction } from '@remix-run/node';
 import { useCatch, useLoaderData } from '@remix-run/react';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import { findSteamAppsWherePostsExist, findTrendingSteamApps } from '~/models/Steam/steamApp.server';
@@ -16,6 +17,8 @@ import NewPerformancePostCard from '~/components/Cards/NewPerformancePostCard';
 import TrendingSteamAppCard from '~/components/Cards/TrendingSteamAppCard';
 import type { SteamAppForSmallDisplayCard } from '~/components/Cards/SmallAppsCard';
 import SmallAppsCard from '~/components/Cards/SmallAppsCard';
+import { metaTags } from '~/lib/meta-tags';
+
 
 interface LoaderData {
   trendingSteamApps: TrendingSteamApp[];
@@ -36,39 +39,13 @@ export async function loader() {
   return json<LoaderData>({
     trendingSteamApps,
     steamAppsWherePostsExist,
-    newPerformancePosts: newPerformancePosts.map(({
-      id,
-      createdAt,
-      postText,
-      steamApp: {
-        steamAppId,
-        name,
-      },
-      ratingMedal,
-      steamUserProfile: {
-        steamUserId64,
-        displayName,
-        avatarMedium,
-      },
-    }) => ({
-      performancePostId: id,
-      createdAt,
-      postText,
-      steamApp: {
-        steamAppId,
-        name,
-      },
-      rating: {
-        ratingMedal,
-      },
-      userWhoCreatedPost: {
-        steamUserId64: steamUserId64.toString(),
-        displayName,
-        avatarMedium,
-      },
-    })),
+    newPerformancePosts,
   });
 }
+
+export const meta: MetaFunction = () => {
+  return { title: `${metaTags.title} - Games` };
+};
 
 export default function SteamAppIdIndexRoute() {
   const {
@@ -77,7 +54,7 @@ export default function SteamAppIdIndexRoute() {
     steamAppsWherePostsExist,
   } = useLoaderData<typeof loader>();
   return (
-    <PageWrapper currentRoute="/apps">
+    <PageWrapper currentRoute="/apps" title="Games">
       <div className="flex flex-col items-center gap-12 w-full mt-6">
         <SmallAppsCard steamApps={steamAppsWherePostsExist} />
         {(trendingSteamApps.length > 0) && (
