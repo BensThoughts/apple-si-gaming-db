@@ -1,67 +1,35 @@
-import type { LoaderArgs, MetaFunction } from '@remix-run/node';
-import { json } from '@remix-run/node';
+import type { MetaFunction } from '@remix-run/node';
 import {
   Link,
   Outlet,
   useCatch,
-  useLoaderData,
 } from '@remix-run/react';
-import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import PageWrapper from '~/components/Layout/PageWrapper';
 
 import { metaTags } from '~/lib/meta-tags';
 import LoginCard from '~/components/Profile/Login/LoginCard';
 import PrivacyCard from '~/components/Profile/Login/PrivacyCard';
 import AnimatedUnderline from '~/components/AnimatedUnderline';
+import { useUserSession } from '~/lib/hooks/useMatchesData';
+import type { SerializedRootLoaderData } from '~/root';
 
-interface ProfileLoaderData {
-  session: { isLoggedIn: boolean };
-  userProfile?: {
-    displayName: string | null | undefined;
-    avatarFull: string | null | undefined;
-  };
-}
-
-export async function loader({ context }: LoaderArgs) {
-  const { steamUser } = extractAppLoadContext(context);
-  if (steamUser) {
-    const {
-      displayName,
-      avatarFull,
-    } = steamUser;
-    return json<ProfileLoaderData>({
-      session: { isLoggedIn: true },
-      userProfile: {
-        displayName,
-        avatarFull,
-      },
-    });
-  }
-  return json<ProfileLoaderData>({
-    session: { isLoggedIn: false },
-  });
-}
-
-export const meta: MetaFunction = ({ data }: { data?: Partial<ProfileLoaderData> }) => {
-  if (data?.userProfile?.displayName) {
-    const { displayName } = data.userProfile;
+export const meta: MetaFunction = ({ parentsData }) => {
+  const data = parentsData['root'] as Partial<SerializedRootLoaderData>;
+  if (data?.userSession?.steamUserProfile?.displayName) {
+    const { displayName } = data.userSession.steamUserProfile;
     return {
       title: displayName ? `${metaTags.title} - Profile - ${displayName}` : `Profile`,
     };
   }
   return {
-    title: `${metaTags.title} - Login`,
+    title: `${metaTags.title} - Profile`,
   };
 };
 
 export default function ProfilePage() {
-  const {
-    session: {
-      isLoggedIn,
-    },
-  } = useLoaderData<ProfileLoaderData>();
+  const { userProfile, steamUserProfile } = useUserSession();
 
-  if (!isLoggedIn) {
+  if (!userProfile || !steamUserProfile) {
     return (
       <PageWrapper currentRoute="/profile" title="Profile" topSpacer>
         <div className="flex flex-col items-center w-full">
