@@ -155,7 +155,12 @@ export function extractSystemSpecs(
   // TODO: between Computer Information: and Processor Information: section
 
   // Capture Computer Information: section
-  const compInfoRe = /(?<=Computer Information:[\n\r])[\S\s]*(?=Processor Information:)/ism;
+  // was originally lookbehind (?<=Computer Information)...
+  //   const compInfoRe = /(?<=Computer Information:[\n\r])[\S\s]*(?=Processor Information:)/ism;
+  // now is look ahead (?:Computer Information)... because Safari doesn't
+  // support lookbehind and was actually redirecting the page back, causing
+  // routing errors!!!
+  const compInfoRe = /(?:Computer Information:[\n\r])[\S\s]*(?=Processor Information:)/ism;
   const compInfoReMatch = systemData.match(compInfoRe);
   let computerInformation;
   if (!compInfoReMatch || !compInfoReMatch[0]) {
@@ -164,8 +169,14 @@ export function extractSystemSpecs(
     const compInfo = compInfoReMatch[0];
     computerInformation = extractComputerInformation(compInfo);
   }
+
   // Capture Processor Information: section
-  const processorInfoRe = /(?<=Processor Information:[\n\r])[\S\s]*(?=Operating System Version:)/ism;
+  // was originally lookbehind (?<=Processor Information)...
+  //   const processorInfoRe = /(?<=Processor Information:[\n\r])[\S\s]*(?=Operating System Version:)/ism;
+  // now is look ahead (?:Processor Information)... because Safari doesn't
+  // support lookbehind and was actually redirecting the page back, causing
+  // routing errors!!!
+  const processorInfoRe = /(?:Processor Information:[\n\r])[\S\s]*(?=Operating System Version:)/ism;
   const processorInfoReMatch = systemData.match(processorInfoRe);
   let processorInformation;
   if (!processorInfoReMatch || !processorInfoReMatch[0]) {
@@ -180,7 +191,12 @@ export function extractSystemSpecs(
   const osVersion = systemData.match(operatingSystemVersionRe);
 
   // Capture Video Card section
-  const videoCardRe = /(?<=Video Card:[\n\r])[\S\s]*(?=Memory:)/ism;
+  // was originally lookbehind (?<=Video Card)...
+  //   const videoCardRe = /(?<=Video Card:[\n\r])[\S\s]*(?=Memory:)/ism;
+  // now is look ahead (?:Video Card)... because Safari doesn't
+  // support lookbehind and was actually redirecting the page back, causing
+  // routing errors!!!
+  const videoCardRe = /(?:Video Card:[\n\r])[\S\s]*(?=Memory:)/ism;
   const videoCardReMatch = systemData.match(videoCardRe);
   let videoCard;
   if (!videoCardReMatch || !videoCardReMatch[0]) {
