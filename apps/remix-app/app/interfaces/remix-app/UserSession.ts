@@ -1,12 +1,18 @@
 
 // Server side we get an array of liked post ids
 // a map does not easily serialize.
-export type UserSessionServerSide = Omit<UserSession, 'userProfile'> & {
+export type UserSessionServerSide = {
   userProfile?: {
     userProfileId: number;
     likedPerformancePostIds: number[];
     systemSpecs: UserProfileSystemSpec[];
   };
+  steamUserProfile?: {
+    steamUserId64: string;
+    displayName?: string | null;
+    avatarFull?: string | null;
+    avatarMedium?: string | null;
+  }
 }
 
 // client side we turn the array of liked post ids into a Map for easy lookup
