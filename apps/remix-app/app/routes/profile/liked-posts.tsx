@@ -23,7 +23,7 @@ interface ProfilePostsRouteLoaderData {
 
 export async function loader({ request }: LoaderArgs) {
   const profileSession = await getProfileSession(request);
-  const userProfileId = Number(profileSession.getUserProfileId());
+  const userProfileId = profileSession.getUserProfileId();
   if (!userProfileId) {
     return redirect('/profile');
   }
