@@ -1,10 +1,7 @@
 import { Outlet, useCatch, useLoaderData } from '@remix-run/react';
 import type { LoaderArgs, MetaFunction } from '@remix-run/server-runtime';
-// import { redirect } from '@remix-run/node';
 import { json, Response } from '@remix-run/node';
 
-// import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-// import { createPerformancePost } from '~/models/performancePost.server';
 import { getSteamAppDetailsRequest } from '~/lib/data-utils/steamApi.server';
 import {
   findSteamAppByAppId,
@@ -12,7 +9,6 @@ import {
   convertSteamApiDataToPrisma,
 } from '~/models/Steam/steamApp.server';
 import AppInfoTags from '~/components/AppInfo/AppInfoTags';
-// import LoadingComponent from '~/components/LoadingComponent';
 import AppInfoMainAppCard from '~/components/AppInfo/AppInfoMainAppCard';
 import AppInfoHeader from '~/components/AppInfo/AppInfoHeader';
 import AppInfoRequirements from '~/components/AppInfo/AppInfoRequirements';
