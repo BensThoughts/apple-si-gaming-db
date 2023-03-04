@@ -8,7 +8,11 @@ if (!sessionSecret) {
   throw new Error('ASGD_THEME_SESSION_SECRET must be set');
 }
 
-const themeStorage = createCookieSessionStorage({
+type ThemeSessionData = {
+  theme: Theme;
+};
+
+const themeStorage = createCookieSessionStorage<ThemeSessionData>({
   cookie: {
     name: '__theme_session',
     secrets: [sessionSecret],

@@ -9,8 +9,16 @@ if (!sessionSecret) {
   throw new Error('ASGD_PROFILE_SESSION_SECRET must be set');
 }
 
+type ProfileSessionData = {
+  userProfileId: number;
+};
+
+// type SessionFlashData = {
+//   error: string;
+// };
+
 // TODO: Change secret to use ENV var
-const userProfileSession = createCookieSessionStorage({
+const userProfileSession = createCookieSessionStorage<ProfileSessionData>({
   cookie: {
     name: '__user_profile_session',
     secrets: [sessionSecret],
@@ -22,26 +30,27 @@ const userProfileSession = createCookieSessionStorage({
 
 async function getProfileSession(request: Request) {
   const session = await userProfileSession.getSession(request.headers.get('Cookie'));
-  const setUserProfileId = (userProfileId: number) => session.set('userProfileId', userProfileId.toString());
+  const setUserProfileId = (userProfileId: number) => session.set('userProfileId', userProfileId);
+  const unsetUserProfileId = () => session.unset('userProfileId');
 
   return {
-    login: (
-        userProfileId: number,
-    ) => {
-      setUserProfileId(userProfileId);
-    },
-    logout: () => userProfileSession.destroySession(session),
+    login: (userProfileId: number) => setUserProfileId(userProfileId),
+    logout: () => unsetUserProfileId(),
     getUserProfileId: () => {
       const userProfileId = session.get('userProfileId');
-      if (typeof userProfileId != 'string') {
+      if (!userProfileId) {
         return undefined;
       }
+      // TODO: Casting to Number because userProfileId used to be a string
+      // TODO: any currently logged in users will get an error otherwise
+      // TODO: this can go away in a couple months from 03/04/2023
       if (!isFinite(Number(userProfileId))) {
         return undefined;
       }
       return Number(userProfileId);
     },
     commit: () => userProfileSession.commitSession(session),
+    destroy: () => userProfileSession.destroySession(session),
   };
 }
 

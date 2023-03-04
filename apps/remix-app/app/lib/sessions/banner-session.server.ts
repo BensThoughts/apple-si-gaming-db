@@ -9,8 +9,16 @@ if (!sessionSecret) {
   throw new Error('ASGD_BANNER_SESSION_SECRET must be set');
 }
 
+type BannerSessionData = {
+  // showSignInBanner: boolean;
+}
+
+type BannerSessionFlashData = {
+  showSignInBanner: boolean;
+}
+
 // TODO: Change secret to use ENV var
-const bannerSession = createCookieSessionStorage({
+const bannerSession = createCookieSessionStorage<BannerSessionData, BannerSessionFlashData>({
   cookie: {
     name: '__banner_session',
     secrets: [sessionSecret],
@@ -23,14 +31,7 @@ const bannerSession = createCookieSessionStorage({
 
 async function getBannerSession(request: Request) {
   const session = await bannerSession.getSession(request.headers.get('Cookie'));
-  const setShowSignInBanner = () => session.flash('showSignInBanner', 'true');
-  // const setShowSignInBanner = (showBanner: boolean) => {
-  //   if (showBanner) {
-  //     session.set('showSignInBanner', 'true');
-  //   } else {
-  //     session.unset('showSignInBanner');
-  //   }
-  // };
+  const flashShowSignInBanner = () => session.flash('showSignInBanner', true);
   const getShowSignInBanner = () => {
     const showBanner = session.get('showSignInBanner');
     if (showBanner) {
@@ -40,10 +41,10 @@ async function getBannerSession(request: Request) {
   };
 
   return {
-    // setShowSignInBanner,
-    setShowSignInBanner,
+    flashShowSignInBanner,
     getShowSignInBanner,
     commit: () => bannerSession.commitSession(session),
+    destroy: () => bannerSession.destroySession(session),
   };
 }
 
