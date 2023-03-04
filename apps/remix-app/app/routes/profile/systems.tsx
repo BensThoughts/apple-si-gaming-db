@@ -7,6 +7,7 @@ import { deleteSystem } from '~/lib/form-actions/profile/delete-system.server';
 import { editSystem } from '~/lib/form-actions/profile/edit-system.server';
 import { useUserProfileSystemSpecs } from '~/lib/hooks/useMatchesData';
 import { getProfileSession } from '~/lib/sessions/profile-session.server';
+import type { ProfileSystemsActionData } from '~/lib/form-actions/profile/interfaces';
 
 export async function loader({ request }: LoaderArgs) {
   const profileSession = await getProfileSession(request);
@@ -14,59 +15,13 @@ export async function loader({ request }: LoaderArgs) {
   if (!userProfileId) {
     return redirect('/profile');
   }
-  return json({});
-}
-
-export type CreateSystemSpecActionData = {
-  formError?: string;
-  fieldErrors?: {
-    systemName?: string;
-    systemInfo?: string;
-  };
-  fields?: {
-    systemName: string;
-    systemInfo: string;
-  }
-}
-
-export type EditSystemSpecActionData = {
-  formError?: string;
-  fieldErrors?: {
-    systemSpecId?: string;
-    systemName?: string;
-    updatedSystemName?: string;
-  };
-  fields?: {
-    systemSpecId: number;
-    systemName: string;
-    updatedSystemName: string;
-  }
-}
-
-export type DeleteSystemSpecActionData = {
-  formError?: string;
-  fieldErrors?: {
-    systemSpecId?: string;
-    systemName?: string;
-  }
-  fields?: {
-    systemSpecId: number;
-    systemName: string;
-  }
-}
-
-export type ProfileSystemsActionData = {
-  _profileAction: {
-    createSystemSpec?: CreateSystemSpecActionData;
-    editSystemSpec?: EditSystemSpecActionData;
-    deleteSystemSpec?: DeleteSystemSpecActionData;
-  };
+  return json({ success: true });
 }
 
 export async function action({ request }: ActionArgs) {
   const profileSession = await getProfileSession(request);
-  const userProfileId = Number(profileSession.getUserProfileId());
-  if (!isFinite(userProfileId)) {
+  const userProfileId = profileSession.getUserProfileId();
+  if (!userProfileId) {
     return redirect('/profile');
   }
   const formData = await request.formData();

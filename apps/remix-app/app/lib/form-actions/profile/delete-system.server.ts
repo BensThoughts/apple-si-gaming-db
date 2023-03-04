@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node';
 import { deleteSystemSpec, doesUserOwnSystemSpec } from '~/models/SteamedApples/userSystemSpecs.server';
-import type { DeleteSystemSpecActionData, ProfileSystemsActionData } from '~/routes/profile/systems';
+import type { DeleteSystemSpecActionData, ProfileSystemsActionData } from './interfaces';
 import { validateSystemName, validateSystemSpecIdForProfile } from '~/lib/form-validators/profile';
 // import { validateSystemName } from '~/lib/form-validators/profile';
 

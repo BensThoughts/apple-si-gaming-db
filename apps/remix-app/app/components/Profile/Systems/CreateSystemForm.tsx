@@ -4,7 +4,7 @@ import MaterialInputOutlinedV2 from '~/components/FormComponents/MaterialInputOu
 // import TextArea from '~/components/FormComponents/TextArea';
 import MaterialTextAreaOutlined from '~/components/FormComponents/MaterialTextAreaOutlined';
 import RoundedButton from '~/components/RoundedButton';
-import type { CreateSystemSpecActionData } from '~/routes/profile/systems';
+import type { CreateSystemSpecActionData } from '~/lib/form-actions/profile/interfaces';
 import { showToast } from '~/components/Toasts';
 import { useEffect, useState } from 'react';
 import { validateNewSystemName, validateSystemInfo } from '~/lib/form-validators/profile';

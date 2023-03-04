@@ -1,7 +1,7 @@
 import { redirect, json } from '@remix-run/node';
 import { createSystemSpec, findSystemSpecSystemNames } from '~/models/SteamedApples/userSystemSpecs.server';
 import type { PrismaUserSystemSpec } from '~/interfaces/database';
-import type { CreateSystemSpecActionData, ProfileSystemsActionData } from '~/routes/profile/systems';
+import type { CreateSystemSpecActionData, ProfileSystemsActionData } from './interfaces';
 import { validateNewSystemName, validateSystemInfo, extractSystemSpecs } from '~/lib/form-validators/profile';
 
 const badRequest = (data: CreateSystemSpecActionData) => (

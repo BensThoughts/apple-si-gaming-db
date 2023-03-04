@@ -4,7 +4,7 @@ import {
   findSystemSpecSystemNames,
   updateSystemSpecSystemName,
 } from '~/models/SteamedApples/userSystemSpecs.server';
-import type { EditSystemSpecActionData, ProfileSystemsActionData } from '~/routes/profile/systems';
+import type { EditSystemSpecActionData, ProfileSystemsActionData } from './interfaces';
 import { validateNewSystemName, validateSystemName, validateSystemSpecIdForProfile } from '~/lib/form-validators/profile';
 
 const badRequest = (data: EditSystemSpecActionData) => (
