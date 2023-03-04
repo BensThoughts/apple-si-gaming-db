@@ -38,6 +38,7 @@ import { getThemeSession } from '~/lib/sessions/theme-session.server';
 import type {
   UserSessionServerSide,
 } from '~/interfaces/remix-app/UserSession';
+import { getBannerSession } from './lib/sessions/banner-session.server';
 
 type RootLoaderData = {
   theme: Theme | null;
@@ -49,6 +50,8 @@ export type SerializedRootLoaderData = SerializeFrom<RootLoaderData>
 export async function loader({ request, context }: LoaderArgs) {
   const themeSession = await getThemeSession(request);
   const theme = themeSession.getTheme();
+
+  const bannerSession = await getBannerSession(request);
 
   const { steamUser } = extractAppLoadContext(context);
   const profileSession = await getProfileSession(request);
@@ -71,6 +74,9 @@ export async function loader({ request, context }: LoaderArgs) {
     const headers = new Headers();
     // TODO: code for headers is duplicated before each return json()
     headers.append('Set-Cookie', await profileSession.commit());
+    
+    // TODO: destroying all banner sessions for now 03/04/2023
+    headers.append('Set-Cookie', await bannerSession.destroy());
     // headers.append('Set-Cookie', await bannerSession.commit());
     return json<RootLoaderData>({
       theme,
@@ -84,13 +90,16 @@ export async function loader({ request, context }: LoaderArgs) {
   // bannerSession.setShowSignInBanner();
 
   // TODO: code for headers is duplicated before each return json()
-  // const headers = new Headers();
+  const headers = new Headers();
   // headers.append('Set-Cookie', await profileSession.commit());
   // headers.append('Set-Cookie', await bannerSession.commit());
+
+  // TODO: destroying all banner sessions for now 03/04/2023
+  headers.append('Set-Cookie', await bannerSession.destroy());
   return json<RootLoaderData>({
     theme,
   }, {
-    // headers,
+    headers,
   });
 }
 
