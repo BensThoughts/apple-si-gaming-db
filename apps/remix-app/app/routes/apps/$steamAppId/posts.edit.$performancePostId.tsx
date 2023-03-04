@@ -13,7 +13,6 @@ import type {
 import { validatePerformancePostId, validateSteamAppId } from '~/lib/loader-functions/params-validators.server';
 import { didSteamUserProfileCreatePerformancePost, findPerformancePostById } from '~/models/SteamedApples/performancePost.server';
 import { useActionData, useLoaderData, useTransition } from '@remix-run/react';
-import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import { findPostTags } from '~/models/SteamedApples/performancePostTag.server';
 import { findAllGamepads } from '~/models/SteamedApples/gamepadMetadata.server';
 // import { doesSteamUserOwnApp } from '~/models/steamUser.server';
@@ -23,6 +22,7 @@ import PostLayoutCard from '~/components/AppInfo/PerformancePosts/PerformancePos
 import { editPerformancePostAction } from '~/lib/form-actions/performance-post/edit-post.server';
 import type { PostTagOption, GamepadOption } from '~/interfaces';
 import type { CreateOrEditPerformancePostActionData } from '~/lib/form-actions/performance-post/create-or-edit-action-type';
+import { requireUserIds } from '~/lib/sessions/profile-session.server';
 
 type EditPostLoaderData = {
   steamAppId: number;
@@ -38,14 +38,10 @@ type EditPostLoaderData = {
   gamepadOptions: GamepadOption[];
 }
 
-export async function loader({ params, context }: LoaderArgs) {
+export async function loader({ params, request }: LoaderArgs) {
   const steamAppId = validateSteamAppId(params);
   const performancePostId = validatePerformancePostId(params);
-  const steamUser = extractAppLoadContext(context).steamUser;
-  if (!steamUser) {
-    return redirect(`/apps/${steamAppId}/posts/`);
-  }
-  const steamUserId64 = steamUser.steamUserId64;
+  const { steamUserId64 } = await requireUserIds(request, `/apps/${steamAppId}/posts/`);
 
   const steamUserProfileCreatedPerformancePost =
       await didSteamUserProfileCreatePerformancePost(steamUserId64, performancePostId);
@@ -75,11 +71,8 @@ export async function action({
 }: ActionArgs) {
   const steamAppId = validateSteamAppId(params);
   const performancePostId = validatePerformancePostId(params);
-  const steamUser = extractAppLoadContext(context).steamUser;
-  if (!steamUser) {
-    return redirect(`/apps/${steamAppId}/posts/`);
-  }
-  const steamUserId64 = steamUser.steamUserId64;
+  const { steamUserId64 } = await requireUserIds(request, `/apps/${steamAppId}/posts/`);
+
   const steamUserProfileCreatedPerformancePost = await didSteamUserProfileCreatePerformancePost(steamUserId64, performancePostId);
   if (!steamUserProfileCreatedPerformancePost) {
     return redirect(`/apps/${steamAppId}/posts/`);

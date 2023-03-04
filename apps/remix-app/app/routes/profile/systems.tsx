@@ -1,4 +1,4 @@
-import { redirect, json } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import type { ActionArgs, LoaderArgs } from '@remix-run/node';
 import { useActionData, useTransition } from '@remix-run/react';
 import SystemSpecLayout from '~/components/Profile/Systems/SystemSpecLayout';
@@ -6,24 +6,16 @@ import { createSystem } from '~/lib/form-actions/profile/create-system.server';
 import { deleteSystem } from '~/lib/form-actions/profile/delete-system.server';
 import { editSystem } from '~/lib/form-actions/profile/edit-system.server';
 import { useUserProfileSystemSpecs } from '~/lib/hooks/useMatchesData';
-import { getProfileSession } from '~/lib/sessions/profile-session.server';
 import type { ProfileSystemsActionData } from '~/lib/form-actions/profile/interfaces';
+import { requireUserIds } from '~/lib/sessions/profile-session.server';
 
 export async function loader({ request }: LoaderArgs) {
-  const profileSession = await getProfileSession(request);
-  const userProfileId = profileSession.getUserProfileId();
-  if (!userProfileId) {
-    return redirect('/profile');
-  }
+  await requireUserIds(request, '/profile');
   return json({ success: true });
 }
 
 export async function action({ request }: ActionArgs) {
-  const profileSession = await getProfileSession(request);
-  const userProfileId = profileSession.getUserProfileId();
-  if (!userProfileId) {
-    return redirect('/profile');
-  }
+  const { userProfileId } = await requireUserIds(request, '/profile');
   const formData = await request.formData();
   const action = formData.get('_profileAction');
   switch (action) {

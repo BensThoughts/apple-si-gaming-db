@@ -1,5 +1,5 @@
 import type { LoaderArgs } from '@remix-run/node';
-import { redirect, json } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import { findUserProfileLikedPosts } from '~/models/SteamedApples/userProfile.server';
 import { useLoaderData } from '@remix-run/react';
 import UserLikedPostsLayout from '~/components/Profile/LikedPosts/UserLikedPostsLayout';
@@ -10,7 +10,7 @@ import type {
   PerformancePostSteamApp,
   PerformancePostUserWhoCreated,
 } from '~/interfaces';
-import { getProfileSession } from '~/lib/sessions/profile-session.server';
+import { requireUserIds } from '~/lib/sessions/profile-session.server';
 
 interface ProfilePostsRouteLoaderData {
   userProfileLikedPosts: (PerformancePostBase & {
@@ -22,11 +22,7 @@ interface ProfilePostsRouteLoaderData {
 }
 
 export async function loader({ request }: LoaderArgs) {
-  const profileSession = await getProfileSession(request);
-  const userProfileId = profileSession.getUserProfileId();
-  if (!userProfileId) {
-    return redirect('/profile');
-  }
+  const { userProfileId } = await requireUserIds(request, '/profile');
   const userProfileLikedPosts = await findUserProfileLikedPosts(userProfileId);
   return json<ProfilePostsRouteLoaderData>({
     userProfileLikedPosts,

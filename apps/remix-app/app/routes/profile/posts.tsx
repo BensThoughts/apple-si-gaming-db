@@ -1,7 +1,6 @@
 import type { LoaderArgs } from '@remix-run/node';
-import { redirect, json } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import UsersPostsLayout from '~/components/Profile/Posts/UsersPostsLayout';
-import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import { useLoaderData } from '@remix-run/react';
 import type {
   PerformancePostBase,
@@ -11,6 +10,7 @@ import type {
   PerformancePostUserWhoCreated,
 } from '~/interfaces';
 import { findPerformancePostsBySteamUserId } from '~/models/SteamedApples/performancePost.server';
+import { requireUserIds } from '~/lib/sessions/profile-session.server';
 
 interface ProfilePostsRouteLoaderData {
   steamUsersPosts: (PerformancePostBase & {
@@ -21,16 +21,9 @@ interface ProfilePostsRouteLoaderData {
   })[]
 }
 
-export async function loader({ context }: LoaderArgs) {
-  const { steamUser } = extractAppLoadContext(context);
-  // TODO: This should maybe return more info about the problem
-  if (!steamUser) {
-    return redirect('/profile');
-  }
-  const steamUserId64 = steamUser.steamUserId64;
-
+export async function loader({ request }: LoaderArgs) {
+  const { steamUserId64 } = await requireUserIds(request, '/profile');
   const steamUsersPosts = await findPerformancePostsBySteamUserId(steamUserId64);
-
   return json<ProfilePostsRouteLoaderData>({
     steamUsersPosts,
   });
