@@ -2,8 +2,7 @@ import {
   createCookieSessionStorage,
   redirect,
 } from '@remix-run/node';
-import { UserSessionServerSide } from '~/interfaces';
-import { getBannerSession } from './banner-session.server';
+import type { UserSessionServerSide } from '~/interfaces';
 
 const sessionSecret = process.env.ASGD_PROFILE_SESSION_SECRET;
 
@@ -38,8 +37,8 @@ export async function getProfileSession(request: Request) {
 
   return {
     login: async (
-      userProfileId: number,
-      steamUserId64: string,
+        userProfileId: number,
+        steamUserId64: string,
     ) => {
       session.set('userProfileId', userProfileId);
       session.set('steamUserId64', steamUserId64);
@@ -72,7 +71,7 @@ export async function getProfileSession(request: Request) {
           displayName: session.get('displayName'),
           avatarFull: session.get('avatarFull'),
         } : undefined,
-      }
+      };
     },
     commit: () => userProfileSession.commitSession(session),
     destroy: () => userProfileSession.destroySession(session),
@@ -88,7 +87,7 @@ export async function logout(request: Request) {
 
 // export async function getUserSession(request: Request): Promise<UserSessionServerSide | undefined> {
 //   const { userProfileId, steamUserId64 } = await requireUserIds(request);
-//   const 
+//   const
 // }
 
 export async function getUserIds(request: Request) {
@@ -99,8 +98,8 @@ export async function getUserIds(request: Request) {
 }
 
 export async function requireUserIds(
-  request: Request,
-  redirectTo: string = new URL(request.url).pathname
+    request: Request,
+    redirectTo: string = new URL(request.url).pathname,
 ) {
   const { userProfileId, steamUserId64 } = await getUserIds(request);
   if (!userProfileId) throw redirect(redirectTo);
