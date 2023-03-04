@@ -20,14 +20,10 @@ export const badRequest = (data: CreateOrEditPerformancePostActionData) => json(
 export async function createPerformancePostAction({
   steamAppId,
   steamUserId64,
-  displayName,
-  avatarMedium,
   formData,
 } : {
   steamAppId: number;
   steamUserId64: string;
-  displayName?: string | null | undefined;
-  avatarMedium?: string | null | undefined;
   formData: FormData;
 }) {
   const {
