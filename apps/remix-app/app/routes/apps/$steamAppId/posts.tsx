@@ -1,8 +1,7 @@
 import type { LoaderArgs, ActionArgs } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import { useActionData, useCatch, useLoaderData, useTransition } from '@remix-run/react';
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
-import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 // import type { GamepadRating, RatingMedal, FrameRate } from '~/interfaces/database';
 import { findPerformancePostsBySteamAppId } from '~/models/SteamedApples/performancePost.server';
 import { findPostTags } from '~/models/SteamedApples/performancePostTag.server';
@@ -22,6 +21,7 @@ import type {
 import CreatePerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForms/CreatePerformancePostForm';
 import type { PostTagOption, GamepadOption } from '~/interfaces';
 import type { CreateOrEditPerformancePostActionData } from '~/lib/form-actions/performance-post/create-or-edit-action-type';
+import { getUserIds, requireUserIds } from '~/lib/sessions/profile-session.server';
 
 interface PerformancePostLoaderData {
   steamAppId: number;
@@ -40,15 +40,12 @@ interface PerformancePostLoaderData {
 
 export async function loader({ params, context, request }: LoaderArgs) {
   const steamAppId = validateSteamAppId(params);
-  const steamUserProfile = extractAppLoadContext(context).steamUser;
   const performancePosts = await findPerformancePostsBySteamAppId(steamAppId);
-
-  let steamUserId64: string | undefined = undefined;
+  const { steamUserId64 } = await getUserIds(request);
   let steamUserProfileOwnsApp = false;
   let postTagOptions: PostTagOption[] = [];
   let gamepadOptions: GamepadOption[] = [];
-  if (steamUserProfile) {
-    steamUserId64 = steamUserProfile.steamUserId64;
+  if (steamUserId64) {
     steamUserProfileOwnsApp = await doesSteamUserOwnApp(steamUserId64, steamAppId);
     postTagOptions = await findPostTags();
     gamepadOptions = await findAllGamepads();
@@ -68,13 +65,8 @@ export async function action({
   context,
 }: ActionArgs) {
   const steamAppId = validateSteamAppId(params);
-  const { steamUser } = extractAppLoadContext(context);
-  if (!steamUser) {
-    return redirect(`/apps/${steamAppId}/posts`);
-  }
-  const steamUserId64 = steamUser.steamUserId64;
-  const displayName = steamUser.displayName;
-  const avatarMedium = steamUser.avatarMedium;
+  const { steamUserId64 } = await requireUserIds(request, `/apps/${steamAppId}/posts`);
+
   const formData = await request.formData();
   const action = formData.get('_performancePostAction');
 
@@ -83,8 +75,6 @@ export async function action({
       return createPerformancePostAction({
         steamAppId,
         steamUserId64,
-        displayName,
-        avatarMedium,
         formData,
       });
     }
