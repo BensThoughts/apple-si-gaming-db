@@ -14,7 +14,7 @@ import {
 import SimpleSearchForm from '~/components/Search/SimpleSearchForm';
 import { Link } from '@remix-run/react';
 import { AppleLogoSolidIcon } from '~/components/Icons/FlatIcons';
-import ProfileMenu from '../ProfileMenu';
+import ProfileMenu from '~/components/Layout/ProfileMenu';
 
 type NavBarProps = {
   className?: string;
