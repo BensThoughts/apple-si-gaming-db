@@ -12,13 +12,15 @@
 }
 
 body {
-  font-family: var(--font-body);
   line-height: 1.5;
+  color: rgb(var(--color-text-primary));
+
+  /*
   background-repeat: no-repeat;
   background: rgb(var(--color-bg-base));
-  color: rgb(var(--color-text-primary));
   min-height: 100vh;
   min-height: calc(100vh - env(safe-area-inset-bottom));
+  */
 }
 
 body[data-theme="light"] {
