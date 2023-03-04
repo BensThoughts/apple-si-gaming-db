@@ -23,3 +23,35 @@ export function safeRedirect(
   return to;
 }
 
+// export async function getUser(request: Request) {
+//   const {} = await getUserIds(request);
+//   if (userId === undefined) return null;
+
+//   const user = await getUserById(userId);
+//   if (user) return user;
+
+//   throw await logout(request);
+// }
+
+// export async function logout(request: Request) {
+//   const session = await getSession(request);
+//   return redirect("/", {
+//     headers: {
+//       "Set-Cookie": await sessionStorage.destroySession(session),
+//     },
+//   });
+// }
+
+
+// export async function requireUserId(
+//   request: Request,
+//   redirectTo: string = new URL(request.url).pathname
+// ) {
+//   const userId = await getUserId(request);
+//   if (!userId) {
+//     const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
+//     throw redirect(`/login?${searchParams}`);
+//   }
+//   return userId;
+// }
+
