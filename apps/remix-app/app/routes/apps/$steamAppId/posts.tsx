@@ -21,7 +21,7 @@ import type {
 import CreatePerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForms/CreatePerformancePostForm';
 import type { PostTagOption, GamepadOption } from '~/interfaces';
 import type { CreateOrEditPerformancePostActionData } from '~/lib/form-actions/performance-post/create-or-edit-action-type';
-import { getUserIds, requireUserIds } from '~/lib/sessions/profile-session.server';
+import { getIsLoggedIn, getUserIds, requireUserIds } from '~/lib/sessions/profile-session.server';
 
 interface PerformancePostLoaderData {
   steamAppId: number;
@@ -41,11 +41,12 @@ interface PerformancePostLoaderData {
 export async function loader({ params, context, request }: LoaderArgs) {
   const steamAppId = validateSteamAppId(params);
   const performancePosts = await findPerformancePostsBySteamAppId(steamAppId);
+  const isLoggedIn = await getIsLoggedIn(request);
   const { steamUserId64 } = await getUserIds(request);
   let steamUserProfileOwnsApp = false;
   let postTagOptions: PostTagOption[] = [];
   let gamepadOptions: GamepadOption[] = [];
-  if (steamUserId64) {
+  if (isLoggedIn && steamUserId64) {
     steamUserProfileOwnsApp = await doesSteamUserOwnApp(steamUserId64, steamAppId);
     postTagOptions = await findPostTags();
     gamepadOptions = await findAllGamepads();
