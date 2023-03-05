@@ -21,7 +21,7 @@ export default function SyncLibraryForm({
           method="post"
         >
           <input type="hidden" name="_profileAction" value="updateOwnedGames" />
-          <RoundedButton type="submit">
+          <RoundedButton width="wide" type="submit">
             {isSubmittingUpdateGames ? <span>Updating...</span> : <span>Resync Library</span>}
           </RoundedButton>
         </Form>

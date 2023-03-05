@@ -122,7 +122,7 @@ export default function OwnedAppsLayout({
             </div>
           ))}
         </div>
-        {!lastPage && <RoundedButton onClick={() => loadMore()}>Load More...</RoundedButton>}
+        {!lastPage && <RoundedButton width="wide" onClick={() => loadMore()}>Load More...</RoundedButton>}
       </div>
     </div>
   );
