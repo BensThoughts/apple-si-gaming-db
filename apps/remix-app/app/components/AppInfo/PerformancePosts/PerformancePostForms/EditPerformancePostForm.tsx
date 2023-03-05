@@ -108,8 +108,8 @@ export default function EditPerformancePostForm({
           <RemixRoundedLink to={`/apps/${steamAppId}/posts/`}>
             Cancel
           </RemixRoundedLink>
-          <RoundedButton type="submit" className="max-w-xs">
-            {isSubmittingForm ? 'Submitting' : 'Edit'}
+          <RoundedButton type="submit" className="max-w-xs" disabled={isSubmittingForm}>
+            {isSubmittingForm ? 'Editing' : 'Edit'}
           </RoundedButton>
         </div>
 

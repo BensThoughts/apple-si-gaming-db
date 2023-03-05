@@ -117,8 +117,8 @@ export default function CreatePerformancePostForm({
           fields={fields}
           fieldErrors={fieldErrors}
         />
-        <RoundedButton type="submit" className="max-w-xs">
-          {isSubmittingForm ? 'Submitting' : 'Submit'}
+        <RoundedButton type="submit" disabled={isSubmittingForm}>
+          {isSubmittingForm ? 'Creating' : 'Create'}
         </RoundedButton>
       </Form>
     </PerformancePostFormWrapper>
