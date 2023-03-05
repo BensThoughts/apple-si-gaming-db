@@ -15,8 +15,4 @@ export const navMenuLinks = [
     name: 'Contact',
     to: '/contact',
   },
-  {
-    name: 'Profile',
-    to: '/profile',
-  },
 ];

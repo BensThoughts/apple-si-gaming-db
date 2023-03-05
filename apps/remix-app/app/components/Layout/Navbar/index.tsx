@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 import ThemeToggle from '~/components/Layout/Navbar/ThemeToggle';
 import MenuDrawer from '~/components/Layout/MenuDrawer';
-import MenuItem from './MenuItem';
 import NavHider from './NavHider';
 
 import { navMenuLinks } from './navMenuLinks';
@@ -12,9 +11,10 @@ import {
   SteamIcon,
 } from '~/components/Icons';
 import SimpleSearchForm from '~/components/Search/SimpleSearchForm';
-import { Link } from '@remix-run/react';
+import { NavLink } from '@remix-run/react';
 import { AppleLogoSolidIcon } from '~/components/Icons/FlatIcons';
 import ProfileMenu from '~/components/Layout/ProfileMenu';
+import AnimatedUnderline from '~/components/AnimatedUnderline';
 
 type NavBarProps = {
   className?: string;
@@ -37,15 +37,22 @@ export default function Navbar({
         <div className="flex flex-col items-center w-full gap-6">
           <div className="flex flex-col justify-end content-between items-center pt-0 mt-7 w-full">
             {navMenuLinks.map((menuItem, idx) => (
-              <Link
+              <NavLink
                 key={`${menuItem.to}-${idx}`}
                 to={menuItem.to}
                 onClick={() => setIsOpen(false)}
                 className="flex items-center justify-center w-full h-10 text-xl text-center hover:bg-primary"
               >
                 {menuItem.name}
-              </Link>
+              </NavLink>
             ))}
+            <NavLink
+              to={isLoggedIn ? '/profile' : '/login'}
+              onClick={() => setIsOpen(false)}
+              className="flex items-center justify-center w-full h-10 text-xl text-center hover:bg-primary"
+            >
+              {isLoggedIn ? 'Profile' : 'Login'}
+            </NavLink>
           </div>
           <div>
             <ThemeToggle />
@@ -62,8 +69,24 @@ export default function Navbar({
               <AppleLogoSolidIcon size={34} className="text-icon-secondary" />
               <div className="flex gap-3 content-between items-center pt-0">
                 {navMenuLinks.map((menuItem, idx) => (
-                  <MenuItem animatedLink key={`${menuItem.to}-${idx}`} href={menuItem.to}>{menuItem.name}</MenuItem>
+                  <NavLink
+                    key={`${menuItem.to}-${idx}`}
+                    to={menuItem.to}
+                  >
+                    <AnimatedUnderline>
+                      {menuItem.name}
+                    </AnimatedUnderline>
+                  </NavLink>
                 ))}
+                <NavLink
+                  to={'/profile'}
+                  onClick={() => setIsOpen(false)}
+                  className="focus-visible:show-ring px-1 rounded-sm"
+                >
+                  <AnimatedUnderline>
+                    {isLoggedIn ? 'Profile' : 'Login'}
+                  </AnimatedUnderline>
+                </NavLink>
                 <SimpleSearchForm
                   isSubmitting={isSearchSubmitting}
                 />
@@ -84,7 +107,7 @@ export default function Navbar({
           {/* Small- Screens */}
           <div className="flex justify-between items-center mx-3 w-full md:hidden">
 
-            <Link
+            <NavLink
               to="/profile"
               className={`ml-3 text-sm text-primary-highlight inline-flex justify-center items-center
                           border border-transparent font-medium rounded
@@ -92,7 +115,7 @@ export default function Navbar({
                           h-[40px] w-[58px]`}
             >
               <SteamIcon size={40} className="text-primary-highlight" />
-            </Link>
+            </NavLink>
             <button
               onClick={() => setIsOpen(!isOpen)}
               aria-label="navigation menu"
