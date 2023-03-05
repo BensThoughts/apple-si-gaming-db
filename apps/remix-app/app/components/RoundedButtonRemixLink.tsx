@@ -1,7 +1,7 @@
 import type { RemixLinkProps } from '@remix-run/react/dist/components';
 import { Link } from '@remix-run/react';
 
-export default function RemixRoundedLink({ to, className, children, ...rest }: RemixLinkProps) {
+export default function RoundedButtonRemixLink({ to, className, children, ...rest }: RemixLinkProps) {
   return (
     <Link
       to={to}

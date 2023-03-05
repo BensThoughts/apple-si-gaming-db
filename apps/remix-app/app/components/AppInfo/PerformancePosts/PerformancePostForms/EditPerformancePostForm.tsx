@@ -6,7 +6,7 @@ import RemixUnderlineLink from '~/components/RemixUnderlineLink';
 import type { FrameRate, RatingMedal, GamepadRating, PostTagOption, GamepadOption, SystemSpecOption } from '~/interfaces';
 import PerformancePostFormWrapper from './PerformancePostFormWrapper';
 import BasePerformancePostFormFields from './BasePerformancePostFormFields';
-import RemixRoundedLink from '~/components/RemixRoundedLink';
+import RoundedButtonRemixLink from '~/components/RoundedButtonRemixLink';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
 
 interface EditPerformancePostFormProps {
@@ -105,9 +105,9 @@ export default function EditPerformancePostForm({
           fieldErrors={fieldErrors}
         />
         <div className="w-full flex gap-x-3 justify-around">
-          <RemixRoundedLink to={`/apps/${steamAppId}/posts/`}>
+          <RoundedButtonRemixLink to={`/apps/${steamAppId}/posts/`}>
             Cancel
-          </RemixRoundedLink>
+          </RoundedButtonRemixLink>
           <RoundedButton type="submit" className="max-w-xs" disabled={isSubmittingForm}>
             {isSubmittingForm ? 'Editing' : 'Edit'}
           </RoundedButton>

@@ -5,7 +5,7 @@ import { searchReleasedSteamAppsByName } from '~/models/Steam/steamApp.server';
 import SearchTitleCard from '~/components/Search/SearchTitleCard';
 import LoadingComponent from '~/components/LoadingComponent';
 import SearchForm from '~/components/Search/SearchForm';
-import RemixRoundedLink from '~/components/RemixRoundedLink';
+import RoundedButtonRemixLink from '~/components/RoundedButtonRemixLink';
 import { metaTags } from '~/lib/meta-tags';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
 import { getSearchOptions } from '~/lib/loader-functions/search.server';
@@ -240,20 +240,20 @@ function PageButtons({
   return (
     <div className="flex justify-between w-full">
       {page > 1 &&
-        <RemixRoundedLink
+        <RoundedButtonRemixLink
           to={`/search?page=${page - 1}&` + searchParams.toString()}
           className="w-32"
         >
           Previous Page
-        </RemixRoundedLink>
+        </RoundedButtonRemixLink>
       }
       {hasNextPage &&
-        <RemixRoundedLink
+        <RoundedButtonRemixLink
           to={`/search?page=${page + 1}&` + searchParams.toString()}
           className="ml-auto w-32"
         >
           Next Page
-        </RemixRoundedLink>
+        </RoundedButtonRemixLink>
       }
     </div>
   );
