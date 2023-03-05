@@ -30,7 +30,7 @@ import {
 } from '~/models/Steam/steamUserProfile.server';
 
 import type { SerializeFrom } from '@remix-run/node';
-import { getProfileSession } from '~/lib/sessions/profile-session.server';
+import { getProfileSession, logout } from '~/lib/sessions/profile-session.server';
 // import { getBannerSession } from '~/lib/sessions/banner-session.server';
 import type { Theme } from '~/lib/context/theme-provider';
 import { useTheme, ThemeProvider, NonFlashOfWrongThemeEls } from '~/lib/context/theme-provider';
@@ -61,7 +61,7 @@ export async function loader({ request, context }: LoaderArgs) {
     if (!userProfileId) { // Upon initial login we don't have userProfileId yet
       const { id } = await upsertUserProfileBySteamUserId64(steamUserId64, steamUser);
       userProfileId = id;
-      await updateSteamUserProfileOwnedSteamApps(steamUser.steamUserId64);
+      await updateSteamUserProfileOwnedSteamApps(steamUserId64);
       // TODO: "It's important that you logout (or perform any mutation for that
       // TODO: matter) in an action"
       // TODO: "When using session.unset(), you need to be sure no
@@ -71,6 +71,9 @@ export async function loader({ request, context }: LoaderArgs) {
     }
     // We are now definitely logged in and have a userProfileId
     const userSession = await findUserSessionByUserProfileId(userProfileId);
+    if (!userSession) {
+      throw await logout(request);
+    }
 
     const headers = new Headers();
     // TODO: code for headers is duplicated before each return json()
