@@ -98,7 +98,7 @@ export default function PerformancePostsRoute() {
   const transition = useTransition();
   const isSubmittingCreatePerformancePost =
     transition.state === 'submitting' &&
-    transition.submission.formData.get('_performancePostAction') === 'createPost';
+    transition.submission.formData.get('_performancePostAction') === 'createPerformancePost';
 
   return (
     <div className="flex flex-col gap-3">
