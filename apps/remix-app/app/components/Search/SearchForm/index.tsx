@@ -77,7 +77,7 @@ export default function SearchForm({
       >
         <input type="hidden" name="page" value="1" className="hidden"/>
         <div className="flex flex-col items-center gap-4 w-full">
-          <div className={`flex flex-col md:flex-row md:justify-between w-full justify-center items-center gap-4 md:gap-2`}>
+          <div className={`flex flex-col md:flex-row md:justify-between w-full justify-center items-center gap-4 md:gap-0`}>
             <MaterialInputOutlined
               name="searchQuery"
               id="searchQuery"
@@ -91,20 +91,25 @@ export default function SearchForm({
               {...rest}
             />
 
-            <div className="flex justify-between md:justify-around items-center w-full">
-              <UncontrolledToggleSwitch
-                defaultChecked={fields ? fields.searchAppleOnly : false}
-                name="searchAppleOnly"
-                label="Apple"
-                labelPosition="left"
-              />
-              <RoundedButton
-                className={`h-[38px] md:h-[46px] w-[89.66px]`}
-                type="submit"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? 'Loading' : 'Search' }
-              </RoundedButton>
+            <div className="flex justify-between items-center w-full">
+              <div className="md:w-full md:justify-self-center">
+                <UncontrolledToggleSwitch
+                  defaultChecked={fields ? fields.searchAppleOnly : false}
+                  name="searchAppleOnly"
+                  label="Apple"
+                  labelPosition="left"
+                />
+              </div>
+              <div>
+                <RoundedButton
+                  className={`h-[38px] md:h-[46px]`}
+                  type="submit"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Loading' : 'Search' }
+                </RoundedButton>
+              </div>
+
             </div>
 
           </div>
@@ -140,14 +145,6 @@ export default function SearchForm({
           </div>
 
         </div>
-
-        {(fieldErrors && fieldErrors.searchQuery) ? (
-        <div className="text-color-error">
-          {fieldErrors.searchQuery}
-        </div>
-      ) : (
-        null
-      )}
       </Form>
     </div>
   );
