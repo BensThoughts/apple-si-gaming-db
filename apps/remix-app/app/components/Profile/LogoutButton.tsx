@@ -9,7 +9,7 @@ export default function LogoutButton() {
       className="w-full max-w-[6rem]"
       onClick={() => fetcher.submit({}, { action: '/actions/logout', method: 'post' })}
     >
-    Logout
+      Logout
     </RoundedButton>
   );
 }
