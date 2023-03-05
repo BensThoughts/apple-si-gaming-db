@@ -81,7 +81,7 @@ export default function AppRatingOverview({ performancePostRatings }: AppRatingO
       <div className="flex gap-1 md:gap-2">
         <div>
           {`[ `}
-          {avgFrameRate ? convertFrameRateToDescription(avgFrameRate) : 'None Given Yet'}
+          {avgFrameRate ? convertFrameRateToDescription(avgFrameRate) : 'None Given'}
           {` ] `}
         </div>
         <span className="text-primary-faded"> Average Frame Rate</span>
@@ -101,7 +101,7 @@ export default function AppRatingOverview({ performancePostRatings }: AppRatingO
       <div className="flex gap-1 md:gap-2">
         <div>
           {`[ `}
-          {avgGamepadRating ? convertGamepadRatingToMedalText(avgGamepadRating) : 'None Given Yet'}
+          {avgGamepadRating ? convertGamepadRatingToMedalText(avgGamepadRating) : 'None Given'}
           {` ] `}
         </div>
         <span className="text-primary-faded">Average Controller Rating</span>
