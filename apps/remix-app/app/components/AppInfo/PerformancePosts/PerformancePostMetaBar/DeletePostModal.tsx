@@ -14,11 +14,13 @@ export default function DeletePostModal({
   isOpen,
   setIsOpen,
 }: DeletePostModalProps) {
-  // const submit = useSubmit();
   const fetcher = useFetcher();
+  const disableDeleteButton =
+    (fetcher.state === 'submitting') ||
+    (fetcher.state === 'loading');
 
   // Form must be submitted prior to closing the modal
-  // or errors occur.  So we use useSubmit()
+  // or errors occur.  So we use fetcher.submit()
   function onClick() {
     fetcher.submit({
       performancePostId: performancePostId.toString(),
@@ -51,6 +53,7 @@ export default function DeletePostModal({
 
           <RoundedButton
             onClick={onClick}
+            disabled={disableDeleteButton}
             className="text-white bg-error hover:bg-error hover:text-white focus-visible:bg-error focus-visible:text-white"
           >
               Delete
