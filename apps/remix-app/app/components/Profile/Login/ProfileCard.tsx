@@ -1,5 +1,4 @@
-import { useFetcher } from '@remix-run/react';
-import RoundedButton from '~/components/RoundedButton';
+import LogoutButton from '../LogoutButton';
 
 export default function ProfileCard({
   avatarFull,
@@ -8,7 +7,6 @@ export default function ProfileCard({
   avatarFull?: string | null;
   displayName?: string | null;
 }) {
-  const fetcher = useFetcher();
   return (
     <div className={`flex flex-col items-center gap-4 w-full max-w-md`}>
       <h2 className="text-2xl"><strong>{displayName}</strong></h2>
@@ -21,11 +19,7 @@ export default function ProfileCard({
         }}
         className="rounded-full border-1 border-secondary-highlight"
       />}
-      <RoundedButton
-        onClick={() => fetcher.submit({}, { action: '/actions/logout', method: 'post' })}
-      >
-        Logout
-      </RoundedButton>
+      <LogoutButton />
     </div>
   );
 }

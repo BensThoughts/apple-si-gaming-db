@@ -1,6 +1,6 @@
-import AnimatedUnderline from '~/components/AnimatedUnderline';
 import Card from '~/components/Cards/Card';
 import ProfileLayout from '~/components/Profile/Login/ProfileLayout';
+import LogoutButton from '~/components/Profile/LogoutButton';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
 
 export default function ProfileIndexRoute() {
@@ -9,14 +9,12 @@ export default function ProfileIndexRoute() {
     return (
       <Card title="No Steam User Found!">
         <div className="flex flex-col gap-3">
-          You need to logout and back in again for the site to work properly.
-          This is due to a transition to a new database schema. Thanks!
+          <p>
+            Something went wrong. You need to logout and back in again
+            for the site to work properly. Thanks!
+          </p>
+          <LogoutButton />
         </div>
-        <a
-          href="/api/auth/steam/logout"
-        >
-          <AnimatedUnderline>Logout</AnimatedUnderline>
-        </a>
       </Card>
     );
   }
