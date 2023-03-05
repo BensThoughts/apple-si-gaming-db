@@ -228,6 +228,37 @@ export const meta: MetaFunction = ({ data }: { data?: Partial<SearchPageLoaderDa
   };
 };
 
+function PageButtons({
+  hasNextPage,
+  page,
+  searchParams,
+}: {
+  hasNextPage: boolean;
+  page: number;
+  searchParams: URLSearchParams;
+}) {
+  return (
+    <div className="flex justify-between w-full">
+      {page > 1 &&
+        <RemixRoundedLink
+          to={`/search?page=${page - 1}&` + searchParams.toString()}
+          className="w-32"
+        >
+          Previous Page
+        </RemixRoundedLink>
+      }
+      {hasNextPage &&
+        <RemixRoundedLink
+          to={`/search?page=${page + 1}&` + searchParams.toString()}
+          className="ml-auto w-32"
+        >
+          Next Page
+        </RemixRoundedLink>
+      }
+    </div>
+  );
+}
+
 function SearchIndexWrap({
   searchOptions,
   children,
@@ -268,8 +299,8 @@ function SearchIndexWrap({
 export default function SearchIndexRoute() {
   const { searchResults, searchOptions, searchFormState } = useLoaderData<SearchPageLoaderData>();
   const steamApps = searchResults?.steamApps;
-  const hasNextPage = searchResults?.hasNextPage;
-  const page = searchResults?.page ? searchResults.page : 1;
+  const hasNextPage = searchResults ? searchResults.hasNextPage : false;
+  const page = searchResults ? searchResults.page : 1;
   const {
     fields,
     formError,
@@ -379,6 +410,9 @@ export default function SearchIndexRoute() {
       isSubmitting={isSubmitting}
     >
       <div className="flex flex-col gap-3 items-center w-full max-w-xl border-secondary border-1 rounded-md p-4 bg-app-bg">
+        {(hasNextPage || (page > 1)) &&
+          <PageButtons hasNextPage={hasNextPage} page={page} searchParams={searchParams} />
+        }
         {steamApps.map(({ steamAppId, name, headerImage, releaseDate }) => (
           <Fragment key={steamAppId}>
             <SearchTitleCard
@@ -390,23 +424,7 @@ export default function SearchIndexRoute() {
           </Fragment>
         ))}
         {(hasNextPage || (page > 1)) &&
-          <div className="flex justify-between w-full">
-            {page > 1 &&
-              <RemixRoundedLink
-                to={`/search?page=${page - 1}&` + searchParams.toString()}
-              >
-                Previous Page
-              </RemixRoundedLink>
-            }
-            {hasNextPage &&
-              <RemixRoundedLink
-                to={`/search?page=${page + 1}&` + searchParams.toString()}
-                className="ml-auto"
-              >
-                Next Page
-              </RemixRoundedLink>
-            }
-          </div>
+          <PageButtons hasNextPage={hasNextPage} page={page} searchParams={searchParams} />
         }
       </div>
     </SearchIndexWrap>
