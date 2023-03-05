@@ -62,7 +62,6 @@ export default function SimpleSearchForm({
           />
         </div>
         <RoundedButton
-          className={`h-[38px] w-[89.66px]`}
           type="submit"
           disabled={isSubmitting}
         >
