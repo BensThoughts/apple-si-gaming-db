@@ -2,7 +2,6 @@ import {
   createCookieSessionStorage,
   redirect,
 } from '@remix-run/node';
-import type { UserSessionServerSide } from '~/interfaces';
 
 const sessionSecret = process.env.ASGD_PROFILE_SESSION_SECRET;
 
@@ -36,19 +35,13 @@ export async function getProfileSession(request: Request) {
   const session = await userProfileSession.getSession(request.headers.get('Cookie'));
 
   return {
-    login: async (
+    login: (
         userProfileId: number,
         steamUserId64: string,
     ) => {
       session.set('userProfileId', userProfileId);
       session.set('steamUserId64', steamUserId64);
-      // return userProfileSession.commitSession(session);
     },
-    // logout: async () => {
-    //   session.unset('userProfileId');
-    //   session.unset('steamUserId64');
-    //   return userProfileSession.destroySession(session);
-    // },
     getUserProfileId: () => {
       const userProfileId = session.get('userProfileId');
       if (!userProfileId) {
@@ -63,16 +56,6 @@ export async function getProfileSession(request: Request) {
       return Number(userProfileId);
     },
     getSteamUserId64: () => session.get('steamUserId64'),
-    getUserSession: (): UserSessionServerSide => {
-      const steamUserId64 = session.get('steamUserId64');
-      return {
-        steamUserProfile: steamUserId64 ? {
-          steamUserId64: steamUserId64,
-          displayName: session.get('displayName'),
-          avatarFull: session.get('avatarFull'),
-        } : undefined,
-      };
-    },
     commit: () => userProfileSession.commitSession(session),
     destroy: () => userProfileSession.destroySession(session),
   };
@@ -84,11 +67,6 @@ export async function logout(request: Request) {
   headers.append('Set-Cookie', await profileSession.destroy());
   return redirect('/api/auth/steam/logout', { headers, status: 302 });
 }
-
-// export async function getUserSession(request: Request): Promise<UserSessionServerSide | undefined> {
-//   const { userProfileId, steamUserId64 } = await requireUserIds(request);
-//   const
-// }
 
 export async function getUserIds(request: Request) {
   const profileSession = await getProfileSession(request);
@@ -106,4 +84,12 @@ export async function requireUserIds(
   if (!steamUserId64) throw redirect(redirectTo);
 
   return { userProfileId, steamUserId64 };
+}
+
+export async function getIsLoggedIn(request: Request) {
+  const { userProfileId, steamUserId64 } = await getUserIds(request);
+  if (userProfileId && steamUserId64) {
+    return true;
+  }
+  return false;
 }
