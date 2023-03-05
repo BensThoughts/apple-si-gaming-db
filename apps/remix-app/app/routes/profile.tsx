@@ -31,7 +31,7 @@ export default function ProfilePage() {
 
   if (!userProfile || !steamUserProfile) {
     return (
-      <PageWrapper currentRoute="/profile" title="Profile" topSpacer>
+      <PageWrapper currentRoute="/profile" title="Login" topSpacer>
         <div className="flex flex-col items-center w-full">
           <div
             className="flex flex-col md:flex-row gap-4 md:gap-6 md:justify-evenly
