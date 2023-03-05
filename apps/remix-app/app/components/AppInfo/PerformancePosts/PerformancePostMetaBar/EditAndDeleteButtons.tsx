@@ -13,7 +13,6 @@ export default function EditAndDeleteButtons({
   performancePostId,
 }: EditAndDeleteButtonsProps) {
   const [isDeleteModalOpen, setDeleteModalIsOpen] = useState(false);
-  // const [deleteModalSystemName, setDeleteModalSystemName] = useState<string | undefined>(undefined);
 
   return (
     <div className="flex gap-2 py-1 px-2 rounded-full border-secondary-highlight border-solid border-1">
