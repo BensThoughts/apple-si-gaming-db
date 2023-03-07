@@ -1,0 +1,19 @@
+# fly.toml file generated for steamed-apples-log-shipper on 2023-03-06T06:28:42-07:00
+
+app = "steamed-apples-log-shipper"
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+[build]
+  image = "ghcr.io/superfly/fly-log-shipper:latest"
+
+[env]
+  # SUBJECT = "logs.steamed-apples-remix-app.>"
+
+[experimental]
+  auto_rollback = true
+
+[[services]]
+  http_checks = []
+  internal_port = 8686
