@@ -47,7 +47,7 @@ export default function Navbar({
               </NavLink>
             ))}
             <NavLink
-              to={isLoggedIn ? '/profile' : '/login'}
+              to={'/profile'}
               onClick={() => setIsOpen(false)}
               className="flex items-center justify-center w-full h-10 text-xl text-center hover:bg-primary"
             >
