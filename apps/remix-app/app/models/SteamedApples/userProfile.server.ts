@@ -2,7 +2,10 @@ import type {
   PrismaUserProfile,
 } from '~/interfaces/database';
 
-import type { AppLoadContextSteamUser, PerformancePostBase, PerformancePostLikes, PerformancePostRating, PerformancePostSteamApp, PerformancePostUserWhoCreated } from '~/interfaces';
+import type {
+  AppLoadContextSteamUser,
+  PerformancePost,
+} from '~/interfaces';
 
 import prisma from '~/lib/database/db.server';
 import type { UserSessionServerSide } from '~/interfaces/remix-app/UserSession';
@@ -128,16 +131,7 @@ export async function findUserSessionByUserProfileId(
 
 export async function findUserProfileLikedPosts(
     userProfileId: number,
-): Promise<
-  (
-    PerformancePostBase & {
-      userWhoCreatedPost: PerformancePostUserWhoCreated;
-      steamApp: PerformancePostSteamApp;
-      rating: PerformancePostRating;
-      likes: PerformancePostLikes;
-    }
-  )[]
-> {
+): Promise<Omit<PerformancePost, 'postTags' | 'systemSpec'>[]> {
   const userProfile = await prisma.userProfile.findUnique({
     where: {
       id: userProfileId,
@@ -212,9 +206,7 @@ export async function findUserProfileLikedPosts(
   }) => ({
     performancePostId: id,
     createdAt,
-    likes: {
-      numLikes: usersWhoLiked,
-    },
+    numLikes: usersWhoLiked,
     rating: {
       ratingMedal,
       frameRateAverage,
@@ -226,7 +218,7 @@ export async function findUserProfileLikedPosts(
       name,
       headerImage,
     },
-    userWhoCreatedPost: {
+    userWhoCreated: {
       steamUserId64: steamUserId64.toString(),
       displayName,
       avatarMedium,

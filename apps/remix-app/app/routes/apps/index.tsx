@@ -6,10 +6,7 @@ import { findSteamAppsWherePostsExist, findTrendingSteamApps } from '~/models/St
 import { findNewestPerformancePosts } from '~/models/SteamedApples/performancePost.server';
 import type {
   TrendingSteamApp,
-  PerformancePostBase,
-  PerformancePostSteamApp,
-  PerformancePostRating,
-  PerformancePostUserWhoCreated,
+  PerformancePost,
 } from '~/interfaces';
 
 import { Fragment } from 'react';
@@ -22,11 +19,7 @@ import { metaTags } from '~/lib/meta-tags';
 
 interface LoaderData {
   trendingSteamApps: TrendingSteamApp[];
-  newPerformancePosts: (PerformancePostBase & {
-    steamApp: PerformancePostSteamApp;
-    rating: PerformancePostRating;
-    userWhoCreatedPost: PerformancePostUserWhoCreated;
-  })[];
+  newPerformancePosts: Omit<PerformancePost, 'postTags' | 'systemSpec' | 'numLikes'>[];
   steamAppsWherePostsExist: SteamAppForSmallDisplayCard[];
 }
 
@@ -88,7 +81,7 @@ export default function SteamAppIdIndexRoute() {
                 createdAt,
                 steamApp,
                 postText,
-                userWhoCreatedPost,
+                userWhoCreated,
                 rating,
               }) => (
                 <Fragment key={performancePostId}>
@@ -97,7 +90,7 @@ export default function SteamAppIdIndexRoute() {
                     createdAt={new Date(createdAt)}
                     steamApp={steamApp}
                     postText={postText}
-                    userWhoCreatedPost={userWhoCreatedPost}
+                    userWhoCreated={userWhoCreated}
                     rating={rating}
                   />
                 </Fragment>

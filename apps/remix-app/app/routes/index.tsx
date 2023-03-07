@@ -7,10 +7,7 @@ import TrendingSteamAppCard from '~/components/Cards/TrendingSteamAppCard';
 import { Fragment } from 'react';
 import type {
   TrendingSteamApp,
-  PerformancePostBase,
-  PerformancePostSteamApp,
-  PerformancePostRating,
-  PerformancePostUserWhoCreated,
+  PerformancePost,
 } from '~/interfaces';
 import NewPerformancePostCard from '~/components/Cards/NewPerformancePostCard';
 import Card from '~/components/Cards/Card';
@@ -25,11 +22,7 @@ import {
 
 interface LoaderData {
   trendingSteamApps: TrendingSteamApp[];
-  newPerformancePosts: (PerformancePostBase & {
-    steamApp: PerformancePostSteamApp;
-    rating: PerformancePostRating;
-    userWhoCreatedPost: PerformancePostUserWhoCreated;
-  })[];
+  newPerformancePosts: Omit<PerformancePost, 'postTags' | 'systemSpec' | 'numLikes'>[];
 }
 
 export async function loader() {
@@ -91,7 +84,7 @@ export default function IndexRoute() {
                 steamApp,
                 postText,
                 rating,
-                userWhoCreatedPost,
+                userWhoCreated,
               }) => (
                 <Fragment key={performancePostId}>
                   <NewPerformancePostCard
@@ -100,7 +93,7 @@ export default function IndexRoute() {
                     steamApp={steamApp}
                     postText={postText}
                     rating={rating}
-                    userWhoCreatedPost={userWhoCreatedPost}
+                    userWhoCreated={userWhoCreated}
                   />
                 </Fragment>
               ))}

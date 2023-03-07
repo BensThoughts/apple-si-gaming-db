@@ -1,11 +1,6 @@
 import type {
-  PerformancePostBase,
-  PerformancePostLikes,
-  PerformancePostRating,
-  PerformancePostSteamApp,
-  PerformancePostSystem,
-  PerformancePostTag,
-  PerformancePostUserWhoCreated,
+  PerformancePost,
+  UserProfilePerformancePost,
 } from '~/interfaces';
 import type {
   PrismaPerformancePost,
@@ -102,19 +97,7 @@ export async function createPerformancePost({
 
 export async function findPerformancePostsBySteamAppId(
     steamAppId: PrismaPerformancePost['steamAppId'],
-) :
-  Promise<
-    (
-      PerformancePostBase & {
-        steamApp: PerformancePostSteamApp;
-        userWhoCreatedPost: PerformancePostUserWhoCreated;
-        rating: PerformancePostRating;
-        postTags: PerformancePostTag[];
-        system: PerformancePostSystem;
-        likes: PerformancePostLikes;
-      }
-    )[]
-  > {
+) : Promise<PerformancePost[]> {
   const performancePosts = await prisma.performancePost.findMany({
     where: {
       steamAppId,
@@ -206,7 +189,7 @@ export async function findPerformancePostsBySteamAppId(
       steamAppId,
       name,
     },
-    userWhoCreatedPost: {
+    userWhoCreated: {
       steamUserId64: steamUserId64.toString(),
       displayName,
       avatarMedium,
@@ -219,7 +202,7 @@ export async function findPerformancePostsBySteamAppId(
       gamepadRating,
     },
     postTags,
-    system: {
+    systemSpec: {
       manufacturer: systemManufacturer,
       model: systemModel,
       osVersion: systemOsVersion,
@@ -229,24 +212,13 @@ export async function findPerformancePostsBySteamAppId(
       videoPrimaryVRAM: systemVideoPrimaryVRAM,
       memoryRAM: systemMemoryRAM,
     },
-    likes: {
-      numLikes: usersWhoLiked,
-    },
+    numLikes: usersWhoLiked,
   }));
 }
 
 export async function findPerformancePostsBySteamUserId(
     steamUserId64: string,
-): Promise<
-  (
-    PerformancePostBase & {
-      userWhoCreatedPost: PerformancePostUserWhoCreated;
-      steamApp: PerformancePostSteamApp;
-      rating: PerformancePostRating;
-      likes: PerformancePostLikes;
-    }
-  )[]
-> {
+): Promise<UserProfilePerformancePost[]> {
   const performancePosts = await prisma.performancePost.findMany({
     where: {
       steamUserId64: BigInt(steamUserId64),
@@ -296,7 +268,7 @@ export async function findPerformancePostsBySteamUserId(
     performancePostId: id,
     createdAt,
     postText,
-    userWhoCreatedPost: {
+    userWhoCreated: {
       steamUserId64: steamUserId64.toString(),
     },
     steamApp: {
@@ -309,24 +281,14 @@ export async function findPerformancePostsBySteamUserId(
       frameRateAverage,
       frameRateStutters,
     },
-    likes: {
-      numLikes: usersWhoLiked,
-    },
+    numLikes: usersWhoLiked,
   }));
 }
 
 
 export async function findNewestPerformancePosts(
     numPerformancePosts: number,
-): Promise<
-  (
-    PerformancePostBase & {
-      steamApp: PerformancePostSteamApp;
-      rating: PerformancePostRating;
-      userWhoCreatedPost: PerformancePostUserWhoCreated;
-    }
-  )[]
-> {
+): Promise<Omit<PerformancePost, 'postTags' | 'systemSpec' | 'numLikes'>[]> {
   const performancePosts = await prisma.performancePost.findMany({
     select: {
       id: true,
@@ -377,7 +339,7 @@ export async function findNewestPerformancePosts(
     rating: {
       ratingMedal,
     },
-    userWhoCreatedPost: {
+    userWhoCreated: {
       steamUserId64: steamUserId64.toString(),
       displayName,
       avatarMedium,
@@ -512,18 +474,7 @@ export async function updatePerformancePost({
 
 export async function findPerformancePostById(
     performancePostId: number,
-): Promise<
-  (
-    PerformancePostBase & {
-      steamApp: PerformancePostSteamApp;
-      rating: PerformancePostRating;
-      likes: PerformancePostLikes;
-      system: PerformancePostSystem;
-      userWhoCreatedPost: PerformancePostUserWhoCreated;
-      postTags: PerformancePostTag[];
-    }
-  ) | undefined
-> {
+): Promise<PerformancePost | undefined> {
   const performancePost = await prisma.performancePost.findUnique({
     where: {
       id: performancePostId,
@@ -620,7 +571,7 @@ export async function findPerformancePostById(
       steamAppId,
       name,
     },
-    userWhoCreatedPost: {
+    userWhoCreated: {
       steamUserId64: steamUserId64.toString(),
       displayName,
       avatarMedium,
@@ -632,7 +583,7 @@ export async function findPerformancePostById(
       gamepadMetadata,
       gamepadRating,
     },
-    system: {
+    systemSpec: {
       systemSpecId: userSystemSpecId,
       manufacturer: systemManufacturer,
       model: systemModel,
@@ -644,6 +595,6 @@ export async function findPerformancePostById(
       memoryRAM: systemMemoryRAM,
     },
     postTags,
-    likes: { numLikes: usersWhoLiked },
+    numLikes: usersWhoLiked,
   };
 }

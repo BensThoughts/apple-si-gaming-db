@@ -1,26 +1,13 @@
 import AppRatingOverview from './AppRatingOverview';
 import PerformancePostDisplay from './PerformancePostDisplay';
 import type {
-  PerformancePostBase,
-  PerformancePostSteamApp,
-  PerformancePostRating,
-  PerformancePostSystem,
-  PerformancePostUserWhoCreated,
-  PerformancePostTag,
-  PerformancePostLikes,
+  PerformancePost,
 } from '~/interfaces';
 import PostLayoutCard from './PerformancePostLayoutCard';
 
 type PerformancePostLayoutProps =
 {
-  performancePosts: (PerformancePostBase & {
-    steamApp: PerformancePostSteamApp;
-    rating: PerformancePostRating;
-    likes: PerformancePostLikes;
-    system: PerformancePostSystem;
-    userWhoCreatedPost: PerformancePostUserWhoCreated;
-    postTags: PerformancePostTag[];
-  })[];
+  performancePosts: PerformancePost[];
 }
 
 

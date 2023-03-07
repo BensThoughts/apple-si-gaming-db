@@ -10,7 +10,9 @@ import {
   convertNumberToGamepadRating,
   convertGamepadRatingToMedalText,
 } from '~/lib/conversions/rating-conversions';
-import type { PerformancePostRating } from '~/interfaces';
+import type { PerformancePost } from '~/interfaces';
+
+type PerformancePostRating = PerformancePost['rating'];
 
 interface AppRatingOverviewProps {
   performancePostRatings: PerformancePostRating[];
@@ -18,20 +20,20 @@ interface AppRatingOverviewProps {
 
 const arrAvg = (arr: number[]) => arr.reduce((a, b) => a + b, 0) / arr.length;
 
-function getAverageMedalRating(perfPostRatings: PerformancePostRating[]) {
+function getAverageMedalRating(performancePostRatings: PerformancePostRating[]) {
   const medalRatingNumbers =
-    perfPostRatings
-        .map((perfPostRating) => convertRatingMedalToNumber(perfPostRating.ratingMedal));
+    performancePostRatings
+        .map((rating) => convertRatingMedalToNumber(rating.ratingMedal));
   const avg = arrAvg(medalRatingNumbers);
   const avgInt = Math.round(avg);
   const medal = convertNumberToRatingMedal(avgInt as 0 | 1 | 2 | 3 | 4);
   return medal;
 }
 
-function getAverageFrameRate(perfPostRatings: PerformancePostRating[]) {
+function getAverageFrameRate(performancePostRatings: PerformancePostRating[]) {
   const frameRateNumbers =
-    perfPostRatings
-        .map((perfPostRating) => perfPostRating.frameRateAverage)
+    performancePostRatings
+        .map((performancePostRating) => performancePostRating.frameRateAverage)
         .filter((frameRateAverage) => isTypeFrameRateAverage(frameRateAverage as string))
         .map((frameRate) => convertFrameRateToNumber(frameRate as FrameRate));
   const avg = arrAvg(frameRateNumbers);

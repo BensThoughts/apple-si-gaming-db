@@ -2,13 +2,7 @@ import { json, redirect } from '@remix-run/node';
 import type { ActionArgs } from '@remix-run/node';
 import type { LoaderArgs } from '@remix-run/node';
 import type {
-  PerformancePostBase,
-  PerformancePostLikes,
-  PerformancePostRating,
-  PerformancePostSteamApp,
-  PerformancePostSystem,
-  PerformancePostTag,
-  PerformancePostUserWhoCreated,
+  PerformancePost,
 } from '~/interfaces';
 import { validatePerformancePostId, validateSteamAppId } from '~/lib/loader-functions/params-validators.server';
 import { didSteamUserProfileCreatePerformancePost, findPerformancePostById } from '~/models/SteamedApples/performancePost.server';
@@ -26,14 +20,7 @@ import { requireUserIds } from '~/lib/sessions/profile-session.server';
 
 type EditPostLoaderData = {
   steamAppId: number;
-  performancePost: PerformancePostBase & {
-    steamApp: PerformancePostSteamApp;
-    rating: PerformancePostRating;
-    likes: PerformancePostLikes;
-    system: PerformancePostSystem;
-    userWhoCreatedPost: PerformancePostUserWhoCreated;
-    postTags: PerformancePostTag[];
-  };
+  performancePost: PerformancePost;
   postTagOptions: PostTagOption[];
   gamepadOptions: GamepadOption[];
 }
@@ -99,7 +86,7 @@ export default function EditPerformancePostRoute() {
     postText,
     rating,
     postTags,
-    system: {
+    systemSpec: {
       systemSpecId,
     },
   } = performancePost;

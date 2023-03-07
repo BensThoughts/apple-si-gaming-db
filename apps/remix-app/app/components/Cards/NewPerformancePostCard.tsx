@@ -1,29 +1,23 @@
 import { Link } from '@remix-run/react';
 import type {
-  PerformancePostBase,
-  PerformancePostRating,
-  PerformancePostSteamApp,
-  PerformancePostUserWhoCreated,
+  PerformancePost,
 } from '~/interfaces';
-import AvatarImage from '../ImageWrappers/AvatarImage';
+import AvatarImage from '~/components/ImageWrappers/AvatarImage';
 
-type NewPerformancePostCardProps = PerformancePostBase & {
-  steamApp: PerformancePostSteamApp;
-  userWhoCreatedPost: PerformancePostUserWhoCreated;
-  rating: PerformancePostRating;
-}
+type NewPerformancePostCardProps =
+  Omit<PerformancePost, 'postTags' | 'systemSpec' | 'numLikes'>
 
 export default function NewPerformancePostCard({
   performancePostId,
   steamApp,
   postText,
-  userWhoCreatedPost,
+  userWhoCreated,
   rating,
 }: NewPerformancePostCardProps) {
   const {
     displayName,
     avatarMedium,
-  } = userWhoCreatedPost;
+  } = userWhoCreated;
   const {
     ratingMedal,
   } = rating;

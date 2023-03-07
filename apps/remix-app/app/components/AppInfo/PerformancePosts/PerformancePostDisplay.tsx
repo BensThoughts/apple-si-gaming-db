@@ -4,24 +4,11 @@ import SystemSpecsPopover from './SystemSpecsPopover';
 import { convertGamepadRatingToDescription } from '~/lib/conversions/rating-conversions';
 import AvatarImage from '~/components/ImageWrappers/AvatarImage';
 import type {
-  PerformancePostBase,
-  PerformancePostRating,
-  PerformancePostSteamApp,
-  PerformancePostSystem,
-  PerformancePostUserWhoCreated,
-  PerformancePostTag,
-  PerformancePostLikes,
+  PerformancePost,
 } from '~/interfaces';
 
 type PerformancePostDisplayProps = {
-  performancePost: PerformancePostBase & {
-    steamApp: PerformancePostSteamApp;
-    rating: PerformancePostRating;
-    likes: PerformancePostLikes;
-    system: PerformancePostSystem;
-    userWhoCreatedPost: PerformancePostUserWhoCreated;
-    postTags: PerformancePostTag[];
-  };
+  performancePost: PerformancePost;
 } & React.HTMLAttributes<HTMLDivElement>
 
 export default function PerformancePostDisplay({
@@ -32,7 +19,7 @@ export default function PerformancePostDisplay({
     performancePostId,
     createdAt,
     postText,
-    userWhoCreatedPost: {
+    userWhoCreated: {
       steamUserId64,
       avatarMedium,
       displayName,
@@ -44,10 +31,17 @@ export default function PerformancePostDisplay({
       gamepadRating,
       gamepadMetadata,
     },
-    likes: {
-      numLikes,
+    numLikes,
+    systemSpec: {
+      manufacturer,
+      model,
+      osVersion,
+      cpuBrand,
+      videoDriver,
+      videoDriverVersion,
+      videoPrimaryVRAM,
+      memoryRAM,
     },
-    system,
     postTags,
     steamApp: {
       steamAppId,
@@ -58,12 +52,10 @@ export default function PerformancePostDisplay({
       <PerformancePostMetaBar
         performancePostId={performancePostId}
         createdAt={createdAt}
-        userWhoCreatedPost={{ steamUserId64 }}
+        userWhoCreated={{ steamUserId64 }}
         steamApp={{ steamAppId }}
         rating={{ ratingMedal, frameRateAverage, frameRateStutters }}
-        likeButtonData={{
-          numLikes,
-        }}
+        numLikes={numLikes}
       />
       <div className="flex flex-row w-full gap-[1px]" {...rest}>
         <div className="flex flex-col gap-1 items-center justify-start pr-3 border-r-2 border-r-secondary md:w-full md:max-w-[10rem]">
@@ -77,24 +69,26 @@ export default function PerformancePostDisplay({
           )}
           {/* // ! Below Added to allow for no system specs on a post */}
           {(
-            system.manufacturer ||
-            system.model ||
-            system.osVersion ||
-            system.cpuBrand ||
-            system.videoDriver ||
-            system.videoDriverVersion ||
-            system.videoPrimaryVRAM ||
-            system.memoryRAM
+            manufacturer ||
+            model ||
+            osVersion ||
+            cpuBrand ||
+            videoDriver ||
+            videoDriverVersion ||
+            videoPrimaryVRAM ||
+            memoryRAM
           ) &&
             <SystemSpecsPopover
-              systemManufacturer={system.manufacturer}
-              systemModel={system.model}
-              systemOsVersion={system.osVersion}
-              systemCpuBrand={system.cpuBrand}
-              systemVideoDriver={system.videoDriver}
-              systemVideoDriverVersion={system.videoDriverVersion}
-              systemVideoPrimaryVRAM={system.videoPrimaryVRAM}
-              systemMemoryRAM={system.memoryRAM}
+              systemSpec={{
+                manufacturer,
+                model,
+                osVersion,
+                cpuBrand,
+                videoDriver,
+                videoDriverVersion,
+                videoPrimaryVRAM,
+                memoryRAM,
+              }}
             >
               <span className="underline underline-offset-4 hover:text-icon-secondary
                                transition-colors duration-200 text-sm">

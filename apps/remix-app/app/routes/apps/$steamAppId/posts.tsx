@@ -10,13 +10,7 @@ import { validateSteamAppId } from '~/lib/loader-functions/params-validators.ser
 import { findAllGamepads } from '~/models/SteamedApples/gamepadMetadata.server';
 import { createPerformancePostAction } from '~/lib/form-actions/performance-post/create-post.server';
 import type {
-  PerformancePostBase,
-  PerformancePostSteamApp,
-  PerformancePostLikes,
-  PerformancePostRating,
-  PerformancePostSystem,
-  PerformancePostTag,
-  PerformancePostUserWhoCreated,
+  PerformancePost,
 } from '~/interfaces';
 import CreatePerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForms/CreatePerformancePostForm';
 import type { PostTagOption, GamepadOption } from '~/interfaces';
@@ -26,14 +20,7 @@ import { getIsLoggedIn, getUserIds, requireUserIds } from '~/lib/sessions/profil
 interface PerformancePostLoaderData {
   steamAppId: number;
   steamUserProfileOwnsApp: boolean;
-  performancePosts: (PerformancePostBase & {
-    steamApp: PerformancePostSteamApp;
-    rating: PerformancePostRating;
-    likes: PerformancePostLikes;
-    userWhoCreatedPost: PerformancePostUserWhoCreated;
-    system: PerformancePostSystem;
-    postTags: PerformancePostTag[];
-  })[];
+  performancePosts: PerformancePost[];
   postTagOptions: PostTagOption[];
   gamepadOptions: GamepadOption[];
 }

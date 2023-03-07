@@ -1,27 +1,21 @@
 import LikeButton from '~/components/LikeButton';
 import type {
-  PerformancePostBase,
-  PerformancePostRating,
-  PerformancePostSteamApp,
-  PerformancePostUserWhoCreated,
+  PerformancePost,
 } from '~/interfaces';
 import { convertFrameRateToDescription, convertRatingMedalToDescription } from '~/lib/conversions/rating-conversions';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
 import EditAndDeleteButtons from './EditAndDeleteButtons';
 
-type PerformancePostMetaBarProps = Pick<PerformancePostBase, 'performancePostId' | 'createdAt'> & {
-  steamApp: Pick<PerformancePostSteamApp, 'steamAppId'>;
-  userWhoCreatedPost: Pick<PerformancePostUserWhoCreated, 'steamUserId64'>;
-  rating: Pick<PerformancePostRating, 'ratingMedal' | 'frameRateAverage' | 'frameRateStutters'>;
-  likeButtonData: {
-    numLikes: number;
-  }
+type PerformancePostMetaBarProps = Pick<PerformancePost, 'performancePostId' | 'createdAt' | 'numLikes'> & {
+  steamApp: Pick<PerformancePost['steamApp'], 'steamAppId'>;
+  userWhoCreated: Pick<PerformancePost['userWhoCreated'], 'steamUserId64'>;
+  rating: Pick<PerformancePost['rating'], 'ratingMedal' | 'frameRateAverage' | 'frameRateStutters'>;
 }
 
 export default function PerformancePostMetaBar({
   performancePostId,
   createdAt,
-  userWhoCreatedPost,
+  userWhoCreated,
   steamApp: {
     steamAppId,
   },
@@ -30,14 +24,12 @@ export default function PerformancePostMetaBar({
     frameRateAverage,
     frameRateStutters,
   },
-  likeButtonData: {
-    numLikes,
-  },
+  numLikes,
 }: PerformancePostMetaBarProps) {
   const { steamUserProfile } = useUserSession();
 
   const didSteamUserCreatePost = steamUserProfile
-    ? userWhoCreatedPost.steamUserId64 === steamUserProfile.steamUserId64
+    ? userWhoCreated.steamUserId64 === steamUserProfile.steamUserId64
     : false;
 
   return (

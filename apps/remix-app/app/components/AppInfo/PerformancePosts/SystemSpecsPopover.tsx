@@ -1,30 +1,26 @@
 import { Popover } from '@headlessui/react';
 import { useState } from 'react';
+import type { PerformancePost } from '~/interfaces';
 
-type SystemSpecsPopoverProps = {
-  children: React.ReactNode;
-  systemManufacturer?: string | null;
-  systemModel?: string | null;
-  systemOsVersion?: string | null;
-  systemCpuBrand?: string | null;
-  systemVideoDriver?: string | null;
-  systemVideoDriverVersion?: string | null;
-  systemVideoPrimaryVRAM?: string | null;
-  systemMemoryRAM?: string | null;
-} & React.HTMLAttributes<HTMLDivElement>
+type SystemSpecsPopoverProps =
+  Pick<PerformancePost, 'systemSpec'>
+  & React.HTMLAttributes<HTMLDivElement>
 
 export default function SystemSpecsPopover({
+  systemSpec,
   children,
-  systemManufacturer,
-  systemModel,
-  systemOsVersion,
-  systemCpuBrand,
-  systemVideoDriver,
-  systemVideoDriverVersion,
-  systemVideoPrimaryVRAM,
-  systemMemoryRAM,
 }: SystemSpecsPopoverProps) {
   const [isShowing, setIsShowing] = useState(false);
+  const {
+    manufacturer,
+    model,
+    osVersion,
+    cpuBrand,
+    videoDriver,
+    videoDriverVersion,
+    videoPrimaryVRAM,
+    memoryRAM,
+  } = systemSpec;
   return (
     <Popover className={`relative`} as="div">
       {({ open }) => (
@@ -47,44 +43,44 @@ export default function SystemSpecsPopover({
               static
             >
               <div className="flex flex-col gap-1 text-sm text-primary-faded">
-                {systemManufacturer &&
+                {manufacturer &&
                   <span>Manufacturer:&nbsp;
-                    <span className="text-primary">{systemManufacturer}</span>
+                    <span className="text-primary">{manufacturer}</span>
                   </span>
                 }
-                {systemModel &&
+                {model &&
                   <span>Model:&nbsp;
-                    <span className="text-primary">{systemModel}</span>
+                    <span className="text-primary">{model}</span>
                   </span>
                 }
-                {systemOsVersion &&
+                {osVersion &&
                   <span>OS Version:&nbsp;
-                    <span className="text-primary">{systemOsVersion}</span>
+                    <span className="text-primary">{osVersion}</span>
                   </span>
                 }
-                {systemCpuBrand &&
+                {cpuBrand &&
                   <span>CPU Brand:&nbsp;
-                    <span className="text-primary">{systemCpuBrand}</span>
+                    <span className="text-primary">{cpuBrand}</span>
                   </span>
                 }
-                {systemVideoDriver&&
+                {videoDriver&&
                   <span>Video Driver:&nbsp;
-                    <span className="text-primary">{systemVideoDriver}</span>
+                    <span className="text-primary">{videoDriver}</span>
                   </span>
                 }
-                {systemVideoDriverVersion &&
+                {videoDriverVersion &&
                   <span>Video Driver Version:&nbsp;
-                    <span className="text-primary">{systemVideoDriverVersion}</span>
+                    <span className="text-primary">{videoDriverVersion}</span>
                   </span>
                 }
-                {systemVideoPrimaryVRAM &&
+                {videoPrimaryVRAM &&
                   <span>Video VRAM:&nbsp;
-                    <span className="text-primary">{systemVideoPrimaryVRAM}</span>
+                    <span className="text-primary">{videoPrimaryVRAM}</span>
                   </span>
                 }
-                {systemMemoryRAM &&
+                {memoryRAM &&
                   <span>RAM:&nbsp;
-                    <span className="text-primary">{systemMemoryRAM}</span>
+                    <span className="text-primary">{memoryRAM}</span>
                   </span>
                 }
               </div>
