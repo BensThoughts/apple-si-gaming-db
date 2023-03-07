@@ -4,21 +4,12 @@ import { findUserProfileLikedPosts } from '~/models/SteamedApples/userProfile.se
 import { useLoaderData } from '@remix-run/react';
 import UserLikedPostsLayout from '~/components/Profile/LikedPosts/UserLikedPostsLayout';
 import type {
-  PerformancePostBase,
-  PerformancePostLikes,
-  PerformancePostRating,
-  PerformancePostSteamApp,
-  PerformancePostUserWhoCreated,
+  UserProfilePerformancePost,
 } from '~/interfaces';
 import { requireUserIds } from '~/lib/sessions/profile-session.server';
 
 interface ProfilePostsRouteLoaderData {
-  userProfileLikedPosts: (PerformancePostBase & {
-    userWhoCreatedPost: PerformancePostUserWhoCreated;
-    steamApp: PerformancePostSteamApp;
-    rating: PerformancePostRating;
-    likes: PerformancePostLikes;
-  })[]
+  userProfileLikedPosts: UserProfilePerformancePost[]
 }
 
 export async function loader({ request }: LoaderArgs) {

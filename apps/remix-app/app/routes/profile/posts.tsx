@@ -3,22 +3,12 @@ import { json } from '@remix-run/node';
 import UsersPostsLayout from '~/components/Profile/Posts/UsersPostsLayout';
 import { useLoaderData } from '@remix-run/react';
 import type {
-  PerformancePostBase,
-  PerformancePostLikes,
-  PerformancePostRating,
-  PerformancePostSteamApp,
-  PerformancePostUserWhoCreated,
+  UserProfilePerformancePost,
 } from '~/interfaces';
 import { findPerformancePostsBySteamUserId } from '~/models/SteamedApples/performancePost.server';
 import { requireUserIds } from '~/lib/sessions/profile-session.server';
-
 interface ProfilePostsRouteLoaderData {
-  steamUsersPosts: (PerformancePostBase & {
-    userWhoCreatedPost: PerformancePostUserWhoCreated;
-    steamApp: PerformancePostSteamApp;
-    rating: PerformancePostRating;
-    likes: PerformancePostLikes;
-  })[]
+  steamUsersPosts: UserProfilePerformancePost[];
 }
 
 export async function loader({ request }: LoaderArgs) {

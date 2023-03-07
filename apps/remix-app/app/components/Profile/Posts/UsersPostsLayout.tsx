@@ -3,20 +3,11 @@ import PerformancePostMetaBar from '~/components/AppInfo/PerformancePosts/Perfor
 import Heading from '~/components/Heading';
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
 import type {
-  PerformancePostBase,
-  PerformancePostLikes,
-  PerformancePostRating,
-  PerformancePostSteamApp,
-  PerformancePostUserWhoCreated,
+  UserProfilePerformancePost,
 } from '~/interfaces';
 
 interface UsersPostsLayoutProps {
-  steamUsersPosts: (PerformancePostBase & {
-    userWhoCreatedPost: PerformancePostUserWhoCreated;
-    steamApp: PerformancePostSteamApp;
-    rating: PerformancePostRating;
-    likes: PerformancePostLikes;
-  })[]
+  steamUsersPosts: UserProfilePerformancePost[];
 }
 
 export default function UsersPostsLayout({
@@ -47,9 +38,7 @@ export default function UsersPostsLayout({
         performancePostId,
         createdAt,
         postText,
-        likes: {
-          numLikes,
-        },
+        numLikes,
         rating: {
           ratingMedal,
           frameRateAverage,
@@ -60,7 +49,7 @@ export default function UsersPostsLayout({
           name,
           headerImage,
         },
-        userWhoCreatedPost: {
+        userWhoCreated: {
           steamUserId64,
         },
       }) => (
@@ -108,11 +97,9 @@ export default function UsersPostsLayout({
                 performancePostId={performancePostId}
                 createdAt={createdAt}
                 steamApp={{ steamAppId }}
-                userWhoCreatedPost={{ steamUserId64 }}
+                userWhoCreated={{ steamUserId64 }}
                 rating={{ ratingMedal, frameRateAverage, frameRateStutters }}
-                likeButtonData={{
-                  numLikes,
-                }}
+                numLikes={numLikes}
               />
             </div>
           </div>
@@ -145,11 +132,9 @@ export default function UsersPostsLayout({
                 performancePostId={performancePostId}
                 createdAt={createdAt}
                 steamApp={{ steamAppId }}
-                userWhoCreatedPost={{ steamUserId64 }}
+                userWhoCreated={{ steamUserId64 }}
                 rating={{ ratingMedal, frameRateAverage, frameRateStutters }}
-                likeButtonData={{
-                  numLikes,
-                }}
+                numLikes={numLikes}
               />
             </div>
           </div>

@@ -2,21 +2,13 @@ import AppHeaderImage from '~/components/ImageWrappers/AppHeaderImage';
 import PerformancePostMetaBar from '~/components/AppInfo/PerformancePosts/PerformancePostMetaBar';
 import Heading from '~/components/Heading';
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
-import type {
-  PerformancePostBase,
-  PerformancePostLikes,
-  PerformancePostRating,
-  PerformancePostSteamApp,
-  PerformancePostUserWhoCreated,
-} from '~/interfaces';
+// import type {
+//   PerformancePost,
+// } from '~/interfaces';
+import type { UserProfilePerformancePost } from '~/interfaces';
 
 interface UserLikedPostsLayoutProps {
-  likedPosts: (PerformancePostBase & {
-    steamApp: PerformancePostSteamApp;
-    userWhoCreatedPost: PerformancePostUserWhoCreated;
-    rating: PerformancePostRating;
-    likes: PerformancePostLikes;
-  })[]
+  likedPosts: UserProfilePerformancePost[]
 }
 
 export default function UserLikedPostsLayout({
@@ -38,12 +30,10 @@ export default function UserLikedPostsLayout({
       {likedPosts.map(({
         performancePostId,
         createdAt,
-        userWhoCreatedPost: {
+        userWhoCreated: {
           steamUserId64,
         },
-        likes: {
-          numLikes,
-        },
+        numLikes,
         rating: {
           ratingMedal,
           frameRateAverage,
@@ -100,11 +90,9 @@ export default function UserLikedPostsLayout({
                 performancePostId={performancePostId}
                 createdAt={createdAt}
                 steamApp={{ steamAppId }}
-                userWhoCreatedPost={{ steamUserId64 }}
+                userWhoCreated={{ steamUserId64 }}
                 rating={{ ratingMedal, frameRateAverage, frameRateStutters }}
-                likeButtonData={{
-                  numLikes,
-                }}
+                numLikes={numLikes}
               />
             </div>
           </div>
@@ -137,11 +125,9 @@ export default function UserLikedPostsLayout({
                 performancePostId={performancePostId}
                 createdAt={createdAt}
                 steamApp={{ steamAppId }}
-                userWhoCreatedPost={{ steamUserId64 }}
+                userWhoCreated={{ steamUserId64 }}
                 rating={{ ratingMedal, frameRateAverage, frameRateStutters }}
-                likeButtonData={{
-                  numLikes,
-                }}
+                numLikes={numLikes}
               />
             </div>
           </div>
