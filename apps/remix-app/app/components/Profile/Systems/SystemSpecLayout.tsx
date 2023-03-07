@@ -1,4 +1,8 @@
-import type { CreateSystemSpecActionData, DeleteSystemSpecActionData, EditSystemSpecActionData } from '~/routes/profile/systems';
+import type {
+  CreateSystemSpecActionData,
+  DeleteSystemSpecActionData,
+  EditSystemSpecActionData,
+} from '~/lib/form-actions/profile/interfaces';
 import Heading from '~/components/Heading';
 import CreateSystemForm from './CreateSystemForm';
 import SystemSpecDisplay from './SystemSpecDisplay';
