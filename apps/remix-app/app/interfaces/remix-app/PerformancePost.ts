@@ -42,6 +42,11 @@ export type PerformancePost = {
   numLikes: number;
 }
 
+export type UserProfilePerformancePost = Omit<PerformancePost, 'postTags' | 'systemSpec' | 'userWhoCreated' | 'rating'> & {
+  userWhoCreated: Pick<PerformancePost['userWhoCreated'], 'steamUserId64'>
+  rating: Pick<PerformancePost['rating'], 'ratingMedal' | 'frameRateAverage' | 'frameRateStutters'>
+}
+
 export interface GamepadOption {
   id: number;
   description: string;
