@@ -4,21 +4,11 @@ import DeleteSystemModal from './DeleteSystemModal';
 import EditSystemModal from './EditSystemModal';
 import SystemSpecsPopover from '~/components/AppInfo/PerformancePosts/SystemSpecsPopover';
 import { showToast } from '~/components/Toasts';
-import type { DeleteSystemSpecActionData, EditSystemSpecActionData } from '~/routes/profile/systems';
+import type { DeleteSystemSpecActionData, EditSystemSpecActionData } from '~/lib/form-actions/profile/interfaces';
+import type { UserProfileSystemSpec } from '~/interfaces';
 
 interface SystemSpecDisplayProps {
-  systemSpecs: {
-    systemSpecId: number;
-    systemName: string;
-    manufacturer: string | null;
-    model: string | null;
-    cpuBrand: string | null;
-    osVersion: string | null;
-    videoDriver: string | null;
-    videoDriverVersion: string | null;
-    videoPrimaryVRAM: string | null;
-    memoryRAM: string | null;
-  }[];
+  systemSpecs: UserProfileSystemSpec[];
   editSystemSpecActionData?: EditSystemSpecActionData;
   deleteSystemSpecActionData?: DeleteSystemSpecActionData;
 }
@@ -170,14 +160,16 @@ export default function SystemSpecDisplay({
             <div className="flex items-center justify-center gap-2">
               <div className="mt-[.33rem]">
                 <SystemSpecsPopover
-                  systemManufacturer={manufacturer}
-                  systemModel={model}
-                  systemOsVersion={osVersion}
-                  systemCpuBrand={cpuBrand}
-                  systemVideoDriver={videoDriver}
-                  systemVideoDriverVersion={videoDriverVersion}
-                  systemVideoPrimaryVRAM={videoPrimaryVRAM}
-                  systemMemoryRAM={memoryRAM}
+                  systemSpec={{
+                    manufacturer,
+                    model,
+                    osVersion,
+                    cpuBrand,
+                    videoDriver,
+                    videoDriverVersion,
+                    videoPrimaryVRAM,
+                    memoryRAM,
+                  }}
                 >
                   <InformationCircleIcon size={22} />
                 </SystemSpecsPopover>
