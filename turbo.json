@@ -41,6 +41,7 @@
     "$ASGD_THEME_SESSION_SECRET",
     "$DATABASE_URL",
     "$FLY_REGION",
+    "$LOG_LEVEL",
     "$NODE_ENV",
     "$PORT",
     "$PRIMARY_REGION"
