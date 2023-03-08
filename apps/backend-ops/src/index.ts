@@ -58,7 +58,7 @@ program.command('stage')
       } = process.env;
       const INITIAL_PAGE = Number(ASGD_INITIAL_PAGE ? ASGD_INITIAL_PAGE : opts.page);
       if (!isFinite(INITIAL_PAGE)) {
-        logger.warn('env var $ASGD_INITIAL_PAGE or option -p --page needs to be a valid number', {
+        logger.error('env var $ASGD_INITIAL_PAGE or option -p --page needs to be a valid number', {
           '$ASGD_INITIAL_PAGE': ASGD_INITIAL_PAGE,
           'opts.page': opts.page,
         });
@@ -67,7 +67,7 @@ program.command('stage')
 
       const BATCH_SIZE = Number(ASGD_BATCH_SIZE ? ASGD_BATCH_SIZE : opts.batchSize);
       if (!isFinite(BATCH_SIZE)) {
-        logger.warn('env var $ASGD_BATCH_SIZE or option -b --batch-size needs to be a valid number', {
+        logger.error('env var $ASGD_BATCH_SIZE or option -b --batch-size needs to be a valid number', {
           '$ASGD_BATCH_SIZE': ASGD_BATCH_SIZE,
           'opts.batchSize': opts.batchSize,
         });
@@ -81,7 +81,7 @@ program.command('stage')
         DAYS_SINCE_SYNC = opts.daysSinceSync;
       }
       if (DAYS_SINCE_SYNC && !isFinite(DAYS_SINCE_SYNC)) {
-        logger.warn('env var $ASGD_DAYS_SINCE_SYNC or option --days-since-sync needs to be a valid number or unset (undefined)', {
+        logger.error('env var $ASGD_DAYS_SINCE_SYNC or option --days-since-sync needs to be a valid number or unset (undefined)', {
           '$ASGD_DAYS_SINCE_SYNC': ASGD_DAYS_SINCE_SYNC,
           'opts.daysSinceSync': opts.daysSinceSync,
         });
@@ -96,7 +96,7 @@ program.command('stage')
             (ASGD_DATA_DOWNLOAD_ATTEMPTED === '0')
           )
         ) {
-          logger.info('env var DATA_DOWNLOAD_ATTEMPTED must be either 0, 1, or unset');
+          logger.error('env var DATA_DOWNLOAD_ATTEMPTED must be either 0, 1, or unset');
           process.exit(1);
         }
         if (DAYS_SINCE_SYNC && (ASGD_DATA_DOWNLOAD_ATTEMPTED === '1')) {
