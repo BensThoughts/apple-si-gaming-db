@@ -25,7 +25,7 @@ interface PerformancePostLoaderData {
   gamepadOptions: GamepadOption[];
 }
 
-export async function loader({ params, context, request }: LoaderArgs) {
+export async function loader({ params, request }: LoaderArgs) {
   const steamAppId = validateSteamAppId(params);
   const performancePosts = await findPerformancePostsBySteamAppId(steamAppId);
   const isLoggedIn = await getIsLoggedIn(request);
