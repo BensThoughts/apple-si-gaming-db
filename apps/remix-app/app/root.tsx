@@ -39,6 +39,7 @@ import type {
   UserSessionServerSide,
 } from '~/interfaces/remix-app/UserSession';
 import { getBannerSession } from './lib/sessions/banner-session.server';
+import logger from '~/lib/logger/logger.server';
 
 type RootLoaderData = {
   theme: Theme | null;
@@ -72,8 +73,33 @@ export async function loader({ request, context }: LoaderArgs) {
     // We are now definitely logged in and have a userProfileId
     const userSession = await findUserSessionByUserProfileId(userProfileId);
     if (!userSession) {
+      logger.warn(`logging out user because they were not found in db. steamUserId64: ${steamUserId64}`, {
+        metadata: {
+          userSession: {
+            userProfile: {
+              userProfileId,
+            },
+            steamUserProfile: {
+              steamUserId: steamUserId64,
+            },
+          },
+        },
+      });
       throw await logout(request);
     }
+
+    logger.debug(`steam user with steamUserId64 ${steamUserId64} just logged in`, {
+      metadata: {
+        userSession: {
+          userProfile: {
+            userProfileId,
+          },
+          steamUserProfile: {
+            steamUserId: steamUserId64,
+          },
+        },
+      },
+    });
 
     const headers = new Headers();
     // TODO: code for headers is duplicated before each return json()

@@ -129,7 +129,7 @@ export async function getSteamPlayerOwnedGamesRequest(
         {
           metadata: {
             userSession: {
-              steamUserProfile: { steamUserId64 },
+              steamUserProfile: { steamUserId: steamUserId64 },
             },
             extra: { endpoint: getOwnedGamesEndpoint },
           },
@@ -147,7 +147,7 @@ export async function getSteamPlayerOwnedGamesRequest(
         {
           metadata: {
             userSession: {
-              steamUserProfile: { steamUserId64 },
+              steamUserProfile: { steamUserId: steamUserId64 },
             },
             extra: {
               endpoint: getOwnedGamesEndpoint,
@@ -168,7 +168,7 @@ export async function getSteamPlayerOwnedGamesRequest(
         metadata: {
           userSession: {
             steamUserProfile: {
-              steamUserId64,
+              steamUserId: steamUserId64,
             },
           },
         },

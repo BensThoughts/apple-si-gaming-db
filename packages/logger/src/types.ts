@@ -11,7 +11,7 @@ export type LoggerMetadata = {
         userProfileId: number;
       }
       steamUserProfile?: {
-        steamUserId64: string;
+        steamUserId: string; // same as steamUserId64
       }
     }
     extra?: any;
