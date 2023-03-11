@@ -11,7 +11,7 @@ import {
   prisma,
 } from '@apple-si-gaming-db/database';
 
-import { logger } from '@apple-si-gaming-db/logger';
+import logger from './logger';
 
 interface AppIdData {
   name: string;
@@ -20,42 +20,78 @@ interface AppIdData {
   prevDataDownloadedAt: Date | null,
 }
 
+const logInfo = (message: string, appIdData: AppIdData, extra?: any) => {
+  const { steamAppId, name, index, prevDataDownloadedAt } = appIdData;
+  logger.info(message, {
+    metadata: {
+      steamApp: { steamAppId, name },
+      extra: { index, prevDataDownloadedAt, ...extra },
+    },
+  });
+};
+
+const logWarn = (message: string, appIdData: AppIdData, extra?: any) => {
+  const { steamAppId, name, index, prevDataDownloadedAt } = appIdData;
+  logger.warn(message, {
+    metadata: {
+      steamApp: { steamAppId, name },
+      extra: { index, prevDataDownloadedAt, ...extra },
+    },
+  });
+};
+
+const logError = (error: Error, appIdData: AppIdData) => {
+  const { steamAppId, name, index, prevDataDownloadedAt } = appIdData;
+  logger.warn(error.message, {
+    error: {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+    },
+    metadata: {
+      steamApp: { steamAppId, name },
+      extra: { index, prevDataDownloadedAt },
+    },
+  });
+};
+
+
 async function getSteamAppDataAndUpdateDB(appIdData: AppIdData) {
   const prismaSteamAppId = appIdData.steamAppId;
 
   try {
-    logger.info('https call started', appIdData);
-    const steamApiAppDetailsResponse = await getSteamAppDetailsRequest(prismaSteamAppId); // .catch((err))
-    logger.info('https call finished', appIdData);
+    logInfo(`https call started for ${appIdData.name}`, appIdData);
+    const steamApiAppDetailsResponse = await getSteamAppDetailsRequest(prismaSteamAppId);
     const { success, data } = steamApiAppDetailsResponse;
+    logInfo(`https call finished for ${appIdData.name}`, appIdData, steamApiAppDetailsResponse);
 
     // * Sometimes the steam API returns data for another (related) appid
     // * we don't want to clobber the data that comes in from the actual appid
     if (success === true && (data?.steam_appid === prismaSteamAppId)) {
       // const steamApiAppId = data.steam_appid;
       const prismaSteamAppData = convertSteamApiDataToPrisma(data);
-
-      logger.info('start writing to DB', appIdData);
+      logInfo(`start writing to DB for ${appIdData.name}`, appIdData, prismaSteamAppData);
       await updateSteamApp(
           // steamApiAppId, // * Make sure we are using appid returned from steam api
           prismaSteamAppData,
       );
-      logger.info('finished writing to DB', appIdData);
+      logInfo(`finished writing to DB for ${appIdData.name}`, appIdData, prismaSteamAppData);
     } else {
       if (success != true) {
-        logger.warn('no data returned from steam api', appIdData);
+        logWarn(`no data returned from steam api for ${appIdData.name}`, appIdData);
       } else if (data?.steam_appid != prismaSteamAppId) {
-        logger.warn('prisma appid did not match steam api appid', appIdData);
+        logWarn(`prisma appid of ${prismaSteamAppId} did not match steam api appid of ${data?.steam_appid}`, appIdData);
       }
-      logger.info('start writing to DB', appIdData);
+      logInfo(`start writing downloaded attempted but not successful to DB for ${appIdData.name}`, appIdData);
       await updateSteamAppDownloadAttempted(prismaSteamAppId);
-      logger.info('finished writing to DB', appIdData);
+      logInfo(`finished writing download attempted but not successful to DB for ${appIdData.name}`, appIdData);
     }
-  } catch (err) {
-    if (err instanceof Error) {
-      logger.error(err.message, appIdData);
+  } catch (error) {
+    if (error instanceof Error) {
+      logError(error, appIdData);
+    } else {
+      logger.error(error);
     }
-    // throw err;
   }
 }
 
@@ -80,8 +116,10 @@ async function getPageOfData(
     },
   });
 
-  logger.info(`Starting page ${page} of ${totalPages}`);
-  logger.info(`Page ${page} appids found in prisma: ${appIds.length}`);
+  const pageMeta = { page, totalPages, batchSize, options: { dataDownloadAttempted, daysSinceLastSync } };
+
+  logger.info(`Starting page ${page} of ${totalPages}`, { metadata: { extra: pageMeta } });
+  logger.info(`Page ${page} appids found in prisma: ${appIds.length}`, { metadata: { extra: pageMeta } });
 
   let totalIdx = page * batchSize;
   let currIdx = 0;
@@ -102,7 +140,7 @@ async function getPageOfData(
     currIdx += 1;
     totalIdx += 1;
     if (currIdx >= appIds.length) {
-      logger.info(`Finished page ${page} of ${totalPages}`);
+      logger.info(`Finished page ${page} of ${totalPages}`, { metadata: { extra: { pageMeta } } });
       clearInterval(oneSecondInterval);
     }
   }, ONE_SECOND_INTERVAL);
@@ -143,10 +181,22 @@ async function getTotalPages(
   const numAppIds = await prisma.steamApp.count({
     where: getWhereInput(dataDownloadAttempted, daysSinceLastSync),
   });
-  logger.info(`Number of appids ${numAppIds}`);
+  logger.info(`Getting number of pages for ${numAppIds} appids found in DB`, {
+    metadata: {
+      extra: {
+        numAppIds,
+        batchSize,
+        options: { dataDownloadAttempted, daysSinceLastSync },
+      },
+    },
+  });
   if (numAppIds < 1) {
-    logger.info('No apps found with these settings', {
-      where: getWhereInput(dataDownloadAttempted, daysSinceLastSync),
+    logger.info(`No apps found with these prisma settings, dataDownloadAttempted: ${dataDownloadAttempted} and daysSinceLastSync: ${daysSinceLastSync}`, {
+      metadata: {
+        extra: {
+          where: getWhereInput(dataDownloadAttempted, daysSinceLastSync),
+        },
+      },
     });
     process.exit(1);
   }
@@ -170,8 +220,12 @@ export async function stage(
     dataDownloadAttempted?: boolean,
     daysSinceSync?: number,
 ) {
-  logger.info('Starting db sync with settings', {
-    where: getWhereInput(dataDownloadAttempted, daysSinceSync),
+  logger.info(`Starting db sync with prisma settings, dataDownloadAttempted: ${dataDownloadAttempted} and daysSinceSync: ${daysSinceSync}`, {
+    metadata: {
+      extra: {
+        where: getWhereInput(dataDownloadAttempted, daysSinceSync),
+      },
+    },
   });
   const totalPages = await getTotalPages(batchSize, dataDownloadAttempted, daysSinceSync);
 

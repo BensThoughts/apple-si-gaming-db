@@ -2,7 +2,8 @@ import chalk from 'chalk';
 import { Command } from 'commander';
 import { stage } from './stage';
 import { updateAppIds } from './update-appids';
-import { logger } from '@apple-si-gaming-db/logger';
+import logger from './logger';
+
 const program = new Command();
 
 program
@@ -59,8 +60,12 @@ program.command('stage')
       const INITIAL_PAGE = Number(ASGD_INITIAL_PAGE ? ASGD_INITIAL_PAGE : opts.page);
       if (!isFinite(INITIAL_PAGE)) {
         logger.error('env var $ASGD_INITIAL_PAGE or option -p --page needs to be a valid number', {
-          '$ASGD_INITIAL_PAGE': ASGD_INITIAL_PAGE,
-          'opts.page': opts.page,
+          metadata: {
+            extra: {
+              '$ASGD_INITIAL_PAGE': ASGD_INITIAL_PAGE,
+              'opts.page': opts.page,
+            },
+          },
         });
         process.exit(1);
       }
@@ -68,8 +73,12 @@ program.command('stage')
       const BATCH_SIZE = Number(ASGD_BATCH_SIZE ? ASGD_BATCH_SIZE : opts.batchSize);
       if (!isFinite(BATCH_SIZE)) {
         logger.error('env var $ASGD_BATCH_SIZE or option -b --batch-size needs to be a valid number', {
-          '$ASGD_BATCH_SIZE': ASGD_BATCH_SIZE,
-          'opts.batchSize': opts.batchSize,
+          metadata: {
+            extra: {
+              '$ASGD_BATCH_SIZE': ASGD_BATCH_SIZE,
+              'opts.batchSize': opts.batchSize,
+            },
+          },
         });
         process.exit(1);
       }
@@ -82,8 +91,12 @@ program.command('stage')
       }
       if (DAYS_SINCE_SYNC && !isFinite(DAYS_SINCE_SYNC)) {
         logger.error('env var $ASGD_DAYS_SINCE_SYNC or option --days-since-sync needs to be a valid number or unset (undefined)', {
-          '$ASGD_DAYS_SINCE_SYNC': ASGD_DAYS_SINCE_SYNC,
-          'opts.daysSinceSync': opts.daysSinceSync,
+          metadata: {
+            extra: {
+              '$ASGD_DAYS_SINCE_SYNC': ASGD_DAYS_SINCE_SYNC,
+              'opts.daysSinceSync': opts.daysSinceSync,
+            },
+          },
         });
         process.exit(1);
       }

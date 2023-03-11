@@ -1,6 +1,7 @@
 import { prisma } from '@apple-si-gaming-db/database';
-import { logger } from '@apple-si-gaming-db/logger';
 import { getSteamAppListRequest } from '@apple-si-gaming-db/steam-api';
+import logger from './logger';
+
 
 export async function updateAppIds() {
   try {
@@ -20,9 +21,7 @@ export async function updateAppIds() {
     });
     logger.info('Added new AppIds Successfully');
   } catch (err) {
-    if (err instanceof Error) {
-      logger.error(err.message);
-      // logger.error(err.message);
-    }
+    logger.error(err);
+    throw err;
   }
 }
