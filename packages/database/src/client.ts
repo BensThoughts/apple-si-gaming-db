@@ -1,7 +1,7 @@
 /* eslint-disable no-var */
 import { PrismaClient } from '@prisma/client';
 import invariant from 'tiny-invariant';
-import { logger } from '@apple-si-gaming-db/logger';
+import logger from './logger';
 
 let prisma: PrismaClient;
 
@@ -43,7 +43,8 @@ function getClient() {
     }
   }
 
-  console.log(`🔌 setting up prisma client to ${databaseUrl.host}`);
+  // const { password, ...rest } = databaseUrl; // take password out
+  logger.info(`🔌 setting up prisma client to ${databaseUrl.host}`);
   // NOTE: during development if you change anything in this function, remember
   // that this only runs once per server restart and won't automatically be
   // re-run per request like everything else is. So if you need to change

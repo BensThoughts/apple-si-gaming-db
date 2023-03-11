@@ -1,6 +1,6 @@
 import { prisma } from '.';
 import type { Prisma } from './interfaces/index';
-import { logger } from '@apple-si-gaming-db/logger';
+import logger from './logger';
 import { getSteamAppListRequest } from '@apple-si-gaming-db/steam-api';
 
 const postTagCreateManyInput: Prisma.PerformancePostTagCreateManyInput[] = [

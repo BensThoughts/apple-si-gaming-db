@@ -5,10 +5,10 @@ import type {
   SteamAppCreateInput,
 } from '../interfaces';
 import { prisma } from '../client';
-import { logger } from '@apple-si-gaming-db/logger';
 import type {
   Prisma,
 } from '@prisma/client';
+import logger from '../logger';
 
 export async function updateSteamAppDownloadAttempted(
     steamAppId: SteamApp['steamAppId'],
@@ -26,11 +26,10 @@ export async function updateSteamAppDownloadAttempted(
     });
   } catch (err) {
     if (err instanceof Error) {
-      logger.error('Error in updateSteamAppDownloadAttempted');
-      logger.error(err);
-      // logError(err, appIdData);
+      logger.error('Error in updateSteamAppDownloadAttempted', { error: err });
       throw err;
     } else {
+      logger.error(err);
       throw err;
     }
   }
@@ -68,11 +67,10 @@ export async function updateSteamApp(
     });
   } catch (err) {
     if (err instanceof Error) {
-      logger.error('Error at prisma.steamApp.update in updateSteamApp');
-      logger.error(err);
-      // logError(err, appIdData);
+      logger.error('Error at prisma.steamApp.update in updateSteamApp', { error: err });
       throw err;
     } else {
+      logger.error(err);
       throw err;
     }
   }
