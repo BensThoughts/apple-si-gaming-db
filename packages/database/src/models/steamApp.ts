@@ -15,6 +15,7 @@ export async function updateSteamAppDownloadAttempted(
     dataDownloadAttempted = true,
 ) {
   try {
+    logger.debug(`updating column dataDownloadAttempted in db for steam app with appid ${steamAppId}`, { metadata: { steamApp: { steamAppId } } });
     await prisma.steamApp.update({
       where: {
         steamAppId,
@@ -55,6 +56,18 @@ export async function updateSteamApp(
   } = prismaSteamAppData;
 
   try {
+    logger.debug(`updating steam app in db with appid ${steamAppId}`, {
+      metadata: {
+        steamApp: {
+          steamAppId,
+        },
+        extra: {
+          categories,
+          genres,
+          ...prismaSteamApp,
+        },
+      },
+    });
     await prisma.steamApp.update({
       where: {
         steamAppId,
