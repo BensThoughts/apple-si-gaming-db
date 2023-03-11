@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsup",
-    "backend-ops:dev": "tsx ./src/index.ts",
+    "dev": "cross-env NODE_ENV=development node --require ../../node_modules/dotenv/config --loader tsx ./src/index.ts",
     "start:stage": "node ./dist/index.mjs stage",
     "start:update-appids": "node ./dist/index.mjs update-appids",
     "lint": "eslint ./src/**.ts**",
@@ -18,6 +18,8 @@
     "@apple-si-gaming-db/steam-api": "*",
     "chalk": "^5.0.1",
     "commander": "^9.4.0",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.3",
     "tiny-invariant": "^1.2.0"
   },
   "devDependencies": {
