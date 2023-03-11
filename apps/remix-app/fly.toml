@@ -12,6 +12,7 @@ processes = []
   NODE_ENV = "production"
   PORT = "8080"
   PRIMARY_REGION = "lax"
+  LOG_LEVEL = "debug"
 
 [experimental]
   allowed_public_ports = []

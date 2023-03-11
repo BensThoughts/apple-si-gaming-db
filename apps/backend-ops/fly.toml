@@ -6,13 +6,14 @@ kill_timeout = 5
 processes = []
 
 [deploy]
-  release_command = "yarn run db:migrate:deploy"
+  # release_command = "yarn run db:migrate:deploy"
 
 [env]
   ASGD_BATCH_SIZE = 198
   ASGD_DATA_DOWNLOAD_ATTEMPTED = 0
   ASGD_INITIAL_PAGE = 0
   NODE_ENV = "production"
+  LOG_LEVEL = "debug"
 
 [experimental]
   auto_rollback = true
