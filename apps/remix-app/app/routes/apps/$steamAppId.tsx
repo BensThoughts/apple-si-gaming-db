@@ -39,14 +39,14 @@ export async function loader({ params }: LoaderArgs) {
   const steamAppId = validateSteamAppId(params);
   let steamApp = await findSteamAppByAppId(steamAppId);
   const throwSteamAppError = () => {
-    logger.debug(`Steam App with steamAppId: ${steamAppId} not found in db`, {
+    logger.debug(`steam app with steamAppId ${steamAppId} not found in db`, {
       metadata: {
         steamApp: {
           steamAppId,
         },
       },
     });
-    throw new Response(`App with appid ${steamAppId} not found in database!`, {
+    throw new Response(`Steam app with appid ${steamAppId} not found in database!`, {
       status: 404,
     });
   };
@@ -63,7 +63,7 @@ export async function loader({ params }: LoaderArgs) {
     )
   ) {
     logger.info(
-        `Stale data for steam app found, last dataDownloadAttemptedAt is more than ${DAYS_TILL_STALE_DATA} days old for ${steamApp.name}`, {
+        `stale data for steam app with steamAppId ${steamAppId} found, last dataDownloadAttemptedAt is more than ${DAYS_TILL_STALE_DATA} days old for ${steamApp.name}`, {
           metadata: {
             steamApp: {
               steamAppId,

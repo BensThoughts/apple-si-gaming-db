@@ -27,7 +27,7 @@ export async function updateSteamAppDownloadAttempted(
     });
   } catch (err) {
     if (err instanceof Error) {
-      logger.error('Error in updateSteamAppDownloadAttempted', { error: err });
+      logger.error('error in updateSteamAppDownloadAttempted', { error: err });
       throw err;
     } else {
       logger.error(err);
@@ -80,7 +80,7 @@ export async function updateSteamApp(
     });
   } catch (err) {
     if (err instanceof Error) {
-      logger.error('Error at prisma.steamApp.update in updateSteamApp', { error: err });
+      logger.error('error at prisma.steamApp.update in updateSteamApp', { error: err });
       throw err;
     } else {
       logger.error(err);

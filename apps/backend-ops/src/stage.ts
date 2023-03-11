@@ -118,8 +118,8 @@ async function getPageOfData(
 
   const pageMeta = { page, totalPages, batchSize, options: { dataDownloadAttempted, daysSinceLastSync } };
 
-  logger.info(`Starting page ${page} of ${totalPages}`, { metadata: { extra: pageMeta } });
-  logger.info(`Page ${page} appids found in prisma: ${appIds.length}`, { metadata: { extra: pageMeta } });
+  logger.info(`starting page ${page} of ${totalPages}`, { metadata: { extra: pageMeta } });
+  logger.info(`page ${page} appids found in prisma: ${appIds.length}`, { metadata: { extra: pageMeta } });
 
   let totalIdx = page * batchSize;
   let currIdx = 0;
@@ -140,7 +140,7 @@ async function getPageOfData(
     currIdx += 1;
     totalIdx += 1;
     if (currIdx >= appIds.length) {
-      logger.info(`Finished page ${page} of ${totalPages}`, { metadata: { extra: { pageMeta } } });
+      logger.info(`finished page ${page} of ${totalPages}`, { metadata: { extra: { pageMeta } } });
       clearInterval(oneSecondInterval);
     }
   }, ONE_SECOND_INTERVAL);
@@ -181,7 +181,7 @@ async function getTotalPages(
   const numAppIds = await prisma.steamApp.count({
     where: getWhereInput(dataDownloadAttempted, daysSinceLastSync),
   });
-  logger.info(`Getting number of pages for ${numAppIds} appids found in DB`, {
+  logger.info(`getting number of pages for ${numAppIds} appids found in DB`, {
     metadata: {
       extra: {
         numAppIds,
@@ -191,7 +191,7 @@ async function getTotalPages(
     },
   });
   if (numAppIds < 1) {
-    logger.info(`No apps found with these prisma settings, dataDownloadAttempted: ${dataDownloadAttempted} and daysSinceLastSync: ${daysSinceLastSync}`, {
+    logger.info(`no apps found with these prisma settings, dataDownloadAttempted: ${dataDownloadAttempted} and daysSinceLastSync: ${daysSinceLastSync}`, {
       metadata: {
         extra: {
           where: getWhereInput(dataDownloadAttempted, daysSinceLastSync),
@@ -220,7 +220,7 @@ export async function stage(
     dataDownloadAttempted?: boolean,
     daysSinceSync?: number,
 ) {
-  logger.info(`Starting db sync with prisma settings, dataDownloadAttempted: ${dataDownloadAttempted} and daysSinceSync: ${daysSinceSync}`, {
+  logger.info(`starting db sync with prisma settings, dataDownloadAttempted: ${dataDownloadAttempted} and daysSinceSync: ${daysSinceSync}`, {
     metadata: {
       extra: {
         where: getWhereInput(dataDownloadAttempted, daysSinceSync),

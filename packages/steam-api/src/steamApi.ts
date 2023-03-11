@@ -64,7 +64,7 @@ export async function getSteamAppDetailsRequest(
   const appDetailEndpoint = 'https://store.steampowered.com/api/appdetails/';
   try {
     logger.debug(
-        `Starting request for app details to ${appDetailEndpoint} for steamAppId: ${steamAppId}`,
+        `starting request for app details to ${appDetailEndpoint} for steamAppId: ${steamAppId}`,
         {
           metadata: {
             steamApp: { steamAppId },
@@ -79,7 +79,7 @@ export async function getSteamAppDetailsRequest(
       responseType: 'json',
     });
     logger.debug(
-        `Received response for app details from ${appDetailEndpoint} for steamAppId ${steamAppId}`,
+        `received response for app details from ${appDetailEndpoint} for steamAppId ${steamAppId}`,
         {
           metadata: {
             steamApp: { steamAppId },
@@ -123,9 +123,9 @@ export async function getSteamPlayerOwnedGamesRequest(
   const getOwnedGamesEndpoint = 'https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/';
   try {
     const apiKey = process.env.ASGD_STEAM_API_KEY;
-    invariant(apiKey, 'No Steam API key found, check ENV var ASGD_STEAM_API_KEY');
+    invariant(apiKey, 'no Steam API key found, check ENV var ASGD_STEAM_API_KEY');
     logger.debug(
-        `Starting request for player owned games to ${getOwnedGamesEndpoint} for steamUserId64: ${steamUserId64}`,
+        `starting request for player owned games to ${getOwnedGamesEndpoint} for steamUserId64: ${steamUserId64}`,
         {
           metadata: {
             userSession: {
@@ -143,7 +143,7 @@ export async function getSteamPlayerOwnedGamesRequest(
       responseType: 'json',
     });
     logger.debug(
-        `Received response for player owned games from ${getOwnedGamesEndpoint} for steamUserId64: ${steamUserId64}`,
+        `received response for player owned games from ${getOwnedGamesEndpoint} for steamUserId64: ${steamUserId64}`,
         {
           metadata: {
             userSession: {
@@ -155,7 +155,7 @@ export async function getSteamPlayerOwnedGamesRequest(
             },
           },
         });
-    invariant(response.status === 200, `Response status was not 200, response.status: ${response.status}`);
+    invariant(response.status === 200, `response status was not 200, response.status: ${response.status}`);
     return response.data.response;
   } catch (err) {
     if (err instanceof Error) {
@@ -183,19 +183,19 @@ export async function getSteamPlayerOwnedGamesRequest(
 export async function getSteamAppListRequest(): Promise<SteamApiAppListResponse> {
   const appListEndpoint = 'https://api.steampowered.com/ISteamApps/GetAppList/v2/';
   try {
-    logger.debug(`Starting request to ${appListEndpoint}`);
+    logger.debug(`starting request to ${appListEndpoint}`);
     const response = await axios.get<SteamApiAppListResponse>(
         appListEndpoint, {
           responseType: 'json',
         });
-    logger.debug(`Received response from ${appListEndpoint}`, {
+    logger.debug(`received response from ${appListEndpoint}`, {
       metadata: {
         extra: {
           axios: { ...filterAxiosResponse(response) },
         },
       },
     });
-    invariant(response.status === 200, `Response status was not 200, response.status: ${response.status}`);
+    invariant(response.status === 200, `response status was not 200, response.status: ${response.status}`);
     const steamApiResponse = response.data;
     return steamApiResponse;
   } catch (err) {

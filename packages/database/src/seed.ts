@@ -82,14 +82,14 @@ const gamepadCreateManyInput: Prisma.GamepadMetadataCreateManyInput[] = [
 ];
 
 async function seed() {
-  logger.info('deleting SteamApps');
+  logger.info('starting to delete all SteamApps from the database');
   await prisma.steamApp.deleteMany();
-  logger.info('deleting SteamApps finished');
-  logger.info('https get requested started');
+  logger.info('successfully deleted all SteamApps from the database');
+  logger.info('starting to request the applist from the Steam API');
   const { applist } = await getSteamAppListRequest();
-  logger.info('https get request finished');
+  logger.info('successfully received the applist from the Steam API');
   const { apps } = applist;
-  logger.info('creating SteamApps started');
+  logger.info('starting to create SteamApps in the database using the applist');
   await prisma.steamApp.createMany({
     data: apps.map((app) => ({
       steamAppId: app.appid,
@@ -97,25 +97,25 @@ async function seed() {
     })),
     skipDuplicates: true,
   });
-  logger.info('creating SteamApps finished');
+  logger.info('successfully created SteamApps in the database using the applist');
 
-  logger.info('started deleting PostTags');
+  logger.info('starting to delete all PostTags from the database');
   await prisma.performancePostTag.deleteMany();
-  logger.info('finished deleting PostTags');
-  logger.info('creating PostTags');
+  logger.info('successfully deleted all PostTags from the database');
+  logger.info('starting to create PostTags in the database');
   await prisma.performancePostTag.createMany({
     data: postTagCreateManyInput,
   });
-  logger.info('finished creating PostTags');
+  logger.info('successfully finished creating PostTags in the database');
 
-  logger.info('started deleting SteamGamepads');
+  logger.info('starting to delete all SteamGamepads from the database');
   await prisma.gamepadMetadata.deleteMany();
-  logger.info('finished deleting SteamGamepads');
-  logger.info('started creating gamepads');
+  logger.info('successfully deleted SteamGamepads from the database');
+  logger.info('starting to create SteamGamepads in the database');
   await prisma.gamepadMetadata.createMany({
     data: gamepadCreateManyInput,
   });
-  logger.info('finished creating gamepads');
+  logger.info('successfully created SteamGamepads in the database');
 }
 
 seed()

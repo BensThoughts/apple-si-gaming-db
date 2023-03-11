@@ -129,10 +129,10 @@ program.command('stage')
         }
       }
 
-      logger.info(`Initial page set to ${INITIAL_PAGE}`);
-      logger.info(`Batch size set to ${BATCH_SIZE}`);
-      logger.info(`Data download attempted set to ${DATA_DOWNLOAD_ATTEMPTED}`);
-      logger.info(`Days since sync set to ${DAYS_SINCE_SYNC}`);
+      logger.info(`initial page set to ${INITIAL_PAGE}`);
+      logger.info(`batch size set to ${BATCH_SIZE}`);
+      logger.info(`data download attempted set to ${DATA_DOWNLOAD_ATTEMPTED}`);
+      logger.info(`days since sync set to ${DAYS_SINCE_SYNC}`);
       stage(INITIAL_PAGE, BATCH_SIZE, DATA_DOWNLOAD_ATTEMPTED, DAYS_SINCE_SYNC);
     });
 
