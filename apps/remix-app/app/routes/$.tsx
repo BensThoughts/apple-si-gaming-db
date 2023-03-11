@@ -1,11 +1,7 @@
-import PageWrapper from '~/components/Layout/PageWrapper';
+import FourOhFour from '~/components/Layout/FourOhFour';
 
 export default function FourOhFourSplatRoute() {
   return (
-    <PageWrapper currentRoute="/404" topSpacer>
-      <div className="flex w-full h-[calc(100vh_-_14rem)] items-center justify-center">
-        <h1 className="text-4xl md:text-6xl text-primary-highlight">Oops! - 404 Error</h1>
-      </div>
-    </PageWrapper>
+    <FourOhFour currentRoute="/404" />
   );
 }
