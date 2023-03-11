@@ -10,8 +10,19 @@ import type { ExtendedAppLoadContext, PassportSteamUser } from '~/interfaces';
 import {
   convertPassportSteamUserToPrismaSteamUser,
 } from '~/lib/data-utils/appLoadContext.server';
+import { getLogger } from '@apple-si-gaming-db/logger';
+const logger = getLogger('apps-remix-app');
 
 const app = express();
+
+const morganMiddleWare = morgan('tiny', {
+  stream: {
+    write: (message) => logger.http(message.trim()),
+  },
+});
+
+app.use(morganMiddleWare);
+
 
 passport.serializeUser((user, done) => {
   done(null, user);
@@ -141,8 +152,6 @@ app.use(
 // more aggressive with this caching.
 app.use(express.static('public', { maxAge: '1h' }));
 
-app.use(morgan('tiny'));
-
 const MODE = process.env.NODE_ENV;
 const BUILD_DIR = path.join(process.cwd(), 'build');
 
@@ -183,7 +192,7 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   // require the built app so we're ready when the first request comes in
   require(BUILD_DIR);
-  console.log(`✅ app ready: http://localhost:${port}`);
+  logger.info(`✅ app ready: http://localhost:${port}`);
 });
 
 function purgeRequireCache() {

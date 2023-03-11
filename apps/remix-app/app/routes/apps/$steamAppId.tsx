@@ -15,6 +15,9 @@ import AppInfoRequirements from '~/components/AppInfo/AppInfoRequirements';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import { validateSteamAppId } from '~/lib/loader-functions/params-validators.server';
 import type { SteamAppSidebarData } from '~/interfaces';
+import logger from '~/lib/logger/logger.server';
+import FourOhFour from '~/components/Layout/FourOhFour';
+import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 
 interface LoaderData {
   steamApp: SteamAppSidebarData;
@@ -26,10 +29,8 @@ function isMoreThanDaysAgo(dateToTest: Date, daysAgo: number) {
   const timestampDaysAgo = new Date().getTime() - daysAgoInMs;
 
   if (timestampDaysAgo > dateToTest.getTime()) {
-    console.log(`date is more than ${daysAgo} days into the past`);
     return true;
   } else {
-    console.log(`date is NOT more than ${daysAgo} days into the past`);
     return false;
   }
 }
@@ -37,19 +38,43 @@ function isMoreThanDaysAgo(dateToTest: Date, daysAgo: number) {
 export async function loader({ params }: LoaderArgs) {
   const steamAppId = validateSteamAppId(params);
   let steamApp = await findSteamAppByAppId(steamAppId);
-  if (!steamApp) {
-    throw new Response('App Not Found!', {
+  const throwSteamAppError = () => {
+    logger.debug(`Steam App with steamAppId: ${steamAppId} not found in db`, {
+      metadata: {
+        steamApp: {
+          steamAppId,
+        },
+      },
+    });
+    throw new Response(`App with appid ${steamAppId} not found in database!`, {
       status: 404,
     });
+  };
+  if (!steamApp) {
+    throw throwSteamAppError();
   }
+  const DAYS_TILL_STALE_DATA = 7;
   if (
     !steamApp.dataDownloadAttempted ||
     !steamApp.dataDownloaded ||
     (
       steamApp.dataDownloadAttemptedAt &&
-      isMoreThanDaysAgo(steamApp.dataDownloadAttemptedAt, 7)
+      isMoreThanDaysAgo(steamApp.dataDownloadAttemptedAt, DAYS_TILL_STALE_DATA)
     )
   ) {
+    logger.info(
+        `Stale data for steam app found, last dataDownloadAttemptedAt is more than ${DAYS_TILL_STALE_DATA} days old for ${steamApp.name}`, {
+          metadata: {
+            steamApp: {
+              steamAppId,
+              name: steamApp.name,
+            },
+            extra: {
+              dataDownloadAttemptedAt: steamApp.dataDownloadAttemptedAt,
+            },
+          },
+        },
+    );
     const steamApiApp = await getSteamAppDetailsRequest(steamApp.steamAppId);
     if (steamApiApp.data) {
       const prismaSteamApp = convertSteamApiDataToPrisma(steamApiApp.data);
@@ -57,9 +82,7 @@ export async function loader({ params }: LoaderArgs) {
       steamApp = await findSteamAppByAppId(steamAppId);
     }
     if (!steamApp) {
-      throw new Response('App Not Found!', {
-        status: 404,
-      });
+      throw throwSteamAppError();
     }
   }
   return json<LoaderData>({
@@ -162,12 +185,14 @@ export function ErrorBoundary({ error }: { error: Error }) {
 
 export function CatchBoundary() {
   const caught = useCatch();
+  if (caught.status === 404) {
+    return (
+      <FourOhFour currentRoute="/apps">
+        {caught.status}: {caught.statusText} - {caught.data}
+      </FourOhFour>
+    );
+  }
   return (
-    <PageWrapper currentRoute="/apps" title="Oops!" topSpacer>
-      <div>
-        <h1>Oops! - {caught.status} - {caught.data}</h1>
-        <p>Error in /apps/$steamAppId route</p>
-      </div>
-    </PageWrapper>
+    <ErrorDisplay thrownResponse={caught} currentRoute="/apps/$steamAppId" />
   );
 }
