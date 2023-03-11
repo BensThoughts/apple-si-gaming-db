@@ -6,8 +6,15 @@ export function validateSteamAppId(params: Params) {
   }
   const steamAppId = Number(params.steamAppId);
   if (!isFinite(steamAppId) || steamAppId < 0) {
-    throw new Response('steam appid must be a valid positive number', { status: 400 });
+    throw new Response(`Steam appid ${steamAppId} is not a valid positive number`,
+        { status: 400 },
+    );
   }
+  if (steamAppId > 2147483647) { // the max Int size in postgres
+    throw new Response(`Steam appid ${steamAppId} is to large, must be less than 2147483647`,
+        { status: 400 });
+  }
+
   return steamAppId;
 }
 
