@@ -1,1 +1,2 @@
-export { logger } from './winston-logger';
+export { getLogger } from './winston-logger';
+export type { LoggerMetadata, ExtendedLeveledLogMethod } from './types';
