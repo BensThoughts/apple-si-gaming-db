@@ -13,7 +13,7 @@ const {
   label,
 } = format;
 
-export function getLogger(serviceLabel: string) {
+function getLogger(serviceLabel: string) {
   const transports: LoggerOptions['transports'] = [
     new winstonTransports.File({
       filename: './logs/error.log',
@@ -116,4 +116,12 @@ export function getLogger(serviceLabel: string) {
     debug,
   };
 };
+
+const serviceLabel = process.env.LOGGER_SERVICE_LABEL;
+if (!serviceLabel) {
+  throw new Error('env var LOGGER_SERVICE_LABEL must be set for the logger service to work');
+}
+
+const logger = getLogger(serviceLabel);
+export { logger };
 

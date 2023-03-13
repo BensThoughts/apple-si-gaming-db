@@ -10,8 +10,7 @@ import type { ExtendedAppLoadContext, PassportSteamUser } from '~/interfaces';
 import {
   convertPassportSteamUserToPrismaSteamUser,
 } from '~/lib/data-utils/appLoadContext.server';
-import { getLogger } from '@apple-si-gaming-db/logger';
-const logger = getLogger('apps-remix-app');
+import { logger } from '@apple-si-gaming-db/logger';
 
 const app = express();
 

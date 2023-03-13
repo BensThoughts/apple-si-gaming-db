@@ -11,7 +11,7 @@ import {
   prisma,
 } from '@apple-si-gaming-db/database';
 
-import logger from './logger';
+import { logger } from './logger';
 
 interface AppIdData {
   name: string;

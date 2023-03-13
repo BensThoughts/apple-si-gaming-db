@@ -39,7 +39,7 @@ import type {
   UserSessionServerSide,
 } from '~/interfaces/remix-app/UserSession';
 import { getBannerSession } from './lib/sessions/banner-session.server';
-import logger from '~/lib/logger/logger.server';
+import { logger } from '~/lib/logger/logger.server';
 
 type RootLoaderData = {
   theme: Theme | null;

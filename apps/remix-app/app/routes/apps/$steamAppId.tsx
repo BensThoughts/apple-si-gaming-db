@@ -15,7 +15,7 @@ import AppInfoRequirements from '~/components/AppInfo/AppInfoRequirements';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import { validateSteamAppId } from '~/lib/loader-functions/params-validators.server';
 import type { SteamAppSidebarData } from '~/interfaces';
-import logger from '~/lib/logger/logger.server';
+import { logger } from '~/lib/logger/logger.server';
 import FourOhFour from '~/components/Layout/FourOhFour';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 

@@ -7,9 +7,7 @@ import type {
   SteamApiGetOwnedGamesResponse,
 } from './interfaces';
 
-// import { createId } from '@paralleldrive/cuid2';
-import { getLogger } from '@apple-si-gaming-db/logger';
-const logger = getLogger('packages-steam-api');
+import { logger } from './logger';
 
 const filterAxiosResponse = (response: AxiosResponse) => {
   const { config } = response;

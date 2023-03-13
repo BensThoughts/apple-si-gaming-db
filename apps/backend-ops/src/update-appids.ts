@@ -1,6 +1,6 @@
 import { prisma } from '@apple-si-gaming-db/database';
 import { getSteamAppListRequest } from '@apple-si-gaming-db/steam-api';
-import logger from './logger';
+import { logger } from './logger';
 
 
 export async function updateAppIds() {

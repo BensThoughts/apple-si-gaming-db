@@ -8,7 +8,7 @@ import { prisma } from '../client';
 import type {
   Prisma,
 } from '@prisma/client';
-import logger from '../logger';
+import { logger } from '../logger';
 
 export async function updateSteamAppDownloadAttempted(
     steamAppId: SteamApp['steamAppId'],

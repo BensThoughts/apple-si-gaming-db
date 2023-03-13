@@ -1,7 +1,7 @@
 /* eslint-disable no-var */
 import { PrismaClient } from '@prisma/client';
 import invariant from 'tiny-invariant';
-import logger from './logger';
+import { logger } from './logger';
 
 let prisma: PrismaClient;
 

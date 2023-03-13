@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import { Command } from 'commander';
 import { stage } from './stage';
 import { updateAppIds } from './update-appids';
-import logger from './logger';
+import { logger } from './logger';
 
 const program = new Command();
 
