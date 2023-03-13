@@ -42,6 +42,7 @@
     "$DATABASE_URL",
     "$FLY_REGION",
     "$LOG_LEVEL",
+    "$LOGGER_SERVICE_LABEL",
     "$LOGTAIL_SOURCE_TOKEN",
     "$NODE_ENV",
     "$PORT",
