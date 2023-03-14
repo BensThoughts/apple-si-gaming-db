@@ -5,9 +5,6 @@ kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
-[build]
-  image = "registry.fly.io/steamed-apples-staging-remix-app:deployment-01GVFAA3G8R19APB87D578CX1W"
-
 [env]
   NODE_ENV = "production"
   PORT = "8080"
