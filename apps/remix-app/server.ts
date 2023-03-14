@@ -34,12 +34,12 @@ passport.deserializeUser((obj: false | Express.User | null | undefined, done) =>
 
 const ASGD_PASSPORT_DOMAIN = process.env.ASGD_PASSPORT_DOMAIN;
 if (!ASGD_PASSPORT_DOMAIN) {
-  console.error('env ASGD_PASSPORT_DOMAIN not set correctly');
+  logger.error('env ASGD_PASSPORT_DOMAIN not set correctly');
   process.exit(1);
 }
 const ASGD_STEAM_API_KEY = process.env.ASGD_STEAM_API_KEY;
 if (!ASGD_STEAM_API_KEY) {
-  console.error('env ASGD_STEAM_API_KEY not set correctly');
+  logger.error('env ASGD_STEAM_API_KEY not set correctly');
 }
 
 // @ts-ignore: 'new' expression, whose target lacks a construct signature,
@@ -58,7 +58,7 @@ function(identifier: any, profile: any, done: any) {
 const PASSPORT_COOKIE_NAME = 'passport-steam';
 const PASSPORT_SESSION_SECRET = process.env.ASGD_PASSPORT_SESSION_SECRET;
 if (!PASSPORT_SESSION_SECRET) {
-  console.error('env var ASGD_PASSPORT_SESSION_SECRET not set.');
+  logger.error('env var ASGD_PASSPORT_SESSION_SECRET not set.');
   process.exit(1);
 }
 
