@@ -4,9 +4,6 @@ import type {
   ExtendedAppLoadContext,
   PassportSteamUser,
 } from '~/interfaces';
-import type {
-  Prisma,
-} from '~/interfaces/database';
 
 export function extractAppLoadContext(context: AppLoadContext): ExtendedAppLoadContext {
   const steamUser = context.steamUser ? context.steamUser as AppLoadContextSteamUser : null;
@@ -15,10 +12,9 @@ export function extractAppLoadContext(context: AppLoadContext): ExtendedAppLoadC
   };
 }
 
-export function convertPassportSteamUserToPrismaSteamUser(
+export function convertPassportSteamUserToAppLoadContextSteamUser(
     passportSteamUser: PassportSteamUser,
-): Omit<Prisma.SteamUserProfileCreateInput, 'steamUserId64'> &
-  { steamUserId64: string } {
+): AppLoadContextSteamUser {
   // passport returns steamUserId64 as a string (steamid).
   // We convert this to bigint elsewhere to avoid throwing
   // in error in server.ts, where this function is used
