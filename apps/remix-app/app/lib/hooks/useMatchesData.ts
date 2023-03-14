@@ -9,7 +9,7 @@ import type { SerializedRootLoaderData } from '~/root';
  * @param {string} id The route id
  * @return {JSON|undefined} The router data or undefined if not found
  */
-export function useMatchesData(
+function useMatchesData(
     id: string,
 ): Record<string, unknown> | undefined {
   const matchingRoutes = useMatches();
