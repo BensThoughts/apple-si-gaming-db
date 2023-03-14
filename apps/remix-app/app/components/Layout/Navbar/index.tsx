@@ -22,7 +22,7 @@ type NavBarProps = {
   isSearchSubmitting: boolean;
 }
 
-export default function Navbar({
+export default function NavBar({
   className,
   isLoggedIn,
   isSearchSubmitting,
