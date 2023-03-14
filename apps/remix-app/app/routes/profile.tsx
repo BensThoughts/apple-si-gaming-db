@@ -17,7 +17,7 @@ import CatchDisplay from '~/components/Layout/CatchDisplay';
 
 export const meta: MetaFunction = ({ parentsData }) => {
   const data = parentsData['root'] as Partial<SerializedRootLoaderData>;
-  if (data?.userSession?.steamUserProfile?.displayName) {
+  if (data?.userSession?.steamUserProfile.displayName) {
     const { displayName } = data.userSession.steamUserProfile;
     return {
       title: displayName ? `${metaTags.title} - Profile - ${displayName}` : `Profile`,
@@ -29,9 +29,9 @@ export const meta: MetaFunction = ({ parentsData }) => {
 };
 
 export default function ProfilePage() {
-  const { userProfile, steamUserProfile } = useUserSession();
+  const { userSession } = useUserSession();
 
-  if (!userProfile || !steamUserProfile) {
+  if (!userSession) {
     return (
       <PageWrapper currentRoute="/profile" title="Login" topSpacer>
         <div className="flex flex-col items-center w-full">

@@ -2,31 +2,35 @@
 // Server side we get an array of liked post ids
 // a map does not easily serialize.
 export type UserSessionServerSide = {
-  userProfile?: {
-    userProfileId: number;
-    likedPerformancePostIds: number[];
-    systemSpecs: UserProfileSystemSpec[];
-  };
-  steamUserProfile?: {
-    steamUserId64: string;
-    displayName?: string | null;
-    avatarFull?: string | null;
-    avatarMedium?: string | null;
+  userSession?: {
+    userProfile: {
+      userProfileId: number;
+      likedPerformancePostIds: number[];
+      systemSpecs: UserProfileSystemSpec[];
+    };
+    steamUserProfile: {
+      steamUserId64: string;
+      displayName?: string | null;
+      avatarFull?: string | null;
+      avatarMedium?: string | null;
+    }
   }
 }
 
 // client side we turn the array of liked post ids into a Map for easy lookup
-export type UserSession = {
-  userProfile?: {
-    userProfileId: number;
-    likedPerformancePostIds: Map<number, number>;
-    systemSpecs: UserProfileSystemSpec[];
-  };
-  steamUserProfile?: {
-    steamUserId64: string;
-    displayName?: string | null;
-    avatarFull?: string | null;
-    avatarMedium?: string | null;
+export type UserSessionClientSide = {
+  userSession?: {
+    userProfile: {
+      userProfileId: number;
+      likedPerformancePostIds: Map<number, number>;
+      systemSpecs: UserProfileSystemSpec[];
+    };
+    steamUserProfile: {
+      steamUserId64: string;
+      displayName?: string | null;
+      avatarFull?: string | null;
+      avatarMedium?: string | null;
+    }
   }
 }
 

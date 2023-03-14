@@ -1,6 +1,6 @@
 import { useMatches } from '@remix-run/react';
 import { useMemo } from 'react';
-import type { UserProfileSystemSpec, UserSession } from '~/interfaces/remix-app/UserSession';
+import type { UserProfileSystemSpec, UserSessionClientSide } from '~/interfaces/remix-app/UserSession';
 import type { SerializedRootLoaderData } from '~/root';
 
 /**
@@ -32,7 +32,7 @@ function useRootLoaderData() {
   return rootLoaderData as SerializedRootLoaderData;
 }
 
-export function useUserSession(): UserSession {
+export function useUserSession(): UserSessionClientSide {
   const rootLoaderData = useRootLoaderData();
   if (!rootLoaderData) return { };
 
@@ -40,7 +40,7 @@ export function useUserSession(): UserSession {
   if (!userSession) return { };
 
   const { userProfile, steamUserProfile } = userSession;
-  if (!userProfile) return { steamUserProfile };
+  // if (!userProfile) return { steamUserProfile };
 
   // TODO: Case for useMemo?
   const likedPerformancePostIds = new Map<number, number>();
@@ -49,28 +49,32 @@ export function useUserSession(): UserSession {
   });
 
   return {
-    userProfile: {
-      ...userProfile,
-      likedPerformancePostIds,
+    userSession: {
+      userProfile: {
+        ...userProfile,
+        likedPerformancePostIds,
+      },
+      steamUserProfile,
     },
-    steamUserProfile,
   };
 }
 
 export function useUserProfileSystemSpecs(): UserProfileSystemSpec[] {
-  const { userProfile } = useUserSession();
-  return userProfile ? userProfile.systemSpecs : [];
+  const { userSession } = useUserSession();
+  return userSession ? userSession.userProfile.systemSpecs : [];
 }
 
 export function useLikeButtonData(performancePostId: number) {
-  const { userProfile } = useUserSession();
-  if (!userProfile) {
+  const { userSession } = useUserSession();
+  if (!userSession) {
     return {
       isUserProfileLoggedIn: false,
       didUserProfileLikePerformancePost: false,
     };
   }
-  const didUserProfileLikePerformancePost = userProfile.likedPerformancePostIds.has(performancePostId);
+  const { userProfile } = userSession;
+  const didUserProfileLikePerformancePost =
+    userProfile.likedPerformancePostIds.has(performancePostId);
   return {
     isUserProfileLoggedIn: true,
     didUserProfileLikePerformancePost,

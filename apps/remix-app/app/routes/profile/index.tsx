@@ -4,8 +4,8 @@ import LogoutButton from '~/components/Profile/LogoutButton';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
 
 export default function ProfileIndexRoute() {
-  const { steamUserProfile } = useUserSession();
-  if (!steamUserProfile) {
+  const { userSession } = useUserSession();
+  if (!userSession) {
     return (
       <Card title="No Steam User Found!">
         <div className="flex flex-col gap-3">
@@ -18,10 +18,7 @@ export default function ProfileIndexRoute() {
       </Card>
     );
   }
-  const {
-    avatarFull,
-    displayName,
-  } = steamUserProfile;
+  const { avatarFull, displayName } = userSession.steamUserProfile;
   return (
     <ProfileLayout displayName={displayName} avatarFull={avatarFull} />
   );

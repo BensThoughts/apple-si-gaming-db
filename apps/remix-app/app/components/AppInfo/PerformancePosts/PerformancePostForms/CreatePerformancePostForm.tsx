@@ -52,7 +52,7 @@ export default function CreatePerformancePostForm({
   gamepadOptions,
   steamUserProfileOwnsApp,
 }: CreatePerformancePostFormProps) {
-  const { userProfile, steamUserProfile } = useUserSession();
+  const { userSession } = useUserSession();
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -68,7 +68,7 @@ export default function CreatePerformancePostForm({
     }
   }, [formError]);
 
-  if (!steamUserProfile || !userProfile) {
+  if (!userSession) {
     return (
       <PerformancePostFormWrapper>
         <div>
@@ -81,6 +81,8 @@ export default function CreatePerformancePostForm({
       </PerformancePostFormWrapper>
     );
   }
+
+  const { userProfile } = userSession;
 
   if (!steamUserProfileOwnsApp) {
     return (

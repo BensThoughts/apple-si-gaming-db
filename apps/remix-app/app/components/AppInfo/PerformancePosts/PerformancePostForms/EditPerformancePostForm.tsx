@@ -47,7 +47,7 @@ export default function EditPerformancePostForm({
   postTagOptions,
   gamepadOptions,
 }: EditPerformancePostFormProps) {
-  const { userProfile, steamUserProfile } = useUserSession();
+  const { userSession } = useUserSession();
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -65,7 +65,7 @@ export default function EditPerformancePostForm({
 
   // This should never trigger, the server redirects
   // on the route that shows this form if this is the case
-  if (!steamUserProfile || !userProfile) {
+  if (!userSession) {
     return (
       <PerformancePostFormWrapper>
         <div>
@@ -78,6 +78,8 @@ export default function EditPerformancePostForm({
       </PerformancePostFormWrapper>
     );
   }
+
+  const { userProfile } = userSession;
 
   const systemSpecOptions: SystemSpecOption[] = userProfile.systemSpecs
       .map(({ systemSpecId, systemName }) => ({ id: systemSpecId, systemName }));

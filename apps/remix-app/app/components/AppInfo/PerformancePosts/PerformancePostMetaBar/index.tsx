@@ -26,10 +26,10 @@ export default function PerformancePostMetaBar({
   },
   numLikes,
 }: PerformancePostMetaBarProps) {
-  const { steamUserProfile } = useUserSession();
+  const { userSession } = useUserSession();
 
-  const didSteamUserCreatePost = steamUserProfile
-    ? userWhoCreated.steamUserId64 === steamUserProfile.steamUserId64
+  const didSteamUserCreatePost = userSession
+    ? userWhoCreated.steamUserId64 === userSession.steamUserProfile.steamUserId64
     : false;
 
   return (
