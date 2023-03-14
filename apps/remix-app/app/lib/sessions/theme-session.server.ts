@@ -19,8 +19,7 @@ const themeStorage = createCookieSessionStorage<ThemeSessionData>({
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production' ? true : false,
     maxAge: 1000 * 60 * 60 * 24 * 400, // 400 days (max chrome cap)
-    // secure: true,
-    path: '/',
+    // path: '/',
     // httpOnly: true,
   },
 });
