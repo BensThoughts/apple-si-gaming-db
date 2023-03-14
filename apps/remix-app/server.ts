@@ -161,10 +161,13 @@ function isPassportSteamUser(object: unknown): object is PassportSteamUser {
     object != null &&
     'id' in object &&
     'displayName' in object &&
-    'provider' in object &&
-    typeof object.provider === 'string'
+    'provider' in object
   ) {
-    return true;
+    // TODO: type-check indicates error TS2339: Property 'provider' does not exist on type '{}'
+    const { provider } = object;
+    if (typeof provider === 'string') {
+      return true;
+    }
     // return object.provider === 'steam';
   }
   return false;
