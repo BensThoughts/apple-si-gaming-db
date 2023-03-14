@@ -2,11 +2,11 @@ import { Outlet, useCatch, useLoaderData } from '@remix-run/react';
 import type { LoaderArgs, MetaFunction } from '@remix-run/server-runtime';
 import { json, Response } from '@remix-run/node';
 
-import { getSteamAppDetailsRequest } from '~/lib/data-utils/steamApi.server';
+// import { getSteamAppDetailsRequest } from '~/lib/data-utils/steamApi.server';
 import {
   findSteamAppByAppId,
-  updateSteamApp,
-  convertSteamApiDataToPrisma,
+  // updateSteamApp,
+  // convertSteamApiDataToPrisma,
 } from '~/models/Steam/steamApp.server';
 import AppInfoTags from '~/components/AppInfo/AppInfoTags';
 import AppInfoMainAppCard from '~/components/AppInfo/AppInfoMainAppCard';
@@ -17,7 +17,7 @@ import { validateSteamAppId } from '~/lib/loader-functions/params-validators.ser
 import type { SteamAppSidebarData } from '~/interfaces';
 import { logger } from '~/lib/logger/logger.server';
 import FourOhFour from '~/components/Layout/FourOhFour';
-import ErrorDisplay from '~/components/Layout/ErrorDisplay';
+import CatchDisplay from '~/components/Layout/CatchDisplay';
 
 interface LoaderData {
   steamApp: SteamAppSidebarData;
@@ -37,7 +37,7 @@ function isMoreThanDaysAgo(dateToTest: Date, daysAgo: number) {
 
 export async function loader({ params }: LoaderArgs) {
   const steamAppId = validateSteamAppId(params);
-  let steamApp = await findSteamAppByAppId(steamAppId);
+  const steamApp = await findSteamAppByAppId(steamAppId);
   const throwSteamAppError = () => {
     logger.debug(`steam app with steamAppId ${steamAppId} not found in db`, {
       metadata: {
@@ -75,15 +75,18 @@ export async function loader({ params }: LoaderArgs) {
           },
         },
     );
-    const steamApiApp = await getSteamAppDetailsRequest(steamApp.steamAppId);
-    if (steamApiApp.data) {
-      const prismaSteamApp = convertSteamApiDataToPrisma(steamApiApp.data);
-      await updateSteamApp(prismaSteamApp);
-      steamApp = await findSteamAppByAppId(steamAppId);
-    }
-    if (!steamApp) {
-      throw throwSteamAppError();
-    }
+    // const steamApiApp = await getSteamAppDetailsRequest(steamApp.steamAppId);
+    // if (steamApiApp.data) {
+    //   const prismaSteamApp = convertSteamApiDataToPrisma(steamApiApp.data);
+    //   // TODO: Performing these updates in a loader doesn't work when
+    //   // TODO: the fly app is not in primary region, ALL mutations need to
+    //   // TODO: somehow move to an action
+    //   await updateSteamApp(prismaSteamApp);
+    //   steamApp = await findSteamAppByAppId(steamAppId);
+    // }
+    // if (!steamApp) {
+    //   throw throwSteamAppError();
+    // }
   }
   return json<LoaderData>({
     steamApp,
@@ -184,15 +187,15 @@ export function ErrorBoundary({ error }: { error: Error }) {
 }
 
 export function CatchBoundary() {
-  const caught = useCatch();
-  if (caught.status === 404) {
+  const thrownResponse = useCatch();
+  if (thrownResponse.status === 404) {
     return (
       <FourOhFour currentRoute="/apps">
-        {caught.status}: {caught.statusText} - {caught.data}
+        {thrownResponse.status}: {thrownResponse.statusText} - {thrownResponse.data}
       </FourOhFour>
     );
   }
   return (
-    <ErrorDisplay thrownResponse={caught} currentRoute="/apps/$steamAppId" />
+    <CatchDisplay thrownResponse={thrownResponse} currentRoute="/apps/$steamAppId" />
   );
 }
