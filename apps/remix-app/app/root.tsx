@@ -90,18 +90,6 @@ export async function loader({ request, context }: LoaderArgs) {
       // TODO: not sure if this is safe
       throw await logout(request);
     }
-    logger.debug(`steam user with steamUserId64 ${steamUserId64} just logged in`, {
-      metadata: {
-        userSession: {
-          userProfile: {
-            userProfileId,
-          },
-          steamUserProfile: {
-            steamUserId: steamUserId64,
-          },
-        },
-      },
-    });
 
     return json<RootLoaderData>({
       theme,
@@ -131,6 +119,18 @@ export async function action({ request, context }: ActionArgs) {
   const { id: userProfileId } = await upsertUserProfileBySteamUserId64(steamUserId64, steamUser);
   await updateSteamUserProfileOwnedSteamApps(steamUserId64);
   profileSession.login(userProfileId, steamUserId64);
+  logger.debug(`steam user with steamUserId64 ${steamUserId64} just logged in`, {
+    metadata: {
+      userSession: {
+        userProfile: {
+          userProfileId,
+        },
+        steamUserProfile: {
+          steamUserId: steamUserId64,
+        },
+      },
+    },
+  });
   return json<LoginActionData>({
     successfullyLoggedInToSite: true,
   }, {
