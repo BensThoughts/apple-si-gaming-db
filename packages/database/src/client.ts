@@ -28,7 +28,7 @@ function getClient() {
 
   const databaseUrl = new URL(DATABASE_URL);
 
-  const isLocalHost = process.env.ASGD_IS_LOCAL_CONTAINER || databaseUrl.hostname === 'localhost';
+  const isLocalHost = databaseUrl.hostname === 'localhost';
 
   const PRIMARY_REGION = isLocalHost ? null : process.env.PRIMARY_REGION;
   const FLY_REGION = isLocalHost ? null : process.env.FLY_REGION;
