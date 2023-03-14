@@ -12,14 +12,14 @@ import { useEffect } from 'react';
  */
 
 export async function loader({ context }: LoaderArgs) {
-  return redirect('/');
+  return redirect('/logged-out');
 }
 
 export default function SteamLogoutRoute() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate('/');
+    navigate('/logged-out');
   }, [navigate]);
 
   return null;
