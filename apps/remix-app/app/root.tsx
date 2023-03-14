@@ -2,6 +2,7 @@ import type {
   LinksFunction,
   LoaderArgs,
   MetaFunction,
+  ActionArgs,
 } from '@remix-run/node';
 import {
   Links,
@@ -10,7 +11,9 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useActionData,
   useCatch,
+  useFetcher,
   useLoaderData,
   // useLocation,
   useTransition,
@@ -19,15 +22,11 @@ import { json } from '@remix-run/node';
 import globalStylesheetUrl from '~/styles/global.css';
 import { metaTags } from '~/lib/meta-tags';
 import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
-import Navbar from '~/components/Layout/Navbar';
+import NavBar from '~/components/Layout/Navbar';
 import { Toaster } from 'react-hot-toast';
 import {
-  findUserSessionByUserProfileId,
-  upsertUserProfileBySteamUserId64,
+  findUserSessionByUserProfileId, upsertUserProfileBySteamUserId64,
 } from '~/models/SteamedApples/userProfile.server';
-import {
-  updateSteamUserProfileOwnedSteamApps,
-} from '~/models/Steam/steamUserProfile.server';
 
 import type { SerializeFrom } from '@remix-run/node';
 import { getProfileSession, logout } from '~/lib/sessions/profile-session.server';
@@ -38,18 +37,23 @@ import { getThemeSession } from '~/lib/sessions/theme-session.server';
 import type {
   UserSessionServerSide,
 } from '~/interfaces/remix-app/UserSession';
-import { getBannerSession } from './lib/sessions/banner-session.server';
 import { logger } from '~/lib/logger/logger.server';
+import { useEffect } from 'react';
+import CatchDisplay from './components/Layout/CatchDisplay';
+import ErrorDisplay from './components/Layout/ErrorDisplay';
+import { updateSteamUserProfileOwnedSteamApps } from './models/Steam/steamUserProfile.server';
 
 type RootLoaderData = {
   theme: Theme | null;
   userSession?: UserSessionServerSide;
+  isLoggedInWithSteam: boolean;
+  isLoggedInToSite: boolean;
 }
 
 export type SerializedRootLoaderData = SerializeFrom<RootLoaderData>
 
+
 export async function loader({ request, context }: LoaderArgs) {
-  const bannerSession = await getBannerSession(request);
   const themeSession = await getThemeSession(request);
   const theme = themeSession.getTheme();
 
@@ -58,20 +62,18 @@ export async function loader({ request, context }: LoaderArgs) {
 
   if (steamUser) { // if steamUser then isLoggedInWithSteam = true
     const steamUserId64 = steamUser.steamUserId64;
-    let userProfileId = profileSession.getUserProfileId(); // are we logged in to SteamedApples?
+    const userProfileId = profileSession.getUserProfileId(); // are we logged in to SteamedApples?
     if (!userProfileId) { // Upon initial login we don't have userProfileId yet
-      const { id } = await upsertUserProfileBySteamUserId64(steamUserId64, steamUser);
-      userProfileId = id;
-      await updateSteamUserProfileOwnedSteamApps(steamUserId64);
-      // TODO: "It's important that you logout (or perform any mutation for that
-      // TODO: matter) in an action"
-      // TODO: "When using session.unset(), you need to be sure no
-      // TODO: other loaders in the request are going to want to read that"
-      // TODO: https://remix.run/docs/en/v1/utils/sessions
-      profileSession.login(userProfileId, steamUserId64);
+      return json<RootLoaderData>({
+        theme,
+        isLoggedInWithSteam: true,
+        isLoggedInToSite: false,
+      });
     }
     // We are now definitely logged in and have a userProfileId
     const userSession = await findUserSessionByUserProfileId(userProfileId);
+
+    // TODO: not sure if this is safe
     if (!userSession) {
       logger.warn(`logging out user because they were not found in db. steamUserId64: ${steamUserId64}`, {
         metadata: {
@@ -85,9 +87,9 @@ export async function loader({ request, context }: LoaderArgs) {
           },
         },
       });
+      // TODO: not sure if this is safe
       throw await logout(request);
     }
-
     logger.debug(`steam user with steamUserId64 ${steamUserId64} just logged in`, {
       metadata: {
         userSession: {
@@ -101,30 +103,40 @@ export async function loader({ request, context }: LoaderArgs) {
       },
     });
 
-    const headers = new Headers();
-    // TODO: code for headers is duplicated before each return json()
-    headers.append('Set-Cookie', await profileSession.commit());
-
-    // TODO: destroying all banner sessions for now 03/04/2023
-    headers.append('Set-Cookie', await bannerSession.destroy());
-    // headers.append('Set-Cookie', await bannerSession.commit());
     return json<RootLoaderData>({
       theme,
       userSession,
-    }, {
-      headers,
+      isLoggedInWithSteam: true,
+      isLoggedInToSite: true,
     });
   }
-
-  // TODO: code for headers is duplicated before each return json()
-  const headers = new Headers();
-
-  // TODO: destroying all banner sessions for now 03/04/2023
-  headers.append('Set-Cookie', await bannerSession.destroy());
   return json<RootLoaderData>({
     theme,
+    isLoggedInWithSteam: false,
+    isLoggedInToSite: false,
+  });
+}
+
+export type LoginActionData = {
+  successfullyLoggedInToSite: boolean;
+}
+
+export async function action({ request, context }: ActionArgs) {
+  const { steamUser } = extractAppLoadContext(context);
+  if (!steamUser) {
+    throw new Response('steam user not found in app context', { status: 401 });
+  }
+  const profileSession = await getProfileSession(request);
+  const steamUserId64 = steamUser.steamUserId64;
+  const { id: userProfileId } = await upsertUserProfileBySteamUserId64(steamUserId64, steamUser);
+  await updateSteamUserProfileOwnedSteamApps(steamUserId64);
+  profileSession.login(userProfileId, steamUserId64);
+  return json<LoginActionData>({
+    successfullyLoggedInToSite: true,
   }, {
-    headers,
+    headers: {
+      'Set-Cookie': await profileSession.commit(),
+    },
   });
 }
 
@@ -201,7 +213,7 @@ function Document({
         data-enable-grammarly="false"
       >
         {/* <Fathom /> */}
-        <Navbar
+        <NavBar
           isLoggedIn={isLoggedIn ? isLoggedIn : false}
           isSearchSubmitting={isSearchSubmitting ? isSearchSubmitting : false}
           className="h-14"
@@ -225,16 +237,45 @@ export default function App() {
   // TODO: with error being thrown on /profile, prob. because of this
   const {
     theme,
-    userSession,
-  }= useLoaderData<RootLoaderData>();
+    isLoggedInWithSteam,
+    isLoggedInToSite,
+  } = useLoaderData<typeof loader>();
+  let shouldLogUserIntoSite = isLoggedInWithSteam && !isLoggedInToSite;
+
+  const actionData = useActionData<typeof action>();
+  if (actionData) {
+    const { successfullyLoggedInToSite } = actionData;
+    shouldLogUserIntoSite = !successfullyLoggedInToSite;
+  }
+
+  const fetcher = useFetcher();
   const transition = useTransition();
+
+  useEffect(() => {
+    if (shouldLogUserIntoSite &&
+        fetcher.state === 'idle' &&
+        transition.state === 'idle'
+    ) {
+      fetcher.submit({}, { action: '/', method: 'post' });
+    }
+  }, [shouldLogUserIntoSite, fetcher, transition]);
+
   const isSearchSubmitting =
     transition.state === 'submitting' &&
     transition.location.pathname === '/search';
   return (
     <ThemeProvider ssrCookieTheme={theme}>
       <Document
-        isLoggedIn={userSession ? true : false}
+        // isLoggedIn={userSession ? true : false}
+        // everywhere else in the app we determine if the user is logged
+        // in by determining if the userProfileId and
+        // steamUserId exists. We only use this here to have
+        // the navigation bar prematurely update to show
+        // isLoggedIn before the action at /actions/login
+        // finishes setting up the user in the database
+        // this way if there is an error, the user can still
+        // logout of steam
+        isLoggedIn={isLoggedInWithSteam}
         isSearchSubmitting={isSearchSubmitting}
         ssrTheme={theme}
       >
@@ -248,23 +289,18 @@ export function ErrorBoundary({ error }: { error: Error }) {
   return (
     <ThemeProvider ssrCookieTheme={null}>
       <Document title={`${metaTags.title} - Error`} ssrTheme={null}>
-        <div>
-          <h1>Main App Error</h1>
-          <pre>{error.message}</pre>
-        </div>
+        <ErrorDisplay error={error} currentRoute="/" />
       </Document>
     </ThemeProvider>
   );
 }
 
 export function CatchBoundary() {
-  const caught = useCatch();
+  const thrownResponse = useCatch();
   return (
     <ThemeProvider ssrCookieTheme={null}>
       <Document title={`${metaTags.title} - Oops!`} ssrTheme={null}>
-        <div>
-          <h1>Oops! - {caught.status} {caught.statusText}</h1>
-        </div>
+        <CatchDisplay thrownResponse={thrownResponse} currentRoute="/" />
       </Document>
     </ThemeProvider>
   );
