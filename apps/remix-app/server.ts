@@ -132,7 +132,7 @@ app.all('*', function getReplayResponse(req, res, next) {
     PRIMARY_REGION,
     FLY_REGION,
   };
-  logger.info(`Replaying:`, { metadata: { extra: logInfo } });
+  logger.info(`replaying ${method} request to ${pathname} from ${FLY_REGION} to ${PRIMARY_REGION}`, { metadata: { extra: logInfo } });
   res.set('fly-replay', `region=${PRIMARY_REGION}`);
   return res.sendStatus(409);
 });
