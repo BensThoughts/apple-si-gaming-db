@@ -12,6 +12,8 @@ import PrivacyCard from '~/components/Profile/Login/PrivacyCard';
 import AnimatedUnderline from '~/components/AnimatedUnderline';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
 import type { SerializedRootLoaderData } from '~/root';
+import ErrorDisplay from '~/components/Layout/ErrorDisplay';
+import CatchDisplay from '~/components/Layout/CatchDisplay';
 
 export const meta: MetaFunction = ({ parentsData }) => {
   const data = parentsData['root'] as Partial<SerializedRootLoaderData>;
@@ -96,21 +98,12 @@ export default function ProfilePage() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
-  return (
-    <PageWrapper currentRoute="/profile" topSpacer>
-      <h1>Error in /profile route</h1>
-      <div>{error.message}</div>
-    </PageWrapper>
-  );
+  return <ErrorDisplay error={error} currentRoute="/profile" />;
 }
 
 export function CatchBoundary() {
   const caught = useCatch();
   return (
-    <PageWrapper currentRoute="/profile" title="Oops!" topSpacer>
-      <div>
-        <h1>Oops! - {caught.status} - {caught.data}</h1>
-      </div>
-    </PageWrapper>
+    <CatchDisplay thrownResponse={caught} currentRoute="/profile" />
   );
 }

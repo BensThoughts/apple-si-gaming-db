@@ -10,6 +10,8 @@ import { metaTags } from '~/lib/meta-tags';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
 import { getSearchOptions } from '~/lib/loader-functions/search.server';
 import { Fragment } from 'react';
+import ErrorDisplay from '~/components/Layout/ErrorDisplay';
+import CatchDisplay from '~/components/Layout/CatchDisplay';
 
 function validateSearchQuery(searchQuery: string) {
   if (searchQuery.length > 100) {
@@ -432,20 +434,12 @@ export default function SearchIndexRoute() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
-  return (
-    <div>
-      <h1>Error in /search/index route</h1>
-      <div>{error.message}</div>
-    </div>
-  );
+  return <ErrorDisplay error={error} currentRoute="/search" />;
 }
 
 export function CatchBoundary() {
   const caught = useCatch();
   return (
-    <div>
-      <h1>Oops! - {caught.status} - {caught.data}</h1>
-      <p>Error in /search/index route</p>
-    </div>
+    <CatchDisplay thrownResponse={caught} currentRoute="/search" />
   );
 }

@@ -16,6 +16,8 @@ import CreatePerformancePostForm from '~/components/AppInfo/PerformancePosts/Per
 import type { PostTagOption, GamepadOption } from '~/interfaces';
 import type { CreateOrEditPerformancePostActionData } from '~/lib/form-actions/performance-post/create-or-edit-action-type';
 import { getIsLoggedIn, getUserIds, requireUserIds } from '~/lib/sessions/profile-session.server';
+import ErrorDisplay from '~/components/Layout/ErrorDisplay';
+import CatchDisplay from '~/components/Layout/CatchDisplay';
 
 interface PerformancePostLoaderData {
   steamAppId: number;
@@ -115,20 +117,14 @@ export default function PerformancePostsRoute() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
-  return (
-    <div>
-      <h1>Error in /apps/$appid/posts route</h1>
-      <div>{error.message}</div>
-    </div>
-  );
+  // TODO: /apps is not technically the current route
+  return <ErrorDisplay error={error} currentRoute="/apps" />;
 }
 
 export function CatchBoundary() {
   const caught = useCatch();
+  // TODO: /apps is not technically the current route
   return (
-    <div>
-      <h1>Oops! - {caught.status} - {caught.data}</h1>
-      <p>Error in /apps/$steamAppId/posts route</p>
-    </div>
+    <CatchDisplay thrownResponse={caught} currentRoute="/apps" />
   );
 }

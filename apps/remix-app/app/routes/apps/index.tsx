@@ -15,6 +15,8 @@ import TrendingSteamAppCard from '~/components/Cards/TrendingSteamAppCard';
 import type { SteamAppForSmallDisplayCard } from '~/components/Cards/SmallAppsCard';
 import SmallAppsCard from '~/components/Cards/SmallAppsCard';
 import { metaTags } from '~/lib/meta-tags';
+import ErrorDisplay from '~/components/Layout/ErrorDisplay';
+import CatchDisplay from '~/components/Layout/CatchDisplay';
 
 
 interface LoaderData {
@@ -104,24 +106,12 @@ export default function SteamAppIdIndexRoute() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
-  return (
-    <PageWrapper currentRoute="/apps" topSpacer>
-      <div>
-        <h1>Error in /apps route</h1>
-        <div>{error.message}</div>
-      </div>
-    </PageWrapper>
-  );
+  return <ErrorDisplay error={error} currentRoute="/apps" />;
 }
 
 export function CatchBoundary() {
   const caught = useCatch();
   return (
-    <PageWrapper currentRoute="/apps" title="Oops!" topSpacer>
-      <div>
-        <h1>Oops! - {caught.status} - {caught.data}</h1>
-        <p>Error in /apps/index route</p>
-      </div>
-    </PageWrapper>
+    <CatchDisplay thrownResponse={caught} currentRoute="/apps" />
   );
 }

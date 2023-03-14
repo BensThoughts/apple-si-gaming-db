@@ -18,6 +18,7 @@ import type { SteamAppSidebarData } from '~/interfaces';
 import { logger } from '~/lib/logger/logger.server';
 import FourOhFour from '~/components/Layout/FourOhFour';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
+import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 
 interface LoaderData {
   steamApp: SteamAppSidebarData;
@@ -176,26 +177,19 @@ export default function AppsRoute() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
-  return (
-    <PageWrapper currentRoute="/apps" topSpacer>
-      <div>
-        <h1>Error in /apps route</h1>
-        <div>{error.message}</div>
-      </div>
-    </PageWrapper>
-  );
+  return <ErrorDisplay error={error} currentRoute="/apps" />;
 }
 
 export function CatchBoundary() {
-  const thrownResponse = useCatch();
-  if (thrownResponse.status === 404) {
+  const caught = useCatch();
+  if (caught.status === 404) {
     return (
       <FourOhFour currentRoute="/apps">
-        {thrownResponse.status}: {thrownResponse.statusText} - {thrownResponse.data}
+        {caught.status}: {caught.statusText} - {caught.data}
       </FourOhFour>
     );
   }
   return (
-    <CatchDisplay thrownResponse={thrownResponse} currentRoute="/apps/$steamAppId" />
+    <CatchDisplay thrownResponse={caught} currentRoute="/apps/$steamAppId" />
   );
 }

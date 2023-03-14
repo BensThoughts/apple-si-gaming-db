@@ -1,5 +1,6 @@
 import type { MetaFunction } from '@remix-run/node';
 import { Outlet } from '@remix-run/react';
+import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import { metaTags } from '~/lib/meta-tags';
 
@@ -18,12 +19,7 @@ export default function SearchRoute() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
-  return (
-    <div>
-      <h1>Error in /search route</h1>
-      <div>{error.message}</div>
-    </div>
-  );
+  return <ErrorDisplay error={error} currentRoute="/search" />;
 }
 
 

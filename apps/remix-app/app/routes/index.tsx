@@ -19,6 +19,7 @@ import {
   SearchDatabaseOutlineIcon,
   SyncOutlineIcon,
 } from '~/components/Icons/FlatIcons';
+import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 
 interface LoaderData {
   trendingSteamApps: TrendingSteamApp[];
@@ -128,10 +129,5 @@ export default function IndexRoute() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
-  return (
-    <PageWrapper currentRoute="/">
-      <h1>Error in /index route</h1>
-      <div>{error.message}</div>
-    </PageWrapper>
-  );
+  return <ErrorDisplay error={error} currentRoute="/" />;
 }
