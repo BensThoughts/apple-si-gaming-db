@@ -1,0 +1,50 @@
+{
+  "config": {
+    "app_name": "steamed-apples-remix-app-machines",
+    "org_slug": "steamed-apples",
+    "image": "registry.fly.io/steamed-apples-remix-app:deployment-01GTYQRGFJEDBPKXB5J8Y3CG35",
+    "image": "registry.fly.io/steamed-apples-remix-app-machines:deployment-01GVE93P3JWEESZV4VTJJM5PHX",
+    "image": "registry.fly.io/steamed-apples-remix-app-machines:deployment-01GVE9SBKK8E38HQS5BC844QRE",
+    "image": "registry.fly.io/steamed-apples-remix-app-machines:deployment-01GVEAN5AJMGMW139PAMB459BG",
+    "image": "registry.fly.io/steamed-apples-remix-app-machines:deployment-01GVEJ2MY4EFZ3RDB86JHT2X1N",
+    "image": "registry.fly.io/steamed-apples-remix-app-machines:deployment-01GVEK0SW5DHZE9WZ9YAC1A1F9",
+    "env": {
+      "NODE_ENV": "production",
+      "PORT": "8080",
+      "PRIMARY_REGION": "lax",
+      "LOG_LEVEL": "debug",
+      "LOGGER_SERVICE_LABEL": "apps-remix-app"
+    },
+    "services": [
+      {
+        "ports": [
+          {
+            "port": 443,
+            "handlers": [
+              "tls",
+              "http"
+            ]
+          },
+          {
+            "port": 80,
+            "handlers": [
+              "http"
+            ]
+          }
+        ],
+        "protocol": "tcp",
+        "internal_port": 8080
+      }
+    ],
+    "checks": {
+        "httpget": {
+            "type": "http",
+            "port": 8080,
+            "method": "GET",
+            "path": "/healthcheck",
+            "interval": "15s",
+            "timeout": "10s"
+        }
+    }
+  }
+}
