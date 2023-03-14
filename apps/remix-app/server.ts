@@ -3,12 +3,13 @@ import express from 'express';
 import compression from 'compression';
 import morgan from 'morgan';
 import { createRequestHandler } from '@remix-run/express';
+import type { GetLoadContextFunction } from '@remix-run/express';
 import passport from 'passport';
 import SteamStrategy from 'passport-steam';
 import session from 'cookie-session';
 import type { ExtendedAppLoadContext, PassportSteamUser } from '~/interfaces';
 import {
-  convertPassportSteamUserToPrismaSteamUser,
+  convertPassportSteamUserToAppLoadContextSteamUser,
 } from '~/lib/data-utils/appLoadContext.server';
 import { logger } from '@apple-si-gaming-db/logger';
 
@@ -83,14 +84,14 @@ app.get('/api/auth/steam/login',
 app.get('/api/auth/steam/return',
     passport.authenticate('steam', { failureRedirect: '/' }),
     async function(req, res) {
-      res.redirect('/profile');
+      res.redirect(302, '/');
     },
 );
 
 app.get('/api/auth/steam/logout',
     function(req, res) {
       req.session = null;
-      res.redirect('/');
+      res.redirect(302, '/logged-out');
     },
 );
 
@@ -131,7 +132,7 @@ app.all('*', function getReplayResponse(req, res, next) {
     PRIMARY_REGION,
     FLY_REGION,
   };
-  console.info(`Replaying:`, logInfo);
+  logger.info(`Replaying:`, { metadata: { extra: logInfo } });
   res.set('fly-replay', `region=${PRIMARY_REGION}`);
   return res.sendStatus(409);
 });
@@ -154,33 +155,45 @@ app.use(express.static('public', { maxAge: '1h' }));
 const MODE = process.env.NODE_ENV;
 const BUILD_DIR = path.join(process.cwd(), 'build');
 
+function isPassportSteamUser(object: unknown): object is PassportSteamUser {
+  if (
+    typeof object === 'object' &&
+    object != null &&
+    'id' in object &&
+    'displayName' in object &&
+    'provider' in object &&
+    typeof object.provider === 'string'
+  ) {
+    return true;
+    // return object.provider === 'steam';
+  }
+  return false;
+}
+
+const getLoadContext: GetLoadContextFunction = (req, res): ExtendedAppLoadContext => {
+  const { user } = req;
+  if (!isPassportSteamUser(user)) {
+    return { steamUser: null };
+  }
+  const steamUser = convertPassportSteamUserToAppLoadContextSteamUser(user);
+  return {
+    steamUser,
+  };
+};
+
 app.all(
     '*',
   MODE === 'production'
     ? createRequestHandler({
       build: require(BUILD_DIR),
-      getLoadContext(req, res): ExtendedAppLoadContext {
-        const steamUser = req.user
-          ? convertPassportSteamUserToPrismaSteamUser(req.user as PassportSteamUser)
-          : null;
-        return {
-          steamUser,
-        };
-      },
+      getLoadContext,
     })
     : (...args) => {
       purgeRequireCache();
       const requestHandler = createRequestHandler({
         build: require(BUILD_DIR),
         mode: MODE,
-        getLoadContext(req, res): ExtendedAppLoadContext {
-          const steamUser = req.user
-              ? convertPassportSteamUserToPrismaSteamUser(req.user as PassportSteamUser)
-              : null;
-          return {
-            steamUser,
-          };
-        },
+        getLoadContext,
       });
       return requestHandler(...args);
     },
