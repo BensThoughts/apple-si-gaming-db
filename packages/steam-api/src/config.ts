@@ -3,7 +3,7 @@ import { logger } from './logger';
 
 const getConfig = () => {
   const STEAM_API_KEY = process.env.STEAM_API_KEY;
-  invariant(typeof STEAM_API_KEY === 'string', 'STEAM_API_KEY env var not set');
+  invariant(typeof STEAM_API_KEY === 'string', 'STEAM_API_KEY env var for packages/steam-api not set');
   logger.info(`env var STEAM_API_KEY is set for packages/steam-api`);
 
   const STEAM_API_APP_DETAILS_ENDPOINT =

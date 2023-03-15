@@ -2,7 +2,7 @@ import invariant from 'tiny-invariant';
 
 const getConfig = () => {
   const LOGGER_SERVICE_LABEL = process.env.LOGGER_SERVICE_LABEL;
-  invariant(typeof LOGGER_SERVICE_LABEL === 'string', 'LOGGER_SERVICE_LABEL env var not set');
+  invariant(typeof LOGGER_SERVICE_LABEL === 'string', 'LOGGER_SERVICE_LABEL env var for packages/logger not set');
   const LOGTAIL_SOURCE_TOKEN = process.env.LOGTAIL_SOURCE_TOKEN;
   const NODE_ENV = process.env.NODE_ENV;
   return {
