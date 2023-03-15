@@ -155,20 +155,19 @@ app.use(express.static('public', { maxAge: '1h' }));
 const MODE = process.env.NODE_ENV;
 const BUILD_DIR = path.join(process.cwd(), 'build');
 
-function isPassportSteamUser(object: unknown): object is PassportSteamUser {
+function isPassportSteamUser(obj: unknown): obj is PassportSteamUser {
   if (
-    typeof object === 'object' &&
-    object != null &&
-    'id' in object &&
-    'displayName' in object &&
-    'provider' in object
+    typeof obj === 'object' &&
+    obj != null &&
+    'id' in obj &&
+    'displayName' in obj &&
+    'provider' in obj &&
+    '_json' in obj
   ) {
+    return true;
     // TODO: type-check indicates error TS2339: Property 'provider' does not exist on type '{}'
-    const { provider } = object;
-    if (typeof provider === 'string') {
-      return true;
-    }
-    // return object.provider === 'steam';
+    // const { provider } = obj;
+    // return typeof provider === 'string' && provider === 'steam';
   }
   return false;
 }
