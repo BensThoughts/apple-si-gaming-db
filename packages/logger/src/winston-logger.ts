@@ -3,6 +3,7 @@ import { createLogger, format, transports as winstonTransports } from 'winston';
 import type { LoggerOptions } from 'winston';
 import {
   NODE_ENV,
+  LOGGER_LOG_LEVEL,
   LOGGER_SERVICE_LABEL,
   LOGTAIL_SOURCE_TOKEN,
 } from './config';
@@ -33,7 +34,7 @@ function getLogger() {
   }
 
   const logger = createLogger({
-    level: process.env.LOG_LEVEL || 'info',
+    level: LOGGER_LOG_LEVEL || 'info',
     format: combine(
         errors({ stack: true }),
         timestamp(),
