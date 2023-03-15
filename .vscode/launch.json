@@ -17,10 +17,8 @@
       "name": "Attach by Process ID",
       "processId": "${command:PickProcess}",
       "request": "attach",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "type": "node"
+      "skipFiles": ["<node_internals>/**"],
+      "type": "pwa-node"
     },
     {
       "name": "Remix: debug client-side",
