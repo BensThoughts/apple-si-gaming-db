@@ -7,8 +7,9 @@ import type { SteamProfileOwnedSteamApp } from '~/interfaces';
 export async function updateSteamUserProfileOwnedSteamApps(
     steamUserId64: string,
 ) {
-  const { games } = await getSteamPlayerOwnedGamesRequest(steamUserId64);
-  if (games) {
+  const { success, data } = await getSteamPlayerOwnedGamesRequest(steamUserId64);
+  if (success && data && data.games) {
+    const { games } = data;
     const ownedAppIds = games.map((app) => app.appid);
     const ownedAppIdsInDB = await filterAppIdsExistInDatabase(ownedAppIds);
     await prisma.steamUserProfile.update({
@@ -23,7 +24,13 @@ export async function updateSteamUserProfileOwnedSteamApps(
         },
       },
     });
+    return {
+      success,
+    };
   }
+  return {
+    success,
+  };
 }
 
 export async function doesSteamUserProfileExistInDB(steamUserId64: string) {
