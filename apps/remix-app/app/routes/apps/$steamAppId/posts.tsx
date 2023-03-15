@@ -118,13 +118,13 @@ export default function PerformancePostsRoute() {
 
 export function ErrorBoundary({ error }: { error: Error }) {
   // TODO: /apps is not technically the current route
-  return <ErrorDisplay error={error} currentRoute="/apps" />;
+  return <ErrorDisplay includePageWrapper={false} error={error} currentRoute="/apps" />;
 }
 
 export function CatchBoundary() {
   const caught = useCatch();
   // TODO: /apps is not technically the current route
   return (
-    <CatchDisplay thrownResponse={caught} currentRoute="/apps" />
+    <CatchDisplay includePageWrap={false} thrownResponse={caught} currentRoute="/apps" />
   );
 }

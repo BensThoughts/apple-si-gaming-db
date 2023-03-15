@@ -98,12 +98,12 @@ export default function ProfilePage() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
-  return <ErrorDisplay error={error} currentRoute="/profile" />;
+  return <ErrorDisplay includePageWrapper error={error} currentRoute="/profile" />;
 }
 
 export function CatchBoundary() {
   const caught = useCatch();
   return (
-    <CatchDisplay thrownResponse={caught} currentRoute="/profile" />
+    <CatchDisplay includePageWrap thrownResponse={caught} currentRoute="/profile" />
   );
 }

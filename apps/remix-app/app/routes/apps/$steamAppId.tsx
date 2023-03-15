@@ -177,7 +177,7 @@ export default function AppsRoute() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
-  return <ErrorDisplay error={error} currentRoute="/apps" />;
+  return <ErrorDisplay includePageWrapper error={error} currentRoute="/apps" />;
 }
 
 export function CatchBoundary() {
@@ -190,6 +190,6 @@ export function CatchBoundary() {
     );
   }
   return (
-    <CatchDisplay thrownResponse={caught} currentRoute="/apps/$steamAppId" />
+    <CatchDisplay includePageWrap thrownResponse={caught} currentRoute="/apps" />
   );
 }

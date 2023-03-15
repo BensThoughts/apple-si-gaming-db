@@ -434,12 +434,12 @@ export default function SearchIndexRoute() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
-  return <ErrorDisplay error={error} currentRoute="/search" />;
+  return <ErrorDisplay includePageWrapper={false} error={error} currentRoute="/search" />;
 }
 
 export function CatchBoundary() {
   const caught = useCatch();
   return (
-    <CatchDisplay thrownResponse={caught} currentRoute="/search" />
+    <CatchDisplay includePageWrap={false} thrownResponse={caught} currentRoute="/search" />
   );
 }

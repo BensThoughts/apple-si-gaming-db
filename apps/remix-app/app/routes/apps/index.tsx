@@ -106,12 +106,12 @@ export default function SteamAppIdIndexRoute() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
-  return <ErrorDisplay error={error} currentRoute="/apps" />;
+  return <ErrorDisplay includePageWrapper error={error} currentRoute="/apps" />;
 }
 
 export function CatchBoundary() {
   const caught = useCatch();
   return (
-    <CatchDisplay thrownResponse={caught} currentRoute="/apps" />
+    <CatchDisplay includePageWrap thrownResponse={caught} currentRoute="/apps" />
   );
 }
