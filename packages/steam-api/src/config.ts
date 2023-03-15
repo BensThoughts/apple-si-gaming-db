@@ -1,11 +1,9 @@
+import invariant from 'tiny-invariant';
 import { logger } from './logger';
 
 const getConfig = () => {
   const STEAM_API_KEY = process.env.STEAM_API_KEY;
-  if (!STEAM_API_KEY) {
-    logger.error('env var STEAM_API_KEY is not set, please set the environment variable');
-    process.exit(1);
-  }
+  invariant(typeof STEAM_API_KEY === 'string', 'STEAM_API_KEY env var not set');
   logger.info(`env var STEAM_API_KEY is set for packages/steam-api`);
 
   const STEAM_API_APP_DETAILS_ENDPOINT =
@@ -33,16 +31,10 @@ const getConfig = () => {
   };
 };
 
-const {
+export const {
   STEAM_API_KEY,
   STEAM_API_APP_DETAILS_ENDPOINT,
   STEAM_API_GET_OWNED_GAMES_ENDPOINT,
   STEAM_API_APP_LIST_ENDPOINT,
 } = getConfig();
 
-export {
-  STEAM_API_KEY,
-  STEAM_API_APP_DETAILS_ENDPOINT,
-  STEAM_API_GET_OWNED_GAMES_ENDPOINT,
-  STEAM_API_APP_LIST_ENDPOINT,
-};
