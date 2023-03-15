@@ -13,12 +13,10 @@ interface LibraryLayoutProps {
     }[];
     platformMac?: boolean | null;
   }[];
-  isSubmittingUpdateGames: boolean;
 }
 
 export default function LibraryLayout({
   ownedApps,
-  isSubmittingUpdateGames,
 }: LibraryLayoutProps) {
   return (
     <div className="flex flex-col gap-8 items-center w-full p-4 bg-tertiary rounded-lg border-1 border-secondary-highlight">
@@ -29,7 +27,7 @@ export default function LibraryLayout({
       </div> */}
       {(ownedApps && ownedApps.length > 0) ? (
         <div>
-          <OwnedAppsLayout ownedApps={ownedApps} isSubmittingUpdateGames={isSubmittingUpdateGames} />
+          <OwnedAppsLayout ownedApps={ownedApps} />
         </div>
       ) : (
         <div className="max-w-md">
@@ -44,7 +42,7 @@ export default function LibraryLayout({
               re-sync library button or logout and back in.
             </div>
             <div>
-              <SyncLibraryForm isSubmittingUpdateGames={isSubmittingUpdateGames} />
+              <SyncLibraryForm />
             </div>
           </div>
         </div>
