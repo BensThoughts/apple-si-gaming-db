@@ -42,12 +42,18 @@ invariant(typeof REMIX_APP_PASSPORT_DOMAIN === 'string', 'REMIX_APP_PASSPORT_DOM
 invariant(typeof REMIX_APP_PASSPORT_SESSION_SECRET === 'string', 'REMIX_APP_PASSPORT_SESSION_SECRET env var not set');
 invariant(typeof STEAM_API_KEY === 'string', 'STEAM_API_KEY env var not set');
 
+const PASSPORT_RETURN_URL = new URL('/api/auth/steam/return', REMIX_APP_PASSPORT_DOMAIN);
+const PASSPORT_REALM = new URL(REMIX_APP_PASSPORT_DOMAIN);
+
+logger.info(`REMIX_APP_PASSPORT_DOMAIN env set to ${REMIX_APP_PASSPORT_DOMAIN}`);
+logger.info(`passport realm set to ${PASSPORT_REALM}`);
+logger.info(`passport returnURL set to ${PASSPORT_RETURN_URL}`);
 // @ts-ignore: 'new' expression, whose target lacks a construct signature,
 // implicitly has an 'any' type.ts(7009)
 passport.use(new SteamStrategy({
   name: 'steam',
-  returnURL: `${REMIX_APP_PASSPORT_DOMAIN}/api/auth/steam/return`,
-  realm: `${REMIX_APP_PASSPORT_DOMAIN}`,
+  returnURL: PASSPORT_RETURN_URL.toString(),
+  realm: PASSPORT_REALM.toString(),
   apiKey: `${STEAM_API_KEY}`,
 },
 function(identifier: any, profile: any, done: any) {
@@ -75,7 +81,7 @@ app.get('/api/auth/steam/login',
     function(req, res) { },
 );
 
-app.get('/api/auth/steam/return',
+app.get(PASSPORT_RETURN_URL.pathname,
     passport.authenticate('steam', { failureRedirect: '/' }),
     async function(req, res) {
       res.redirect(302, '/');
