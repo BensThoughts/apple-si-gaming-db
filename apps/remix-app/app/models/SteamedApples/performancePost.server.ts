@@ -310,11 +310,12 @@ export async function findNewestPerformancePosts(
       },
     },
     orderBy: {
-      createdAt: 'desc',
+      // createdAt: 'desc',
     },
-    take: numPerformancePosts,
+    // take: numPerformancePosts,
   });
-  return performancePosts.map(({
+  const performancePostMap = new Map<BigInt, Omit<PerformancePost, 'postTags' | 'systemSpec' | 'numLikes'>>();
+  performancePosts.forEach(({
     id,
     createdAt,
     postText,
@@ -328,23 +329,36 @@ export async function findNewestPerformancePosts(
       displayName,
       avatarMedium,
     },
-  }) => ({
-    performancePostId: id,
-    createdAt,
-    postText,
-    steamApp: {
-      steamAppId,
-      name,
-    },
-    rating: {
-      ratingMedal,
-    },
-    userWhoCreated: {
-      steamUserId64: steamUserId64.toString(),
-      displayName,
-      avatarMedium,
-    },
-  }));
+  }) => {
+    performancePostMap.set(steamUserId64, {
+      performancePostId: id,
+      createdAt,
+      postText,
+      steamApp: {
+        steamAppId,
+        name,
+      },
+      rating: {
+        ratingMedal,
+      },
+      userWhoCreated: {
+        steamUserId64: steamUserId64.toString(),
+        displayName,
+        avatarMedium,
+      },
+    });
+  });
+  return Array.from(performancePostMap, (entry) => {
+    return entry[1];
+  }).sort((a, b) => {
+    if (a.createdAt === b.createdAt) {
+      return 0;
+    }
+    if (a.createdAt > b.createdAt) {
+      return -1;
+    }
+    return 1;
+  }).slice(0, numPerformancePosts);
 }
 
 // We use steamUserId64 as the source of truth for who created the post
