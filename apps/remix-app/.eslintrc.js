@@ -7,4 +7,5 @@ module.exports = {
     // '@remix-run/eslint-config/node',
     'custom',
   ],
+  'ignorePatterns': ['**/build/**'],
 };
