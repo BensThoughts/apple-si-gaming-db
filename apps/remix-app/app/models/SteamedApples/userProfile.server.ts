@@ -48,6 +48,90 @@ export async function doesUserProfileExist(
   return userProfileCount > 0 ? true : false;
 }
 
+export async function findUserSessionBySteamUserId64(
+    steamUserId64: string,
+): Promise<UserSessionServerSide | undefined> {
+  const userProfile = await prisma.userProfile.findUnique({
+    where: {
+      steamUserId64: BigInt(steamUserId64),
+    },
+    select: {
+      id: true,
+      userSystemSpecs: {
+        select: {
+          id: true,
+          cpuBrand: true,
+          manufacturer: true,
+          memoryRAM: true,
+          model: true,
+          osVersion: true,
+          systemName: true,
+          videoDriver: true,
+          videoDriverVersion: true,
+          videoPrimaryVRAM: true,
+        },
+        orderBy: {
+          createdAt: 'asc',
+        },
+      },
+      likedPerformancePosts: {
+        select: {
+          performancePostId: true,
+        },
+      },
+      steamUserProfile: {
+        select: {
+          displayName: true,
+          avatarFull: true,
+          avatarMedium: true,
+        },
+      },
+    },
+  });
+  if (!userProfile) {
+    return undefined;
+  }
+  const {
+    id,
+    steamUserProfile,
+    userSystemSpecs,
+    likedPerformancePosts,
+  } = userProfile;
+
+  if (!steamUserProfile) {
+    return undefined;
+  }
+
+  const likedPerformancePostIds = likedPerformancePosts.map(({ performancePostId }) => performancePostId);
+
+  const systemSpecs = userSystemSpecs
+      .map((systemSpec) => ({ ...systemSpec, systemSpecId: systemSpec.id }));
+
+  const {
+    displayName,
+    avatarFull,
+    avatarMedium,
+  } = steamUserProfile;
+  // const ownedSteamApps = new Map();
+  // steamUserProfile.ownedSteamApps.forEach((steamApp) => ownedSteamApps.set(steamApp.steamAppId, steamApp));
+  return {
+    userSession: {
+      userProfile: {
+        userProfileId: id,
+        likedPerformancePostIds,
+        systemSpecs,
+      },
+      steamUserProfile: {
+        // TODO: needs JSON.stringify? https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields
+        steamUserId64: steamUserId64.toString(),
+        displayName,
+        avatarFull,
+        avatarMedium,
+      },
+    },
+  };
+}
+
 export async function findUserSessionByUserProfileId(
     userProfileId: PrismaUserProfile['id'],
 ): Promise<UserSessionServerSide | undefined> {
@@ -114,17 +198,19 @@ export async function findUserSessionByUserProfileId(
   // const ownedSteamApps = new Map();
   // steamUserProfile.ownedSteamApps.forEach((steamApp) => ownedSteamApps.set(steamApp.steamAppId, steamApp));
   return {
-    userProfile: {
-      userProfileId,
-      likedPerformancePostIds,
-      systemSpecs,
-    },
-    steamUserProfile: {
-      // TODO: needs JSON.stringify? https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields
-      steamUserId64: steamUserId64.toString(),
-      displayName,
-      avatarFull,
-      avatarMedium,
+    userSession: {
+      userProfile: {
+        userProfileId,
+        likedPerformancePostIds,
+        systemSpecs,
+      },
+      steamUserProfile: {
+        // TODO: needs JSON.stringify? https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields
+        steamUserId64: steamUserId64.toString(),
+        displayName,
+        avatarFull,
+        avatarMedium,
+      },
     },
   };
 }
