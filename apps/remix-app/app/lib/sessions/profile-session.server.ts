@@ -2,12 +2,10 @@ import {
   createCookieSessionStorage,
   redirect,
 } from '@remix-run/node';
+import invariant from 'tiny-invariant';
 
-const sessionSecret = process.env.ASGD_PROFILE_SESSION_SECRET;
-
-if (!sessionSecret) {
-  throw new Error('ASGD_PROFILE_SESSION_SECRET must be set');
-}
+const { REMIX_APP_PROFILE_SESSION_SECRET } = process.env;
+invariant(typeof REMIX_APP_PROFILE_SESSION_SECRET === 'string', 'REMIX_APP_PROFILE_SESSION_SECRET env var not set');
 
 type ProfileSessionData = {
   userProfileId: number;
@@ -24,7 +22,7 @@ type ProfileSessionData = {
 const userProfileSession = createCookieSessionStorage<ProfileSessionData>({
   cookie: {
     name: '__user_profile_session',
-    secrets: [sessionSecret],
+    secrets: [REMIX_APP_PROFILE_SESSION_SECRET],
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production' ? true : false,
     maxAge: 60 * 60 * 24 * 30, // 30 days

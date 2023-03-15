@@ -3,7 +3,7 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**"]
+      "outputs": ["dist/**", ".build/**"]
     },
     "db:migrate:deploy": {
       "outputs": []
@@ -25,25 +25,35 @@
     },
     "lint": {
       "outputs": []
+    },
+    "type-check": {
+      "outputs": []
     }
   },
   "globalDependencies": [
-    "$ASGD_BATCH_SIZE",
-    "$ASGD_DATA_DOWNLOAD_ATTEMPTED",
-    "$ASGD_DAYS_SINCE_SYNC",
-    "$ASGD_INITIAL_PAGE",
-    "$ASGD_PASSPORT_DOMAIN",
-    "$ASGD_PASSPORT_SESSION_SECRET",
-    "$ASGD_PROFILE_SESSION_SECRET",
-    "$ASGD_STEAM_API_KEY",
-    "$ASGD_THEME_SESSION_SECRET",
-    "$DATABASE_URL",
-    "$FLY_REGION",
-    "$LOG_LEVEL",
-    "$LOGGER_SERVICE_LABEL",
-    "$LOGTAIL_SOURCE_TOKEN",
     "$NODE_ENV",
-    "$PORT",
-    "$PRIMARY_REGION"
+    "$PRIMARY_REGION",
+    "$FLY_REGION",
+    "$DATABASE_URL",
+
+    "$BACKEND_OPS_BATCH_SIZE",
+    "$BACKEND_OPS_DATA_DOWNLOAD_ATTEMPTED",
+    "$BACKEND_OPS_DAYS_SINCE_SYNC",
+    "$BACKEND_OPS_INITIAL_PAGE",
+
+    "$REMIX_APP_PASSPORT_DOMAIN",
+    "$REMIX_APP_PASSPORT_SESSION_SECRET",
+    "$REMIX_APP_PORT",
+    "$REMIX_APP_PROFILE_SESSION_SECRET",
+    "$REMIX_APP_THEME_SESSION_SECRET",
+
+    "$STEAM_API_KEY",
+    "$STEAM_API_APP_DETAILS_ENDPOINT",
+    "$STEAM_API_GET_OWNED_GAMES_ENDPOINT",
+    "$STEAM_API_APP_LIST_ENDPOINT",
+  
+    "$LOGGER_LOG_LEVEL",
+    "$LOGGER_SERVICE_LABEL",
+    "$LOGGER_LOGTAIL_SOURCE_TOKEN"
   ]
 }

@@ -12,6 +12,7 @@ import {
   convertPassportSteamUserToAppLoadContextSteamUser,
 } from '~/lib/data-utils/appLoadContext.server';
 import { logger } from '@apple-si-gaming-db/logger';
+import invariant from 'tiny-invariant';
 
 const app = express();
 
@@ -32,23 +33,22 @@ passport.deserializeUser((obj: false | Express.User | null | undefined, done) =>
   done(null, obj);
 });
 
-const ASGD_PASSPORT_DOMAIN = process.env.ASGD_PASSPORT_DOMAIN;
-if (!ASGD_PASSPORT_DOMAIN) {
-  logger.error('env ASGD_PASSPORT_DOMAIN not set correctly');
-  process.exit(1);
-}
-const ASGD_STEAM_API_KEY = process.env.ASGD_STEAM_API_KEY;
-if (!ASGD_STEAM_API_KEY) {
-  logger.error('env ASGD_STEAM_API_KEY not set correctly');
-}
+const {
+  REMIX_APP_PASSPORT_DOMAIN,
+  REMIX_APP_PASSPORT_SESSION_SECRET,
+  STEAM_API_KEY,
+} = process.env;
+invariant(typeof REMIX_APP_PASSPORT_DOMAIN === 'string', 'REMIX_APP_PASSPORT_DOMAIN env var not set');
+invariant(typeof REMIX_APP_PASSPORT_SESSION_SECRET === 'string', 'REMIX_APP_PASSPORT_SESSION_SECRET env var not set');
+invariant(typeof STEAM_API_KEY === 'string', 'STEAM_API_KEY env var not set');
 
 // @ts-ignore: 'new' expression, whose target lacks a construct signature,
 // implicitly has an 'any' type.ts(7009)
 passport.use(new SteamStrategy({
   name: 'steam',
-  returnURL: `${ASGD_PASSPORT_DOMAIN}/api/auth/steam/return`,
-  realm: `${ASGD_PASSPORT_DOMAIN}`,
-  apiKey: `${ASGD_STEAM_API_KEY}`,
+  returnURL: `${REMIX_APP_PASSPORT_DOMAIN}/api/auth/steam/return`,
+  realm: `${REMIX_APP_PASSPORT_DOMAIN}`,
+  apiKey: `${STEAM_API_KEY}`,
 },
 function(identifier: any, profile: any, done: any) {
   return done(null, profile);
@@ -56,15 +56,9 @@ function(identifier: any, profile: any, done: any) {
 ));
 
 const PASSPORT_COOKIE_NAME = 'passport-steam';
-const PASSPORT_SESSION_SECRET = process.env.ASGD_PASSPORT_SESSION_SECRET;
-if (!PASSPORT_SESSION_SECRET) {
-  logger.error('env var ASGD_PASSPORT_SESSION_SECRET not set.');
-  process.exit(1);
-}
-
 app.use(session({
   name: PASSPORT_COOKIE_NAME,
-  secret: PASSPORT_SESSION_SECRET,
+  secret: REMIX_APP_PASSPORT_SESSION_SECRET,
   sameSite: 'lax',
   // secure: process.env.NODE_ENV === 'production' ? true : false,
   maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
@@ -201,7 +195,7 @@ app.all(
     },
 );
 
-const port = process.env.PORT || 3000;
+const port = process.env.REMIX_APP_PORT || 3000;
 
 app.listen(port, () => {
   // require the built app so we're ready when the first request comes in

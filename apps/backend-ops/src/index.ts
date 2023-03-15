@@ -24,45 +24,45 @@ program.command('stage')
     .option(
         '-p, --page <number>',
         chalk.yellow('The initial page in the db to start on, 0 is the first page. Can also be set via env var ') +
-        chalk.blue('$ASGD_INITIAL_PAGE'),
+        chalk.blue('BACKEND_OPS_INITIAL_PAGE'),
         '0',
     )
     .option(
         '-b, --batch-size <number>',
         chalk.yellow('The number of appids to pull from steam every 5 minutes. Can also be set via env var ') +
-        chalk.blue('$ASGD_BATCH_SIZE'),
+        chalk.blue('BACKEND_OPS_BATCH_SIZE'),
         '200',
     )
     .option(
         '--data-download-attempted',
         chalk.yellow('Update all apps where data download has already been attempted. Can also be set via env var ') +
-        chalk.blue('$ASGD_DATA_DOWNLOAD_ATTEMPTED="1"'),
+        chalk.blue('BACKEND_OPS_DATA_DOWNLOAD_ATTEMPTED="1"'),
     )
     .option(
         '--no-data-download-attempted',
         chalk.yellow('Update all apps where data download has not been attempted. Can also be set via env var ') +
-        chalk.blue('$ASGD_DATA_DOWNLOAD_ATTEMPTED="0"'),
+        chalk.blue('BACKEND_OPS_DATA_DOWNLOAD_ATTEMPTED="0"'),
     )
     .option(
         '--days-since-sync <number>',
         chalk.yellow('Only update data for apps that have not been synced in --days-since-sync days. Can also be set via env var ') +
-        chalk.blue('$ASGD_DAYS_SINCE_SYNC'),
+        chalk.blue('BACKEND_OPS_DAYS_SINCE_SYNC'),
     )
     .action(async (opts: StageOpts) => {
       // const STARTING_PAGE = 3; // fly.io current page
       // const STARTING_PAGE = 145; // local current page
       const {
-        ASGD_INITIAL_PAGE,
-        ASGD_BATCH_SIZE,
-        ASGD_DATA_DOWNLOAD_ATTEMPTED,
-        ASGD_DAYS_SINCE_SYNC,
+        BACKEND_OPS_INITIAL_PAGE,
+        BACKEND_OPS_BATCH_SIZE,
+        BACKEND_OPS_DATA_DOWNLOAD_ATTEMPTED,
+        BACKEND_OPS_DAYS_SINCE_SYNC,
       } = process.env;
-      const INITIAL_PAGE = Number(ASGD_INITIAL_PAGE ? ASGD_INITIAL_PAGE : opts.page);
+      const INITIAL_PAGE = Number(BACKEND_OPS_INITIAL_PAGE ? BACKEND_OPS_INITIAL_PAGE : opts.page);
       if (!isFinite(INITIAL_PAGE)) {
-        logger.error('env var $ASGD_INITIAL_PAGE or option -p --page needs to be a valid number', {
+        logger.error('env var BACKEND_OPS_INITIAL_PAGE or option -p --page needs to be a valid number', {
           metadata: {
             extra: {
-              '$ASGD_INITIAL_PAGE': ASGD_INITIAL_PAGE,
+              'BACKEND_OPS_INITIAL_PAGE': BACKEND_OPS_INITIAL_PAGE,
               'opts.page': opts.page,
             },
           },
@@ -70,12 +70,12 @@ program.command('stage')
         process.exit(1);
       }
 
-      const BATCH_SIZE = Number(ASGD_BATCH_SIZE ? ASGD_BATCH_SIZE : opts.batchSize);
+      const BATCH_SIZE = Number(BACKEND_OPS_BATCH_SIZE ? BACKEND_OPS_BATCH_SIZE : opts.batchSize);
       if (!isFinite(BATCH_SIZE)) {
-        logger.error('env var $ASGD_BATCH_SIZE or option -b --batch-size needs to be a valid number', {
+        logger.error('env var BACKEND_OPS_BATCH_SIZE or option -b --batch-size needs to be a valid number', {
           metadata: {
             extra: {
-              '$ASGD_BATCH_SIZE': ASGD_BATCH_SIZE,
+              'BACKEND_OPS_BATCH_SIZE': BACKEND_OPS_BATCH_SIZE,
               'opts.batchSize': opts.batchSize,
             },
           },
@@ -84,16 +84,16 @@ program.command('stage')
       }
 
       let DAYS_SINCE_SYNC: number | undefined = undefined;
-      if (ASGD_DAYS_SINCE_SYNC) {
-        DAYS_SINCE_SYNC = Number(ASGD_DAYS_SINCE_SYNC);
+      if (BACKEND_OPS_DAYS_SINCE_SYNC) {
+        DAYS_SINCE_SYNC = Number(BACKEND_OPS_DAYS_SINCE_SYNC);
       } else {
         DAYS_SINCE_SYNC = opts.daysSinceSync;
       }
       if (DAYS_SINCE_SYNC && !isFinite(DAYS_SINCE_SYNC)) {
-        logger.error('env var $ASGD_DAYS_SINCE_SYNC or option --days-since-sync needs to be a valid number or unset (undefined)', {
+        logger.error('env var BACKEND_OPS_DAYS_SINCE_SYNC or option --days-since-sync needs to be a valid number or unset (undefined)', {
           metadata: {
             extra: {
-              '$ASGD_DAYS_SINCE_SYNC': ASGD_DAYS_SINCE_SYNC,
+              'BACKEND_OPS_DAYS_SINCE_SYNC': BACKEND_OPS_DAYS_SINCE_SYNC,
               'opts.daysSinceSync': opts.daysSinceSync,
             },
           },
@@ -102,22 +102,22 @@ program.command('stage')
       }
 
       let DATA_DOWNLOAD_ATTEMPTED: undefined | boolean = undefined;
-      if (ASGD_DATA_DOWNLOAD_ATTEMPTED) {
+      if (BACKEND_OPS_DATA_DOWNLOAD_ATTEMPTED) {
         if (
           !(
-            (ASGD_DATA_DOWNLOAD_ATTEMPTED === '1') ||
-            (ASGD_DATA_DOWNLOAD_ATTEMPTED === '0')
+            (BACKEND_OPS_DATA_DOWNLOAD_ATTEMPTED === '1') ||
+            (BACKEND_OPS_DATA_DOWNLOAD_ATTEMPTED === '0')
           )
         ) {
           logger.error('env var DATA_DOWNLOAD_ATTEMPTED must be either 0, 1, or unset');
           process.exit(1);
         }
-        if (DAYS_SINCE_SYNC && (ASGD_DATA_DOWNLOAD_ATTEMPTED === '1')) {
+        if (DAYS_SINCE_SYNC && (BACKEND_OPS_DATA_DOWNLOAD_ATTEMPTED === '1')) {
           DATA_DOWNLOAD_ATTEMPTED = undefined;
-        } else if (DAYS_SINCE_SYNC && (ASGD_DATA_DOWNLOAD_ATTEMPTED === '0')) {
+        } else if (DAYS_SINCE_SYNC && (BACKEND_OPS_DATA_DOWNLOAD_ATTEMPTED === '0')) {
           DATA_DOWNLOAD_ATTEMPTED = false;
         } else {
-          DATA_DOWNLOAD_ATTEMPTED = (ASGD_DATA_DOWNLOAD_ATTEMPTED === '1') ? true : false;
+          DATA_DOWNLOAD_ATTEMPTED = (BACKEND_OPS_DATA_DOWNLOAD_ATTEMPTED === '1') ? true : false;
         }
       } else {
         if (DAYS_SINCE_SYNC && (opts.dataDownloadAttempted === true)) {
