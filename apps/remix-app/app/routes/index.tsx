@@ -1,5 +1,5 @@
 import { json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { useCatch, useLoaderData } from '@remix-run/react';
 import { findNewestPerformancePosts } from '~/models/SteamedApples/performancePost.server';
 import { findTrendingSteamApps } from '~/models/Steam/steamApp.server';
 import PageWrapper from '~/components/Layout/PageWrapper';
@@ -20,6 +20,7 @@ import {
   SyncOutlineIcon,
 } from '~/components/Icons/FlatIcons';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
+import CatchDisplay from '~/components/Layout/CatchDisplay';
 
 interface LoaderData {
   trendingSteamApps: TrendingSteamApp[];
@@ -129,5 +130,14 @@ export default function IndexRoute() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
-  return <ErrorDisplay error={error} currentRoute="/" />;
+  // TODO: /apps is not technically the current route
+  return <ErrorDisplay includePageWrapper error={error} currentRoute="/" />;
+}
+
+export function CatchBoundary() {
+  const caught = useCatch();
+  // TODO: /apps is not technically the current route
+  return (
+    <CatchDisplay includePageWrap thrownResponse={caught} currentRoute="/" />
+  );
 }

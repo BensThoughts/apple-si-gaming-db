@@ -1,5 +1,6 @@
 import type { MetaFunction } from '@remix-run/node';
-import { Outlet } from '@remix-run/react';
+import { Outlet, useCatch } from '@remix-run/react';
+import CatchDisplay from '~/components/Layout/CatchDisplay';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import { metaTags } from '~/lib/meta-tags';
@@ -19,7 +20,15 @@ export default function SearchRoute() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
-  return <ErrorDisplay error={error} currentRoute="/search" />;
+  // TODO: /apps is not technically the current route
+  return <ErrorDisplay includePageWrapper error={error} currentRoute="/search" />;
 }
 
+export function CatchBoundary() {
+  const caught = useCatch();
+  // TODO: /apps is not technically the current route
+  return (
+    <CatchDisplay includePageWrap thrownResponse={caught} currentRoute="/search" />
+  );
+}
 

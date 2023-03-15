@@ -6,7 +6,7 @@ import type {
 } from '~/interfaces';
 import { validatePerformancePostId, validateSteamAppId } from '~/lib/loader-functions/params-validators.server';
 import { didSteamUserProfileCreatePerformancePost, findPerformancePostById } from '~/models/SteamedApples/performancePost.server';
-import { useActionData, useLoaderData, useTransition } from '@remix-run/react';
+import { useActionData, useCatch, useLoaderData, useTransition } from '@remix-run/react';
 import { findPostTags } from '~/models/SteamedApples/performancePostTag.server';
 import { findAllGamepads } from '~/models/SteamedApples/gamepadMetadata.server';
 // import { doesSteamUserOwnApp } from '~/models/steamUser.server';
@@ -17,6 +17,8 @@ import { editPerformancePostAction } from '~/lib/form-actions/performance-post/e
 import type { PostTagOption, GamepadOption } from '~/interfaces';
 import type { CreateOrEditPerformancePostActionData } from '~/lib/form-actions/performance-post/create-or-edit-action-type';
 import { requireUserIds } from '~/lib/sessions/profile-session.server';
+import ErrorDisplay from '~/components/Layout/ErrorDisplay';
+import CatchDisplay from '~/components/Layout/CatchDisplay';
 
 type EditPostLoaderData = {
   steamAppId: number;
@@ -130,5 +132,18 @@ export default function EditPerformancePostRoute() {
         gamepadOptions={gamepadOptions}
       />
     </div>
+  );
+}
+
+export function ErrorBoundary({ error }: { error: Error }) {
+  // TODO: /apps is not technically the current route
+  return <ErrorDisplay includePageWrapper={false} error={error} currentRoute="/apps" />;
+}
+
+export function CatchBoundary() {
+  const caught = useCatch();
+  // TODO: /apps is not technically the current route
+  return (
+    <CatchDisplay includePageWrap={false} thrownResponse={caught} currentRoute="/apps" />
   );
 }
