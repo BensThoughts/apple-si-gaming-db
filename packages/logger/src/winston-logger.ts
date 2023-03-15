@@ -1,6 +1,11 @@
 /* eslint-disable no-var */
 import { createLogger, format, transports as winstonTransports } from 'winston';
 import type { LoggerOptions } from 'winston';
+import {
+  NODE_ENV,
+  LOGGER_SERVICE_LABEL,
+  LOGTAIL_SOURCE_TOKEN,
+} from './config';
 import { Logtail } from '@logtail/node';
 import { LogtailTransport } from '@logtail/winston';
 import type { ExtendedLeveledLogMethod, LoggerMetadata } from './types';
@@ -13,7 +18,7 @@ const {
   label,
 } = format;
 
-function getLogger(serviceLabel: string) {
+function getLogger() {
   const transports: LoggerOptions['transports'] = [
     new winstonTransports.File({
       filename: './logs/error.log',
@@ -21,8 +26,6 @@ function getLogger(serviceLabel: string) {
     }),
     new winstonTransports.Console(),
   ];
-
-  const LOGTAIL_SOURCE_TOKEN = process.env.LOGTAIL_SOURCE_TOKEN;
 
   if (LOGTAIL_SOURCE_TOKEN) {
     const logtail = new Logtail(LOGTAIL_SOURCE_TOKEN);
@@ -34,11 +37,11 @@ function getLogger(serviceLabel: string) {
     format: combine(
         errors({ stack: true }),
         timestamp(),
-        label({ label: serviceLabel, message: false }),
+        label({ label: LOGGER_SERVICE_LABEL, message: false }),
         // timestamp({ format: `MM-DD-YYYY [at] hh:mm:ss A` }),
         // timestamp({ format: `MM-DD-YYYY [at] HH:mm:ss` }),
-        process.env.NODE_ENV === 'development' &&
-        !process.env.LOGTAIL_SOURCE_TOKEN
+        NODE_ENV === 'development' &&
+        !LOGTAIL_SOURCE_TOKEN
           ? prettyPrint({ colorize: true })
           : json(),
     ),
@@ -117,11 +120,7 @@ function getLogger(serviceLabel: string) {
   };
 };
 
-const serviceLabel = process.env.LOGGER_SERVICE_LABEL;
-if (!serviceLabel) {
-  throw new Error('env var LOGGER_SERVICE_LABEL must be set for the logger service to work');
-}
 
-const logger = getLogger(serviceLabel);
+const logger = getLogger();
 export { logger };
 
