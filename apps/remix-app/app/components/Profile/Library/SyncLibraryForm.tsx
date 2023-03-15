@@ -1,12 +1,22 @@
-import { Form } from '@remix-run/react';
+import { useFetcher } from '@remix-run/react';
+import { useEffect } from 'react';
 import { SyncOutlineIcon } from '~/components/Icons/FlatIcons';
 import RoundedButton from '~/components/RoundedButton';
+import { showToast } from '~/components/Toasts';
+import type { LibraryActionData } from '~/routes/profile/library';
 
-export default function SyncLibraryForm({
-  isSubmittingUpdateGames,
-}: {
-  isSubmittingUpdateGames: boolean;
-}) {
+export default function SyncLibraryForm() {
+  const fetcher = useFetcher<LibraryActionData>();
+  const actionData = fetcher.data;
+  useEffect(() => {
+    if (actionData) {
+      const { updateOwnedGames: { success } } = actionData;
+      if (!success) {
+        showToast.error('Error updating library, is your steam profile set to public?');
+      }
+    }
+  }, [actionData]);
+
   return (
     <div
       className="flex items-center justify-center gap-3
@@ -16,15 +26,15 @@ export default function SyncLibraryForm({
         <SyncOutlineIcon size={38} className="text-icon-secondary-highlight" />
       </div>
       <div>
-        <Form
+        <fetcher.Form
           action="/profile/library"
           method="post"
         >
           <input type="hidden" name="_profileAction" value="updateOwnedGames" />
-          <RoundedButton width="wide" type="submit">
-            {isSubmittingUpdateGames ? <span>Updating...</span> : <span>Resync Library</span>}
+          <RoundedButton width="wide" type="submit" disabled={fetcher.state != 'idle'}>
+            {fetcher.state != 'idle' ? <span>Updating...</span> : <span>Resync Library</span>}
           </RoundedButton>
-        </Form>
+        </fetcher.Form>
       </div>
     </div>
   );
