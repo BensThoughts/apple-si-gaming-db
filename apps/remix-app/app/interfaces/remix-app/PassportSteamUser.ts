@@ -2,7 +2,7 @@ export interface PassportSteamUser {
   provider: 'steam',
   id: string;
   displayName: string;
-  photos?: { value: string }[];
+  photos?: { value: string }[] | null;
   _json: {
     steamid: string; // same as steamId64
     communityvisibilitystate: number;
@@ -14,14 +14,14 @@ export interface PassportSteamUser {
     avatarmedium: string,
     avatarfull: string;
     avatarhash: string;
-    lastlogoff: number;
     personastate: number;
-    realname: string;
-    primaryclanid: string;
-    timecreated: number;
-    personastateflags: number;
-    loccountrycode: string;
-    locstatecode: string;
-    loccityid: number;
+    lastlogoff?: number | null;
+    realname?: string | null;
+    primaryclanid?: string | null;
+    timecreated?: number | null;
+    personastateflags?: number | null;
+    loccountrycode?: string | null;
+    locstatecode?: string | null;
+    loccityid?: number | null;
   }
 }
