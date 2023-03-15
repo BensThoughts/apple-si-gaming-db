@@ -25,7 +25,9 @@ import { extractAppLoadContext } from '~/lib/data-utils/appLoadContext.server';
 import NavBar from '~/components/Layout/Navbar';
 import { Toaster } from 'react-hot-toast';
 import {
-  findUserSessionByUserProfileId, upsertUserProfileBySteamUserId64,
+  findUserSessionBySteamUserId64,
+  // findUserSessionByUserProfileId,
+  upsertUserProfileBySteamUserId64,
 } from '~/models/SteamedApples/userProfile.server';
 
 import type { SerializeFrom } from '@remix-run/node';
@@ -45,10 +47,9 @@ import { updateSteamUserProfileOwnedSteamApps } from './models/Steam/steamUserPr
 
 type RootLoaderData = {
   theme: Theme | null;
-  userSession?: UserSessionServerSide;
   isLoggedInWithSteam: boolean;
   isLoggedInToSite: boolean;
-}
+} & UserSessionServerSide;
 
 export type SerializedRootLoaderData = SerializeFrom<RootLoaderData>
 
@@ -71,10 +72,11 @@ export async function loader({ request, context }: LoaderArgs) {
       });
     }
     // We are now definitely logged in and have a userProfileId
-    const userSession = await findUserSessionByUserProfileId(userProfileId);
+    // const userSession = await findUserSessionByUserProfileId(userProfileId);
+    const userSessionFromDB = await findUserSessionBySteamUserId64(steamUserId64);
 
     // TODO: not sure if this is safe
-    if (!userSession) {
+    if (!userSessionFromDB) {
       logger.warn(`logging out user because they were not found in db. steamUserId64: ${steamUserId64}`, {
         metadata: {
           userSession: {
@@ -90,6 +92,8 @@ export async function loader({ request, context }: LoaderArgs) {
       // TODO: not sure if this is safe
       throw await logout(request);
     }
+
+    const { userSession } = userSessionFromDB;
 
     return json<RootLoaderData>({
       theme,
@@ -117,7 +121,8 @@ export async function action({ request, context }: ActionArgs) {
   const profileSession = await getProfileSession(request);
   const steamUserId64 = steamUser.steamUserId64;
   const { id: userProfileId } = await upsertUserProfileBySteamUserId64(steamUserId64, steamUser);
-  await updateSteamUserProfileOwnedSteamApps(steamUserId64);
+  const { success } = await updateSteamUserProfileOwnedSteamApps(steamUserId64);
+  logger.debug(`steam user with steamUserId64 ${steamUserId64} attempt to update owned games, success: ${success}`);
   profileSession.login(userProfileId, steamUserId64);
   logger.debug(`steam user with steamUserId64 ${steamUserId64} just logged in`, {
     metadata: {
@@ -289,7 +294,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
   return (
     <ThemeProvider ssrCookieTheme={null}>
       <Document title={`${metaTags.title} - Error`} ssrTheme={null}>
-        <ErrorDisplay error={error} currentRoute="/" />
+        <ErrorDisplay includePageWrapper error={error} currentRoute="/" />
       </Document>
     </ThemeProvider>
   );
@@ -300,7 +305,7 @@ export function CatchBoundary() {
   return (
     <ThemeProvider ssrCookieTheme={null}>
       <Document title={`${metaTags.title} - Oops!`} ssrTheme={null}>
-        <CatchDisplay thrownResponse={thrownResponse} currentRoute="/" />
+        <CatchDisplay includePageWrap thrownResponse={thrownResponse} currentRoute="/" />
       </Document>
     </ThemeProvider>
   );
