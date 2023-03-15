@@ -36,10 +36,8 @@ function computeGenreOptions(ownedApps: OwnedApp[], ALL_FILTER: SelectOption) {
 
 export default function OwnedAppsLayout({
   ownedApps,
-  isSubmittingUpdateGames,
 }: {
   ownedApps: OwnedApp[]
-  isSubmittingUpdateGames: boolean;
 }) {
   const ALL_FILTER = useMemo(() => ({ name: 'All', value: 'All' }), []);
   const genreOptions = useMemo(() => computeGenreOptions(ownedApps, ALL_FILTER), [ownedApps, ALL_FILTER]);
@@ -103,7 +101,7 @@ export default function OwnedAppsLayout({
 
       <div className="flex flex-col items-center justify-center self-center gap-8 w-full">
         <div className="">
-          <SyncLibraryForm isSubmittingUpdateGames={isSubmittingUpdateGames} />
+          <SyncLibraryForm />
         </div>
 
 
