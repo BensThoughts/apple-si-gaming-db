@@ -22,8 +22,10 @@ function ErrorToast({ message, t }: ToastProps) {
       leaveFrom="opacity-100 scale-100"
       leaveTo="opacity-0 scale-95"
     >
-      <span>{message}</span>
-      <RoundedButton onClick={() => toast.dismiss(t.id)}>Close</RoundedButton>
+      <div className="flex gap-2">
+        <span>{message}</span>
+        <RoundedButton onClick={() => toast.dismiss(t.id)}>Close</RoundedButton>
+      </div>
     </Transition>
   );
 }
