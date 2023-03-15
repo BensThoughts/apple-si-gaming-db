@@ -9,7 +9,7 @@
     "build": "tsup",
     "clean": "rimraf .turbo node_modules dist",
     "dev": "tsup --watch",
-    "lint": "eslint ./src/**.ts**",
+    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "type-check": "tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
