@@ -5,7 +5,7 @@ import {
   NODE_ENV,
   LOGGER_LOG_LEVEL,
   LOGGER_SERVICE_LABEL,
-  LOGTAIL_SOURCE_TOKEN,
+  LOGGER_LOGTAIL_SOURCE_TOKEN,
 } from './config';
 import { Logtail } from '@logtail/node';
 import { LogtailTransport } from '@logtail/winston';
@@ -28,8 +28,8 @@ function getLogger() {
     new winstonTransports.Console(),
   ];
 
-  if (LOGTAIL_SOURCE_TOKEN) {
-    const logtail = new Logtail(LOGTAIL_SOURCE_TOKEN);
+  if (LOGGER_LOGTAIL_SOURCE_TOKEN) {
+    const logtail = new Logtail(LOGGER_LOGTAIL_SOURCE_TOKEN);
     transports.push(new LogtailTransport(logtail));
   }
 
@@ -42,7 +42,7 @@ function getLogger() {
         // timestamp({ format: `MM-DD-YYYY [at] hh:mm:ss A` }),
         // timestamp({ format: `MM-DD-YYYY [at] HH:mm:ss` }),
         NODE_ENV === 'development' &&
-        !LOGTAIL_SOURCE_TOKEN
+        !LOGGER_LOGTAIL_SOURCE_TOKEN
           ? prettyPrint({ colorize: true })
           : json(),
     ),
