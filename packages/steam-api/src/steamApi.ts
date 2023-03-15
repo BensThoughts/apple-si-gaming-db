@@ -117,7 +117,10 @@ export async function getSteamAppDetailsRequest(
 
 export async function getSteamPlayerOwnedGamesRequest(
     steamUserId64: string,
-): Promise<SteamApiGetOwnedGamesResponse['response']> {
+): Promise<{
+  success: boolean;
+  data?: SteamApiGetOwnedGamesResponse['response']
+}> {
   const getOwnedGamesEndpoint = 'https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/';
   try {
     const apiKey = process.env.ASGD_STEAM_API_KEY;
@@ -154,7 +157,15 @@ export async function getSteamPlayerOwnedGamesRequest(
           },
         });
     invariant(response.status === 200, `response status was not 200, response.status: ${response.status}`);
-    return response.data.response;
+    if ('games' in response.data.response) {
+      return {
+        success: true,
+        data: response.data.response,
+      };
+    }
+    return {
+      success: false,
+    };
   } catch (err) {
     if (err instanceof Error) {
       logger.error(err.message, {
