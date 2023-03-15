@@ -7,10 +7,10 @@ processes = []
 
 [env]
   NODE_ENV = "production"
-  PORT = "8080"
+  REMIX_APP_PORT = "8080"
   PRIMARY_REGION = "lax"
-  LOG_LEVEL = "debug"
-  LOGGER_SERVICE_LABEL = "apps-remix-app"
+  LOGGER_LOG_LEVEL = "debug"
+  LOGGER_SERVICE_LABEL = "apps-remix-app-staging"
 
 [experimental]
   allowed_public_ports = []
