@@ -310,55 +310,53 @@ export async function findNewestPerformancePosts(
       },
     },
     orderBy: {
-      // createdAt: 'desc',
+      createdAt: 'desc',
     },
-    // take: numPerformancePosts,
+    take: numPerformancePosts * 10,
   });
-  const performancePostMap = new Map<BigInt, Omit<PerformancePost, 'postTags' | 'systemSpec' | 'numLikes'>>();
-  performancePosts.forEach(({
-    id,
-    createdAt,
-    postText,
-    steamApp: {
-      steamAppId,
-      name,
-    },
-    ratingMedal,
-    steamUserProfile: {
-      steamUserId64,
-      displayName,
-      avatarMedium,
-    },
-  }) => {
-    performancePostMap.set(steamUserId64, {
-      performancePostId: id,
+  const postsWithUniqueAuthor = new Map<BigInt, Omit<PerformancePost, 'postTags' | 'systemSpec' | 'numLikes'>>();
+  for (let i = 0; i < performancePosts.length; i++) {
+    const {
+      id,
       createdAt,
       postText,
       steamApp: {
         steamAppId,
         name,
       },
-      rating: {
-        ratingMedal,
-      },
-      userWhoCreated: {
-        steamUserId64: steamUserId64.toString(),
+      ratingMedal,
+      steamUserProfile: {
+        steamUserId64,
         displayName,
         avatarMedium,
       },
-    });
-  });
-  return Array.from(performancePostMap, (entry) => {
+    } = performancePosts[i];
+    if (!postsWithUniqueAuthor.has(steamUserId64)) {
+      postsWithUniqueAuthor.set(steamUserId64, {
+        performancePostId: id,
+        createdAt,
+        postText,
+        steamApp: {
+          steamAppId,
+          name,
+        },
+        rating: {
+          ratingMedal,
+        },
+        userWhoCreated: {
+          steamUserId64: steamUserId64.toString(),
+          displayName,
+          avatarMedium,
+        },
+      });
+    }
+    if (postsWithUniqueAuthor.size >= numPerformancePosts) {
+      break;
+    }
+  }
+  return Array.from(postsWithUniqueAuthor, (entry) => {
     return entry[1];
-  }).sort((a, b) => {
-    if (a.createdAt === b.createdAt) {
-      return 0;
-    }
-    if (a.createdAt > b.createdAt) {
-      return -1;
-    }
-    return 1;
-  }).slice(0, numPerformancePosts);
+  });
 }
 
 // We use steamUserId64 as the source of truth for who created the post
