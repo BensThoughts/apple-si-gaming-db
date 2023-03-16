@@ -3,13 +3,13 @@ import { useCatch, useLoaderData } from '@remix-run/react';
 import { findNewestPerformancePosts } from '~/models/SteamedApples/performancePost.server';
 import { findTrendingSteamApps } from '~/models/Steam/steamApp.server';
 import PageWrapper from '~/components/Layout/PageWrapper';
-import TrendingSteamAppCard from '~/components/Cards/TrendingSteamAppCard';
+import TrendingSteamAppCard from '~/components/Home/TrendingSteamAppCard';
 import { Fragment } from 'react';
 import type {
   TrendingSteamApp,
   PerformancePost,
 } from '~/interfaces';
-import NewPerformancePostCard from '~/components/Cards/NewPerformancePostCard';
+import NewPerformancePostCard from '~/components/Home/NewPerformancePostCard';
 import Card from '~/components/Cards/Card';
 import {
   CommentsOutlineIcon,
