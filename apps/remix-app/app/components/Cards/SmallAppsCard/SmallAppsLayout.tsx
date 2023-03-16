@@ -27,15 +27,16 @@ export default function SmallAppsLayout({
 }: {
   steamApps: SteamAppForSmallDisplayCard []
 }) {
+  const APPS_PER_PAGE = 30;
   const ALL_FILTER = useMemo(() => ({ name: 'All', value: 'All' }), []);
   const genreOptions = useMemo(() => computeGenreOptions(steamApps, ALL_FILTER), [steamApps, ALL_FILTER]);
   const [nameQuery, setNameQuery] = useState('');
   const [genreFilter, setGenreFilter] = useState(ALL_FILTER);
   const [filterAppleOnly, setFilterAppleOnly] = useState(false);
-  const [paginate, setPaginate] = useState(20);
+  const [paginate, setPaginate] = useState(APPS_PER_PAGE);
 
   const loadMore = () => {
-    setPaginate((prevValue) => prevValue + 20);
+    setPaginate((prevValue) => prevValue + APPS_PER_PAGE);
   };
 
   function searchNames(ownedApps: SteamAppForSmallDisplayCard []) {
