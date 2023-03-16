@@ -1,0 +1,24 @@
+{
+  "name": "@apple-si-gaming-db/invariant",
+  "version": "0.0.1",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsup",
+    "clean": "rimraf .turbo node_modules dist",
+    "dev": "tsup --watch",
+    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
+    "type-check": "tsc --noEmit --skipLibCheck"
+  },
+  "devDependencies": {
+    "@apple-si-gaming-db/tsconfig": "*",
+    "eslint": "^8.20.0",
+    "eslint-config-custom": "*",
+    "rimraf": "^3.0.2",
+    "tsup": "^6.2.3",
+    "tsx": "^3.9.0",
+    "typescript": "^4.8.2"
+  }
+}
