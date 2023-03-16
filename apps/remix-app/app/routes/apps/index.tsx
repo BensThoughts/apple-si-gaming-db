@@ -2,17 +2,9 @@ import { json } from '@remix-run/node';
 import type { MetaFunction } from '@remix-run/node';
 import { useCatch, useLoaderData } from '@remix-run/react';
 import PageWrapper from '~/components/Layout/PageWrapper';
-import { findSteamAppsWherePostsExist, findTrendingSteamApps } from '~/models/Steam/steamApp.server';
-import { findNewestPerformancePosts } from '~/models/SteamedApples/performancePost.server';
-import type {
-  TrendingSteamApp,
-} from '~/interfaces';
-
-import { Fragment } from 'react';
-import NewPerformancePostCard from '~/components/Cards/NewPerformancePostCard';
-import TrendingSteamAppCard from '~/components/Cards/TrendingSteamAppCard';
-import type { SteamAppForSmallDisplayCard } from '~/components/Cards/SmallAppsCard';
-import SmallAppsCard from '~/components/Cards/SmallAppsCard';
+import { findSteamAppsWherePostsExist } from '~/models/Steam/steamApp.server';
+import type { SteamAppForSmallDisplayCard } from '~/components/Games/SmallAppsCard';
+import SmallAppsCard from '~/components/Games/SmallAppsCard';
 import { metaTags } from '~/lib/meta-tags';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
