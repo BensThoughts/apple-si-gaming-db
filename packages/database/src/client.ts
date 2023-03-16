@@ -1,6 +1,6 @@
 /* eslint-disable no-var */
 import { PrismaClient } from '@prisma/client';
-import invariant from 'tiny-invariant';
+import invariant from '@apple-si-gaming-db/invariant';
 import { logger } from './logger';
 
 let prisma: PrismaClient;

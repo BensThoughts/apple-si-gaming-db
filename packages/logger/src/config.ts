@@ -1,4 +1,4 @@
-import invariant from 'tiny-invariant';
+import invariant from '@apple-si-gaming-db/invariant';
 
 const getConfig = () => {
   const LOGGER_SERVICE_LABEL = process.env.LOGGER_SERVICE_LABEL;

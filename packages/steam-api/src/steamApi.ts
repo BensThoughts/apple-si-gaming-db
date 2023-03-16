@@ -1,6 +1,6 @@
 import axios from 'axios';
 import type { AxiosResponse } from 'axios';
-import invariant from 'tiny-invariant';
+import invariant from '@apple-si-gaming-db/invariant';
 import type {
   SteamApiAppDetailsResponse,
   SteamApiAppListResponse,

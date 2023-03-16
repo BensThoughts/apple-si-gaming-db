@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@apple-si-gaming-db/database": "*",
+    "@apple-si-gaming-db/invariant": "*",
     "@apple-si-gaming-db/logger": "*",
     "@apple-si-gaming-db/steam-api": "*",
     "@headlessui/react": "^1.6.6",
@@ -45,8 +46,7 @@
     "react-hot-toast": "^2.4.0",
     "react-select": "^5.4.0",
     "react-use": "^17.4.0",
-    "remix-utils": "^3.4.0",
-    "tiny-invariant": "^1.2.0"
+    "remix-utils": "^3.4.0"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.14.0",

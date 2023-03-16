@@ -12,7 +12,7 @@ import {
   convertPassportSteamUserToAppLoadContextSteamUser,
 } from '~/lib/data-utils/appLoadContext.server';
 import { logger } from '@apple-si-gaming-db/logger';
-import invariant from 'tiny-invariant';
+import invariant from '@apple-si-gaming-db/invariant';
 
 const app = express();
 

@@ -1,7 +1,7 @@
 import { isTheme } from '../context/theme-provider';
 import type { Theme } from '../context/theme-provider';
 import { createCookieSessionStorage } from '@remix-run/node';
-import invariant from 'tiny-invariant';
+import invariant from '@apple-si-gaming-db/invariant';
 
 const { REMIX_APP_THEME_SESSION_SECRET } = process.env;
 invariant(typeof REMIX_APP_THEME_SESSION_SECRET === 'string', 'REMIX_APP_THEME_SESSION_SECRET env var not set');

@@ -28,10 +28,10 @@
     "seed": "tsx src/seed.ts"
   },
   "dependencies": {
+    "@apple-si-gaming-db/invariant": "*",
     "@apple-si-gaming-db/logger": "*",
     "@apple-si-gaming-db/steam-api": "*",
-    "@prisma/client": "^4.10.1",
-    "tiny-invariant": "^1.2.0"
+    "@prisma/client": "^4.10.1"
   },
   "devDependencies": {
     "@apple-si-gaming-db/tsconfig": "*",
