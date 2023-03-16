@@ -28,8 +28,8 @@ interface LoaderData {
 }
 
 export async function loader() {
-  const NUM_TRENDING_APPS = 10;
-  const NUM_RECENT_POSTS = 5;
+  const NUM_TRENDING_APPS = 7;
+  const NUM_RECENT_POSTS = 7;
   const trendingSteamApps = await findTrendingSteamApps(NUM_TRENDING_APPS);
   const newPerformancePosts = await findNewestPerformancePosts(NUM_RECENT_POSTS);
   return json<LoaderData>({
