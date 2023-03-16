@@ -312,7 +312,9 @@ export async function findNewestPerformancePosts(
     orderBy: {
       createdAt: 'desc',
     },
-    take: numPerformancePosts * 10,
+    take: numPerformancePosts * 20, // with numPerformancePosts at 5, someone would have to write
+                                    // over 95 posts before this whole function starts
+                                    // returning less than 5 posts
   });
   const postsWithUniqueAuthor = new Map<BigInt, Omit<PerformancePost, 'postTags' | 'systemSpec' | 'numLikes'>>();
   for (let i = 0; i < performancePosts.length; i++) {
