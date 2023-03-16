@@ -1,4 +1,4 @@
-import LogoutButton from '../LogoutButton';
+import LogoutButton from './LogoutButton';
 
 export default function ProfileCard({
   avatarFull,

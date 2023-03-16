@@ -7,8 +7,8 @@ import {
 import PageWrapper from '~/components/Layout/PageWrapper';
 
 import { metaTags } from '~/lib/meta-tags';
-import LoginCard from '~/components/Profile/Login/LoginCard';
-import PrivacyCard from '~/components/Profile/Login/PrivacyCard';
+import LoginCard from '~/components/Profile/LoginCard';
+import PrivacyCard from '~/components/Profile/PrivacyCard';
 import AnimatedUnderline from '~/components/AnimatedUnderline';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
 import type { SerializedRootLoaderData } from '~/root';
@@ -33,12 +33,12 @@ export default function ProfilePage() {
 
   if (!userSession) {
     return (
-      <PageWrapper currentRoute="/profile" title="Login" topSpacer>
-        <div className="flex flex-col items-center w-full">
+      <PageWrapper currentRoute="/profile" topSpacer>
+        <div className="flex flex-col items-center justify-center w-full">
           <div
-            className="flex flex-col md:flex-row gap-4 md:gap-6 md:justify-evenly
+            className="flex flex-col md:flex-row gap-4 md:gap-10 md:justify-evenly
                items-center p-4 md:p-6 rounded-lg border-1
-               border-secondary-highlight bg-tertiary w-full max-w-3xl"
+               border-secondary-highlight bg-tertiary w-full max-w-4xl"
           >
             <LoginCard />
             <PrivacyCard />

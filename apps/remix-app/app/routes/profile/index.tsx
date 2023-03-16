@@ -1,5 +1,5 @@
 import Card from '~/components/Cards/Card';
-import ProfileLayout from '~/components/Profile/Login/ProfileLayout';
+import ProfileLayout from '~/components/Profile/ProfileLayout';
 import LogoutButton from '~/components/Profile/LogoutButton';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
 
