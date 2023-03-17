@@ -50,7 +50,7 @@ export default function PageWrapper({
         </PageMain>
         <Background />
       </div>
-      <PageFooter className="mt-20" />
+      <PageFooter className="mt-10 md:mt-20" />
     </div>
   );
 }
