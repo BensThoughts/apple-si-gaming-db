@@ -63,7 +63,7 @@ export default function ContactRoute() {
 
         {/* Medium Screens */}
         <div className="hidden md:flex md:justify-center bg-tertiary w-full max-w-2xl px-8 pb-8 pt-6 rounded-lg border-1 border-secondary-highlight">
-          <AsideCard title="Suggestions" iconBackground="bg-tertiary" className="w-full max-w-md">
+          <AsideCard title="Suggestions" iconBackground="bg-tertiary">
             <div className="flex flex-col gap-6">
               <p>
                 The site is currently pre-alpha.  Please join the Discord or

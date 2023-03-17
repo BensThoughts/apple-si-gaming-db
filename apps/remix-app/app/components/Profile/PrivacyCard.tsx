@@ -4,7 +4,7 @@ import ExternalLink from '~/components/ExternalLink';
 export default function PrivacyCard() {
   return (
     <div className="flex items-center justify-center w-full h-full">
-      <AsideCard title="Note" iconBackground="bg-tertiary" className="max-w-md mx-2">
+      <AsideCard title="Note" iconBackground="bg-tertiary">
         Within your&nbsp;
         <ExternalLink
           href="https://steamcommunity.com/my/edit/settings"

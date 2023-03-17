@@ -2,7 +2,7 @@ import AsideCard from '~/components/Cards/AsideCard';
 
 export default function CreateSystemInstructions() {
   return (
-    <AsideCard title="How To Create a System" iconBackground="bg-tertiary" className="max-w-md">
+    <AsideCard title="How To Create a System" iconBackground="bg-tertiary">
       <div className="flex flex-col gap-3">
         <div>
           Copy and paste your system information directly from Steam
