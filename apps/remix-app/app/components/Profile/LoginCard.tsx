@@ -12,11 +12,11 @@ export default function LoginCard() {
         <span className="text-secondary">&nbsp;Click the icon to login.</span>
       </span>
       <a
-          href="/api/auth/steam/login"
-          className="outline-none focus-visible:show-ring rounded-lg mt-2"
-          // onClick={() => Fathom.trackGoal('7HVQUUZ4', 1)}
-        >
-      <div className="p-5 border-solid border-secondary-highlight border-y-2 rounded-xl bg-tertiary-highlight">
+        href="/api/auth/steam/login"
+        className="outline-none focus-visible:show-ring rounded-lg mt-2"
+        // onClick={() => Fathom.trackGoal('7HVQUUZ4', 1)}
+      >
+        <div className="p-5 border-solid border-secondary-highlight border-y-2 rounded-xl bg-tertiary-highlight">
 
           <img
             src="/steam_sign_in.png"
@@ -28,7 +28,7 @@ export default function LoginCard() {
               e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
             }}
           />
-      </div>
+        </div>
       </a>
 
     </div>
