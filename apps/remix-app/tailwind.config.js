@@ -30,6 +30,7 @@ module.exports = {
       'secondary-highlight': generateColorClass('color-app-secondary-highlight'),
       'tertiary': generateColorClass('color-app-tertiary'),
       'tertiary-highlight': generateColorClass('color-app-tertiary-highlight'),
+      'gray': generateColorClass('color-app-gray'),
       'error': generateColorClass('color-app-error'),
       'danger': generateColorClass('color-app-danger'),
       'danger-light': generateColorClass('color-app-danger-light'),
@@ -61,6 +62,28 @@ module.exports = {
       },
       borderWidth: {
         1: '1px',
+      },
+      animation: {
+        'marquee': 'marquee 40s linear infinite',
+        'marquee2': 'marquee2 40s linear infinite',
+        'large-marquee': 'marquee 80s linear infinite',
+        'large-marquee2': 'marquee2 80s linear infinite',
+      },
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(0)' },
+          'to': { transform: 'translateX(-100%)' },
+        },
+        marquee2: {
+          '0%': { transform: 'translateX(100%)' },
+          'to': { transform: 'translateX(0)' },
+        },
+        shimmer: {
+          'to': {
+            content: 'var(--tw-content)',
+            transform: 'translateX(100%)',
+          },
+        },
       },
       // fontFamily: {
       //   'merriweather': ['"Merriweather"', 'serif'],
