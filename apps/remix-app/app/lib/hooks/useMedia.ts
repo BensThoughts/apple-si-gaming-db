@@ -1,6 +1,6 @@
 import { useMedia } from 'react-use';
 
-export function useMediaIsWide() {
-  const isWide = useMedia('(min-width: 768px)', false);
-  return { isWide };
+export function useMediaIsWide(defaultValue: boolean) {
+  const isWide = useMedia('(min-width: 768px)', defaultValue);
+  return isWide;
 }

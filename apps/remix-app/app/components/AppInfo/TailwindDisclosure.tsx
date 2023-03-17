@@ -10,7 +10,7 @@ export default function TailwindDisclosure({
   title: string;
   children: React.ReactNode;
 }) {
-  const { isWide } = useMediaIsWide();
+  const isWide = useMediaIsWide(false);
   const [isOpen, setIsOpen] = useState(true);
 
   // TODO: Maybe remove this useEffect and isWide
