@@ -211,7 +211,7 @@ function Document({
         <Links />
       </head>
       <body
-        className="min-h-screen bg-app-bg"
+        className="min-h-screen bg-app-bg max-w-[100vw] overflow-x-hidden"
         data-theme={theme ? theme : ''}
         data-gramm="false"
         data-gramm_editor="false"
