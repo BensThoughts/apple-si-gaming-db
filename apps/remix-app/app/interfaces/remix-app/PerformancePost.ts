@@ -18,6 +18,7 @@ export type PerformancePost = {
     steamUserId64: string;
     displayName?: string | null;
     avatarMedium?: string | null;
+    avatarFull?: string | null;
   };
   steamApp: {
     steamAppId: number;

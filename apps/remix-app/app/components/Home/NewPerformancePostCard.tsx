@@ -16,7 +16,7 @@ export default function NewPerformancePostCard({
 }: NewPerformancePostCardProps) {
   const {
     displayName,
-    avatarMedium,
+    avatarFull,
   } = userWhoCreated;
   const {
     ratingMedal,
@@ -26,16 +26,16 @@ export default function NewPerformancePostCard({
       to={`/apps/${steamApp.steamAppId}/posts#${performancePostId}`}
       className="border-1 border-secondary-highlight rounded-md
                  p-4 bg-tertiary hover:bg-tertiary-highlight
-                 focus:show-ring w-full max-w-xl h-full max-h-[165px]
-                 flex items-center justify-start"
+                 focus:show-ring w-[20rem] md:w-[36rem] h-[165px]
+                 flex items-center justify-start whitespace-normal"
     >
       {/* Medium+ Screens */}
       <div className="hidden md:flex items-center gap-2 w-full h-full">
         <div className="flex flex-col items-center justify-center gap-2 w-full max-w-[8rem]">
-          {avatarMedium && (
+          {avatarFull && (
             // <div className="border-1 border-secondary-highlight rounded-full">
-            <div className="w-[64px] h-[64px] rounded-full">
-              <AvatarImage avatarMedium={avatarMedium} />
+            <div className="w-[84px] h-[84px]">
+              <AvatarImage avatarFull={avatarFull} />
             </div>
             // </div>
           )}
@@ -48,7 +48,7 @@ export default function NewPerformancePostCard({
             </span>
             {` - `}<i className="italic">{ratingMedal}</i>
           </div>
-          <div className="line-clamp-3">
+          <div className="line-clamp-3 text-left">
             {postText}
           </div>
         </div>
@@ -56,9 +56,9 @@ export default function NewPerformancePostCard({
 
       {/* Small- Screens */}
       <div
-        className="md:hidden flex flex-col gap-2 justify-center"
+        className="md:hidden flex flex-col gap-2 justify-center items-center w-full"
       >
-        <div className="flex flex-col justify-center">
+        <div className="flex flex-col justify-center items-center w-full">
           <div>
             <span className="font-semibold">
               {steamApp.name}

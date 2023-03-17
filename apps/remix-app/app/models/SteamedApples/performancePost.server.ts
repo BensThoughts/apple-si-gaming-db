@@ -305,16 +305,17 @@ export async function findNewestPerformancePosts(
         select: {
           steamUserId64: true,
           displayName: true,
-          avatarMedium: true,
+          avatarFull: true,
         },
       },
     },
     orderBy: {
       createdAt: 'desc',
     },
-    take: numPerformancePosts * 20, // with numPerformancePosts at 5, someone would have to write
-                                    // over 95 posts before this whole function starts
-                                    // returning less than 5 posts
+    // with numPerformancePosts at 7, someone would have to write
+    // over 133 posts before findNewestPerformancePosts starts
+    // returning less than 7 posts
+    take: numPerformancePosts * 20,
   });
   const postsWithUniqueAuthor = new Map<BigInt, Omit<PerformancePost, 'postTags' | 'systemSpec' | 'numLikes'>>();
   for (let i = 0; i < performancePosts.length; i++) {
@@ -330,7 +331,7 @@ export async function findNewestPerformancePosts(
       steamUserProfile: {
         steamUserId64,
         displayName,
-        avatarMedium,
+        avatarFull,
       },
     } = performancePosts[i];
     if (!postsWithUniqueAuthor.has(steamUserId64)) {
@@ -348,7 +349,7 @@ export async function findNewestPerformancePosts(
         userWhoCreated: {
           steamUserId64: steamUserId64.toString(),
           displayName,
-          avatarMedium,
+          avatarFull,
         },
       });
     }
