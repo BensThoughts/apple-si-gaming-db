@@ -3,7 +3,7 @@ import { useCatch, useLoaderData } from '@remix-run/react';
 import { findNewestPerformancePosts } from '~/models/SteamedApples/performancePost.server';
 import { findTrendingSteamApps } from '~/models/Steam/steamApp.server';
 import PageWrapper from '~/components/Layout/PageWrapper';
-import TrendingSteamAppCard from '~/components/Home/TrendingSteamAppCard';
+import TrendingSteamAppsSection from '~/components/Home/TrendingSteamAppsSection';
 import { Fragment } from 'react';
 import type {
   TrendingSteamApp,
@@ -28,7 +28,7 @@ interface LoaderData {
 }
 
 export async function loader() {
-  const NUM_TRENDING_APPS = 7;
+  const NUM_TRENDING_APPS = 8;
   const NUM_RECENT_POSTS = 7;
   const trendingSteamApps = await findTrendingSteamApps(NUM_TRENDING_APPS);
   const newPerformancePosts = await findNewestPerformancePosts(NUM_RECENT_POSTS);
@@ -59,7 +59,7 @@ export default function IndexRoute() {
       <div className="flex flex-col items-center gap-12 w-full">
         <div className="flex flex-col items-center gap-6 w-full">
 
-          <h2 className="text-secondary text-2xl">New Features</h2>
+          <h2 className="text-secondary text-4xl">New Features</h2>
           <div className="w-full max-w-3xl">
             <Card>
               <div>
@@ -78,7 +78,7 @@ export default function IndexRoute() {
         </div>
         {(newPerformancePosts.length > 0) && (
           <div className="flex flex-col items-center gap-6 w-full">
-            <h2 className="text-secondary text-2xl">New Posts</h2>
+            <h2 className="text-secondary text-4xl">New Posts</h2>
             <div className="w-full flex flex-col items-center gap-4">
               {newPerformancePosts.map(({
                 performancePostId,
@@ -102,28 +102,7 @@ export default function IndexRoute() {
             </div>
           </div>
         )}
-        {(trendingSteamApps.length > 0) && (
-          <div className="flex flex-col items-center gap-6 w-full">
-            <h2 className="text-secondary text-2xl">Trending Apps</h2>
-            <div className="flex flex-col items-center gap-4 w-full">
-              {trendingSteamApps.map(({
-                steamAppId,
-                name,
-                headerImage,
-                numPerformancePosts,
-              }) => (
-                <Fragment key={steamAppId}>
-                  <TrendingSteamAppCard
-                    steamAppId={steamAppId}
-                    name={name}
-                    headerImage={headerImage}
-                    numPerformancePosts={numPerformancePosts}
-                  />
-                </Fragment>
-              ))}
-            </div>
-          </div>
-        )}
+        <TrendingSteamAppsSection trendingSteamApps={trendingSteamApps} />
       </div>
     </PageWrapper>
   );
