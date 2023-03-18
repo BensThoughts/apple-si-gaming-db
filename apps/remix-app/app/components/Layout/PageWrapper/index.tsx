@@ -22,13 +22,12 @@ function Background() {
 }
 
 type PageProps = {
-  currentRoute: string;
   title?: string;
   topSpacer?: boolean;
-} & React.HTMLAttributes<HTMLDivElement>
+  children: React.ReactNode;
+}
 
 export default function PageWrapper({
-  currentRoute,
   title,
   topSpacer = false,
   children,
