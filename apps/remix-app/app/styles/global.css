@@ -27,8 +27,12 @@ body {
 }
 
 body[data-theme="light"] {
-  --color-bg-primary: 224, 251, 253;
-  --color-bg-secondary: 152, 193, 218;
+  /* --color-bg-primary: 224, 251, 253; */
+  /* --color-bg-secondary: 152, 193, 218; */
+  /* --color-bg-primary: 153, 195, 225; */
+  --color-bg-primary: 181, 214, 238;
+  --color-bg-secondary: 194, 219, 237;
+  /* --color-bg-secondary: 124, 170, 217; */
   --color-bg-modal: 243, 248, 251;
 
   --color-app-primary: 248, 240, 227;
