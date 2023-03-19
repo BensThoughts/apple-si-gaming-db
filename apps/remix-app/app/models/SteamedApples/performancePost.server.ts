@@ -1,6 +1,6 @@
 import type {
   PerformancePost,
-  UserProfilePerformancePost,
+  PerformancePostForUserProfileDisplay,
 } from '~/interfaces';
 import type {
   PrismaPerformancePost,
@@ -218,7 +218,7 @@ export async function findPerformancePostsBySteamAppId(
 
 export async function findPerformancePostsBySteamUserId(
     steamUserId64: string,
-): Promise<UserProfilePerformancePost[]> {
+): Promise<PerformancePostForUserProfileDisplay[]> {
   const performancePosts = await prisma.performancePost.findMany({
     where: {
       steamUserId64: BigInt(steamUserId64),

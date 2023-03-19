@@ -2,7 +2,7 @@ import { getSteamPlayerOwnedGamesRequest } from '~/lib/data-utils/steamApi.serve
 import { filterAppIdsExistInDatabase } from './steamApp.server';
 import type { PrismaSteamApp } from '~/interfaces/database';
 import prisma from '~/lib/database/db.server';
-import type { SteamProfileOwnedSteamApp } from '~/interfaces';
+import type { SteamAppForSmallAppsGridLayout } from '~/interfaces';
 
 export async function updateSteamUserProfileOwnedSteamApps(
     steamUserId64: string,
@@ -77,7 +77,7 @@ export async function doesSteamUserOwnApp(
   return steamUser.ownedSteamApps.map((app) => app.steamAppId).includes(steamAppId);
 }
 
-export async function findSteamUserProfileOwnedSteamApps(steamUserId64: string): Promise<SteamProfileOwnedSteamApp[]> {
+export async function findSteamUserProfileOwnedSteamApps(steamUserId64: string): Promise<SteamAppForSmallAppsGridLayout[]> {
   const steamUserProfile = await prisma.steamUserProfile.findUnique({
     where: {
       steamUserId64: BigInt(steamUserId64),

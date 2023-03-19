@@ -10,7 +10,11 @@ import type {
   PrismaSteamGenre,
   PrismaSteamCategory,
 } from '~/interfaces/database';
-import type { TrendingSteamApp } from '~/interfaces';
+import type {
+  TrendingSteamApp,
+  SteamAppForSmallAppsGridLayout,
+  SteamAppForSearchPage,
+} from '~/interfaces';
 
 import prisma from '~/lib/database/db.server';
 
@@ -70,9 +74,13 @@ export async function findSteamAppByAppId(
   });
 }
 
-
-interface SearchReleasedSteamAppsByNameProps {
-  searchQuery: PrismaSteamApp['name'];
+export async function searchReleasedSteamAppsByName({
+  appName,
+  skip,
+  take,
+  whereOptions,
+}: {
+  appName: PrismaSteamApp['name'];
   skip: number;
   take: number;
   whereOptions?: {
@@ -80,17 +88,7 @@ interface SearchReleasedSteamAppsByNameProps {
     genreIds?: PrismaSteamGenre['id'][];
     categoryIds?: PrismaSteamCategory['id'][];
   },
-}
-
-export async function searchReleasedSteamAppsByName(
-    searchOptions: SearchReleasedSteamAppsByNameProps,
-) {
-  const {
-    searchQuery,
-    skip,
-    take,
-    whereOptions,
-  } = searchOptions;
+}): Promise<SteamAppForSearchPage[]> {
   let whereInput: Prisma.SteamAppWhereInput = {};
   if (whereOptions) {
     const {
@@ -146,10 +144,10 @@ export async function searchReleasedSteamAppsByName(
       // } : undefined,
     };
   }
-  return prisma.steamApp.findMany({
+  return await prisma.steamApp.findMany({
     where: {
       name: {
-        contains: searchQuery,
+        contains: appName,
         mode: 'insensitive',
       },
       // comingSoon: {
@@ -216,7 +214,7 @@ export async function findTrendingSteamApps(
   }));
 }
 
-export function findSteamAppsWherePostsExist() {
+export async function findSteamAppsWherePostsExist(): Promise<SteamAppForSmallAppsGridLayout[]> {
   return prisma.steamApp.findMany({
     where: {
       performancePosts: {
