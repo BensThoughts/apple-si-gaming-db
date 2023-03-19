@@ -2,10 +2,12 @@ export default function AppHeaderImage({
   headerImageSrc,
   name,
   className,
+  loading = 'lazy',
 }: {
-  headerImageSrc?: string;
+  headerImageSrc?: string | null;
   name: string;
   className?: string;
+  loading?: 'lazy' | 'eager';
 }) {
   return (
     <img
@@ -14,7 +16,7 @@ export default function AppHeaderImage({
       width={460}
       height={215}
       className={`rounded-md ${className}`}
-      loading="lazy"
+      loading={loading}
       onError={(e) => {
         e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
       }}
