@@ -7,12 +7,12 @@ import {
   updateSteamUserProfileOwnedSteamApps,
 } from '~/models/Steam/steamUserProfile.server';
 import { requireUserIds } from '~/lib/sessions/profile-session.server';
-import type { SteamProfileOwnedSteamApp } from '~/interfaces';
+import type { SteamAppForSmallAppsGridLayout } from '~/interfaces';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
 
 type LibraryLoaderData = {
-  ownedSteamApps: SteamProfileOwnedSteamApp[];
+  ownedSteamApps: SteamAppForSmallAppsGridLayout[];
 }
 
 export async function loader({ request }: LoaderArgs) {
@@ -36,14 +36,7 @@ export async function action({ request, context }: ActionArgs) {
   }
   switch (action) {
     case 'updateOwnedGames': {
-      // const userProfileExists = await doesUserProfileExist(userProfileId);
-      // if (!userProfileExists) {
-      //   await upsertUserProfileBySteamUserId64(steamUserId64, steamUser);
-      // }
       const { success } = await updateSteamUserProfileOwnedSteamApps(steamUserId64);
-      // if (!success) {
-      //   throw new Response('failed to update library', { status: 500 });
-      // }
       return json<LibraryActionData>({ updateOwnedGames: { success } });
     }
     default: {
@@ -54,17 +47,7 @@ export async function action({ request, context }: ActionArgs) {
 
 export default function ProfileAppsRoute() {
   const { ownedSteamApps } = useLoaderData<typeof loader>();
-  // const transition = useTransition();
-
-  // const isSubmittingUpdateGames =
-  //   transition.state === 'submitting' &&
-  //   transition.submission.formData.get('_profileAction') === 'updateOwnedGames';
-
-  return (
-    <LibraryLayout
-      ownedApps={ownedSteamApps}
-    />
-  );
+  return <LibraryLayout ownedApps={ownedSteamApps} />;
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
