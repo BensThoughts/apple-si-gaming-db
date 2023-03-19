@@ -2,7 +2,7 @@ import PageWrapper from '~/components/Layout/PageWrapper';
 
 export default function LoggedOutPage() {
   return (
-    <PageWrapper currentRoute="/logged-out" topSpacer>
+    <PageWrapper topSpacer>
       <div className="flex flex-col gap-4 w-full h-[calc(100vh_-_14rem)] items-center justify-center">
         <h1 className="text-4xl md:text-6xl text-primary-highlight">You Logged Out</h1>
         <p>

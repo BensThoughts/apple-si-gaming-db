@@ -10,7 +10,7 @@ export const meta: MetaFunction = () => ({
 
 export default function ContactRoute() {
   return (
-    <PageWrapper currentRoute="/contact" title="Contact" topSpacer>
+    <PageWrapper title="Contact" topSpacer>
       <div className="flex flex-col gap-6 items-center w-full">
         <div className="flex flex-col gap-4 md:flex-row md:justify-between w-full max-w-2xl p-4 bg-tertiary rounded-md border-1 border-secondary-highlight">
           <a

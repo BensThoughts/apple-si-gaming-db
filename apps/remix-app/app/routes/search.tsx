@@ -11,7 +11,7 @@ export const meta: MetaFunction = () => ({
 
 export default function SearchRoute() {
   return (
-    <PageWrapper currentRoute="/search" title="Search" topSpacer>
+    <PageWrapper title="Search" topSpacer>
       <div className="flex flex-col w-full items-center gap-6">
         <Outlet />
       </div>

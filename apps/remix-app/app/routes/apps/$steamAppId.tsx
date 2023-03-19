@@ -128,7 +128,7 @@ export default function AppsRoute() {
     categories,
   } = steamApp;
   return (
-    <PageWrapper currentRoute={`/apps/${steamAppId}/posts`} title={name} topSpacer>
+    <PageWrapper title={name} topSpacer>
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4 min-h-screen">
 
         <div className="col-start-1 col-span-1 md:col-span-4 xl:col-span-3">
