@@ -3,20 +3,15 @@ import type { MetaFunction } from '@remix-run/node';
 import { useCatch, useLoaderData } from '@remix-run/react';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import { findSteamAppsWherePostsExist } from '~/models/Steam/steamApp.server';
-import type { SteamAppForSmallDisplayCard } from '~/components/Games/SmallAppsCard';
-import SmallAppsCard from '~/components/Games/SmallAppsCard';
 import { metaTags } from '~/lib/meta-tags';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
+import SmallAppsGridLayout from '~/components/Apps/SmallAppsGridLayout';
 
-
-interface LoaderData {
-  steamAppsWherePostsExist: SteamAppForSmallDisplayCard[];
-}
 
 export async function loader() {
   const steamAppsWherePostsExist = await findSteamAppsWherePostsExist();
-  return json<LoaderData>({
+  return json({
     steamAppsWherePostsExist,
   });
 }
@@ -30,9 +25,9 @@ export default function SteamAppIdIndexRoute() {
     steamAppsWherePostsExist,
   } = useLoaderData<typeof loader>();
   return (
-    <PageWrapper currentRoute="/apps" title="Games">
+    <PageWrapper title="Games With Posts">
       <div className="flex flex-col items-center gap-12 w-full mt-6">
-        <SmallAppsCard steamApps={steamAppsWherePostsExist} />
+        <SmallAppsGridLayout steamApps={steamAppsWherePostsExist} />
       </div>
     </PageWrapper>
   );
