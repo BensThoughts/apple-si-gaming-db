@@ -11,12 +11,10 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useActionData,
   useCatch,
   useFetcher,
   useLoaderData,
-  // useLocation,
-  useTransition,
+  useNavigation,
 } from '@remix-run/react';
 import { json } from '@remix-run/node';
 import globalStylesheetUrl from '~/styles/global.css';
@@ -60,6 +58,8 @@ export async function loader({ request, context }: LoaderArgs) {
 
   const { steamUser } = extractAppLoadContext(context);
   const profileSession = await getProfileSession(request);
+
+  // TODO: add check for userProfileId without steamUser and logout if case
 
   if (steamUser) { // if steamUser then isLoggedInWithSteam = true
     const steamUserId64 = steamUser.steamUserId64;
@@ -109,14 +109,10 @@ export async function loader({ request, context }: LoaderArgs) {
   });
 }
 
-export type LoginActionData = {
-  successfullyLoggedInToSite: boolean;
-}
-
 export async function action({ request, context }: ActionArgs) {
   const { steamUser } = extractAppLoadContext(context);
   if (!steamUser) {
-    throw new Response('steam user not found in app context', { status: 401 });
+    throw new Response('failed login attempt, steam user not found in app context', { status: 401 });
   }
   const profileSession = await getProfileSession(request);
   const steamUserId64 = steamUser.steamUserId64;
@@ -136,9 +132,7 @@ export async function action({ request, context }: ActionArgs) {
       },
     },
   });
-  return json<LoginActionData>({
-    successfullyLoggedInToSite: true,
-  }, {
+  return json(null, {
     headers: {
       'Set-Cookie': await profileSession.commit(),
     },
@@ -174,28 +168,6 @@ function Document({
   ssrTheme: Theme | null;
 }) {
   const [theme] = useTheme();
-
-  // const fathomLoaded = useRef(false);
-  // const location = useLocation();
-
-  // useEffect(function setupFathom() {
-  //   if (!fathomLoaded.current) {
-  //     Fathom.load('OXJZWIXK', {
-  //       url: 'https://outstanding-phone.steamedapples.com/script.js',
-  //       includedDomains: [
-  //         'www.steamedapples.com',
-  //         'steamedapples.com',
-  //         '*.steamedapples.com',
-  //         'www.applesilicongaming.com',
-  //         'applesilicongaming.com',
-  //         '*.applesilicongaming.com',
-  //       ],
-  //     });
-  //     fathomLoaded.current = true;
-  //   } else {
-  //     Fathom.trackPageview({ url: location.pathname + location.search });
-  //   }
-  // }, [location]);
 
   return (
     <html
@@ -245,29 +217,24 @@ export default function App() {
     isLoggedInWithSteam,
     isLoggedInToSite,
   } = useLoaderData<typeof loader>();
-  let shouldLogUserIntoSite = isLoggedInWithSteam && !isLoggedInToSite;
-
-  const actionData = useActionData<typeof action>();
-  if (actionData) {
-    const { successfullyLoggedInToSite } = actionData;
-    shouldLogUserIntoSite = !successfullyLoggedInToSite;
-  }
+  const shouldLogUserIntoSite = isLoggedInWithSteam && !isLoggedInToSite;
 
   const fetcher = useFetcher();
-  const transition = useTransition();
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (shouldLogUserIntoSite &&
         fetcher.state === 'idle' &&
-        transition.state === 'idle'
+        !fetcher.data
     ) {
-      fetcher.submit({}, { action: '/', method: 'post' });
+      fetcher.submit(null, { action: '/', method: 'post' });
     }
-  }, [shouldLogUserIntoSite, fetcher, transition]);
+  }, [shouldLogUserIntoSite, fetcher]);
 
   const isSearchSubmitting =
-    transition.state === 'submitting' &&
-    transition.location.pathname === '/search';
+    navigation.state === 'loading' &&
+    navigation.location.pathname === '/search';
+
   return (
     <ThemeProvider ssrCookieTheme={theme}>
       <Document
