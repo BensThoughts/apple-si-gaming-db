@@ -50,8 +50,8 @@ export default function SimpleSearchForm({
         <div>
           <input type="hidden" name="page" value="1" />
           <MaterialInputOutlined
-            name="searchQuery"
-            id="searchQuery"
+            name="appName"
+            id={`${FORM_NAME}_appName`}
             label="Search Games..."
             componentSize="small"
             fieldError={fieldErrors ? fieldErrors.searchQuery : undefined}
