@@ -38,6 +38,7 @@ export default function TrendingSteamAppCard({
           <AppHeaderImage
             headerImageSrc={headerImage}
             name={name}
+            loading="eager"
             className="h-full w-full flex object-cover
                        rounded-2xl bg-gray"
           />
