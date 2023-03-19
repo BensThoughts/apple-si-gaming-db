@@ -62,9 +62,9 @@ export default function SelectMenu<T = string>({
         {/* TODO: Should we be setting width here with w- (or in each component individually with max-w) */}
         <div className={`relative mt-1.5 ${menuSize === 'medium' ? 'w-72' : 'w-80'}`}>
           <Listbox.Button
-            className={`relative py-2 pr-10 pl-3 w-full text-left rounded-lg
+            className="relative py-2 pr-10 pl-3 w-full text-left rounded-lg
                         cursor-default text-neutral-lightest bg-neutral-medium
-                        focus-visible:show-ring sm:text-sm bg-primary`}
+                        focus-visible:show-ring sm:text-sm bg-primary"
           >
             {({ value }: { value: SelectOption<T> }) => (
               <>
