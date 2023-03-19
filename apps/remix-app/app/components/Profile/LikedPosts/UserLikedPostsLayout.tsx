@@ -1,14 +1,10 @@
 import AppHeaderImage from '~/components/ImageWrappers/AppHeaderImage';
 import PerformancePostMetaBar from '~/components/AppInfo/PerformancePosts/PerformancePostMetaBar';
-import Heading from '~/components/Heading';
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
-// import type {
-//   PerformancePost,
-// } from '~/interfaces';
-import type { UserProfilePerformancePost } from '~/interfaces';
+import type { PerformancePostForUserProfileDisplay } from '~/interfaces';
 
 interface UserLikedPostsLayoutProps {
-  likedPosts: UserProfilePerformancePost[]
+  likedPosts: PerformancePostForUserProfileDisplay[]
 }
 
 export default function UserLikedPostsLayout({
@@ -16,17 +12,13 @@ export default function UserLikedPostsLayout({
 }: UserLikedPostsLayoutProps) {
   if (likedPosts.length < 1) {
     return (
-      <div className="flex flex-col gap-8 items-center w-full p-4 bg-tertiary rounded-lg border-1 border-secondary-highlight">
-        <Heading>Liked Posts</Heading>
-        <span>
+      <div className="flex gap-8 justify-center items-center w-full p-4 bg-tertiary rounded-lg border-1 border-secondary-highlight">
           It look like you haven't liked any posts yet. Like posts to see them appear here.
-        </span>
       </div>
     );
   }
   return (
-    <div className="flex flex-col gap-8 items-center w-full p-4 bg-tertiary rounded-lg border-1 border-secondary-highlight">
-      <Heading>Liked Posts</Heading>
+    <div className="flex flex-col gap-8 items-center w-full">
       {likedPosts.map(({
         performancePostId,
         createdAt,

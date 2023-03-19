@@ -1,13 +1,12 @@
 import AppHeaderImage from '~/components/ImageWrappers/AppHeaderImage';
 import PerformancePostMetaBar from '~/components/AppInfo/PerformancePosts/PerformancePostMetaBar';
-import Heading from '~/components/Heading';
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
 import type {
-  UserProfilePerformancePost,
+  PerformancePostForUserProfileDisplay,
 } from '~/interfaces';
 
 interface UsersPostsLayoutProps {
-  steamUsersPosts: UserProfilePerformancePost[];
+  steamUsersPosts: PerformancePostForUserProfileDisplay[];
 }
 
 export default function UsersPostsLayout({
@@ -16,7 +15,6 @@ export default function UsersPostsLayout({
   if (steamUsersPosts.length < 1) {
     return (
       <div className="flex flex-col gap-8 items-center w-full p-4 bg-tertiary rounded-lg border-1 border-secondary-highlight">
-        <div><Heading>Posts</Heading></div>
         <div className="w-full max-w-sm">
           <span>
             It look like you haven't posted yet.  Post a report for a game in your{` `}
@@ -32,8 +30,7 @@ export default function UsersPostsLayout({
     );
   }
   return (
-    <div className="flex flex-col gap-8 items-center w-full p-4 bg-tertiary rounded-lg border-1 border-secondary-highlight">
-      <Heading>Posts</Heading>
+    <div className="flex flex-col gap-8 items-center w-full">
       {steamUsersPosts.map(({
         performancePostId,
         createdAt,
