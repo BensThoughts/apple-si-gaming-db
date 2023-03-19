@@ -41,7 +41,7 @@ body[data-theme="light"] {
   --color-app-secondary-highlight: 49, 130, 206;
   --color-app-tertiary: 243, 248, 251;
   --color-app-tertiary-highlight: 222, 236, 244;
-  --color-app-gray: 235, 236, 240;
+  --color-app-gray: 215, 215, 215;
 
   --color-app-error: 181, 5, 37;
   --color-app-danger: 222, 53, 11;
@@ -67,8 +67,10 @@ body[data-theme="dark"] {
   --color-app-primary-highlight: 57, 75, 95;
   --color-app-secondary: 49, 130, 206;
   --color-app-secondary-highlight: 78, 147, 212;
-  --color-app-tertiary: 3, 24, 47;
+  /* --color-app-tertiary: 3, 24, 47; */
+  --color-app-tertiary: 4, 31, 61;
   --color-app-tertiary-highlight: 10, 40, 74;
+  /* --color-app-tertiary-highlight: 24, 59, 99; */
   --color-app-gray: 52, 58, 70;
 
   --color-app-error: 176, 0, 32;
