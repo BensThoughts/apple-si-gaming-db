@@ -4,12 +4,10 @@ import { findNewestPerformancePosts } from '~/models/SteamedApples/performancePo
 import { findTrendingSteamApps } from '~/models/Steam/steamApp.server';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import TrendingSteamAppsSection from '~/components/Home/TrendingSteamAppsSection';
-import { Fragment } from 'react';
 import type {
   TrendingSteamApp,
   PerformancePost,
 } from '~/interfaces';
-import NewPerformancePostCard from '~/components/Home/NewPerformancePostCard';
 import Card from '~/components/Cards/Card';
 import {
   CommentsOutlineIcon,
@@ -21,6 +19,7 @@ import {
 } from '~/components/Icons/FlatIcons';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
+import NewPerformancePostCardSection from '~/components/Home/NewPerformancePostCardSection';
 
 interface LoaderData {
   trendingSteamApps: TrendingSteamApp[];
@@ -29,7 +28,7 @@ interface LoaderData {
 
 export async function loader() {
   const NUM_TRENDING_APPS = 8;
-  const NUM_RECENT_POSTS = 7;
+  const NUM_RECENT_POSTS = 11;
   const trendingSteamApps = await findTrendingSteamApps(NUM_TRENDING_APPS);
   const newPerformancePosts = await findNewestPerformancePosts(NUM_RECENT_POSTS);
   return json<LoaderData>({
@@ -41,7 +40,7 @@ export async function loader() {
 export default function IndexRoute() {
   const { trendingSteamApps, newPerformancePosts } = useLoaderData<typeof loader>();
   return (
-    <PageWrapper currentRoute="/">
+    <PageWrapper>
       <div className="relative sm:flex sm:items-center sm:justify-center">
         <div className="mx-auto max-w-3xl sm:px-6 lg:px-8">
           <div className="relative px-4 pt-16 pb-8 sm:px-6 sm:pt-20 sm:pb-14 lg:px-8 lg:pb-20 lg:pt-20">
@@ -76,32 +75,8 @@ export default function IndexRoute() {
             </Card>
           </div>
         </div>
-        {(newPerformancePosts.length > 0) && (
-          <div className="flex flex-col items-center gap-6 w-full">
-            <h2 className="text-secondary text-4xl">New Posts</h2>
-            <div className="w-full flex flex-col items-center gap-4">
-              {newPerformancePosts.map(({
-                performancePostId,
-                createdAt,
-                steamApp,
-                postText,
-                rating,
-                userWhoCreated,
-              }) => (
-                <Fragment key={performancePostId}>
-                  <NewPerformancePostCard
-                    performancePostId={performancePostId}
-                    createdAt={new Date(createdAt)}
-                    steamApp={steamApp}
-                    postText={postText}
-                    rating={rating}
-                    userWhoCreated={userWhoCreated}
-                  />
-                </Fragment>
-              ))}
-            </div>
-          </div>
-        )}
+
+        <NewPerformancePostCardSection newPerformancePosts={newPerformancePosts} />
         <TrendingSteamAppsSection trendingSteamApps={trendingSteamApps} />
       </div>
     </PageWrapper>
