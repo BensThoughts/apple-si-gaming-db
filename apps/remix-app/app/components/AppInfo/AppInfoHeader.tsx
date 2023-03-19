@@ -29,7 +29,7 @@ export default function AppInfoHeader({
                  bg-tertiary p-2 rounded-lg border-1 border-secondary-highlight"
     >
       <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-center bg-primary-highlight p-[3px] md:p-[6px] rounded-lg">
+        <div className="flex items-center justify-center p-[3px] md:p-[6px] rounded-lg">
           {headerImage && <AppHeaderImage
             headerImageSrc={headerImage}
             name={name}
