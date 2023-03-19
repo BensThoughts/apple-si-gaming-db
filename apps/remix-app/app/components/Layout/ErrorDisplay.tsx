@@ -26,7 +26,7 @@ export default function ErrorDisplay({
 }) {
   if (includePageWrapper) {
     return (
-      <PageWrapper currentRoute={currentRoute} topSpacer>
+      <PageWrapper topSpacer>
         <MainErrorDisplay error={error} />
       </PageWrapper>
     );

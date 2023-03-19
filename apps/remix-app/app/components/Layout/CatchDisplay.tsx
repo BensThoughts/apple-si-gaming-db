@@ -31,7 +31,7 @@ export default function CatchDisplay({
 }) {
   if (includePageWrap) {
     return (
-      <PageWrapper currentRoute={currentRoute} topSpacer>
+      <PageWrapper topSpacer>
         <MainCatchDisplay thrownResponse={thrownResponse} />
       </PageWrapper>
     );
