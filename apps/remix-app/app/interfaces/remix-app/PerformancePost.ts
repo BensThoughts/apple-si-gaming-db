@@ -1,5 +1,12 @@
 import type { FrameRate, GamepadRating, RatingMedal } from '~/interfaces/database';
 
+//  type ExpandRecursively<T> = T extends object
+//    ? T extends infer O ? { [K in keyof O]: ExpandRecursively<O[K]> } : never
+//    : T;
+
+//  type Expand<T> = T extends infer O ? { [K in keyof O]: O[K] } : never;
+
+
 export type PerformancePost = {
   performancePostId: number;
   createdAt: Date;
@@ -43,9 +50,69 @@ export type PerformancePost = {
   numLikes: number;
 }
 
-export type UserProfilePerformancePost = Omit<PerformancePost, 'postTags' | 'systemSpec' | 'userWhoCreated' | 'rating'> & {
-  userWhoCreated: Pick<PerformancePost['userWhoCreated'], 'steamUserId64'>
-  rating: Pick<PerformancePost['rating'], 'ratingMedal' | 'frameRateAverage' | 'frameRateStutters'>
+
+export type PerformancePostForUserProfileDisplay = {
+  performancePostId: number;
+  createdAt: Date;
+  postText: string;
+  rating: {
+    ratingMedal: RatingMedal;
+    frameRateAverage?: FrameRate | null;
+    frameRateStutters?: boolean | null;
+  }
+  userWhoCreated: {
+    steamUserId64: string;
+  }
+  steamApp: {
+    steamAppId: number;
+    name: string;
+    headerImage?: string | null;
+  };
+  numLikes: number;
+}
+
+export type PerformancePostSystemSpecPopover = {
+  systemSpec: {
+    manufacturer?: string | null;
+    model?: string | null;
+    osVersion?: string | null;
+    cpuBrand?: string | null;
+    videoDriver?: string | null;
+    videoDriverVersion?: string | null;
+    videoPrimaryVRAM?: string | null;
+    memoryRAM?: string | null;
+    systemSpecId?: number | null;
+  }
+};
+
+export type PerformancePostMetaBarData = {
+  performancePostId: number;
+  createdAt: Date;
+  steamApp: {
+    steamAppId: number;
+  };
+  userWhoCreated: {
+    steamUserId64: string;
+  };
+  rating: {
+    ratingMedal: RatingMedal;
+    frameRateAverage?: FrameRate | null;
+    frameRateStutters?: boolean | null;
+  };
+  numLikes: number;
+}
+
+export type PerformancePostForNewPostsCards = {
+  performancePostId: number;
+  postText: string;
+  userWhoCreated: {
+    displayName?: string | null;
+    avatarFull?: string | null;
+  }
+  steamApp: {
+    steamAppId: number;
+    name: string;
+  }
 }
 
 export interface GamepadOption {
@@ -71,13 +138,14 @@ export interface SystemSpecOption {
   a performance post throughout the app depending on the front end components
   data needs.  For example, some components need the rating, others do not.
 */
-// export type PerformancePostBase = {
+
+// export interface PerformancePostBase {
 //   performancePostId: number;
 //   createdAt: Date;
 //   postText: string;
 // }
 
-// export type PerformancePostRating = {
+// export interface PerformancePostRating {
 //   ratingMedal: RatingMedal;
 //   frameRateAverage?: FrameRate | null;
 //   frameRateStutters?: boolean | null;
@@ -87,6 +155,7 @@ export interface SystemSpecOption {
 //     description: string;
 //   } | null;
 // }
+
 
 // export interface PerformancePostSystem {
 //   manufacturer?: string | null;

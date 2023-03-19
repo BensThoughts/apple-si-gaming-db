@@ -1,16 +1,24 @@
-import type { PrismaSteamCategory, PrismaSteamGenre } from '../database';
-
-export interface SteamAppBase {
-  steamAppId: number;
-  name: string;
+type SteamGenre = {
+  id: string;
+  description: string;
 }
 
-export type TrendingSteamApp = SteamAppBase & {
+type SteamCategory = {
+  id: number;
+  description: string;
+}
+
+export type TrendingSteamApp = {
+  steamAppId: number;
+  name: string;
   headerImage?: string | null;
   numPerformancePosts: number;
 }
 
-export type SteamAppSidebarData = SteamAppBase & {
+
+export type SteamAppSidebarData = {
+  steamAppId: number;
+  name: string;
   headerImage: string | null;
   requiredAge: string | null;
   shortDescription: string | null;
@@ -21,13 +29,25 @@ export type SteamAppSidebarData = SteamAppBase & {
   pcRequirementsMinimum: string | null;
   macRequirementsMinimum: string | null;
   linuxRequirementsMinimum: string | null;
-  genres: PrismaSteamGenre[];
-  categories: PrismaSteamCategory[];
+  genres: SteamGenre[];
+  categories: SteamCategory[];
 }
 
-export type SteamProfileOwnedSteamApp = SteamAppBase & {
-  headerImage: string | null;
-  platformMac: boolean | null;
-  genres: PrismaSteamGenre[];
+export type SteamAppForSmallAppsGridLayout = {
+  steamAppId: number;
+  name: string;
+  headerImage?: string | null;
+  platformMac?: boolean | null;
+  genres: {
+    id: string;
+    description: string;
+  }[];
+}
+
+export type SteamAppForSearchPage = {
+    steamAppId: number;
+    name: string;
+    headerImage: string | null;
+    releaseDate: string | null;
 }
 
