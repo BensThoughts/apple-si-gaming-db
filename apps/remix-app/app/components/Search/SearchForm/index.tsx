@@ -7,16 +7,13 @@ import UncontrolledToggleSwitch from '~/components/FormComponents/ToggleSwitch/U
 import MultiSelectMenu from '~/components/FormComponents/MultiSelectMenu';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
 import type {
-  SearchFormFieldErrors,
-  SearchFormFields,
+  SearchFormState,
 } from '~/routes/search/index';
 
 const FORM_NAME = 'game-search-form';
 
 type SearchInputProps = {
-  formError?: string;
-  fieldErrors?: SearchFormFieldErrors;
-  fields?: SearchFormFields;
+  formState?: SearchFormState
   isSubmitting: boolean;
   genreOptions: MultiSelectOption<string>[];
   categoryOptions: MultiSelectOption<number>[];
@@ -26,34 +23,41 @@ export default function SearchForm({
   genreOptions,
   categoryOptions,
   isSubmitting,
-  formError,
-  fieldErrors,
-  fields,
+  formState,
   ...rest
 }: SearchInputProps) {
+  const {
+    formError,
+    fieldErrors,
+    fields,
+  } = formState ? formState : { formError: undefined, fieldErrors: undefined, fields: undefined };
   const formRef = useRef<HTMLFormElement>(null);
 
   let defaultGenreOptions: MultiSelectOption<string>[] | undefined = undefined;
   let defaultCategoryOptions: MultiSelectOption<number>[] | undefined = undefined;
-  if (fields && fields.searchGenreIds) {
-    const genreIds = fields.searchGenreIds;
+  if (fields && fields.genreIds) {
+    const genreIds = fields.genreIds;
     defaultGenreOptions = genreOptions.filter((genreOption) => genreIds.includes(genreOption.value));
   }
-  if (fields && fields.searchCategoryIds) {
-    const categoryIds = fields.searchCategoryIds;
+  if (fields && fields.categoryIds) {
+    const categoryIds = fields.categoryIds;
     defaultCategoryOptions = categoryOptions.filter((categoryOption) => categoryIds.includes(categoryOption.value));
   }
   // TODO: showToast doesn't seem to appear when inside useEffect
   // TODO: it appears twice when not in useEffect fieldErrors vs formError
-  if (formError) {
-    showToast.error(formError);
-  }
+  // if (formError) {
+  //   showToast.error(formError);
+  // }
+
 
   useEffect(() => {
-    if (fieldErrors?.searchQuery) {
-      showToast.error(fieldErrors.searchQuery);
+    if (formError) {
+      showToast.error(formError);
     }
-  }, [fieldErrors]);
+    if (fieldErrors?.appName) {
+      showToast.error(fieldErrors.appName);
+    }
+  }, [fieldErrors, formError]);
 
   useEffect(() => {
     if (isSubmitting) {
@@ -79,12 +83,12 @@ export default function SearchForm({
         <div className="flex flex-col items-center gap-4 w-full">
           <div className={`flex flex-col md:flex-row md:justify-between w-full justify-center items-center gap-4 md:gap-0`}>
             <MaterialInputOutlined
-              name="searchQuery"
-              id="searchQuery"
+              name="appName"
+              id={`${FORM_NAME}_appName`}
               label="Search Games..."
-              defaultValue={fields ? fields.searchQuery : ''}
+              defaultValue={fields ? fields.appName : ''}
               componentSize="large"
-              fieldError={fieldErrors ? fieldErrors.searchQuery : undefined}
+              fieldError={fieldErrors ? fieldErrors.appName : undefined}
               // minLength={2}
               maxLength={100}
               // required
@@ -94,8 +98,8 @@ export default function SearchForm({
             <div className="flex justify-between items-center w-full">
               <div className="md:w-full md:justify-self-center">
                 <UncontrolledToggleSwitch
-                  defaultChecked={fields ? fields.searchAppleOnly : false}
-                  name="searchAppleOnly"
+                  defaultChecked={fields ? fields.appleOnly : false}
+                  name="appleOnly"
                   label="Apple"
                   labelPosition="left"
                 />
@@ -116,12 +120,12 @@ export default function SearchForm({
           <div className="flex flex-col items-start justify-center gap-4 w-full">
             <div className="w-full">
               <MultiSelectMenu
-                name="searchGenreIds"
-                id="searchGenreIds"
+                name="genreIds"
+                id={`${FORM_NAME}_genreIds`}
                 labelText="Genres"
                 options={genreOptions}
                 defaultValue={defaultGenreOptions}
-                fieldError={fieldErrors?.searchGenreIds}
+                fieldError={fieldErrors?.genreIds}
                 // defaultValue={fields ? fields.searchGenreIds : undefined}
                 openMenuOnFocus={false}
                 closeMenuOnSelect={true}
@@ -130,12 +134,12 @@ export default function SearchForm({
             </div>
             <div className="w-full">
               <MultiSelectMenu
-                name="searchCategoryIds"
-                id="searchCategoryIds"
+                name="categoryIds"
+                id={`${FORM_NAME}_categoryIds`}
                 labelText="Categories"
                 options={categoryOptions}
                 defaultValue={defaultCategoryOptions}
-                fieldError={fieldErrors?.searchCategoryIds}
+                fieldError={fieldErrors?.categoryIds}
                 // defaultValue={fields ? fields.searchCategoryIds : undefined}
                 openMenuOnFocus={false}
                 closeMenuOnSelect={true}
@@ -143,7 +147,6 @@ export default function SearchForm({
               />
             </div>
           </div>
-
         </div>
       </Form>
     </div>
