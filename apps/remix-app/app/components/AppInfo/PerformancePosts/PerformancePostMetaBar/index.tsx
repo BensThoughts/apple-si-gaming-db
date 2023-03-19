@@ -1,16 +1,12 @@
 import LikeButton from '~/components/LikeButton';
 import type {
-  PerformancePost,
+  PerformancePostMetaBarData,
 } from '~/interfaces';
 import { convertFrameRateToDescription, convertRatingMedalToDescription } from '~/lib/conversions/rating-conversions';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
 import EditAndDeleteButtons from './EditAndDeleteButtons';
 
-type PerformancePostMetaBarProps = Pick<PerformancePost, 'performancePostId' | 'createdAt' | 'numLikes'> & {
-  steamApp: Pick<PerformancePost['steamApp'], 'steamAppId'>;
-  userWhoCreated: Pick<PerformancePost['userWhoCreated'], 'steamUserId64'>;
-  rating: Pick<PerformancePost['rating'], 'ratingMedal' | 'frameRateAverage' | 'frameRateStutters'>;
-}
+type PerformancePostMetaBarProps = PerformancePostMetaBarData;
 
 export default function PerformancePostMetaBar({
   performancePostId,

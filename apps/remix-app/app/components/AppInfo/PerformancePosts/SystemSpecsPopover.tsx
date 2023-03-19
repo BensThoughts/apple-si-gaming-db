@@ -1,10 +1,10 @@
 import { Popover } from '@headlessui/react';
 import { useState } from 'react';
-import type { PerformancePost } from '~/interfaces';
+import type { PerformancePostSystemSpecPopover } from '~/interfaces';
 
-type SystemSpecsPopoverProps =
-  Pick<PerformancePost, 'systemSpec'>
-  & React.HTMLAttributes<HTMLDivElement>
+type SystemSpecsPopoverProps = PerformancePostSystemSpecPopover & {
+  children: React.ReactNode;
+}
 
 export default function SystemSpecsPopover({
   systemSpec,
