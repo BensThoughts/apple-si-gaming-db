@@ -7,15 +7,21 @@ import type { LibraryActionData } from '~/routes/profile/library';
 
 export default function SyncLibraryForm() {
   const fetcher = useFetcher<LibraryActionData>();
-  const actionData = fetcher.data;
   useEffect(() => {
-    if (actionData) {
-      const { updateOwnedGames: { success } } = actionData;
+    if (
+      fetcher.formAction === '/profile/library' &&
+      fetcher.data
+    ) {
+      const { updateOwnedGames: { success } } = fetcher.data;
       if (!success) {
         showToast.error('Error updating library, is your steam profile set to public?');
       }
     }
-  }, [actionData]);
+  }, [fetcher]);
+
+  const isSubmitting =
+    fetcher.state != 'idle' &&
+    fetcher.formAction === '/profile/library';
 
   return (
     <div
@@ -32,7 +38,7 @@ export default function SyncLibraryForm() {
         >
           <input type="hidden" name="_profileAction" value="updateOwnedGames" />
           <RoundedButton width="wide" type="submit" disabled={fetcher.state != 'idle'}>
-            {fetcher.state != 'idle' ? <span>Updating...</span> : <span>Resync Library</span>}
+            {isSubmitting ? <span>Updating...</span> : <span>Resync Library</span>}
           </RoundedButton>
         </fetcher.Form>
       </div>
