@@ -1,4 +1,4 @@
-import { Form, useSubmit } from '@remix-run/react';
+import { useFetcher } from '@remix-run/react';
 import React, { useState } from 'react';
 import MaterialInputOutlinedV2 from '~/components/FormComponents/MaterialInputOutlinedV2';
 // import MaterialInputOutlinedNew from '~/components/FormComponents/MaterialInputOutlinedNew';
@@ -24,7 +24,7 @@ export default function EditSystemModal({
   isOpen,
   setIsOpen,
 }: EditSystemModalProps) {
-  const submit = useSubmit();
+  const fetcher = useFetcher();
   const [systemNameValue, setSystemNameValue] = useState('');
   const [systemNameTouched, setSystemNameTouched] = useState(false);
   const systemNameError = validateNewSystemName(systemNameValue, currentSystemNames);
@@ -32,12 +32,12 @@ export default function EditSystemModal({
 
   // Form must be submitted prior to closing the modal
   // or errors occur.  So we use useSubmit()
-  function handleSubmitEvent(event: React.FormEvent<HTMLFormElement>) {
-    submit(event.currentTarget, { replace: true });
-    setSystemNameValue('');
-    setSystemNameTouched(false);
-    setIsOpen(false);
-  }
+  // function handleSubmitEvent(event: React.FormEvent<HTMLFormElement>) {
+  // submit(event.currentTarget, { replace: true });
+  // setSystemNameValue('');
+  // setSystemNameTouched(false);
+  // setIsOpen(false);
+  // }
 
   return (
     <BasicModal
@@ -54,10 +54,14 @@ export default function EditSystemModal({
         <div className="text-primary-faded">
           Please choose a new name for <span className="text-secondary">{systemName}</span>
         </div>
-        <Form
+        <fetcher.Form
           action="/profile/systems"
           method="post"
-          onSubmit={handleSubmitEvent}
+          onSubmit={() => {
+            setSystemNameValue('');
+            setSystemNameTouched(false);
+            setIsOpen(false);
+          }}
           className="flex flex-col gap-4"
         >
           <div>
@@ -109,7 +113,7 @@ export default function EditSystemModal({
             </RoundedButton>
           </div>
 
-        </Form>
+        </fetcher.Form>
       </div>
     </BasicModal>
   );
