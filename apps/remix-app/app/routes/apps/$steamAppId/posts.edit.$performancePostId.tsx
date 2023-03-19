@@ -6,7 +6,7 @@ import type {
 } from '~/interfaces';
 import { validatePerformancePostId, validateSteamAppId } from '~/lib/loader-functions/params-validators.server';
 import { didSteamUserProfileCreatePerformancePost, findPerformancePostById } from '~/models/SteamedApples/performancePost.server';
-import { useActionData, useCatch, useLoaderData, useTransition } from '@remix-run/react';
+import { useActionData, useCatch, useLoaderData, useNavigation } from '@remix-run/react';
 import { findPostTags } from '~/models/SteamedApples/performancePostTag.server';
 import { findAllGamepads } from '~/models/SteamedApples/gamepadMetadata.server';
 // import { doesSteamUserOwnApp } from '~/models/steamUser.server';
@@ -94,10 +94,10 @@ export default function EditPerformancePostRoute() {
   } = performancePost;
 
   const actionData = useActionData<CreateOrEditPerformancePostActionData>();
-  const transition = useTransition();
+  const navigation = useNavigation();
   const isSubmittingEditPerformancePost =
-    transition.state === 'submitting' &&
-    transition.submission.formData.get('_performancePostAction') === 'editPerformancePost';
+    navigation.state === 'submitting' &&
+    navigation.formData.get('_performancePostAction') === 'editPerformancePost';
 
 
   return (

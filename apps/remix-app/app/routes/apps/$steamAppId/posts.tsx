@@ -1,6 +1,6 @@
 import type { LoaderArgs, ActionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useActionData, useCatch, useLoaderData, useTransition } from '@remix-run/react';
+import { useActionData, useCatch, useLoaderData, useNavigation } from '@remix-run/react';
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
 // import type { GamepadRating, RatingMedal, FrameRate } from '~/interfaces/database';
 import { findPerformancePostsBySteamAppId } from '~/models/SteamedApples/performancePost.server';
@@ -85,10 +85,10 @@ export default function PerformancePostsRoute() {
   } = useLoaderData<PerformancePostLoaderData>();
 
   const actionData = useActionData<CreateOrEditPerformancePostActionData>();
-  const transition = useTransition();
+  const navigation = useNavigation();
   const isSubmittingCreatePerformancePost =
-    transition.state === 'submitting' &&
-    transition.submission.formData.get('_performancePostAction') === 'createPerformancePost';
+    navigation.state === 'submitting' &&
+    navigation.formData.get('_performancePostAction') === 'createPerformancePost';
 
   return (
     <div className="flex flex-col gap-3">
