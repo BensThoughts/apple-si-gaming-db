@@ -208,7 +208,7 @@ export function extractSystemSpecs(
 
   // Capture RAM
   // TODO: Maybe make it match after Memory: section
-  const memoryRAMRe = /RAM:\s*([^\r\n]+)/i;
+  const memoryRAMRe = /[^V]RAM:\s*([^\r\n]+)/i;
   const memoryRAM = systemData.match(memoryRAMRe);
 
   return {
