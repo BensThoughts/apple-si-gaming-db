@@ -59,8 +59,8 @@ export default function SmallAppsGridLayout({
   return (
     <div className="flex flex-col items-center gap-8">
       <div
-        className="self-center flex flex-col lg:flex-row items-center justify-center gap-3
-                   bg-tertiary p-0 md:p-4 rounded-lg"
+        className="self-center flex flex-col xl:flex-row items-center justify-center gap-3
+                   bg-tertiary p-4 rounded-lg"
       >
         <div>
           <MaterialInputOutlined
