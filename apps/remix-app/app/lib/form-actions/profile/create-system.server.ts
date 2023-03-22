@@ -1,4 +1,7 @@
-import { redirect, json } from '@remix-run/node';
+import {
+  // redirect,
+  json,
+} from '@remix-run/node';
 import { createSystemSpec, findSystemSpecSystemNames } from '~/models/SteamedApples/userSystemSpecs.server';
 import type { PrismaUserSystemSpec } from '~/interfaces/database';
 import type { CreateSystemSpecActionData, ProfileSystemsActionData } from './interfaces';
@@ -44,5 +47,6 @@ export async function createSystem(
   const systemSpecs = extractSystemSpecs(systemInfo);
   await createSystemSpec(userProfileId, systemName.trim(), systemSpecs);
 
-  return redirect(`/profile/systems`);
+  return json(null);
+  // return redirect(`/profile/systems`);
 }
