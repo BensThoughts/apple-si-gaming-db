@@ -55,7 +55,9 @@ body[data-theme="light"] {
   /* --color-text-secondary: 32, 88, 139; */
   --color-text-secondary: 11, 67, 118;
   --color-text-error: 176, 0, 32;
+
   --color-text-snackbar-error: 207, 207, 207;
+  --color-snackbar-error: 181, 5, 37;
 }
 
 body[data-theme="dark"] {
@@ -85,6 +87,15 @@ body[data-theme="dark"] {
   --color-text-primary-highlight: 250, 250, 250;
   --color-text-primary-faded: 175, 175, 175;
   --color-text-secondary: 255, 107, 0;
-  --color-text-error: 225, 49, 81;
+  /* --color-text-error: 225, 49, 81; */
+  /* --color-text-error: 242, 66, 98; */
+
+  /* PINK */
+  /* --color-text-error: 255, 128, 161; */
+
+  /* DARKER BETTER PINK */
+  --color-text-error: 242, 66, 98;
+
   --color-text-snackbar-error: 207, 207, 207;
+  --color-snackbar-error: 158, 0, 14;
 }
