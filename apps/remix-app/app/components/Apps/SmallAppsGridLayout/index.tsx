@@ -54,7 +54,7 @@ export default function SmallAppsGridLayout({
 
   const filteredSteamApps = searchNames(steamApps);
   const paginatedSteamApps = filteredSteamApps.slice(0, paginate);
-  const lastPage = paginate >= steamApps.length;
+  const lastPage = paginate >= filteredSteamApps.length;
 
   return (
     <div className="flex flex-col items-center gap-8">
