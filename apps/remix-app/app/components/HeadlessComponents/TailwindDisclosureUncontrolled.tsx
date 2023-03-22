@@ -1,8 +1,8 @@
 import {
   Disclosure,
-  // Transition,
+  Transition,
 } from '@headlessui/react';
-// import { Fragment } from 'react';
+import { Fragment } from 'react';
 import { ChevronUpIcon } from '~/components/Icons';
 
 export default function TailwindDisclosureUncontrolled({
@@ -30,21 +30,22 @@ export default function TailwindDisclosureUncontrolled({
                 className={`${open ? 'rotate-180 transform' : 'rotate-0 transform'} h-5 w-5 text-primary`}
               />
             </Disclosure.Button>
-            {/* <Transition
-              as={Fragment}
-              enter="transition duration-300 ease-in-out"
+            <Transition
+              as="div"
+              enter="transition-all duration-300 ease-in-out"
               enterFrom="transform max-h-0 opacity-0"
               enterTo="transform max-h-[200px] opacity-100"
-              leave="transition duration-300 ease-in-out"
+              leave="transition-all duration-300 ease-in-out"
               leaveFrom="transform max-h-[200px] opacity-100"
               leaveTo="transform max-h-0 opacity-0"
-            > */}
-            <Disclosure.Panel
-              className="peer-focus-visible:show-ring p-3 bg-primary rounded-b-lg"
+              className="peer-focus-visible:show-ring rounded-b-lg"
             >
-              {children}
-            </Disclosure.Panel>
-            {/* </Transition> */}
+              <Disclosure.Panel
+                className="p-3 bg-primary rounded-b-lg"
+              >
+                {children}
+              </Disclosure.Panel>
+            </Transition>
           </>
         )}
       </Disclosure>
