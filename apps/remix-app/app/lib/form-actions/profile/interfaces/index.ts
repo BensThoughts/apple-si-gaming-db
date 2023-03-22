@@ -42,4 +42,4 @@ export type ProfileSystemsActionData = {
     editSystemSpec?: EditSystemSpecActionData;
     deleteSystemSpec?: DeleteSystemSpecActionData;
   };
-}
+} | null;
