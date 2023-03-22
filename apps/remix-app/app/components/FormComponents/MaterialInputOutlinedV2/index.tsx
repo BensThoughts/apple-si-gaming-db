@@ -50,7 +50,7 @@ export default function MaterialInputOutlinedV2({
         <fieldset className={`inset-0 absolute border rounded peer-focus:border-2
                             pointer-events-none mt-[-9px] invisible peer-placeholder-shown:visible
                             ${errorMessage
-                                ? 'border-error group-hover:border-error peer-focus:!border-error':'border-secondary-highlight group-hover:border-secondary peer-focus:!border-secondary'}`}>
+                                ? 'border-text-error group-hover:border-text-error peer-focus:!border-text-error':'border-secondary-highlight group-hover:border-secondary peer-focus:!border-secondary'}`}>
           <legend className={`ml-2 px-0 text-sm transition-all duration-300 invisible
                             max-w-[0.01px] group-focus-within:max-w-full group-focus-within:px-1
                             whitespace-nowrap`}>
@@ -61,14 +61,14 @@ export default function MaterialInputOutlinedV2({
         {/* This fieldset+legend always has a notch and is shown when the input is filled, instead of the other, so the notch doesnt vanish when you unfocus the field */}
         <fieldset className={`inset-0 absolute border rounded group-focus-within:border-2
                               pointer-events-none mt-[-9px] visible peer-placeholder-shown:invisible
-                              ${errorMessage ? 'border-error' : 'border-secondary'}
+                              ${errorMessage ? 'border-text-error' : 'border-secondary'}
                   `}>
           <legend className="invisible px-1 ml-2 max-w-full text-sm whitespace-nowrap">
             {label}
           </legend>
         </fieldset>
       </div>
-      {errorMessage ? <div className="text-base text-error">{errorMessage}</div> : <div className="h-[1.5rem]" />}
+      <div className={`text-base text-error transition-all ease-in-out duration-300 ${errorMessage ? 'h-12 md:h-6 opacity-100' : 'h-0 opacity-0'}`}>{errorMessage}</div>
     </div>
   );
 }
