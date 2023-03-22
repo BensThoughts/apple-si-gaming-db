@@ -21,7 +21,7 @@ function ErrorToast({ message, t }: ToastProps) {
       leaveTo="opacity-0 scale-95"
     >
       <div className="w-full max-w-md bg-snackbar-error text-snackbar-error rounded-md
-                      flex gap-4 justify-between items-center px-2 py-1">
+                      flex gap-4 justify-between items-center px-3 py-2">
         <span>{message}</span>
         <RoundedButton onClick={() => toast.dismiss(t.id)}>Close</RoundedButton>
       </div>
@@ -42,7 +42,7 @@ function LoginToast({ message, t }: ToastProps) {
       leaveTo="opacity-0 scale-95"
     >
       <div className="w-full max-w-md bg-primary-highlight text-primary rounded-md
-                 flex justify-between items-center px-4 py-2">
+                 flex gap-4 justify-between items-center px-3 py-2">
         <span>{message}</span>
         <a
           href="/api/auth/steam/login"
