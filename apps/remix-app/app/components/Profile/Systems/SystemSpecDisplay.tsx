@@ -13,18 +13,6 @@ interface SystemSpecDisplayProps {
   deleteSystemSpecActionData?: DeleteSystemSpecActionData;
 }
 
-// function Wrapper({
-//   children,
-// }: {
-//   children: React.ReactNode
-// }) {
-//   return (
-//     <div className="w-full flex flex-col justify-center items-center gap-3">
-//       {children}
-//     </div>
-//   );
-// }
-
 export default function SystemSpecDisplay({
   editSystemSpecActionData,
   deleteSystemSpecActionData,
@@ -87,14 +75,13 @@ export default function SystemSpecDisplay({
   }, [deleteSystemSpecActionData]);
 
   if (systemSpecs.length < 1) {
-    return null;
-    // return (
-    //   <Wrapper>
-    //     <div className="flex items-center justify-center w-full max-w-md border-1 border-secondary-highlight rounded-md p-4">
-    //       This is where your systems go. Try creating one with the form below.
-    //     </div>
-    //   </Wrapper>
-    // );
+    return (
+      <div
+        className="bg-tertiary border-1 border-secondary-highlight p-3 rounded-lg
+                   flex w-full max-w-lg justify-between items-center">
+          You have no systems defined. Your systems will appear here when created.
+      </div>
+    );
   }
 
   const systemNames = systemSpecs.map((sysSpec) => sysSpec.systemName);
@@ -151,54 +138,51 @@ export default function SystemSpecDisplay({
         videoPrimaryVRAM,
         memoryRAM,
       }, idx) => (
-        <div key={systemName + idx} className="w-full max-w-lg">
-          <div
-            className="bg-tertiary border-1
-                     border-secondary-highlight p-3 rounded-lg
-                     flex w-full max-w-lg justify-between items-center"
-          >
-            <div className="flex items-center justify-center gap-2">
-              <div className="mt-[.33rem]">
-                <SystemSpecsPopover
-                  systemSpec={{
-                    manufacturer,
-                    model,
-                    osVersion,
-                    cpuBrand,
-                    videoDriver,
-                    videoDriverVersion,
-                    videoPrimaryVRAM,
-                    memoryRAM,
-                  }}
-                >
-                  <InformationCircleIcon size={22} />
-                </SystemSpecsPopover>
-              </div>
-              <div>{systemName}</div>
-            </div>
-            <div>
-              <div
-                className="flex gap-2"
+        <div
+          key={systemName + idx}
+          className="bg-tertiary border-1 border-secondary-highlight p-3 rounded-lg
+                     flex w-full max-w-lg justify-between items-center">
+          <div className="flex items-center justify-center gap-2">
+            <div className="mt-[.33rem]">
+              <SystemSpecsPopover
+                systemSpec={{
+                  manufacturer,
+                  model,
+                  osVersion,
+                  cpuBrand,
+                  videoDriver,
+                  videoDriverVersion,
+                  videoPrimaryVRAM,
+                  memoryRAM,
+                }}
               >
-                <button
-                  onClick={() => openEditModal(systemName, systemSpecId)}
-                  className="rounded-md py-1.5 px-2 bg-secondary hover:bg-secondary-highlight focus-visible:show-ring"
-                >
-                  <EditIcon
-                    strokeWidth={1.5}
-                    className="text-primary-highlight w-7 h-7"
-                  />
-                </button>
-                <button
-                  onClick={() => openDeleteModal(systemName, systemSpecId)}
-                  className="rounded-md py-1.5 px-2 bg-secondary hover:bg-secondary-highlight focus-visible:show-ring"
-                >
-                  <TrashIcon
-                    strokeWidth={1.5}
-                    className="text-primary-highlight w-7 h-7"
-                  />
-                </button>
-              </div>
+                <InformationCircleIcon size={22} />
+              </SystemSpecsPopover>
+            </div>
+            <div>{systemName}</div>
+          </div>
+          <div>
+            <div
+              className="flex gap-2"
+            >
+              <button
+                onClick={() => openEditModal(systemName, systemSpecId)}
+                className="rounded-md py-1.5 px-2 bg-secondary hover:bg-secondary-highlight focus-visible:show-ring"
+              >
+                <EditIcon
+                  strokeWidth={1.5}
+                  className="text-primary-highlight w-7 h-7"
+                />
+              </button>
+              <button
+                onClick={() => openDeleteModal(systemName, systemSpecId)}
+                className="rounded-md py-1.5 px-2 bg-secondary hover:bg-secondary-highlight focus-visible:show-ring"
+              >
+                <TrashIcon
+                  strokeWidth={1.5}
+                  className="text-primary-highlight w-7 h-7"
+                />
+              </button>
             </div>
           </div>
         </div>
