@@ -76,14 +76,14 @@ export default function MultiSelectMenu<T>({
                 {labelText}
               </span>
               {required &&
-            <span className="text-color-error">
+            <span className="text-error">
               *
             </span>
               }
               {fieldError &&
             <span className="text-primary">
               {`: `}
-              <span className="text-color-error">
+              <span className="text-error">
                 {fieldError}
               </span>
             </span>

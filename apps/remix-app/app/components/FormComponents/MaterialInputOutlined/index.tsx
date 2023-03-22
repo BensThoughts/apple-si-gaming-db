@@ -37,7 +37,7 @@ export default function MaterialInputOutlined({
 
       <label
         htmlFor={id}
-        className={`absolute left-[9px] -top-[1px] text-sm ${fieldError ? 'text-color-error' : 'text-primary'}
+        className={`absolute left-[9px] -top-[1px] text-sm ${fieldError ? 'text-error' : 'text-primary'}
                     transition-all duration-300 px-1 transform -translate-y-1/2
                     pointer-events-none peer-placeholder-shown:top-1/2
                     peer-placeholder-shown:text-xl group-focus-within:!-top-[1px]

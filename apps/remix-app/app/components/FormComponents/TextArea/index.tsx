@@ -19,14 +19,14 @@ export default function TextArea({
           {labelText}
         </span>
         {required &&
-          <span className="text-color-error">
+          <span className="text-error">
             *&nbsp;
           </span>
         }
         {fieldError &&
           <span className="text-primary">
             {`: `}
-            <span className="text-color-error">
+            <span className="text-error">
               {fieldError}
             </span>
           </span>

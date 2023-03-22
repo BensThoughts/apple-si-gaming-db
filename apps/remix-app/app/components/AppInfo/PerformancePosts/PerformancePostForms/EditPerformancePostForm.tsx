@@ -88,7 +88,7 @@ export default function EditPerformancePostForm({
   return (
     <PerformancePostFormWrapper>
       <h2 className="text-secondary text-lg">Edit Post</h2>
-      {formError && <div className="text-color-error">{formError}</div>}
+      {formError && <div className="text-error">{formError}</div>}
       <Form
         id={formId}
         method="post"

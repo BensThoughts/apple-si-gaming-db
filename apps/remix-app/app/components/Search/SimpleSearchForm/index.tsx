@@ -69,7 +69,7 @@ export default function SimpleSearchForm({
         </RoundedButton>
       </div>
       {(fieldErrors && fieldErrors.searchQuery) ? (
-        <div className="text-color-error">
+        <div className="text-error">
           {fieldErrors.searchQuery}
         </div>
       ) : (
