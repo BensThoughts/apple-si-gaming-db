@@ -5,7 +5,6 @@ import type {
 } from '~/lib/form-actions/profile/interfaces';
 import CreateSystemForm from './CreateSystemForm';
 import SystemSpecDisplay from './SystemSpecDisplay';
-import CreateSystemInstructions from './CreateSystemInstructions';
 
 interface SystemSpecLayoutProps {
   systemSpecs: {
