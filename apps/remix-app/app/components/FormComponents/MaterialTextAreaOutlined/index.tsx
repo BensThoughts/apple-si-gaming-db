@@ -1,27 +1,21 @@
 type InputProps = {
   errorMessage?: string;
   label: string;
-  componentSize?: 'large' | 'small';
 } & React.TextareaHTMLAttributes<HTMLTextAreaElement>
 
 export default function MaterialTextAreaOutlined({
   id,
   errorMessage,
   label,
-  componentSize = 'large',
   ...rest
 }: InputProps) {
-  let inputSizeClassnames = 'px-3 py-3';
-  if (componentSize === 'small') {
-    inputSizeClassnames = 'px-[7px] py-[7px]';
-  }
-
   return (
     <div className="flex flex-col gap-1 justify-center w-full">
-      <div className={`relative w-full rounded group bg-primary`}>
+      <div className="relative w-full rounded group bg-primary">
+        <div className="after:absolute after:w-full after:bg-primary after:h-2" />
         <textarea
           id={id}
-          className={`w-full bg-transparent outline-none peer min-h-[250px] ${inputSizeClassnames}`}
+          className="w-full bg-transparent outline-none peer min-h-[250px] p-3"
           placeholder=" "
           {...rest}
         />
@@ -62,7 +56,14 @@ export default function MaterialTextAreaOutlined({
           </legend>
         </fieldset>
       </div>
-      {errorMessage ? <div className="text-base text-error">{errorMessage}</div> : <div className="h-12" />}
+
+      <div
+        className={`text-base text-error ease-in-out duration-300 transition-all
+                ${errorMessage ? 'opacity-100 h-auto' : 'opacity-0 h-0'}
+          `}
+      >
+        {errorMessage}
+      </div>
     </div>
   );
 }
