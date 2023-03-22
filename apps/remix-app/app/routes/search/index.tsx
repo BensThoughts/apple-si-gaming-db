@@ -1,6 +1,6 @@
 import type { LoaderArgs, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { useCatch, useLoaderData, useTransition } from '@remix-run/react';
+import { useCatch, useLoaderData, useNavigation } from '@remix-run/react';
 import { searchReleasedSteamAppsByName } from '~/models/Steam/steamApp.server';
 import SearchTitleCard from '~/components/Search/SearchTitleCard';
 import LoadingComponent from '~/components/LoadingComponent';
@@ -12,97 +12,41 @@ import { getSearchOptions } from '~/lib/loader-functions/search.server';
 import { Fragment } from 'react';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
+import type { SteamAppForSearchPage } from '~/interfaces';
+import {
+  validateAppName,
+  validateGenreIds,
+  validateCategoryIds,
+  validatePageNumber,
+} from '~/lib/form-validators/search';
 
-function validateSearchQuery(searchQuery: string) {
-  if (searchQuery.length > 100) {
-    return `The search query is too long (100 character maximum)`;
-  }
-  // if (searchQuery.length < 2) {
-  //   return `Search query must contain at least 2 character`;
-  // }
-}
-
-function validateGenreIds(
-    genreIds: string[],
-    validGenres: GenreSelectOptions,
-) {
-  let invalidGenreId: string | undefined;
-
-  const hasInvalidGenreId = genreIds.some((genreId) => {
-    const isValidCategoryId =
-      validGenres.some((genre) => genre.value === genreId);
-    if (!isValidCategoryId) {
-      invalidGenreId = genreId;
-      return true;
-    }
-    return false;
-  });
-  if (hasInvalidGenreId) {
-    return `Genre Id ${invalidGenreId} was not a valid option`;
-  }
-}
-
-function validateCategoryIds(
-    categoryIds: number[],
-    validCategoryOptions: CategorySelectOptions,
-) {
-  let invalidCategoryId: number | undefined;
-
-  const hasInvalidCategoryId = categoryIds.some((categoryId) => {
-    const isValidCategoryId =
-      validCategoryOptions
-          .some((categoryOption) => categoryOption.value === categoryId);
-
-    if (!isValidCategoryId) {
-      invalidCategoryId = categoryId;
-      return true;
-    }
-    return false;
-  });
-  if (hasInvalidCategoryId) {
-    return `Category Id ${invalidCategoryId} was not a valid option`;
-  }
-}
-
-export interface SearchFormFields {
-  searchQuery: string;
-  searchAppleOnly: boolean;
-  searchGenreIds?: string[];
-  searchCategoryIds?: number[];
-}
-
-export interface SearchFormFieldErrors {
-  searchQuery?: string | undefined;
-  searchGenreIds?: string | undefined;
-  searchCategoryIds?: string | undefined;
-}
-
-interface SearchFormState {
+export type SearchFormState = {
   formError?: string;
-  fieldErrors?: SearchFormFieldErrors;
-  fields?: SearchFormFields;
+  fieldErrors?: {
+    appName?: string | undefined;
+    genreIds?: string | undefined;
+    categoryIds?: string | undefined;
+  };
+  fields?: {
+    appName: string;
+    appleOnly: boolean;
+    genreIds?: string[];
+    categoryIds?: number[];
+  }
+  // fields?: SearchFormFields;
 }
 
 type GenreSelectOptions = MultiSelectOption<string>[];
 type CategorySelectOptions = MultiSelectOption<number>[];
-// export interface SearchPageLoaderDataSearchOptions {
-//   genreOptions: GenreSelectOptions;
-//   categoryOptions: CategorySelectOptions;
-// }
 
 export type SearchPageLoaderData = {
-  searchOptions: {
+  availableSearchOptions: {
     genreOptions: GenreSelectOptions;
     categoryOptions: CategorySelectOptions;
   };
   searchFormState?: SearchFormState;
   searchResults?: {
-    steamApps: {
-      name: string;
-      steamAppId: number;
-      headerImage: string | null;
-      releaseDate: string | null;
-    }[];
+    steamApps: SteamAppForSearchPage[];
     page: number;
     hasNextPage: boolean;
   }
@@ -110,96 +54,88 @@ export type SearchPageLoaderData = {
 
 const badRequest = (data: SearchPageLoaderData) => json<SearchPageLoaderData>(data, { status: 400 });
 
+enum SearchFormParams {
+  PAGE = 'page',
+  APP_NAME = 'appName',
+  APPLE_ONLY = 'appleOnly',
+  GENRE_IDS = 'genreIds',
+  CATEGORY_IDS = 'categoryIds',
+}
 
 export async function loader({
   request,
 }: LoaderArgs) {
-  const searchOptions = await getSearchOptions();
+  const availableSearchOptions = await getSearchOptions();
 
   const url = new URL(request.url);
-  const searchQuery = url.searchParams.get('searchQuery')?.trim();
+  const searchParams = url.searchParams;
+  const appName = searchParams.get(SearchFormParams.APP_NAME)?.trim();
   // !This is the case where someone navigates to /search initially
-  // !with no searchQuery
+  // !with no appName in the searchQuery
   if (
-    (searchQuery === undefined) ||
-    (searchQuery === null)
+    (appName === undefined) ||
+    (appName === null)
   ) {
-    return json<SearchPageLoaderData>({ searchOptions });
+    return json<SearchPageLoaderData>({ availableSearchOptions });
   }
   // If searchQuery exists we extract all other data
-  const pageQuery = url.searchParams.get('page')?.trim() || '1';
-  const searchAppleOnly = url.searchParams.get('searchAppleOnly');
-  const searchGenreIds = url.searchParams.getAll('searchGenreIds');
-  const searchCategoryIds = url.searchParams.getAll('searchCategoryIds');
-
-  // page falls under formError because it has no field representing it
-  const page = Number(pageQuery);
-  if (!isFinite(page)) {
-    return badRequest( {
-      searchOptions,
-      searchFormState: {
-        formError: `Page must be a positive finite number`,
-      },
-    });
+  const pageParam = searchParams.get(SearchFormParams.PAGE)?.trim() || '1';
+  const page = Number(pageParam);
+  // page falls under formError because it has no field in the form representing it
+  const formError = validatePageNumber(page);
+  if (formError) {
+    throw new Response(formError, { status: 400 });
+    // return badRequest({ availableSearchOptions, searchFormState: { formError } });
   }
-  if (page < 1) {
-    return badRequest( {
-      searchOptions,
-      searchFormState: {
-        formError: `Page must be a positive number, greater than zero`,
-      },
-    });
-  }
-
+  const appleOnlyParam = searchParams.get(SearchFormParams.APPLE_ONLY);
+  const appleOnly = appleOnlyParam ? true : false;
+  const genreIdParams = searchParams.getAll(SearchFormParams.GENRE_IDS);
   let genreIds: string[] = [];
+  if (genreIdParams[0] !== '' && genreIdParams.length > 0) {
+    genreIds = genreIdParams;
+  }
+  const categoryIdParams = searchParams.getAll(SearchFormParams.CATEGORY_IDS);
   let categoryIds: number[] = [];
-  if (searchGenreIds[0] !== '' && searchGenreIds.length > 0) {
-    genreIds = searchGenreIds;
+  if (categoryIdParams[0] !== '' && categoryIdParams.length > 0) {
+    categoryIds = categoryIdParams.map((categoryId) => Number(categoryId));
   }
-  if (searchCategoryIds[0] !== '' && searchCategoryIds.length > 0) {
-    categoryIds = searchCategoryIds.map((categoryId) => Number(categoryId));
-  }
+
+  const validGenreIds = availableSearchOptions.genreOptions.map((genre) => genre.value);
+  const validCategoryIds = availableSearchOptions.categoryOptions.map((category) => category.value);
 
   const fieldErrors = {
-    searchQuery: validateSearchQuery(searchQuery),
-    searchCategoryIds: validateCategoryIds(categoryIds, searchOptions.categoryOptions),
-    searchGenreIds: validateGenreIds(genreIds, searchOptions.genreOptions),
+    appName: validateAppName(appName),
+    genreIds: validateGenreIds(genreIds, validGenreIds),
+    categoryIds: validateCategoryIds(categoryIds, validCategoryIds),
   };
   if (Object.values(fieldErrors).some(Boolean)) {
     return badRequest({
-      searchOptions,
+      availableSearchOptions,
       searchFormState: {
         fieldErrors,
         fields: {
-          searchQuery,
-          searchAppleOnly: searchAppleOnly ? true : false,
+          appName: fieldErrors.appName ? '' : appName,
+          appleOnly,
+          genreIds: fieldErrors.genreIds ? undefined : genreIds,
+          categoryIds: fieldErrors.categoryIds ? undefined : categoryIds,
         },
       },
     });
   }
 
-  const fields = {
-    searchQuery,
-    searchGenreIds: genreIds,
-    searchCategoryIds: categoryIds,
-    searchAppleOnly: searchAppleOnly ? true : false,
-  };
-
-
-  const PAGE_SIZE = 50;
+  const PAGE_SIZE = 25;
   const skip = PAGE_SIZE * (page - 1);
   const take = PAGE_SIZE + 1; // take 1 extra to see if there is a next page
-  const steamAppsAll =
-    await searchReleasedSteamAppsByName({
-      searchQuery,
-      skip,
-      take,
-      whereOptions: {
-        platformMac: searchAppleOnly ? true : undefined,
-        genreIds,
-        categoryIds,
-      },
-    });
+  const steamAppsAll = await searchReleasedSteamAppsByName({
+    appName,
+    skip,
+    take,
+    whereOptions: {
+      platformMac: appleOnly ? true : undefined,
+      genreIds,
+      categoryIds,
+    },
+  });
   let hasNextPage = false;
   if (steamAppsAll.length >= PAGE_SIZE) {
     hasNextPage = true;
@@ -211,18 +147,23 @@ export async function loader({
     hasNextPage,
   };
   return json<SearchPageLoaderData>({
-    searchOptions,
+    availableSearchOptions,
     searchResults,
     searchFormState: {
-      fields,
+      fields: {
+        appName,
+        appleOnly,
+        genreIds,
+        categoryIds,
+      },
     },
   });
 }
 
 export const meta: MetaFunction = ({ data }: { data?: Partial<SearchPageLoaderData> }) => {
-  if (data?.searchFormState?.fields?.searchQuery) {
+  if (data?.searchFormState?.fields?.appName) {
     return {
-      'title': `${metaTags.title} - Search - ${data.searchFormState.fields.searchQuery}`,
+      'title': `${metaTags.title} - Search - ${data.searchFormState.fields.appName}`,
     };
   }
   return {
@@ -239,11 +180,15 @@ function PageButtons({
   page: number;
   searchParams: URLSearchParams;
 }) {
+  const nextPageSearchParams = new URLSearchParams(searchParams);
+  nextPageSearchParams.set(SearchFormParams.PAGE, (page + 1).toString());
+  const prevPageSearchParams = new URLSearchParams(searchParams);
+  prevPageSearchParams.set(SearchFormParams.PAGE, (page - 1).toString());
   return (
     <div className="flex justify-between w-full">
       {page > 1 &&
         <RoundedButtonRemixLink
-          to={`/search?page=${page - 1}&` + searchParams.toString()}
+          to={`/search?${prevPageSearchParams.toString()}`}
           className="w-32"
         >
           Previous Page
@@ -251,7 +196,7 @@ function PageButtons({
       }
       {hasNextPage &&
         <RoundedButtonRemixLink
-          to={`/search?page=${page + 1}&` + searchParams.toString()}
+          to={`/search?${nextPageSearchParams.toString()}`}
           className="ml-auto w-32"
         >
           Next Page
@@ -262,32 +207,26 @@ function PageButtons({
 }
 
 function SearchIndexWrap({
-  searchOptions,
+  availableSearchOptions,
   children,
-  formError,
-  fieldErrors,
-  fields,
+  searchFormState,
   isSubmitting,
 }: {
-  searchOptions: {
+  availableSearchOptions: {
     genreOptions: GenreSelectOptions;
     categoryOptions: CategorySelectOptions;
   };
   isSubmitting: boolean;
-  formError?: string;
-  fieldErrors?: SearchFormFieldErrors;
-  fields?: SearchFormFields;
+  searchFormState?: SearchFormState;
   children?: React.ReactNode;
 }) {
   return (
     <div className="flex flex-col gap-6 justify-center items-center w-full">
       <SearchForm
-        genreOptions={searchOptions.genreOptions}
-        categoryOptions={searchOptions.categoryOptions}
+        genreOptions={availableSearchOptions.genreOptions}
+        categoryOptions={availableSearchOptions.categoryOptions}
         isSubmitting={isSubmitting}
-        formError={formError}
-        fieldErrors={fieldErrors}
-        fields={fields}
+        formState={searchFormState}
       />
       {children &&
         <div className="flex items-center justify-center w-full">
@@ -299,47 +238,28 @@ function SearchIndexWrap({
 }
 
 export default function SearchIndexRoute() {
-  const { searchResults, searchOptions, searchFormState } = useLoaderData<SearchPageLoaderData>();
-  const steamApps = searchResults?.steamApps;
-  const hasNextPage = searchResults ? searchResults.hasNextPage : false;
-  const page = searchResults ? searchResults.page : 1;
+  const { availableSearchOptions, searchFormState, searchResults } = useLoaderData<typeof loader>();
+  const navigation = useNavigation();
+  // !This is the case where someone navigates to /search initially
+  // !with no searchQuery
+  if (!searchFormState || !searchResults) {
+    return <SearchIndexWrap availableSearchOptions={availableSearchOptions} isSubmitting={false} />;
+  }
   const {
-    fields,
-    formError,
-    fieldErrors,
-  } = searchFormState
-    ? searchFormState
-    : { fields: undefined, formError: undefined, fieldErrors: undefined };
+    steamApps,
+    hasNextPage,
+    page,
+  } = searchResults;
 
-  const {
-    searchQuery,
-    searchAppleOnly,
-    searchCategoryIds,
-    searchGenreIds,
-  } = fields ? fields : {
-    searchQuery: undefined,
-    searchAppleOnly: undefined,
-    searchCategoryIds: undefined,
-    searchGenreIds: undefined,
-  };
-
-  const transition = useTransition();
-  const isSubmitting = (
-    (transition.state === 'submitting') &&
-    (transition.location.pathname === '/search')
-  );
+  const isSubmitting =
+    navigation.state === 'loading' &&
+    navigation.location.pathname === '/search';
 
   if (isSubmitting) {
-    const newSearchQuery = transition.submission.formData.get('searchQuery');
     return (
       <SearchIndexWrap
-        searchOptions={searchOptions}
-        formError={formError}
-        fieldErrors={fieldErrors}
-        fields={fields ? {
-          ...fields,
-          searchQuery: newSearchQuery ? newSearchQuery.toString() : '',
-        } : undefined}
+        availableSearchOptions={availableSearchOptions}
+        searchFormState={searchFormState}
         isSubmitting
       >
         <LoadingComponent />
@@ -347,30 +267,11 @@ export default function SearchIndexRoute() {
     );
   }
 
-  // !This is the case where someone navigates to /search initially
-  // !with no searchQuery
-  if (!steamApps) {
+  if (steamApps.length < 1) {
     return (
       <SearchIndexWrap
-        searchOptions={searchOptions}
-        formError={formError}
-        fieldErrors={fieldErrors}
-        fields={fields}
-        isSubmitting={isSubmitting}
-      />
-    );
-  }
-
-  if (
-    (steamApps) &&
-    (steamApps.length < 1)
-  ) {
-    return (
-      <SearchIndexWrap
-        searchOptions={searchOptions}
-        formError={formError}
-        fieldErrors={fieldErrors}
-        fields={fields}
+        availableSearchOptions={availableSearchOptions}
+        searchFormState={searchFormState}
         isSubmitting={isSubmitting}
       >
         <div className="w-full max-w-xl flex items-center justify-center bg-tertiary
@@ -381,39 +282,42 @@ export default function SearchIndexRoute() {
     );
   }
 
+  const {
+    appName,
+    appleOnly,
+    genreIds,
+    categoryIds,
+  } = searchFormState.fields ? searchFormState.fields : {
+    appName: '',
+    appleOnly: undefined,
+    genreIds: undefined,
+    categoryIds: undefined,
+  };
   const searchParams = new URLSearchParams();
-  // !searchQuery must always be defined or the route
-  // !will think this is an initial navigation to /search
-  if (searchQuery) {
-    searchParams.set('searchQuery', searchQuery);
-  } else {
-    searchParams.set('searchQuery', '');
+  searchParams.set(SearchFormParams.PAGE, page.toString());
+  searchParams.set(SearchFormParams.APP_NAME, appName);
+  if (appleOnly) {
+    searchParams.set(SearchFormParams.APPLE_ONLY, 'On');
   }
-  if (searchAppleOnly) {
-    searchParams.set('searchAppleOnly', 'on');
+  if (genreIds) {
+    genreIds.forEach((genreId) => searchParams.append(SearchFormParams.GENRE_IDS, genreId));
   }
-  if (searchCategoryIds) {
-    searchCategoryIds.forEach((categoryId) => {
-      searchParams.append('searchCategoryIds', `${categoryId}`);
-    });
+  if (categoryIds) {
+    categoryIds.forEach((categoryId) => searchParams.append(SearchFormParams.CATEGORY_IDS, categoryId.toString()));
   }
-  if (searchGenreIds) {
-    searchGenreIds.forEach((genreId) => {
-      searchParams.append('searchGenreIds', genreId);
-    });
-  }
-
   return (
     <SearchIndexWrap
-      searchOptions={searchOptions}
-      formError={formError}
-      fieldErrors={fieldErrors}
-      fields={fields}
+      availableSearchOptions={availableSearchOptions}
+      searchFormState={searchFormState}
       isSubmitting={isSubmitting}
     >
       <div className="flex flex-col gap-3 items-center w-full max-w-xl border-secondary border-1 rounded-md p-4 bg-app-bg">
         {(hasNextPage || (page > 1)) &&
-          <PageButtons hasNextPage={hasNextPage} page={page} searchParams={searchParams} />
+          <PageButtons
+            page={page}
+            hasNextPage={hasNextPage}
+            searchParams={searchParams}
+          />
         }
         {steamApps.map(({ steamAppId, name, headerImage, releaseDate }) => (
           <Fragment key={steamAppId}>
@@ -426,7 +330,11 @@ export default function SearchIndexRoute() {
           </Fragment>
         ))}
         {(hasNextPage || (page > 1)) &&
-          <PageButtons hasNextPage={hasNextPage} page={page} searchParams={searchParams} />
+          <PageButtons
+            page={page}
+            hasNextPage={hasNextPage}
+            searchParams={searchParams}
+          />
         }
       </div>
     </SearchIndexWrap>
