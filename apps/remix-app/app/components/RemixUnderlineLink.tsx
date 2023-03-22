@@ -17,7 +17,8 @@ export default function RemixUnderlineLink({
       className={`inline relative px-0 py-[0.1em] overflow-hidden no-underline
                   after:block after:absolute after:bottom-[-3px] after:left-0
                   after:h-[0.2em] after:bg-secondary after:transition-transform
-                  after:w-full after:rounded-full text-secondary ${className}`}
+                  after:w-full after:rounded-full text-secondary focus:outline-none
+                  focus-visible:show-ring rounded ${className}`}
       {...rest}
     >
       {children}
