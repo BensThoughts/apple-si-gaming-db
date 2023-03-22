@@ -55,8 +55,7 @@ export default function ProfilePage() {
 
   return (
     <PageWrapper title={title} topSpacer>
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 min-h-screen">
-
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 min-h-screen">
         <div className="col-start-1 col-span-1 justify-items-center md:col-span-4 xl:col-span-3">
           <div className="flex flex-col gap-2 items-center w-full md:max-w-xs bg-tertiary rounded-md p-4">
             <h2 className="text-lg text-secondary">Menu</h2>
