@@ -23,14 +23,14 @@ export default function EditAndDeleteButtons({
       />
       <Link
         to={`/apps/${steamAppId}/posts/edit/${performancePostId}`}
-        className="hover:text-primary-highlight"
+        className="rounded hover:text-primary-highlight focus:outline-none focus-visible:show-ring"
       >
         <EditIcon />
       </Link>
       <div className="border-l-2 border-secondary-highlight border-solid" />
       <button
         onClick={() => setDeleteModalIsOpen(true)}
-        className="hover:text-primary-highlight"
+        className="rounded hover:text-primary-highlight focus:outline-none focus-visible:show-ring"
       >
         <TrashIcon />
       </button>
