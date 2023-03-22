@@ -13,8 +13,6 @@ function ErrorToast({ message, t }: ToastProps) {
     <Transition
       appear
       show={t.visible}
-      className="w-full max-w-md bg-error text-color-snackbar-error rounded-md
-                 flex justify-between items-center px-4 py-2"
       enter="transform transition duration-[400ms]"
       enterFrom="opacity-0 translate-y-6"
       enterTo="opacity-100 translate-y-0"
@@ -22,7 +20,8 @@ function ErrorToast({ message, t }: ToastProps) {
       leaveFrom="opacity-100 scale-100"
       leaveTo="opacity-0 scale-95"
     >
-      <div className="flex gap-2">
+      <div className="w-full max-w-md bg-snackbar-error text-snackbar-error rounded-md
+                      flex gap-4 justify-between items-center px-2 py-1">
         <span>{message}</span>
         <RoundedButton onClick={() => toast.dismiss(t.id)}>Close</RoundedButton>
       </div>
@@ -35,8 +34,6 @@ function LoginToast({ message, t }: ToastProps) {
     <Transition
       appear
       show={t.visible}
-      className="w-full max-w-md bg-primary-highlight text-primary rounded-md
-                 flex justify-between items-center px-4 py-2"
       enter="transform transition duration-[400ms]"
       enterFrom="opacity-0 translate-y-6"
       enterTo="opacity-100 translate-y-0"
@@ -44,23 +41,26 @@ function LoginToast({ message, t }: ToastProps) {
       leaveFrom="opacity-100 scale-100"
       leaveTo="opacity-0 scale-95"
     >
-      <span>{message}</span>
-      <a
-        href="/api/auth/steam/login"
-        className="block w-[85.5] h-[33]"
+      <div className="w-full max-w-md bg-primary-highlight text-primary rounded-md
+                 flex justify-between items-center px-4 py-2">
+        <span>{message}</span>
+        <a
+          href="/api/auth/steam/login"
+          className="block w-[85.5] h-[33]"
         // onClick={() => Fathom.trackGoal('7HVQUUZ4', 1)}
-      >
-        <img
-          src="/steam_sign_in.png"
-          alt="login with steam"
-          width={85.5}
-          height={33}
-          loading="lazy"
-          onError={(e) => {
-            e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
-          }}
-        />
-      </a>
+        >
+          <img
+            src="/steam_sign_in.png"
+            alt="login with steam"
+            width={85.5}
+            height={33}
+            loading="lazy"
+            onError={(e) => {
+              e.currentTarget.src = '/svg-images/no-image-placeholder.svg';
+            }}
+          />
+        </a>
+      </div>
     </Transition>
   );
 }
