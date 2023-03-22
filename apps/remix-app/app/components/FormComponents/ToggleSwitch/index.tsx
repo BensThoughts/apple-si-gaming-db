@@ -42,7 +42,7 @@ export default function ToggleSwitch({
             {/* <span className="sr-only">Filter Apple Only Games</span> */}
             <span
               aria-hidden="true"
-              className={`${checked ? 'translate-x-[38px] bg-primary-text-highlight' : 'translate-x-[4px] bg-primary-text'}
+              className={`${checked ? 'translate-x-[38px] bg-text-primary-highlight' : 'translate-x-[4px] bg-text-primary'}
             pointer-events-none inline-block h-[30px] w-[30px] transform rounded-full
             shadow-lg ring-0 transition duration-200 ease-in-out`}
             />
