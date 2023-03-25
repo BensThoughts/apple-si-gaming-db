@@ -32,7 +32,7 @@ export default function PerformancePostMetaBar({
     <div className="@container">
       <div className="flex flex-col gap-1 items-start justify-between text-sm px-3 py-1
                       rounded-sm bg-primary w-full text-primary-faded
-                      @[650px]:gap-0 @[650px]:flex-row @[650px]:items-center
+                      @[706px]:gap-0 @[706px]:flex-row @[706px]:items-center
                       supports-[not(container-type:inline-size)]:postMetaBarQuery:gap-0
                       supports-[not(container-type:inline-size)]:postMetaBarQuery:flex-row
                       supports-[not(container-type:inline-size)]:postMetaBarQuery:items-center"
