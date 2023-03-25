@@ -51,7 +51,12 @@ export default function ProfilePage() {
   }
 
   const lastSegment = pathname.substring(pathname.lastIndexOf('/') + 1);
-  const title = lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1);
+  const titleWords = lastSegment.split('-');
+  titleWords.forEach((letter, idx) => {
+    const word = titleWords[idx];
+    titleWords[idx] = word.charAt(0).toUpperCase() + word.slice(1);
+  });
+  const title = titleWords.join(' ');
 
   return (
     <PageWrapper title={title} topSpacer>
