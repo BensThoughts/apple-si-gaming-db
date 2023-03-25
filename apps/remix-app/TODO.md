@@ -13,7 +13,7 @@ Explicit (doesn't require db cleanup externally)
 
 ## Priority High
 
-- [ ] Add controller review option
+- [x] Add controller review option
 - [x] Add ability to tag performance post (Native, Rosetta 2, CrossOver 19 - 22,
       Parallels 16 - 18)
 - [ ] Add clarifier for rating meaning (tooltip?)
@@ -29,18 +29,18 @@ Explicit (doesn't require db cleanup externally)
 
 ## Priority Medium
 
-- [ ] Create re-route logic for user not logged in trying to access
+- [x] Fix game controller change to none when editing
+- [x] Fix title name on Profile liked-posts
+- [x] Create re-route logic for user not logged in trying to access
       /profile/routes
 - [ ] Fix scroll to on anchor links to post idx
-- [ ] Fix focus-visible (show-ring) on MultiSelect
+- [x] Fix focus-visible (show-ring) on MultiSelect
 - [ ] Fix ring spacing on all elements with show-ring
 - [x] Refactor Icons
-- [ ] Look at using .client.ts(x) extension for colorMode, instead of using suspense
-      and lazy loading.
+<!-- - [ ] Look at using .client.ts(x) extension for colorMode, instead of using
+      suspense and lazy loading. -->
 - [x] Make Regex for system information more robust
 - [ ] Spruce up forms to be more visually consistent
 - [x] Add a sync button to profile so users can sync their game library at
       anytime, not just on initial login
-- [ ] Add a way for users to flag inappropriate posts
-- [ ] Add a way for users to up/down vote performance posts?
 - [ ] Fonts
