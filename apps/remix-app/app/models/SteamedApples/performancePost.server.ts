@@ -417,12 +417,15 @@ export async function updatePerformancePost({
 }) {
   const currentPerformancePost = await prisma.performancePost.findUnique({
     where: { id: performancePostId },
-    select: { postTags: true },
+    select: { postTags: { select: { id: true } }, gamepadId: true },
   });
   if (!currentPerformancePost) throw Error(`Cannot find post with id: ${performancePostId}`);
-  const { postTags } = currentPerformancePost;
-  const currentPerformancePostTagIds = postTags.map((tag) => tag.id);
-  const performancePostTagIdsToDisconnect = currentPerformancePostTagIds.filter((tagId) => !postTagIds.includes(tagId));
+  const { postTags: currentPostTags } = currentPerformancePost;
+  const currentPerformancePostTagIds = currentPostTags.map((tag) => tag.id);
+  const performancePostTagIdsToDisconnect =
+    currentPerformancePostTagIds.filter((tagId) => !postTagIds.includes(tagId));
+
+  // const { gamepadId: currentGamepadId } = currentPerformancePost;
 
   const performancePostData: Prisma.PerformancePostUpdateInput = {
     postText,
@@ -433,8 +436,11 @@ export async function updatePerformancePost({
       connect: {
         id: gamepadId,
       },
-    } : undefined,
-    gamepadRating,
+      // disconnect: currentGamepadId ? true : undefined,
+    } : {
+      disconnect: true,
+    },
+    gamepadRating: gamepadId ? gamepadRating : null,
     postTags: {
       connect: postTagIds.map((id) => ({ id })),
       disconnect: performancePostTagIdsToDisconnect.map((id) => ({ id })),
