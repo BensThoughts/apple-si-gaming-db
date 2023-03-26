@@ -1,11 +1,10 @@
 import { forwardRef } from 'react';
 
-type IconProps = {
+export type FlatIcon60Props = {
   size?: number,
-  gradient?: boolean,
 } & React.SVGAttributes<SVGElement>
 
-const FlatIcon60 = forwardRef<SVGSVGElement, IconProps>(({
+const FlatIcon60 = forwardRef<SVGSVGElement, FlatIcon60Props>(({
   size = 24,
   width,
   height,
@@ -14,7 +13,7 @@ const FlatIcon60 = forwardRef<SVGSVGElement, IconProps>(({
   viewBox = '0 0 60 60',
   children,
   ...rest
-}: IconProps, ref) => {
+}: FlatIcon60Props, ref) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
