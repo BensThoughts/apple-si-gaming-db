@@ -1,5 +1,7 @@
 import FlatIcon60 from '../../FlatIcon60';
 
+// TODO: get rid of userLiked, let LikeButton component fill it
+
 type IconProps = {
   size?: number;
   userLiked: boolean;
