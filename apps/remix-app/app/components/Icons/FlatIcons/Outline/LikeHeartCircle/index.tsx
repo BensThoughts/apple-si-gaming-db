@@ -1,13 +1,11 @@
 import FlatIcon60 from '../../FlatIcon60';
+import type { FlatIcon60Props } from '../../FlatIcon60';
 
-type IconProps = {
-  size?: number,
-} & React.SVGAttributes<SVGElement>
 
 export function LikeHeartCircleOutlineIcon({
   size = 24,
   ...rest
-}: IconProps) {
+}: FlatIcon60Props) {
   return (
     <FlatIcon60
       size={size}
