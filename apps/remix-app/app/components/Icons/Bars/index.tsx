@@ -14,7 +14,7 @@ export default function Bars({
       size={size}
       {...rest}
     >
-      <path d="M3 12h18M3 6h18M3 18h18" />
+      <path d="M3 12h18M3 5h18M3 19h18" />
     </FeatherIcon>
   );
 }
