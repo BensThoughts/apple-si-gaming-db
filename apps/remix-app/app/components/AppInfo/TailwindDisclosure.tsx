@@ -63,7 +63,8 @@ export default function TailwindDisclosure({
       {isOpen &&
             <Disclosure.Panel
               static
-              className={`peer-focus-visible:show-ring border-secondary border-x-1 border-b-1 p-3 bg-tertiary rounded-b-md`}
+              className="peer-focus-visible:show-ring border-secondary border-x-1
+                         border-b-1 p-3 bg-tertiary rounded-b-md"
             >
               {children}
             </Disclosure.Panel>
