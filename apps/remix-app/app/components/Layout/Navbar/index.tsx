@@ -107,20 +107,20 @@ export default function NavBar({
               to="/profile"
               className={`ml-3 text-sm text-primary-highlight inline-flex justify-center items-center
                           border border-transparent font-medium rounded
-                          bg-secondary hover:bg-secondary-highlight focus-visible:show-ring
+                          bg-primary hover:bg-primary-highlight focus-visible:show-ring
                           h-[40px] w-[58px]`}
             >
-              <SteamIcon size={40} className="text-primary-highlight" />
+              <SteamIcon size={40} className="fill-secondary stroke-0" />
             </NavLink>
             <button
               onClick={() => setIsOpen(!isOpen)}
               aria-label="navigation menu"
               className={`mr-3 text-sm text-primary-highlight inline-flex justify-center items-center
                           border border-transparent font-medium px-4 py-2 rounded
-                          bg-secondary hover:bg-secondary-highlight focus-visible:show-ring
+                          bg-primary hover:bg-primary-highlight focus-visible:show-ring
                           h-[40px] w-[58px]`}
             >
-              <BarsIcon size={24} className="text-primary-highlight" />
+              <BarsIcon size={24} className="fill-transparent stroke-secondary stroke-2" />
             </button>
           </div>
         </div>
