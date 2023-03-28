@@ -14,7 +14,7 @@ export default function TrendingSteamAppsSection({
       <h2 className="sr-only">Trending Apps</h2>
       <div className="relative flex overflow-x-hidden overflow-y-visible group max-w-[100vw]">
         <div className="flex py-12 whitespace-nowrap animate-marquee lg:animate-large-marquee
-                        group-hover:pause will-change-transform">
+                        group-hover:pause group-focus-within:pause will-change-transform">
           {trendingSteamApps.map(({
             steamAppId,
             name,
@@ -33,7 +33,8 @@ export default function TrendingSteamAppsSection({
           ))}
         </div>
         <div className="flex absolute top-0 whitespace-nowrap py-12 animate-marquee2
-                        lg:animate-large-marquee2 group-hover:pause will-change-transform">
+                        lg:animate-large-marquee2 group-hover:pause group-focus-within:pause
+                        will-change-transform">
           {trendingSteamApps.map(({
             steamAppId,
             name,
