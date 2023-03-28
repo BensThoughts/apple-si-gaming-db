@@ -77,7 +77,7 @@ export default function SmallAppsGridLayout({
           <ToggleSwitch checked={filterAppleOnly} onChange={setFilterAppleOnly} />
         </div>
         <div className="flex flex-col lg:flex-row items-center justify-center gap-2">
-          <label>Select Genre:</label>
+          <label>Genre:</label>
           <SelectMenu
             options={genreOptions}
             onChange={(e) => setGenreFilter(e)}
