@@ -1,12 +1,12 @@
-import FlatIcon60 from '../../FlatIcon60';
-import type { FlatIcon60Props } from '../../FlatIcon60';
+import FlatIconBlueLineal from '../FlatIconBlueLineal';
+import type { FlatIconBlueLinealProps } from '../FlatIconBlueLineal';
 
 export function BookBlueLinealIcon({
   size = 24,
   ...rest
-}: FlatIcon60Props) {
+}: FlatIconBlueLinealProps) {
   return (
-    <FlatIcon60
+    <FlatIconBlueLineal
       size={size}
       {...rest}
     >
@@ -68,6 +68,6 @@ export function BookBlueLinealIcon({
           </g>
         </g>
       </g>
-    </FlatIcon60>
+    </FlatIconBlueLineal>
   );
 }

@@ -1,13 +1,13 @@
-import FlatIcon60 from '../../FlatIcon60';
-import type { FlatIcon60Props } from '../../FlatIcon60';
+import FlatIconOutline from '../FlatIconOutline';
+import type { FlatIconOutlineProps } from '../FlatIconOutline';
 
 
 export function BookOutlineIcon({
   size = 24,
   ...rest
-}: FlatIcon60Props) {
+}: FlatIconOutlineProps) {
   return (
-    <FlatIcon60
+    <FlatIconOutline
       size={size}
       viewBox="0 0 612.1 612.1"
       {...rest}
@@ -17,6 +17,6 @@ export function BookOutlineIcon({
       <path id="Shape_101_" d="m367.997 220.255-50.983 112.163c-1.606 3.33-1.284 7.269.843 10.294s5.724 4.661 9.401 4.277 6.859-2.729 8.314-6.128l11.186-24.615h61.037l11.216 24.615c1.455 3.399 4.636 5.744 8.314 6.128 3.677.384 7.275-1.252 9.401-4.277s2.449-6.964.843-10.294l-50.983-112.163c-1.656-3.636-5.284-5.969-9.279-5.969s-7.622 2.333-9.279 5.969zm30.529 75.598h-42.5l21.25-46.731z" />
       <path id="Shape_100_" d="m50.983 550.77c0 5.631 4.565 10.197 10.197 10.197h20.393c5.631 0 10.197-4.565 10.197-10.197 0-5.631-4.565-10.197-10.197-10.197h-20.393c-5.632 0-10.197 4.565-10.197 10.197z" />
       <path id="Shape_99_" d="m132.556 560.966h265.113c5.631 0 10.197-4.565 10.197-10.197 0-5.631-4.565-10.197-10.197-10.197h-265.113c-5.631 0-10.197 4.565-10.197 10.197.001 5.632 4.566 10.197 10.197 10.197z" />
-    </FlatIcon60>
+    </FlatIconOutline>
   );
 }

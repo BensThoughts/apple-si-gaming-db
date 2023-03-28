@@ -1,13 +1,13 @@
-import FlatIcon60 from '../../FlatIcon60';
-import type { FlatIcon60Props } from '../../FlatIcon60';
+import FlatIconOutline from '../FlatIconOutline';
+import type { FlatIconOutlineProps } from '../FlatIconOutline';
 
 
 export function SearchDatabaseOutlineIcon({
   size = 24,
   ...rest
-}: FlatIcon60Props) {
+}: FlatIconOutlineProps) {
   return (
-    <FlatIcon60
+    <FlatIconOutline
       size={size}
       viewBox="0 0 505.141 505.141"
       {...rest}
@@ -22,6 +22,6 @@ export function SearchDatabaseOutlineIcon({
       <path d="M75.935,75.541c1.069-0.001,2.128-0.203,3.122-0.596l41.967-16.787c4.306-1.724,6.4-6.613,4.675-10.92c-1.724-4.306-6.613-6.4-10.92-4.675L72.812,59.35c-3.743,1.491-5.898,5.431-5.135,9.387S71.906,75.549,75.935,75.541z"/>
       <path d="M68.182,97.492c-0.856,2.056-0.861,4.368-0.012,6.427c0.847,2.06,2.479,3.698,4.535,4.555c2.056,0.856,4.368,0.861,6.427,0.011l142.689-58.754c4.288-1.766,6.332-6.674,4.566-10.962c-1.766-4.288-6.674-6.332-10.962-4.566L72.737,92.957C70.677,93.805,69.039,95.436,68.182,97.492z"/>
 
-    </FlatIcon60>
+    </FlatIconOutline>
   );
 }

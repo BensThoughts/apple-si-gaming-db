@@ -1,13 +1,13 @@
-import FlatIcon60 from '../../FlatIcon60';
-import type { FlatIcon60Props } from '../../FlatIcon60';
+import FlatIconOutline from '../FlatIconOutline';
+import type { FlatIconOutlineProps } from '../FlatIconOutline';
 
 
 export function GameBoyOutlineIcon({
   size = 24,
   ...rest
-}: FlatIcon60Props) {
+}: FlatIconOutlineProps) {
   return (
-    <FlatIcon60
+    <FlatIconOutline
       size={size}
       viewBox="'0 0 576 512'"
       {...rest}
@@ -30,6 +30,6 @@ export function GameBoyOutlineIcon({
         d="m377.127 266h-242.254c-5.523 0-10-4.477-10-10v-185.787c0-5.523 4.477-10 10-10h242.255c5.523 0 10 4.477 10 10v47.687c0 5.523-4.477 10-10 10s-10-4.477-10-10v-37.687h-222.255v165.787h222.255v-37.687c0-5.523 4.477-10 10-10s10 4.477 10 10v47.687c-.001 5.523-4.478 10-10.001 10z" />
       <path
         d="m315.473 512h-194.797c-26.88 0-48.75-21.869-48.75-48.75v-414.5c0-26.88 21.869-48.75 48.75-48.75h270.647c26.88 0 48.75 21.869 48.75 48.75v338.65c0 68.704-55.895 124.6-124.6 124.6zm-194.797-492c-15.853 0-28.75 12.897-28.75 28.75v414.5c0 15.853 12.897 28.75 28.75 28.75h194.796c57.677 0 104.601-46.924 104.601-104.601v-338.649c0-15.853-12.897-28.75-28.75-28.75z" />
-    </FlatIcon60>
+    </FlatIconOutline>
   );
 };

@@ -1,26 +1,22 @@
 import { forwardRef } from 'react';
 
-export type FlatIcon60Props = {
+export type FlatIconSolidProps = {
   size?: number,
 } & React.SVGAttributes<SVGElement>
 
-const FlatIcon60 = forwardRef<SVGSVGElement, FlatIcon60Props>(({
+const FlatIconSolid = forwardRef<SVGSVGElement, FlatIconSolidProps>(({
   size = 24,
   width,
   height,
-  fill = 'currentColor',
-  strokeWidth = 1,
   viewBox = '0 0 60 60',
   children,
   ...rest
-}: FlatIcon60Props, ref) => {
+}: FlatIconSolidProps, ref) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={size ? size : width}
       height={size ? size : height}
-      fill={fill}
-      strokeWidth={strokeWidth}
       viewBox={viewBox}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}
@@ -31,6 +27,6 @@ const FlatIcon60 = forwardRef<SVGSVGElement, FlatIcon60Props>(({
   );
 });
 
-FlatIcon60.displayName = 'FlatIcon60';
+FlatIconSolid.displayName = 'FlatIcon60Solid';
 
-export default FlatIcon60;
+export default FlatIconSolid;

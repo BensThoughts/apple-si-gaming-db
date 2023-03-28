@@ -1,12 +1,12 @@
-import FlatIcon60 from '../../FlatIcon60';
-import type { FlatIcon60Props } from '../../FlatIcon60';
+import FlatIconSolid from '../FlatIconSolid';
+import type { FlatIconSolidProps } from '../FlatIconSolid';
 
 export function AppleLogoSolidIcon({
   size = 24,
   ...rest
-}: FlatIcon60Props) {
+}: FlatIconSolidProps) {
   return (
-    <FlatIcon60
+    <FlatIconSolid
       size={size}
       viewBox="0 0 512 512.08853"
       {...rest}
@@ -39,6 +39,6 @@ export function AppleLogoSolidIcon({
         <path
           d="m34.757812 217.042969c-4.792968 0-8.679687 3.886719-8.679687 8.679687v8.675782c0 4.792968 3.886719 8.679687 8.679687 8.679687 4.792969 0 8.675782-3.886719 8.675782-8.679687v-8.675782c0-4.792968-3.882813-8.679687-8.675782-8.679687zm0 0" />
       </g>
-    </FlatIcon60>
+    </FlatIconSolid>
   );
 }

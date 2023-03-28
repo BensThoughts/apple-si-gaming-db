@@ -1,13 +1,13 @@
-import FlatIcon60 from '../../FlatIcon60';
-import type { FlatIcon60Props } from '../../FlatIcon60';
+import FlatIconOutline from '../FlatIconOutline';
+import type { FlatIconOutlineProps } from '../FlatIconOutline';
 
 
 export function LikeHeartCircleOutlineIcon({
   size = 24,
   ...rest
-}: FlatIcon60Props) {
+}: FlatIconOutlineProps) {
   return (
-    <FlatIcon60
+    <FlatIconOutline
       size={size}
       viewBox="0 0 73 73"
       {...rest}
@@ -27,6 +27,6 @@ export function LikeHeartCircleOutlineIcon({
       <path
         d="m68.1255798 23.6400337c.4023438 0 .7353516-.3193359.7490234-.7246094.0141602-.4140625-.3105469-.7607422-.7246094-.7753906l-6.7319336-.2255859c-.4052734.0009766-.7607422.3105469-.7744141.7246094-.0141602.4140625.3105469.7607422.7246094.7753906l6.7319336.2255859z"
       />
-    </FlatIcon60>
+    </FlatIconOutline>
   );
 }

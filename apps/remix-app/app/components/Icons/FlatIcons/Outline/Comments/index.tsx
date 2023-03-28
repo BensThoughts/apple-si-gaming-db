@@ -1,13 +1,13 @@
-import FlatIcon60 from '../../FlatIcon60';
-import type { FlatIcon60Props } from '../../FlatIcon60';
+import FlatIconOutline from '../FlatIconOutline';
+import type { FlatIconOutlineProps } from '../FlatIconOutline';
 
 
 export function CommentsOutlineIcon({
   size = 24,
   ...rest
-}: FlatIcon60Props) {
+}: FlatIconOutlineProps) {
   return (
-    <FlatIcon60
+    <FlatIconOutline
       size={size}
       viewBox="0 0 480 480"
       {...rest}
@@ -31,6 +31,6 @@ export function CommentsOutlineIcon({
       <path d="m340.291 401c4.418 0 8-3.582 8-8s-3.582-8-8-8h-109.291c-4.418 0-8 3.582-8 8s3.582 8 8 8z" />
       <path d="m290.323 79c-4.418 0-8 3.582-8 8s3.582 8 8 8h91.677c4.418 0 8-3.582 8-8s-3.582-8-8-8z" />
       <path d="m259.291 87c0-4.418-3.582-8-8-8h-20.291c-4.418 0-8 3.582-8 8s3.582 8 8 8h20.291c4.418 0 8-3.582 8-8z" />
-    </FlatIcon60>
+    </FlatIconOutline>
   );
 }

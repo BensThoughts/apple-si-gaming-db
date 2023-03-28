@@ -1,13 +1,13 @@
-import FlatIcon60 from '../../FlatIcon60';
-import type { FlatIcon60Props } from '../../FlatIcon60';
+import FlatIconBlueLineal from '../FlatIconBlueLineal';
+import type { FlatIconBlueLinealProps } from '../FlatIconBlueLineal';
 
 
 export function ChatBlueLinealIcon({
   size = 24,
   ...rest
-}: FlatIcon60Props) {
+}: FlatIconBlueLinealProps) {
   return (
-    <FlatIcon60
+    <FlatIconBlueLineal
       size={size}
       {...rest}
     >
@@ -44,6 +44,6 @@ export function ChatBlueLinealIcon({
           <path d="m40 21a4 4 0 1 0 -4 4 4 4 0 0 0 4-4zm-6 0a2 2 0 1 1 2 2 2 2 0 0 1 -2-2z" />
         </g>
       </g>
-    </FlatIcon60>
+    </FlatIconBlueLineal>
   );
 }

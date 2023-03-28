@@ -1,32 +1,25 @@
-import FlatIcon60 from '../../FlatIcon60';
-
-// TODO: get rid of userLiked, let LikeButton component fill it
-
-type IconProps = {
-  size?: number;
-  userLiked: boolean;
-} & React.SVGAttributes<SVGElement>
+import FlatIconOutline from '../FlatIconOutline';
+import type { FlatIconOutlineProps } from '../FlatIconOutline';
 
 export function BleedingHeartOutlineIcon({
   size = 24,
-  userLiked,
   ...rest
-}: IconProps) {
+}: FlatIconOutlineProps) {
   return (
-    <FlatIcon60
+    <FlatIconOutline
       size={size}
       viewBox="0 0 520 520"
       {...rest}
     >
-      <g id="_x31_10-Bleeding_Heart_x2C__Crazy_Love_x2C__Emotions" className="stroke-current">
-        <g fill={userLiked ? `#ff3e3b` : 'none'}>
+      <g id="_x31_10-Bleeding_Heart_x2C__Crazy_Love_x2C__Emotions">
+        <g>
           <path d="m455 80c8.28 0 15 6.72 15 15s-6.72 15-15 15-15-6.72-15-15 6.72-15 15-15z" />
           <path d="m60 370c11.05 0 20 8.95 20 20s-8.95 20-20 20-20-8.95-20-20 8.95-20 20-20z" />
           <path d="m60 70c11.05 0 20 8.95 20 20s-8.95 20-20 20-20-8.95-20-20 8.95-20 20-20z" />
         </g>
         <path
           d="m451.36 214.15c0 39.08-15.96 71.291-41.36 102.23v63.62c0 11.05-8.95 20-20 20s-20-8.95-20-20v-21.55c-12.51 11.859-25.96 23.91-40 36.47v75.08c0 11.05-8.95 20-20 20s-20-8.95-20-20v-38.84c-9.93 9.229-19.96 18.8-30 28.84-6.68-6.68-13.35-13.15-20-19.45v9.45c0 11.05-8.95 20-20 20s-20-8.95-20-20v-46.13c-13.92-12.47-27.36-24.39-40-36.05v62.18c0 11.05-8.95 20-20 20s-20-8.95-20-20v-101.95c-31.2-34.6-51.47-69.89-51.47-113.9 0-52.82 42.86-95.68 95.79-95.68 47.84 0 71.76 23.93 95.68 71.76 23.92-47.83 47.84-71.76 95.68-71.76 52.83 0 95.68 42.86 95.68 95.68z"
-          fill={userLiked ? '#ff3e3b' : 'none'} />
+          fill="none" />
         <path
           d="m477.07 352.93c3.91 3.9 3.91 10.24 0 14.141-3.9 3.91-10.24 3.91-14.141 0-3.91-3.9-3.91-10.24 0-14.141 3.901-3.91 10.241-3.91 14.141 0z" />
         <path
@@ -56,6 +49,6 @@ export function BleedingHeartOutlineIcon({
         <path
           d="m60 420c-16.542 0-30-13.458-30-30s13.458-30 30-30 30 13.458 30 30-13.458 30-30 30zm0-40c-5.514 0-10 4.486-10 10s4.486 10 10 10 10-4.486 10-10-4.486-10-10-10z" />
       </g>
-    </FlatIcon60>
+    </FlatIconOutline>
   );
 }
