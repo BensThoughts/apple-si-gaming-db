@@ -1,7 +1,7 @@
 import { useFetcher } from '@remix-run/react';
 import { useState } from 'react';
 import { useLikeButtonData } from '~/lib/hooks/useMatchesData';
-import { BleedingHeartOutlineIcon } from './Icons/FlatIcons';
+import { BleedingHeartSimpleSolidIcon } from '~/components/Icons/FlatIcons/Solid';
 import { showToast } from './Toasts';
 
 export default function LikeButton({
@@ -15,7 +15,6 @@ export default function LikeButton({
     isUserProfileLoggedIn,
     didUserProfileLikePerformancePost,
   } = useLikeButtonData(performancePostId);
-  // without a userProfileId we can safely assume no logged in user, so no like
   const [likedPostRaw, setLikedPostRaw] = useState(didUserProfileLikePerformancePost);
   const [numLikesRaw, setNumLikesRaw] = useState(numLikes);
 
@@ -24,7 +23,6 @@ export default function LikeButton({
   const isSubmittingLike =
     fetcher.state === 'submitting' &&
     fetcher.submission.action === '/actions/like-post';
-  // const isLoading = fetcher.state === 'loading';
 
   function onLikeClick() {
     if (isUserProfileLoggedIn) {
@@ -51,15 +49,16 @@ export default function LikeButton({
       onClick={onLikeClick}
       disabled={isSubmittingLike}
       type="submit"
-      className="border-1 border-secondary-highlight rounded-full px-3 py-0.5
+      className="border-1 border-secondary-highlight rounded-full px-3 py-1.5
                   min-w-[75px] focus:outline-none focus-visible:show-ring"
       aria-label={likedPostRaw ? 'unlike post' : 'like post'}
     >
-      <div className="flex justify-between items-center gap-2">
-        <BleedingHeartOutlineIcon
+      <div className="flex justify-between items-center gap-1">
+        <BleedingHeartSimpleSolidIcon
           size={30}
-          className={`inline ${likedPostRaw ? 'text-primary' : 'text-primary-highlight'}`}
-          userLiked={likedPostRaw}
+          className={likedPostRaw
+              ? 'fill-heart stroke-text-primary h-6 w-6'
+              : 'fill-transparent stroke-text-primary-highlight h-6 w-6'}
         />
         <span className={`${isSubmittingLike ? 'text-primary' : 'text-primary-highlight'}`}>
           {numLikesRaw}
