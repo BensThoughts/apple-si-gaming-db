@@ -75,7 +75,7 @@ function PostCard({
   } =performancePost;
   return (
     <Link to={`/apps/${steamApp.steamAppId}/posts#${performancePostId}`}
-      className="relative flex flex-col-reverse bg-tertiary rounded-lg p-6 outline-none
+      className="relative flex flex-col-reverse bg-tertiary rounded-lg p-6
                  focus-visible:show-ring"
     >
       <figure

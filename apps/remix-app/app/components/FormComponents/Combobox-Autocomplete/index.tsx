@@ -75,7 +75,7 @@ export default function ComboboxAutocomplete<T extends React.Key = string>({
                      rounded-lg bg-primary text-left shadow-md"
             >
               <Combobox.Input
-                className="bg-primary w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-primary outline-none"
+                className="bg-primary w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-primary"
                 displayValue={(option: ComboboxOption<T>) => option.label}
                 onChange={(event) => setQuery(event.target.value)}
                 // onFocus={() => setIsOpenFromFocus(true)}

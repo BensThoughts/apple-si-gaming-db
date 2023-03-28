@@ -98,13 +98,11 @@ export default function EditSystemModal({
           <div className="flex gap-2">
             <RoundedButton
               type="submit"
-              // className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 rounded-md border border-transparent text-primary-highlight hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
             >
               Edit
             </RoundedButton>
             <RoundedButton
               type="button"
-              // className="inline-flex justify-center px-4 py-2 text-sm font-medium rounded-md border border-transparent text-primary-highlight hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
               onClick={() => {
                 setSystemNameValue('');
                 setSystemNameTouched(false);

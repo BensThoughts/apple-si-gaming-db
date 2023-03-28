@@ -42,7 +42,7 @@ export default function NavBar({
                 to={menuItem.to}
                 onClick={() => setIsOpen(false)}
                 className="flex items-center justify-center w-full h-10 text-xl text-center
-                           hover:bg-primary outline-none focus-visible:show-ring rounded-sm"
+                           hover:bg-primary focus-visible:show-ring rounded-sm"
               >
                 {menuItem.name}
               </NavLink>
@@ -51,7 +51,7 @@ export default function NavBar({
               to={'/profile'}
               onClick={() => setIsOpen(false)}
               className="flex items-center justify-center w-full h-10 text-xl text-center
-                         hover:bg-primary outline-none focus-visible:show-ring rounded-sm"
+                         hover:bg-primary focus-visible:show-ring rounded-sm"
             >
               {isLoggedIn ? 'Profile' : 'Login'}
             </NavLink>
@@ -84,7 +84,7 @@ export default function NavBar({
                 <NavLink
                   to={'/profile'}
                   onClick={() => setIsOpen(false)}
-                  className="outline-none focus-visible:show-ring px-1 rounded-sm"
+                  className="focus-visible:show-ring px-1 rounded-sm"
                 >
                   <AnimatedUnderline>
                     {isLoggedIn ? 'Profile' : 'Login'}

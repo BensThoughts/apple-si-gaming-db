@@ -41,7 +41,8 @@ function NewFeatureCard({
       to={to}
       className="flex flex-col gap-4 h-[280px] sm:h-[240px] w-[160px] sm:w-[200px]
                  bg-tertiary shadow-md shadow-black p-5 rounded-xl ease-out duration-400
-                 lg:hover:translate-y-[-20px] group relative inset-0"
+                 lg:hover:translate-y-[-20px] group relative inset-0
+                 focus-visible:show-ring"
     >
       <h3
         className="z-30 font-semibold text-2xl relative text-primary

@@ -13,7 +13,7 @@ export default function LoginCard() {
       </span>
       <a
         href="/api/auth/steam/login"
-        className="outline-none focus-visible:show-ring rounded-lg mt-2"
+        className="focus-visible:show-ring rounded-lg mt-2"
         // onClick={() => Fathom.trackGoal('7HVQUUZ4', 1)}
       >
         <div className="p-5 border-solid border-secondary-highlight border-y-2 rounded-xl bg-tertiary-highlight">

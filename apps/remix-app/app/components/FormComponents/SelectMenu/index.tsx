@@ -64,7 +64,7 @@ export default function SelectMenu<T = string>({
           <Listbox.Button
             className="relative py-2 pr-10 pl-3 w-full text-left rounded-lg
                         cursor-default text-neutral-lightest bg-neutral-medium
-                        focus-visible:show-ring sm:text-sm bg-primary"
+                        focus-visible:show-ring-tertiary sm:text-sm bg-primary"
           >
             {({ value }: { value: SelectOption<T> }) => (
               <>

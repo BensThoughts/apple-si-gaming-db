@@ -15,7 +15,7 @@ export default function MaterialTextAreaOutlined({
         <div className="after:absolute after:w-full after:bg-primary after:h-2" />
         <textarea
           id={id}
-          className="w-full bg-transparent outline-none peer min-h-[250px] p-3"
+          className="w-full bg-transparent focus:outline-none peer min-h-[250px] p-3"
           placeholder=" "
           {...rest}
         />

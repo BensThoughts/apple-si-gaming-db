@@ -20,7 +20,7 @@ export default function PageFooter({
             href="https://twitter.com/bensthoughts"
             rel="noopener noreferrer"
             target="_blank"
-            className="block rounded outline-none focus-visible:show-ring"
+            className="block rounded focus-visible:show-ring"
           >
             <TwitterIcon size={28} />
           </a>
@@ -28,7 +28,7 @@ export default function PageFooter({
             href="https://discord.gg/8Ub5669qJv"
             rel="noopener noreferrer"
             target="_blank"
-            className="block rounded outline-none focus-visible:show-ring"
+            className="block rounded focus-visible:show-ring"
           >
             <DiscordIcon size={28} />
           </a>
@@ -36,7 +36,7 @@ export default function PageFooter({
             href="https://www.reddit.com/user/BenjaminsThoughts"
             rel="noopener noreferrer"
             target="_blank"
-            className="block rounded outline-none focus-visible:show-ring"
+            className="block rounded focus-visible:show-ring"
           >
             <RedditIcon size={28} />
           </a>

@@ -36,7 +36,7 @@ export default function ToggleSwitch({
             className={`${checked ? 'bg-secondary' : 'bg-primary'}
           relative inline-flex items-center h-[38px] w-[74px] shrink-0 cursor-pointer
           rounded-full border-2 border-transparent transition-colors duration-200
-          ease-in-out outline-none focus-visible:show-ring-tertiary`}
+          ease-in-out focus:outline-none focus-visible:show-ring-tertiary`}
           >
             {/* <span className="sr-only">Filter Apple Only Games</span> */}
             <span

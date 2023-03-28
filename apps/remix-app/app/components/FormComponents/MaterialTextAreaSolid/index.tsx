@@ -33,7 +33,7 @@ export default function MaterialTextAreaSolid({
         required
         aria-describedby={errorMessage ? `${name}-error` : undefined}
         // displayError={displayError as boolean}
-        className={`peer outline-none bg-transparent border-0
+        className={`peer focus:outline-none bg-transparent border-0
                       text-primary block text-[1.2rem] mt-[24px] pt-0 px-[12px] pb-[10px] w-full
                       focus-visible:outline-none
                       border-b-2 min-h-[250px]

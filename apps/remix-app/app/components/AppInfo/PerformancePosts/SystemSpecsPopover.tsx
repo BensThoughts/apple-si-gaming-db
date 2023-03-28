@@ -28,7 +28,7 @@ export default function SystemSpecsPopover({
           <Popover.Button
             onMouseEnter={() => setIsShowing(true)}
             onMouseLeave={() => setIsShowing(false)}
-            className="text-primary select-none outline-none focus-visible:show-ring rounded-sm"
+            className="text-primary select-none focus-visible:show-ring rounded-sm"
             aria-label="show system hardware"
           >
             {children}

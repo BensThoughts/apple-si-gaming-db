@@ -28,7 +28,7 @@ export default function RequirementTabs({
                 <Tab
                   className={({ selected }) => classNames(
                       'w-full rounded py-1.5 text-sm font-medium leading-5 text-primary',
-                      'outline-none focus-visible:show-ring-tertiary ring-secondary-highlight',
+                      'focus-visible:show-ring-tertiary ring-secondary-highlight',
                       selected
                       ? 'text-primary-highlight bg-primary-highlight shadow'
                       : 'text-primary hover:bg-primary-highlight hover:text-secondary-highlight',
@@ -49,7 +49,7 @@ export default function RequirementTabs({
             <Fragment key={platformName + idx}>
               {(platformSupported && requirementsMinimum) &&
                 <Tab.Panel
-                  className="rounded-xl p-3 outline-none focus-visible:show-ring-tertiary"
+                  className="rounded-xl p-3 focus-visible:show-ring-tertiary"
                 >
                   <div
                     dangerouslySetInnerHTML={{ __html: requirementsMinimum }}

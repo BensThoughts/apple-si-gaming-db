@@ -13,7 +13,7 @@ export default function ExternalLink({
       target="_blank"
       className={`underline underline-offset-4 hover:text-tertiary
                   transition-colors duration-200 focus-visible:show-ring
-                  rounded-sm outline-none ${className}`}
+                  rounded-sm ${className}`}
       {...rest}
     >
       {children}

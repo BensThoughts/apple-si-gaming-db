@@ -35,7 +35,7 @@ export default function TextArea({
       <textarea
         id={id}
         defaultValue={defaultValue}
-        className={`bg-primary rounded-lg p-2 w-full h-screen max-h-56 focus-visible:show-ring ${className}`}
+        className={`bg-primary rounded-lg p-2 w-full h-screen max-h-56 focus:outline-none focus-visible:show-ring-tertiary ${className}`}
         required={required}
         {...rest}
       />

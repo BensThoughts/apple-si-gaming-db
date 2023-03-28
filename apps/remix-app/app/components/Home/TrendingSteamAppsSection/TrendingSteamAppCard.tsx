@@ -25,7 +25,7 @@ export default function TrendingSteamAppCard({
       className={`h-auto relative rounded-2xl overflow-hidden transition-all ease-in-out
                  duration-300 hover:rotate-0 hover:scale-110 bg-tertiary hover:bg-tertiary-highlight
                  hover:shadow-lg lg:hover:shadow-xl group/app-card w-[15rem] md:w-[20rem] pb-2
-                 outline-none focus-visible:show-ring
+                 focus-visible:show-ring
                  ${reversed ? 'rotate-[2deg]' : 'rotate-[-2deg]'}`}
     >
       {headerImage && (
