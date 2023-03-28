@@ -20,7 +20,7 @@ export default function NewPerformancePostCardSection({
     <section className="relative max-w-7xl mx-auto px-4 sm:px-3 md:px-5 flex flex-col gap-6 justify-center items-center">
       <h2 className="sr-only">New Posts</h2>
       <div
-        className={`grid grid-cols-1 gap-6 lg:gap-8 sm:grid-cols-2 lg:grid-cols-3
+        className={`grid grid-cols-1 gap-6 lg:gap-8 sm:grid-cols-2 lg:grid-cols-3 p-1
                     ${!expanded && 'max-h-[33rem] overflow-hidden'}`}
       >
         <ul className="space-y-8">
@@ -75,7 +75,8 @@ function PostCard({
   } =performancePost;
   return (
     <Link to={`/apps/${steamApp.steamAppId}/posts#${performancePostId}`}
-      className="relative flex flex-col-reverse bg-tertiary rounded-lg p-6"
+      className="relative flex flex-col-reverse bg-tertiary rounded-lg p-6 outline-none
+                 focus-visible:show-ring"
     >
       <figure
         className=""
