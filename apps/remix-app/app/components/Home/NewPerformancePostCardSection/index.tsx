@@ -18,7 +18,7 @@ export default function NewPerformancePostCardSection({
   const postsColThree = newPerformancePosts.slice(numPostsPerCol * 2, newPerformancePosts.length);
   return (
     <section className="relative max-w-7xl mx-auto px-4 sm:px-3 md:px-5 flex flex-col gap-6 justify-center items-center">
-      <h2 className="text-secondary text-4xl">New Posts</h2>
+      <h2 className="sr-only">New Posts</h2>
       <div
         className={`grid grid-cols-1 gap-6 lg:gap-8 sm:grid-cols-2 lg:grid-cols-3
                     ${!expanded && 'max-h-[33rem] overflow-hidden'}`}

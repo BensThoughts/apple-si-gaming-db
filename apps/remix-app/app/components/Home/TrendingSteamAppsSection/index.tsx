@@ -11,7 +11,7 @@ export default function TrendingSteamAppsSection({
   }
   return (
     <section className="flex flex-col items-center gap-0 w-full">
-      <h2 className="text-secondary text-4xl">Trending Apps</h2>
+      <h2 className="sr-only">Trending Apps</h2>
       <div className="relative flex overflow-x-hidden overflow-y-visible group max-w-[100vw]">
         <div className="flex py-12 whitespace-nowrap animate-marquee lg:animate-large-marquee
                         group-hover:pause will-change-transform">
