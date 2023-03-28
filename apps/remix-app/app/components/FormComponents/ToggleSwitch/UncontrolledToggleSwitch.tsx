@@ -70,8 +70,6 @@ export default function ToggleSwitch({
                             pointer-events-none h-[30px] w-[30px] transform rounded-full
                             shadow-lg ring-0 transition duration-200 ease-in-out inline-block`}
               />
-              {/* <AppleIcon size={22} className={`${checked ? 'text-icon-secondary' : 'text-icon-primary-highlight'} mt-[3px] ml-[3px]`} />
-              </span> */}
             </button>
 
           )}

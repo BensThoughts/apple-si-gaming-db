@@ -96,10 +96,6 @@ export default function NavBar({
               <ThemeToggle />
               <div className="hidden navBarQuery:flex gap-x-4 items-center justify-center">
                 <ProfileMenu isLoggedIn={isLoggedIn} />
-                {/* <span>{isLoggedIn ? 'Logged In' : 'Logged Out'}</span>
-                <Link to="/profile" className="block focus-visible:show-ring rounded-md h-[40px] w-[40px] bg-primary hover:bg-primary-highlight p-px group">
-                  <SteamIcon className="text-icon-secondary rounded-md w-full h-full group-hover:text-icon-secondary-highlight" />
-                </Link> */}
               </div>
             </div>
           </div>
