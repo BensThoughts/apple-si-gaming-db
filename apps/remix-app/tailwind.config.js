@@ -79,6 +79,9 @@ module.exports = {
       boxShadowColor: {
         'black': 'rgba(var(--color-shadow))',
       },
+      transitionDuration: {
+        '400': '400ms',
+      },
       // fontFamily: {
       //   'merriweather': ['"Merriweather"', 'serif'],
       // },
