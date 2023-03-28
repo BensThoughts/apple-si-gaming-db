@@ -13,11 +13,11 @@ Explicit (doesn't require db cleanup externally)
 
 ## Priority High
 
+- [ ] Add tests!
 - [x] Add controller review option
 - [x] Add ability to tag performance post (Native, Rosetta 2, CrossOver 19 - 22,
       Parallels 16 - 18)
 - [ ] Add clarifier for rating meaning (tooltip?)
-- [ ] Add tests!
 - [x] Centralize form validation (systemName etc.)
 - [x] Add contact information (twitter, discord, reddit)
 - [x] Add not affiliated with Steam information
@@ -29,6 +29,8 @@ Explicit (doesn't require db cleanup externally)
 
 ## Priority Medium
 
+- [ ] Make edit post redirect to originating page
+- [ ] Add profile fly in menu for mobile
 - [x] Fix game controller change to none when editing
 - [x] Fix title name on Profile liked-posts
 - [x] Create re-route logic for user not logged in trying to access
