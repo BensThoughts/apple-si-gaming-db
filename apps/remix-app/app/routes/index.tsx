@@ -8,18 +8,10 @@ import type {
   TrendingSteamApp,
   PerformancePost,
 } from '~/interfaces';
-import Card from '~/components/Cards/Card';
-import {
-  CommentsOutlineIcon,
-  BleedingHeartOutlineIcon,
-  MessageOutlineIcon,
-  MonitorOutlineIcon,
-  SearchDatabaseOutlineIcon,
-  SyncOutlineIcon,
-} from '~/components/Icons/FlatIcons';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
 import NewPerformancePostCardSection from '~/components/Home/NewPerformancePostCardSection';
+import NewFeaturesSection from '~/components/Home/NewFeaturesSection';
 
 interface LoaderData {
   trendingSteamApps: TrendingSteamApp[];
@@ -55,27 +47,8 @@ export default function IndexRoute() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col items-center gap-12 w-full">
-        <div className="flex flex-col items-center gap-6 w-full">
-
-          <h2 className="text-secondary text-4xl">New Features</h2>
-          <div className="w-full max-w-3xl">
-            <Card>
-              <div>
-                <ul className="flex flex-col gap-4">
-                  <li className="flex items-center gap-4"><BleedingHeartOutlineIcon userLiked={false} size={36} className="inline -rotate-12 min-w-[40px] self-start md:self-center text-icon-secondary-highlight" />Added ability to like posts and see all the posts you liked in your profile</li>
-                  <li className="flex items-center gap-4"><CommentsOutlineIcon size={32} className="inline rotate-12 min-w-[40px] self-start md:self-center text-icon-secondary-highlight" />Added section in profile to view all posts</li>
-                  <li className="flex items-center gap-4"><MessageOutlineIcon size={32} className="inline -rotate-12 min-w-[40px] self-start md:self-center text-icon-secondary-highlight" />Added a "New Posts" section to highlight user posts</li>
-                  <li className="flex items-center gap-4"><MonitorOutlineIcon size={32} className="inline rotate-12 min-w-[40px] self-start md:self-center text-icon-secondary-highlight" />Added ability to post average frame rate and stutter</li>
-                  <li className="flex items-center gap-4"><SyncOutlineIcon size={32} className="inline -rotate-12 min-w-[40px] self-start md:self-center text-icon-secondary-highlight" />Added ability to re-sync Steam library from the user profile page</li>
-                  <li className="flex items-center gap-4"><SearchDatabaseOutlineIcon size={32} className="inline rotate-12 min-w-[40px] self-start md:self-center text-icon-secondary-highlight" /> Added search filters for Apple compatibility, genres, and categories (e.g. Full Controller Support)</li>
-                  {/* <li className="flex items-center gap-4"><GearOutlineIcon size={32} className="inline -rotate-12 min-w-[40px] self-start md:self-center text-icon-secondary-highlight" /> Changed post form so that attaching system specs to a post is now optional</li> */}
-                </ul>
-              </div>
-            </Card>
-          </div>
-        </div>
-
+      <div className="flex flex-col items-center gap-24 w-full">
+        <NewFeaturesSection />
         <NewPerformancePostCardSection newPerformancePosts={newPerformancePosts} />
         <TrendingSteamAppsSection trendingSteamApps={trendingSteamApps} />
       </div>
