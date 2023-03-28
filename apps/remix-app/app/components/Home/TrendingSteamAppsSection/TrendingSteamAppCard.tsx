@@ -1,6 +1,7 @@
 import { Link } from '@remix-run/react';
 import type { TrendingSteamApp } from '~/interfaces';
 import AppHeaderImage from '~/components/ImageWrappers/AppHeaderImage';
+import { useEffect, useRef, useState } from 'react';
 
 type TrendingSteamAppProps = TrendingSteamApp & {
   reversed: boolean;
@@ -13,16 +14,18 @@ export default function TrendingSteamAppCard({
   numPerformancePosts,
   reversed,
 }: TrendingSteamAppProps) {
+  const intersectionRef: any = useRef<HTMLAnchorElement>();
+  const onScreen = useOnScreen<HTMLAnchorElement>(intersectionRef, '-80px');
+
   return (
     <Link
+      ref={intersectionRef}
       to={`/apps/${steamAppId}/posts`}
-      // className="flex flex-col md:flex-row gap-8 md:gap-2 items-center px-2 py-8 md:p-2 bg-tertiary
-      //            border-1 border-secondary-highlight rounded-md hover:bg-tertiary-highlight
-      //            focus-visible:show-ring w-[20rem] md:w-[36rem] h-[140px]
-      //            max-w-xl group/app-card"
+      tabIndex={onScreen ? 0 : -1}
       className={`h-auto relative rounded-2xl overflow-hidden transition-all ease-in-out
                  duration-300 hover:rotate-0 hover:scale-110 bg-tertiary hover:bg-tertiary-highlight
                  hover:shadow-lg lg:hover:shadow-xl group/app-card w-[15rem] md:w-[20rem] pb-2
+                 outline-none focus-visible:show-ring
                  ${reversed ? 'rotate-[2deg]' : 'rotate-[-2deg]'}`}
     >
       {headerImage && (
@@ -61,4 +64,29 @@ export default function TrendingSteamAppCard({
       </div>
     </Link>
   );
+}
+
+function useOnScreen<T extends Element>(ref: React.MutableRefObject<T>, rootMargin: string = '0px'): boolean {
+  // State and setter for storing whether element is visible
+  const [isIntersecting, setIntersecting] = useState<boolean>(false);
+  useEffect(() => {
+    const current = ref.current;
+    const observer = new IntersectionObserver(
+        ([entry]) => {
+        // Update our state when observer callback fires
+          setIntersecting(entry.isIntersecting);
+        },
+        {
+          rootMargin,
+        },
+    );
+    if (current) {
+      observer.observe(current);
+    }
+    return () => {
+      observer.unobserve(current);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty array ensures that effect is only run on mount and unmount
+  return isIntersecting;
 }
