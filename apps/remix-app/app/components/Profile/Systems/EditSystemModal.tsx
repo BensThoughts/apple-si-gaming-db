@@ -1,4 +1,4 @@
-import { useFetcher } from '@remix-run/react';
+import { Form, useSubmit } from '@remix-run/react';
 import React, { useState } from 'react';
 import MaterialInputOutlinedV2 from '~/components/FormComponents/MaterialInputOutlinedV2';
 // import MaterialInputOutlinedNew from '~/components/FormComponents/MaterialInputOutlinedNew';
@@ -24,7 +24,8 @@ export default function EditSystemModal({
   isOpen,
   setIsOpen,
 }: EditSystemModalProps) {
-  const fetcher = useFetcher();
+  // const fetcher = useFetcher();
+  const submit= useSubmit();
   const [systemNameValue, setSystemNameValue] = useState('');
   const [systemNameTouched, setSystemNameTouched] = useState(false);
   const systemNameError = validateNewSystemName(systemNameValue, currentSystemNames);
@@ -32,12 +33,12 @@ export default function EditSystemModal({
 
   // Form must be submitted prior to closing the modal
   // or errors occur.  So we use useSubmit()
-  // function handleSubmitEvent(event: React.FormEvent<HTMLFormElement>) {
-  // submit(event.currentTarget, { replace: true });
-  // setSystemNameValue('');
-  // setSystemNameTouched(false);
-  // setIsOpen(false);
-  // }
+  function handleSubmitEvent(event: React.FormEvent<HTMLFormElement>) {
+    submit(event.currentTarget, { replace: true });
+    setSystemNameValue('');
+    setSystemNameTouched(false);
+    setIsOpen(false);
+  }
 
   return (
     <BasicModal
@@ -54,14 +55,15 @@ export default function EditSystemModal({
         <div className="text-primary-faded">
           Please choose a new name for <span className="text-secondary">{systemName}</span>
         </div>
-        <fetcher.Form
+        <Form
           action="/profile/systems"
           method="post"
-          onSubmit={() => {
-            setSystemNameValue('');
-            setSystemNameTouched(false);
-            setIsOpen(false);
-          }}
+          onSubmit={handleSubmitEvent}
+          // onSubmit={() => {
+          //   setSystemNameValue('');
+          //   setSystemNameTouched(false);
+          //   setIsOpen(false);
+          // }}
           className="flex flex-col gap-4"
         >
           <div>
@@ -96,13 +98,13 @@ export default function EditSystemModal({
           <div className="flex gap-2">
             <RoundedButton
               type="submit"
-              className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 rounded-md border border-transparent text-primary-highlight hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              // className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 rounded-md border border-transparent text-primary-highlight hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
             >
               Edit
             </RoundedButton>
             <RoundedButton
               type="button"
-              className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 rounded-md border border-transparent text-primary-highlight hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              // className="inline-flex justify-center px-4 py-2 text-sm font-medium rounded-md border border-transparent text-primary-highlight hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
               onClick={() => {
                 setSystemNameValue('');
                 setSystemNameTouched(false);
@@ -113,7 +115,7 @@ export default function EditSystemModal({
             </RoundedButton>
           </div>
 
-        </fetcher.Form>
+        </Form>
       </div>
     </BasicModal>
   );

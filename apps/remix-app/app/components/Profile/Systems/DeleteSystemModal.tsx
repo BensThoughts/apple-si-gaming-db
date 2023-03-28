@@ -1,4 +1,4 @@
-import { useFetcher } from '@remix-run/react';
+import { Form, useSubmit } from '@remix-run/react';
 import React from 'react';
 import RoundedButton from '~/components/RoundedButton';
 import BasicModal from '~/components/BasicModal';
@@ -19,14 +19,15 @@ export default function DeleteSystemModal({
   isOpen,
   setIsOpen,
 }: DeleteSystemModalProps) {
-  const fetcher = useFetcher();
+  // const fetcher = useFetcher();
+  const submit = useSubmit();
 
   // Form must be submitted prior to closing the modal
   // or errors occur.  So we use useSubmit()
-  // function handleSubmitEvent(event: React.FormEvent<HTMLFormElement>) {
-  //   fetcher.submit(event.currentTarget, { replace: true });
-  //   setIsOpen(false);
-  // }
+  function handleSubmitEvent(event: React.FormEvent<HTMLFormElement>) {
+    submit(event.currentTarget, { replace: true });
+    setIsOpen(false);
+  }
 
   return (
     <BasicModal
@@ -49,10 +50,11 @@ export default function DeleteSystemModal({
           >
             Cancel
           </RoundedButton>
-          <fetcher.Form
+          <Form
             action="/profile/systems"
             method="post"
-            onSubmit={() => setIsOpen(false)}
+            // onSubmit={() => setIsOpen(false)}
+            onSubmit={handleSubmitEvent}
           >
             <input type="hidden" name="_profileAction" value="deleteSystem" />
             <input type="hidden" name="systemName" value={systemName} />
@@ -63,7 +65,7 @@ export default function DeleteSystemModal({
             >
               Delete
             </RoundedButton>
-          </fetcher.Form>
+          </Form>
         </div>
       </div>
     </BasicModal>
