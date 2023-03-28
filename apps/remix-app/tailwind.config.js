@@ -1,7 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 
-const colors = require('tailwindcss/colors');
-
 const generateColorClass = (variable) => {
   return ({ opacityValue }) =>
     opacityValue
@@ -12,40 +10,31 @@ const generateColorClass = (variable) => {
 module.exports = {
   content: ['./app/**/*.{ts,tsx,jsx,js}'],
   theme: {
-    screens: {
-      'sm': '640px',
-      'md': '768px',
-      'navBarQuery': '960px',
-      'lg': '1024px',
-      'postMetaBarQuery': '1190px',
-      'xl': '1280px',
-      '2xl': '1536px',
-    },
-    colors: {
-      'app-bg': generateColorClass('color-bg-primary'),
-      'app-bg-secondary': generateColorClass('color-bg-secondary'),
-      'primary': generateColorClass('color-app-primary'),
-      'primary-highlight': generateColorClass('color-app-primary-highlight'),
-      'secondary': generateColorClass('color-app-secondary'),
-      'secondary-highlight': generateColorClass('color-app-secondary-highlight'),
-      'tertiary': generateColorClass('color-app-tertiary'),
-      'tertiary-highlight': generateColorClass('color-app-tertiary-highlight'),
-      'gray': generateColorClass('color-app-gray'),
-      'error': generateColorClass('color-app-error'),
-      'snackbar-error': generateColorClass('color-snackbar-error'),
-      'danger': generateColorClass('color-app-danger'),
-      'danger-light': generateColorClass('color-app-danger-light'),
-      'heart': generateColorClass('color-app-heart'),
-      'modal': generateColorClass('color-bg-modal'),
-      'text-primary': generateColorClass('color-text-primary'),
-      'text-primary-highlight': generateColorClass('color-text-primary-highlight'),
-      'text-error': generateColorClass('color-text-error'),
-      'black': colors.black,
-      'white': colors.white,
-      'current': colors.current,
-      'transparent': colors.transparent,
-    },
     extend: {
+      colors: {
+        'app-bg': generateColorClass('color-bg-primary'),
+        'app-bg-secondary': generateColorClass('color-bg-secondary'),
+        'primary': generateColorClass('color-app-primary'),
+        'primary-highlight': generateColorClass('color-app-primary-highlight'),
+        'secondary': generateColorClass('color-app-secondary'),
+        'secondary-highlight': generateColorClass('color-app-secondary-highlight'),
+        'tertiary': generateColorClass('color-app-tertiary'),
+        'tertiary-highlight': generateColorClass('color-app-tertiary-highlight'),
+        'gray': generateColorClass('color-app-gray'),
+        'error': generateColorClass('color-app-error'),
+        'snackbar-error': generateColorClass('color-snackbar-error'),
+        'danger': generateColorClass('color-app-danger'),
+        'danger-light': generateColorClass('color-app-danger-light'),
+        'heart': generateColorClass('color-app-heart'),
+        'modal': generateColorClass('color-bg-modal'),
+        'text-primary': generateColorClass('color-text-primary'),
+        'text-primary-highlight': generateColorClass('color-text-primary-highlight'),
+        'text-error': generateColorClass('color-text-error'),
+      },
+      screens: {
+        'navBarQuery': '960px',
+        'postMetaBarQuery': '1190px',
+      },
       textColor: {
         'primary': generateColorClass('color-text-primary'),
         'primary-highlight': generateColorClass('color-text-primary-highlight'),
@@ -68,22 +57,32 @@ module.exports = {
         'marquee2': 'marquee2 40s linear infinite',
         'large-marquee': 'marquee 80s linear infinite',
         'large-marquee2': 'marquee2 80s linear infinite',
+        'shimmer': 'shimmer 1s forwards',
+        'dash': 'dash 20s linear infinite',
       },
       keyframes: {
-        marquee: {
+        'marquee': {
           '0%': { transform: 'translateX(0)' },
           'to': { transform: 'translateX(-100%)' },
         },
-        marquee2: {
+        'marquee2': {
           '0%': { transform: 'translateX(100%)' },
           'to': { transform: 'translateX(0)' },
         },
-        shimmer: {
+        'shimmer': {
           'to': {
             content: 'var(--tw-content)',
             transform: 'translateX(100%)',
           },
         },
+        'dash': {
+          'to': {
+            'stroke-dashoffset': 0,
+          },
+        },
+      },
+      boxShadowColor: {
+        'black': 'rgba(var(--color-shadow))',
       },
       // fontFamily: {
       //   'merriweather': ['"Merriweather"', 'serif'],
