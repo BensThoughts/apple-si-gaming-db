@@ -16,7 +16,10 @@ export default function AsideCard({
                        rounded-lg mt-5 bg-primary text-primary w-full max-w-md">
         <div className={`rounded-[50%] absolute inset-0 w-[40px] h-[40px]
                        -translate-x-[50%] -translate-y-[50%] ${iconBackground}`}>
-          <InformationCircleIcon className="absolute inset-0 translate-x-[3px] translate-y-[3px] text-icon-secondary w-8 h-8" />
+          <InformationCircleIcon
+            className="absolute inset-0 translate-x-[3px] translate-y-[3px]
+                       fill-transparent stroke-secondary stroke-2 w-8 h-8"
+          />
         </div>
         <div className="flex flex-col gap-3">
           <strong className="font-bold">{title}</strong>

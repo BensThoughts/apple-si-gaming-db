@@ -12,7 +12,7 @@ import {
 } from '~/components/Icons';
 import SimpleSearchForm from '~/components/Search/SimpleSearchForm';
 import { NavLink } from '@remix-run/react';
-import { AppleLogoSolidIcon } from '~/components/Icons/FlatIcons';
+import { AppleLogoSolidIcon } from '~/components/Icons/FlatIcons/Solid';
 import ProfileMenu from '~/components/Layout/ProfileMenu';
 import AnimatedUnderline from '~/components/AnimatedUnderline';
 
@@ -66,7 +66,7 @@ export default function NavBar({
           {/* Medium+ Screens */}
           <div className="hidden md:flex md:justify-between md:items-center md:w-full md:pt-0 md:mx-3">
             <div className="flex gap-x-4 items-center">
-              <AppleLogoSolidIcon size={34} className="text-icon-secondary" />
+              <AppleLogoSolidIcon size={34} className="fill-secondary stroke-0" />
               <div className="flex gap-3 content-between items-center pt-0">
                 {navMenuLinks.map((menuItem, idx) => (
                   <NavLink

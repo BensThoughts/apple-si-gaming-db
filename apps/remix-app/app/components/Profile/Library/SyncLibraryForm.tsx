@@ -1,6 +1,6 @@
 import { useFetcher } from '@remix-run/react';
 import { useEffect } from 'react';
-import { SyncOutlineIcon } from '~/components/Icons/FlatIcons';
+import { SyncOutlineIcon } from '~/components/Icons/FlatIcons/Outline';
 import RoundedButton from '~/components/RoundedButton';
 import { showToast } from '~/components/Toasts';
 import type { LibraryActionData } from '~/routes/profile/library';
@@ -29,7 +29,7 @@ export default function SyncLibraryForm() {
                  bg-tertiary p-4 rounded-lg border-1 border-secondary-highlight"
     >
       <div>
-        <SyncOutlineIcon size={38} className="text-icon-secondary-highlight" />
+        <SyncOutlineIcon size={38} className="fill-secondary-highlight stroke-1" />
       </div>
       <div>
         <fetcher.Form

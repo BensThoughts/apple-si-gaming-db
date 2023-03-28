@@ -46,15 +46,15 @@ export default function AppInfoHeader({
           <div className="flex gap-1">
             <AppleIcon
               size={19}
-              className={platformMac ? `text-icon-secondary-highlight` : `text-icon-primary-highlight`}
+              className={platformMac ? `fill-secondary-highlight stroke-0` : `fill-primary-highlight stroke-0`}
             />
             <WindowsIcon
               size={19}
-              className={platformWindows ? `text-icon-secondary-highlight` : `text-icon-primary-highlight`}
+              className={platformWindows ? `fill-secondary-highlight stroke-0` : `fill-primary-highlight stroke-0`}
             />
             <LinuxIcon
               size={19}
-              className={platformLinux ? `text-icon-secondary-highlight` : `text-icon-primary-highlight`}
+              className={platformLinux ? `fill-secondary-highlight stroke-0` : `fill-primary-highlight stroke-0`}
             />
           </div>
         </div>

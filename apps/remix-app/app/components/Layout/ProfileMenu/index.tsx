@@ -16,10 +16,10 @@ export default function ProfileMenu({
   return (
     <div className="flex items-center text-right">
       <Menu as="div" className="relative inline-block text-left">
-        <Menu.Button className="group flex items-center justify-center gap-2 h-[38px] rounded-md bg-primary py-px px-2 text-base font-medium text-primary hover:bg-primary-highlight focus:outline-none focus-visible:show-ring">
+        <Menu.Button className="flex items-center justify-center gap-2 h-[38px] rounded-md bg-primary py-px px-2 text-base font-medium text-primary hover:bg-primary-highlight focus:outline-none focus-visible:show-ring">
           Account
           <SteamIcon
-            className="h-9 w-9 text-icon-secondary group-hover:text-icon-secondary-highlight"
+            className="h-9 w-9 fill-secondary stroke-0"
             aria-hidden="true"
           />
         </Menu.Button>
