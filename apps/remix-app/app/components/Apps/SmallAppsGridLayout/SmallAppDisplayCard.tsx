@@ -30,7 +30,7 @@ export default function SmallAppDisplayCard({
       <div className="relative
                         rounded-xl overflow-hidden before:-skew-x-12
                          before:absolute before:inset-0 before:-translate-x-full
-                         group-hover/small-app-card:before:animate-[shimmer_1s_forwards]
+                         group-hover/small-app-card:before:animate-shimmer
                          before:bg-gradient-to-r before:from-transparent
                          before:via-white/10 before:to-transparent transition-all
                          ease-in-out duration-300">
