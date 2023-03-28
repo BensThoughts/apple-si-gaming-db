@@ -90,7 +90,7 @@ export default function PerformancePostDisplay({
                 memoryRAM,
               }}
             >
-              <span className="underline underline-offset-4 hover:text-icon-secondary
+              <span className="underline underline-offset-4 hover:text-tertiary
                                transition-colors duration-200 text-sm">
                 System
               </span>

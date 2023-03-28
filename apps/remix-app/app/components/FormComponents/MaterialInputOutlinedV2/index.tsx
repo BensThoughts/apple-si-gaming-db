@@ -40,7 +40,7 @@ export default function MaterialInputOutlinedV2({
                     peer-focus:!text-sm
                     ${errorMessage
                         ? 'text-primary peer-focus:text-primary'
-                        : 'text-primary peer-focus:text-icon-secondary'}
+                        : 'text-primary peer-focus:text-tertiary'}
           `}
         >
           {label}
@@ -50,7 +50,8 @@ export default function MaterialInputOutlinedV2({
         <fieldset className={`inset-0 absolute border rounded peer-focus:border-2
                             pointer-events-none mt-[-9px] invisible peer-placeholder-shown:visible
                             ${errorMessage
-                                ? 'border-text-error group-hover:border-text-error peer-focus:!border-text-error':'border-secondary-highlight group-hover:border-secondary peer-focus:!border-secondary'}`}>
+                                ? 'border-text-error group-hover:border-text-error peer-focus:!border-text-error'
+                                : 'border-secondary-highlight group-hover:border-secondary peer-focus:!border-secondary'}`}>
           <legend className={`ml-2 px-0 text-sm transition-all duration-300 invisible
                             max-w-[0.01px] group-focus-within:max-w-full group-focus-within:px-1
                             whitespace-nowrap`}>

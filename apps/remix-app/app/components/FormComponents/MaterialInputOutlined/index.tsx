@@ -41,7 +41,7 @@ export default function MaterialInputOutlined({
                     transition-all duration-300 px-1 transform -translate-y-1/2
                     pointer-events-none peer-placeholder-shown:top-1/2
                     peer-placeholder-shown:text-xl group-focus-within:!-top-[1px]
-                    group-focus-within:!text-sm group-focus-within:text-icon-secondary`}
+                    group-focus-within:!text-sm group-focus-within:text-tertiary`}
       >
         {label}
       </label>

@@ -28,7 +28,7 @@ export default function MaterialTextAreaOutlined({
                     peer-focus:!text-sm
                     ${errorMessage
                         ? 'text-primary peer-focus:text-primary'
-                        : 'text-primary peer-focus:text-icon-secondary'}
+                        : 'text-primary peer-focus:text-tertiary'}
           `}
         >
           {label}
