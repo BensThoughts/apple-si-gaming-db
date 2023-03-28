@@ -8,7 +8,7 @@ export function BleedingHeartOutlineIcon({
   return (
     <FlatIconOutline
       size={size}
-      viewBox="0 0 520 520"
+      viewBox="0 40 480 480"
       {...rest}
     >
       <g id="_x31_10-Bleeding_Heart_x2C__Crazy_Love_x2C__Emotions">
