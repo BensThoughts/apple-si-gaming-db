@@ -27,8 +27,8 @@ export default function RequirementTabs({
               {(platformSupported && requirementsMinimum) &&
                 <Tab
                   className={({ selected }) => classNames(
-                      'w-full rounded py-1.5 text-sm font-medium leading-5 text-blue-700',
-                      'ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus-visible:show-ring ring-secondary-highlight',
+                      'w-full rounded py-1.5 text-sm font-medium leading-5 text-primary',
+                      'outline-none focus-visible:show-ring ring-secondary-highlight',
                       selected
                       ? 'text-primary-highlight bg-primary-highlight shadow'
                       : 'text-primary hover:bg-primary-highlight hover:text-secondary-highlight',
