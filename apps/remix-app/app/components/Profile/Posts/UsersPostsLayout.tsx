@@ -14,18 +14,16 @@ export default function UsersPostsLayout({
 }: UsersPostsLayoutProps) {
   if (steamUsersPosts.length < 1) {
     return (
-      <div className="flex flex-col gap-8 items-center w-full p-4 bg-tertiary rounded-lg border-1 border-secondary-highlight">
-        <div className="w-full max-w-sm">
-          <span>
-            It look like you haven't posted yet.  Post a report for a game in your{` `}
-            <RemixUnderlineLink
-              to="/profile/library"
-            >
+      <div className="max-w-max p-4 bg-tertiary rounded-lg border-1 border-secondary-highlight">
+        <span>
+            You haven't posted yet.  Post a report for a game in your{` `}
+          <RemixUnderlineLink
+            to="/profile/library"
+          >
               library
-            </RemixUnderlineLink>
-            {` `}to see it appear here.
-          </span>
-        </div>
+          </RemixUnderlineLink>
+          {` `}to see it appear here.
+        </span>
       </div>
     );
   }

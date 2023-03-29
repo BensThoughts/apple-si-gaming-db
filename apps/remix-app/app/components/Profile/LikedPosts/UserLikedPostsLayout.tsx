@@ -12,8 +12,8 @@ export default function UserLikedPostsLayout({
 }: UserLikedPostsLayoutProps) {
   if (likedPosts.length < 1) {
     return (
-      <div className="flex gap-8 justify-center items-center w-full p-4 bg-tertiary rounded-lg border-1 border-secondary-highlight">
-          It look like you haven't liked any posts yet. Like posts to see them appear here.
+      <div className="max-w-max p-4 bg-tertiary rounded-lg border-1 border-secondary-highlight">
+          You haven't liked any posts yet. Like posts to see them appear here.
       </div>
     );
   }
