@@ -61,7 +61,8 @@ export default function ProfilePage() {
   return (
     <PageWrapper title={title} topSpacer>
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 min-h-screen">
-        <div className="col-start-1 col-span-1 justify-items-center md:col-span-4 xl:col-span-3">
+        <div className="col-start-1 col-span-1 justify-items-center md:col-span-4 xl:col-span-3
+                        flex flex-col gap-6">
           <div className="flex flex-col gap-2 items-center w-full md:max-w-xs bg-tertiary rounded-md p-4">
             <h2 className="text-lg text-secondary">Menu</h2>
             <Link to="/profile" className="focus-visible:show-ring px-1 rounded-sm font-medium text-primary">
@@ -89,14 +90,12 @@ export default function ProfilePage() {
                   Liked Posts
               </AnimatedUnderline>
             </Link>
-            {/* <Link to="/profile/achievements" className="focus-visible:show-ring px-1 rounded-sm font-medium text-primary">
-                <AnimatedUnderline>
-                  Achievements
-                </AnimatedUnderline>
-              </Link> */}
+          </div>
+          <div className="block md:hidden">
+            <Outlet />
           </div>
         </div>
-        <div className="md:col-start-5 xl:col-start-4 col-end-[-1]">
+        <div className="hidden md:block md:col-start-5 xl:col-start-4 col-end-[-1]">
           <Outlet />
         </div>
       </div>
