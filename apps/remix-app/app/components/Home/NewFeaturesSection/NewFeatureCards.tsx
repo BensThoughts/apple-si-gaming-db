@@ -39,7 +39,7 @@ function NewFeatureCard({
   return (
     <NavLink
       to={to}
-      className="flex flex-col gap-4 h-[280px] sm:h-[240px] w-[160px] sm:w-[200px]
+      className="flex flex-col gap-4 min-h-[240px] max-w-[300px] md:max-w-[200px]
                  bg-tertiary shadow-md shadow-black p-5 rounded-xl ease-out duration-400
                  lg:hover:translate-y-[-20px] group relative inset-0
                  focus-visible:show-ring"
@@ -70,12 +70,12 @@ function NewFeatureCard({
       >
         <Icon
           className="h-11 w-11 fill-secondary-highlight stroke-secondary-highlight stroke-1
-                     opacity-0 group-hover:opacity-100 -rotate-12 ease-out
+                     opacity-100 sm:opacity-0 group-hover:opacity-100 -rotate-12 ease-out
                      duration-400 mr-2"
 
         />
         <div
-          className="w-0 h-[5px] bg-gradient-to-r from-secondary to-secondary-highlight
+          className="w-full sm:w-0 h-[5px] bg-gradient-to-r from-secondary to-secondary-highlight
                       group-hover:w-full ease-out duration-400 rounded-full"
         />
       </div>
