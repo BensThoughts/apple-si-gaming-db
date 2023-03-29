@@ -6,7 +6,8 @@ export default function TrendingSteamAppsSection({
 }: {
   trendingSteamApps: TrendingSteamApp[]
 }) {
-  if (trendingSteamApps.length < 1) {
+  const MINIMUM_NUMBER_OF_APPS = 12; // won't display right without at least
+  if (trendingSteamApps.length < MINIMUM_NUMBER_OF_APPS) {
     return null;
   }
   return (
