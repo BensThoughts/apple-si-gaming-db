@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import type { FlatIconOutlineProps } from '~/components/Icons/FlatIcons/Outline/FlatIconOutline';
 import { NavLink } from '@remix-run/react';
 
-export default function NewFeatureCards({
+export default function FeatureCards({
   features,
 }: {
   features: {
@@ -16,16 +16,16 @@ export default function NewFeatureCards({
     <div className="flex justify-center w-full max-w-lg lg:max-w-full flex-wrap gap-4">
       {features.map(({ title, to, content, Icon }, idx) => (
         <Fragment key={`new_feature_${idx}`}>
-          <NewFeatureCard title={title} to={to} Icon={Icon}>
+          <FeatureCard title={title} to={to} Icon={Icon}>
             {content}
-          </NewFeatureCard>
+          </FeatureCard>
         </Fragment>
       ))}
     </div>
   );
 }
 
-function NewFeatureCard({
+function FeatureCard({
   title,
   to,
   Icon,

@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import type { FlatIconOutlineProps } from '~/components/Icons/FlatIcons/Outline/FlatIconOutline';
 
-export default function NewFeatureCardsOverlapped({
+export default function FeatureCardsOverlapped({
   features,
 }: {
   features: {
@@ -14,14 +14,14 @@ export default function NewFeatureCardsOverlapped({
     <div className="flex justify-center w-full ml-[35px]">
       {features.map(({ title, content, Icon }, idx) => (
         <Fragment key={`new_feature_${idx}`}>
-          <NewFeatureCard title={title} Icon={Icon}>{content}</NewFeatureCard>
+          <FeatureCard title={title} Icon={Icon}>{content}</FeatureCard>
         </Fragment>
       ))}
     </div>
   );
 }
 
-function NewFeatureCard({
+function FeatureCard({
   title,
   Icon,
   children,
