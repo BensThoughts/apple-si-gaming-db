@@ -3,13 +3,14 @@ import { Link } from '@remix-run/react';
 import AvatarImage from '~/components/ImageWrappers/AvatarImage';
 import { useState } from 'react';
 
-export default function NewPerformancePostCardSection({
+export default function NewPerformancePostsSection({
   newPerformancePosts,
 }: {
   newPerformancePosts: PerformancePostForNewPostsCards[]
 }) {
   const [expanded, setExpanded] = useState(false);
-  if (newPerformancePosts.length < 3) {
+  const MINIMUM_NUMBER_OF_POSTS = 6; // won't display right without at least
+  if (newPerformancePosts.length < MINIMUM_NUMBER_OF_POSTS) {
     return null;
   }
   const numPostsPerCol = Math.ceil(newPerformancePosts.length / 3);
@@ -26,21 +27,26 @@ export default function NewPerformancePostCardSection({
         <ul className="space-y-8">
           {postsColOne.map((post) => (
             <li key={post.performancePostId} className="text-sm leading-6">
-              <PostCard performancePost={post} />
+              <NewPerformancePostCard performancePost={post} />
+            </li>
+          ))}
+          {postsColTwo.map((post) => (
+            <li key={post.performancePostId} className="block sm:hidden">
+              <NewPerformancePostCard performancePost={post} />
             </li>
           ))}
         </ul>
         <ul className="space-y-8 hidden sm:block">
           {postsColTwo.map((post) => (
             <li key={post.performancePostId} className="text-sm leading-6">
-              <PostCard performancePost={post} />
+              <NewPerformancePostCard performancePost={post} />
             </li>
           ))}
         </ul>
         <ul className="space-y-8 hidden lg:block">
           {postsColThree.map((post) => (
             <li key={post.performancePostId} className="text-sm leading-6">
-              <PostCard performancePost={post} />
+              <NewPerformancePostCard performancePost={post} />
             </li>
           ))}
         </ul>
@@ -62,7 +68,7 @@ export default function NewPerformancePostCardSection({
   );
 }
 
-function PostCard({
+function NewPerformancePostCard({
   performancePost,
 }: {
   performancePost: PerformancePostForNewPostsCards;
@@ -78,9 +84,7 @@ function PostCard({
       className="relative flex flex-col-reverse bg-tertiary rounded-lg p-6
                  focus-visible:show-ring"
     >
-      <figure
-        className=""
-      >
+      <figure>
         <blockquote className="mt-6 text-primary-highlight">
           <p className="line-clamp-3">
             {postText}
