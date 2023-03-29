@@ -103,7 +103,7 @@ model PerformancePost {
   steamAppId Int
 
   steamUserId64    BigInt
-  steamUserProfile SteamUserProfile @relation(fields: [steamUserId64], references: [steamUserId64])
+  steamUserProfile SteamUserProfile @relation(fields: [steamUserId64], references: [steamUserId64], onDelete: Restrict)
 
   postText          String
   ratingMedal       RatingMedal
