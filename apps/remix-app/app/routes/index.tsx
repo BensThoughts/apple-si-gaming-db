@@ -3,15 +3,16 @@ import { useCatch, useLoaderData } from '@remix-run/react';
 import { findNewestPerformancePosts } from '~/models/SteamedApples/performancePost.server';
 import { findTrendingSteamApps } from '~/models/Steam/steamApp.server';
 import PageWrapper from '~/components/Layout/PageWrapper';
-import TrendingSteamAppsSection from '~/components/Home/TrendingSteamAppsSection';
 import type {
   TrendingSteamApp,
   PerformancePost,
 } from '~/interfaces';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
-import NewPerformancePostCardSection from '~/components/Home/NewPerformancePostCardSection';
-import NewFeaturesSection from '~/components/Home/NewFeaturesSection';
+import FeaturesSection from '~/components/Home/FeaturesSection';
+import NewPerformancePostsSection from '~/components/Home/NewPerformancePostsSection';
+import TrendingSteamAppsSection from '~/components/Home/TrendingSteamAppsSection';
+
 
 interface LoaderData {
   trendingSteamApps: TrendingSteamApp[];
@@ -19,8 +20,8 @@ interface LoaderData {
 }
 
 export async function loader() {
-  const NUM_TRENDING_APPS = 8;
-  const NUM_RECENT_POSTS = 11;
+  const NUM_TRENDING_APPS = 12;
+  const NUM_RECENT_POSTS = 12;
   const trendingSteamApps = await findTrendingSteamApps(NUM_TRENDING_APPS);
   const newPerformancePosts = await findNewestPerformancePosts(NUM_RECENT_POSTS);
   return json<LoaderData>({
@@ -48,8 +49,8 @@ export default function IndexRoute() {
         </div>
       </div>
       <div className="flex flex-col items-center gap-24 w-full">
-        <NewFeaturesSection />
-        <NewPerformancePostCardSection newPerformancePosts={newPerformancePosts} />
+        <FeaturesSection />
+        <NewPerformancePostsSection newPerformancePosts={newPerformancePosts} />
         <TrendingSteamAppsSection trendingSteamApps={trendingSteamApps} />
       </div>
     </PageWrapper>
