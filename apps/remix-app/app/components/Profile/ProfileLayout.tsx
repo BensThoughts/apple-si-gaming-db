@@ -9,7 +9,7 @@ export default function ProfileLayout({
   avatarFull?: string | null;
 }) {
   return (
-    <div className="flex flex-col gap-8 items-center p-6 bg-tertiary rounded-lg border-1 border-secondary-highlight">
+    <div className="flex flex-col gap-8 w-full max-w-2xl items-center p-6 bg-tertiary rounded-lg">
       <ProfileCard avatarFull={avatarFull} displayName={displayName} />
       <PrivacyCard />
     </div>
