@@ -50,20 +50,19 @@ export default function LikeButton({
       disabled={isSubmittingLike}
       type="submit"
       className="border-1 border-secondary-highlight rounded-full px-3 py-1.5
-                  min-w-[75px] focus-visible:show-ring"
+                 min-w-[75px] focus-visible:show-ring group
+                 flex justify-between items-center gap-1"
       aria-label={likedPostRaw ? 'unlike post' : 'like post'}
     >
-      <div className="flex justify-between items-center gap-1">
-        <BleedingHeartSimpleSolidIcon
-          size={30}
-          className={likedPostRaw
-              ? 'fill-heart stroke-text-primary h-6 w-6'
-              : 'fill-transparent stroke-text-primary-highlight h-6 w-6'}
-        />
-        <span className={`${isSubmittingLike ? 'text-primary' : 'text-primary-highlight'}`}>
-          {numLikesRaw}
-        </span>
-      </div>
+      <BleedingHeartSimpleSolidIcon
+        size={30}
+        className={likedPostRaw
+              ? 'fill-heart stroke-text-primary h-6 w-6 group-hover:stroke-text-primary-highlight'
+              : 'fill-transparent stroke-text-primary h-6 w-6 group-hover:stroke-text-primary-highlight'}
+      />
+      <span className={`${isSubmittingLike ? 'text-primary' : 'text-primary-highlight'}`}>
+        {numLikesRaw}
+      </span>
     </button>
   );
 }
