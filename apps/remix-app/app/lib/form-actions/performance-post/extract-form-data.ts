@@ -1,6 +1,6 @@
 import type {
   PerformancePostFormFieldsRaw,
-} from './create-or-edit-action-type';
+} from './types';
 
 /**
   Converts performance post form data into usable data for creating or editing a

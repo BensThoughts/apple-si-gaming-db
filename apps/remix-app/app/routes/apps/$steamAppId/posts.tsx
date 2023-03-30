@@ -14,7 +14,7 @@ import type {
 } from '~/interfaces';
 import CreatePerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForms/CreatePerformancePostForm';
 import type { PostTagOption, GamepadOption } from '~/interfaces';
-import type { CreateOrEditPerformancePostActionData } from '~/lib/form-actions/performance-post/create-or-edit-action-type';
+import type { CreatePerformancePostActionData } from '~/lib/form-actions/performance-post/types';
 import { getIsLoggedIn, getUserIds, requireUserIds } from '~/lib/sessions/profile-session.server';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
@@ -84,7 +84,7 @@ export default function PerformancePostsRoute() {
     gamepadOptions,
   } = useLoaderData<PerformancePostLoaderData>();
 
-  const actionData = useActionData<CreateOrEditPerformancePostActionData>();
+  const actionData = useActionData<CreatePerformancePostActionData>();
   const navigation = useNavigation();
   const isSubmittingCreatePerformancePost =
     navigation.state === 'submitting' &&

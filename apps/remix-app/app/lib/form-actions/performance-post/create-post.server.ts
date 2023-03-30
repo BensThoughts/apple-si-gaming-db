@@ -12,10 +12,10 @@ import {
   validateSystemSpecIdForPost,
 } from '~/lib/form-validators/posts';
 import { createPerformancePost } from '~/models/SteamedApples/performancePost.server';
-import type { CreateOrEditPerformancePostActionData } from './create-or-edit-action-type';
+import type { CreatePerformancePostActionData } from './types';
 import { extractFormData } from './extract-form-data';
 
-export const badRequest = (data: CreateOrEditPerformancePostActionData) => json(data, { status: 400 });
+export const badRequest = (data: CreatePerformancePostActionData) => json(data, { status: 400 });
 
 export async function createPerformancePostAction({
   steamAppId,
