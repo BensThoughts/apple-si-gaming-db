@@ -46,7 +46,7 @@ export default function DeletePostModal({
           <RoundedButton
             type="button"
             onClick={() => setIsOpen(false)}
-            className="text-white hover:text-white focus-visible:text-white"
+            className="text-white hover:text-white focus-visible:text-white focus-visible:show-ring-primary"
           >
             Cancel
           </RoundedButton>
@@ -54,7 +54,9 @@ export default function DeletePostModal({
           <RoundedButton
             onClick={onClick}
             disabled={disableDeleteButton}
-            className="text-white bg-error hover:bg-error hover:text-white focus-visible:bg-error focus-visible:text-white"
+            className="text-white bg-error hover:bg-error hover:text-white
+                       focus-visible:bg-error focus-visible:text-white
+                       focus-visible:show-ring-primary"
           >
               Delete
           </RoundedButton>

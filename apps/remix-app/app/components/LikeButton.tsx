@@ -50,7 +50,7 @@ export default function LikeButton({
       disabled={isSubmittingLike}
       type="submit"
       className="border-1 border-secondary-highlight rounded-full px-3 py-1.5
-                 min-w-[75px] focus-visible:show-ring group
+                 min-w-[75px] focus-visible:show-ring-primary group
                  flex justify-between items-center gap-1"
       aria-label={likedPostRaw ? 'unlike post' : 'like post'}
     >

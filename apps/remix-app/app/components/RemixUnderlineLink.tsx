@@ -18,7 +18,7 @@ export default function RemixUnderlineLink({
                   after:block after:absolute after:bottom-[-3px] after:left-0
                   after:h-[0.2em] after:bg-secondary after:transition-transform
                   after:w-full after:rounded-full text-secondary focus:outline-none
-                  focus-visible:show-ring rounded-sm ${className}`}
+                  focus-visible:show-ring-tertiary rounded-sm ${className}`}
       {...rest}
     >
       {children}

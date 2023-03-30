@@ -119,7 +119,7 @@ export default function CreatePerformancePostForm({
           fields={fields}
           fieldErrors={fieldErrors}
         />
-        <RoundedButton type="submit" disabled={isSubmittingForm}>
+        <RoundedButton type="submit" disabled={isSubmittingForm} className="focus-visible:show-ring-tertiary">
           {isSubmittingForm ? 'Creating' : 'Create'}
         </RoundedButton>
       </Form>

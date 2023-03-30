@@ -25,7 +25,8 @@ export default function EditAndDeleteButtons({
   }
 
   return (
-    <div className="flex gap-2 py-1 px-2 rounded-full border-secondary-highlight border-solid border-1">
+    <div className="flex gap-2 py-1 px-2 rounded-full border-secondary-highlight
+                    border-solid border-1">
       <DeletePostModal
         performancePostId={performancePostId}
         isOpen={isDeleteModalOpen}
@@ -33,14 +34,16 @@ export default function EditAndDeleteButtons({
       />
       <Link
         to={editURL.toString()}
-        className="rounded hover:text-primary-highlight focus:outline-none focus-visible:show-ring"
+        className="rounded hover:text-primary-highlight focus:outline-none
+                   focus-visible:show-ring-primary"
       >
         <EditIcon />
       </Link>
       <div className="border-l-2 border-secondary-highlight border-solid" />
       <button
         onClick={() => setDeleteModalIsOpen(true)}
-        className="rounded hover:text-primary-highlight focus:outline-none focus-visible:show-ring"
+        className="rounded hover:text-primary-highlight focus:outline-none
+                   focus-visible:show-ring-primary"
       >
         <TrashIcon />
       </button>
