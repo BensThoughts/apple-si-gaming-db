@@ -10,7 +10,7 @@ export default function LibraryLayout({
   ownedApps,
 }: LibraryLayoutProps) {
   return (
-    <div className="flex flex-col gap-8 items-center w-full p-4 rounded-lg">
+    <div className="flex flex-col gap-8 items-center w-full rounded-lg">
       {/* <div className="flex flex-col items-center md:flex-row gap-2 md:items-start justify-between w-full">
         <Heading>Library</Heading>
       </div> */}
