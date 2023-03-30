@@ -58,37 +58,31 @@ export default function ProfilePage() {
   });
   const title = titleWords.join(' ');
 
+  const MenuItem = ({
+    to,
+    label,
+  }: { to: string, label: string}) => {
+    return (
+      <Link
+        to={to}
+        className="focus-visible:show-ring-tertiary focus-visible:bg-tertiary-highlight p-1 rounded-md font-medium
+                   text-primary text-base w-full text-center hover:bg-tertiary-highlight group">
+        {label}
+      </Link>
+    );
+  };
+
   return (
     <PageWrapper title={title} topSpacer>
       <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] grid-rows-[auto_1fr] gap-8 min-h-screen">
-        <div className="col-start-1 col-span-1 row-start-1 row-span-1 min-w-[22rem]">
-          <div className="flex flex-col gap-2 items-center w-full bg-tertiary rounded-lg p-4">
-            <h2 className="text-lg text-secondary">Menu</h2>
-            <Link to="/profile" className="focus-visible:show-ring px-1 rounded-sm font-medium text-primary">
-              <AnimatedUnderline>
-                  Profile
-              </AnimatedUnderline>
-            </Link>
-            <Link to="/profile/library" className="focus-visible:show-ring px-1 rounded-sm font-medium text-primary">
-              <AnimatedUnderline>
-                  Library
-              </AnimatedUnderline>
-            </Link>
-            <Link to="/profile/systems" className="focus-visible:show-ring px-1 rounded-sm font-medium text-primary">
-              <AnimatedUnderline>
-                  Systems
-              </AnimatedUnderline>
-            </Link>
-            <Link to="/profile/posts" className="focus-visible:show-ring px-1 rounded-sm font-medium text-primary">
-              <AnimatedUnderline>
-                  Posts
-              </AnimatedUnderline>
-            </Link>
-            <Link to="/profile/liked-posts" className="focus-visible:show-ring px-1 rounded-sm font-medium text-primary">
-              <AnimatedUnderline>
-                  Liked Posts
-              </AnimatedUnderline>
-            </Link>
+        <div className="col-start-1 col-span-1 row-start-1 row-span-1">
+          <div className="flex flex-col gap-2 items-center w-full min-w-[15rem] bg-tertiary rounded-lg p-4">
+            <h2 className="text-lg text-secondary font-bold">Account Menu</h2>
+            <MenuItem to="/profile" label="Profile" />
+            <MenuItem to="/profile/library" label="Library" />
+            <MenuItem to="/profile/systems" label="Systems" />
+            <MenuItem to="/profile/posts" label="Posts" />
+            <MenuItem to="/profile/liked-posts" label="Liked Posts" />
           </div>
         </div>
         <div className="block col-start-1 md:col-start-2 col-end-[-1] row-start-2 md:row-start-1 row-span-1">
