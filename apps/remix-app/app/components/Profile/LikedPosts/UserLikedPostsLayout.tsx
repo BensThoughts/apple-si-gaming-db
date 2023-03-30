@@ -40,10 +40,8 @@ export default function UserLikedPostsLayout({
       }) => (
         <div
           key={performancePostId}
-          className="md:border-1 md:border-secondary-highlight rounded-md
-                   p-3 md:px-4 md:py-3 bg-tertiary
-                   focus:show-ring w-full max-w-4xl
-                   flex items-center justify-start"
+          className="rounded-md p-3 md:px-4 md:py-3 bg-tertiary focus:show-ring
+                     w-full max-w-4xl flex items-center justify-start"
         >
           {/* Medium+ Screens */}
           <div className="hidden md:flex md:flex-col md:gap-4 md:w-full">
