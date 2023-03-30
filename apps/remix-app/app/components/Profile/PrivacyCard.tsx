@@ -8,7 +8,7 @@ export default function PrivacyCard() {
         Within your&nbsp;
         <ExternalLink
           href="https://steamcommunity.com/my/edit/settings"
-          className="underline-offset-2"
+          className="underline-offset-2 focus-visible:show-ring-primary"
         >
           Steam Privacy Settings
         </ExternalLink>

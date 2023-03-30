@@ -6,7 +6,7 @@ export default function LogoutButton() {
 
   return (
     <RoundedButton
-      className="w-full max-w-[6rem]"
+      className="w-full max-w-[6rem] focus-visible:show-ring-tertiary"
       onClick={() => fetcher.submit({}, { action: '/actions/logout', method: 'post' })}
     >
       Logout
