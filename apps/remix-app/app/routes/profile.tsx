@@ -60,10 +60,9 @@ export default function ProfilePage() {
 
   return (
     <PageWrapper title={title} topSpacer>
-      <div className="grid grid-cols-1 md:grid-cols-12 grid-rows-[auto_1fr] gap-6 min-h-screen">
-        <div className="col-start-1 col-span-1 justify-items-center md:col-span-4 xl:col-span-3
-                        row-start-1 row-span-1 flex flex-col gap-6">
-          <div className="flex flex-col gap-2 items-center w-full md:max-w-xs bg-tertiary rounded-md p-4">
+      <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] grid-rows-[auto_1fr] gap-8 min-h-screen">
+        <div className="col-start-1 col-span-1 row-start-1 row-span-1 min-w-[22rem]">
+          <div className="flex flex-col gap-2 items-center w-full bg-tertiary rounded-lg p-4">
             <h2 className="text-lg text-secondary">Menu</h2>
             <Link to="/profile" className="focus-visible:show-ring px-1 rounded-sm font-medium text-primary">
               <AnimatedUnderline>
@@ -92,8 +91,10 @@ export default function ProfilePage() {
             </Link>
           </div>
         </div>
-        <div className="block md:col-start-5 xl:col-start-4 col-end-[-1] row-start-2 row-span-1 md:row-start-1">
-          <Outlet />
+        <div className="block col-start-1 md:col-start-2 col-end-[-1] row-start-2 md:row-start-1 row-span-1">
+          <div className="flex justify-center">
+            <Outlet />
+          </div>
         </div>
       </div>
     </PageWrapper>
