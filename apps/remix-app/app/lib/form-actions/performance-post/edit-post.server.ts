@@ -1,5 +1,5 @@
 import { redirect, json } from '@remix-run/node';
-import type { CreateOrEditPerformancePostActionData } from '~/lib/form-actions/performance-post/create-or-edit-action-type';
+import type { EditPerformancePostActionData } from './types';
 import {
   validatePostText,
   isTypeFrameRateAverage,
@@ -14,18 +14,21 @@ import {
 } from '~/lib/form-validators/posts';
 import { updatePerformancePost } from '~/models/SteamedApples/performancePost.server';
 import { extractFormData } from './extract-form-data';
+import { safeRedirect } from '~/lib/utils.server';
 
 
-const badRequest = (data: CreateOrEditPerformancePostActionData) => json(data, { status: 400 });
+const badRequest = (data: EditPerformancePostActionData) => json(data, { status: 400 });
 
 export async function editPerformancePostAction({
   steamAppId,
   performancePostId,
   formData,
+  redirectToAfterEdit,
 } : {
   steamAppId: number;
   performancePostId: number;
   formData: FormData;
+  redirectToAfterEdit: string | null;
 }) {
   const {
     formError,
@@ -96,5 +99,9 @@ export async function editPerformancePostAction({
     gamepadRating: gamepadRating === 'None' ? undefined : gamepadRating,
   });
 
-  return redirect(`/apps/${steamAppId}/posts`);
+  const redirectTo = redirectToAfterEdit
+    ? safeRedirect(redirectToAfterEdit)
+    : `/apps/${steamAppId}/posts`;
+
+  return redirect(redirectTo);
 }

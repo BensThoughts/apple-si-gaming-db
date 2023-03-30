@@ -1,3 +1,4 @@
+import { useMatches } from '@remix-run/react';
 import LikeButton from '~/components/LikeButton';
 import type {
   PerformancePostMetaBarData,
@@ -6,23 +7,36 @@ import { convertFrameRateToDescription, convertRatingMedalToDescription } from '
 import { useUserSession } from '~/lib/hooks/useMatchesData';
 import EditAndDeleteButtons from './EditAndDeleteButtons';
 
-type PerformancePostMetaBarProps = PerformancePostMetaBarData;
+type PerformancePostMetaBarProps = {
+  performancePostMetadata: PerformancePostMetaBarData;
+}
 
 export default function PerformancePostMetaBar({
-  performancePostId,
-  createdAt,
-  userWhoCreated,
-  steamApp: {
-    steamAppId,
+  performancePostMetadata: {
+    performancePostId,
+    createdAt,
+    userWhoCreated,
+    steamApp: {
+      steamAppId,
+    },
+    rating: {
+      ratingMedal,
+      frameRateAverage,
+      frameRateStutters,
+    },
+    numLikes,
   },
-  rating: {
-    ratingMedal,
-    frameRateAverage,
-    frameRateStutters,
-  },
-  numLikes,
 }: PerformancePostMetaBarProps) {
   const { userSession } = useUserSession();
+  const matches = useMatches();
+  const deepestMatch = matches.length > 0
+    ? matches[matches.length - 1]
+    : undefined;
+  const currentlyOnEditPage =
+    deepestMatch && deepestMatch.id === 'routes/apps/$steamAppId/posts.edit.$performancePostId'
+      ? true
+      : false;
+  const redirectToAfterEdit = deepestMatch && deepestMatch.pathname;
 
   const didSteamUserCreatePost = userSession
     ? userWhoCreated.steamUserId64 === userSession.steamUserProfile.steamUserId64
@@ -30,8 +44,8 @@ export default function PerformancePostMetaBar({
 
   return (
     <div className="@container">
-      <div className="flex flex-col gap-1 items-start justify-between text-sm px-3 py-1
-                      rounded-sm bg-primary w-full text-primary-faded
+      <div className="flex flex-col gap-1 items-start justify-between px-3 py-1
+                      rounded-sm bg-primary w-full text-sm text-primary-faded
                       @[706px]:gap-0 @[706px]:flex-row @[706px]:items-center
                       supports-[not(container-type:inline-size)]:postMetaBarQuery:gap-0
                       supports-[not(container-type:inline-size)]:postMetaBarQuery:flex-row
@@ -43,22 +57,19 @@ export default function PerformancePostMetaBar({
                         supports-[not(container-type:inline-size)]:postMetaBarQuery:flex-row
                         supports-[not(container-type:inline-size)]:postMetaBarQuery:items-center"
         >
-          {/* <Form
-            method="post"
-            action="/actions/like-post"
-          > */}
           <LikeButton
             performancePostId={performancePostId}
             numLikes={numLikes}
           />
-          {/* </Form> */}
           <div className="flex flex-col gap-1 md:flex-row md:gap-2">
             <div>
-              <span className="text-primary-highlight">
+              <span className="text-primary-highlight text-base leading-4">
                 {ratingMedal}
               </span>
-              {` - `}
-              {convertRatingMedalToDescription(ratingMedal)}
+              <span>
+                {` - `}
+                {convertRatingMedalToDescription(ratingMedal)}
+              </span>
             </div>
             <div>
               {/* {(frameRateAverage || frameRateStutters) && <span>Frame Rate: </span>} */}
@@ -72,10 +83,11 @@ export default function PerformancePostMetaBar({
             </span>}
             </div>
           </div>
-          {didSteamUserCreatePost && (
+          {(didSteamUserCreatePost && !currentlyOnEditPage) && (
             <EditAndDeleteButtons
               steamAppId={steamAppId}
               performancePostId={performancePostId}
+              redirectToAfterEdit={redirectToAfterEdit}
             />
           )}
         </div>

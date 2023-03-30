@@ -15,16 +15,18 @@ import PerformancePostDisplay from '~/components/AppInfo/PerformancePosts/Perfor
 import PostLayoutCard from '~/components/AppInfo/PerformancePosts/PerformancePostLayoutCard';
 import { editPerformancePostAction } from '~/lib/form-actions/performance-post/edit-post.server';
 import type { PostTagOption, GamepadOption } from '~/interfaces';
-import type { CreateOrEditPerformancePostActionData } from '~/lib/form-actions/performance-post/create-or-edit-action-type';
+import type { EditPerformancePostActionData } from '~/lib/form-actions/performance-post/types';
 import { requireUserIds } from '~/lib/sessions/profile-session.server';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
+import { EditPostURLParams } from '~/interfaces/remix-app/URLSearchParams/EditPost';
 
 type EditPostLoaderData = {
   steamAppId: number;
   performancePost: PerformancePost;
   postTagOptions: PostTagOption[];
   gamepadOptions: GamepadOption[];
+  redirectToAfterEdit: string | null;
 }
 
 export async function loader({ params, request }: LoaderArgs) {
@@ -45,22 +47,28 @@ export async function loader({ params, request }: LoaderArgs) {
     return redirect(`/apps/${steamAppId}/posts`);
     // throw Error(`Post with ${performancePostId} not found in database`);
   }
+  const url = new URL(request.url);
+  const searchParams = url.searchParams;
+  const redirectToAfterEdit = searchParams.get(EditPostURLParams.REDIRECT_TO_AFTER_EDIT);
   return json<EditPostLoaderData>({
     steamAppId,
     performancePost,
     postTagOptions,
     gamepadOptions,
+    redirectToAfterEdit,
   });
 }
 
 export async function action({
   request,
   params,
-  context,
 }: ActionArgs) {
   const steamAppId = validateSteamAppId(params);
   const performancePostId = validatePerformancePostId(params);
   const { steamUserId64 } = await requireUserIds(request, `/apps/${steamAppId}/posts/`);
+  const url = new URL(request.url);
+  const searchParams = url.searchParams;
+  const redirectToAfterEdit = searchParams.get(EditPostURLParams.REDIRECT_TO_AFTER_EDIT);
 
   const steamUserProfileCreatedPerformancePost = await didSteamUserProfileCreatePerformancePost(steamUserId64, performancePostId);
   if (!steamUserProfileCreatedPerformancePost) {
@@ -71,6 +79,7 @@ export async function action({
     steamAppId,
     performancePostId,
     formData,
+    redirectToAfterEdit,
   });
 }
 
@@ -81,6 +90,7 @@ export default function EditPerformancePostRoute() {
     steamAppId,
     postTagOptions,
     gamepadOptions,
+    redirectToAfterEdit,
   } = loaderData;
 
   const {
@@ -93,7 +103,7 @@ export default function EditPerformancePostRoute() {
     },
   } = performancePost;
 
-  const actionData = useActionData<CreateOrEditPerformancePostActionData>();
+  const actionData = useActionData<EditPerformancePostActionData>();
   const navigation = useNavigation();
   const isSubmittingEditPerformancePost =
     navigation.state === 'submitting' &&
@@ -130,6 +140,7 @@ export default function EditPerformancePostRoute() {
         isSubmittingForm={isSubmittingEditPerformancePost}
         postTagOptions={postTagOptions}
         gamepadOptions={gamepadOptions}
+        redirectToAfterEdit={redirectToAfterEdit}
       />
     </div>
   );
