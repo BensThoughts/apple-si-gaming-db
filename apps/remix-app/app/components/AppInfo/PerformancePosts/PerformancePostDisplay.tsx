@@ -9,11 +9,10 @@ import type {
 
 type PerformancePostDisplayProps = {
   performancePost: PerformancePost;
-} & React.HTMLAttributes<HTMLDivElement>
+}
 
 export default function PerformancePostDisplay({
   performancePost,
-  ...rest
 }: PerformancePostDisplayProps) {
   const {
     performancePostId,
@@ -50,14 +49,20 @@ export default function PerformancePostDisplay({
   return (
     <div className="flex flex-col w-full gap-3">
       <PerformancePostMetaBar
-        performancePostId={performancePostId}
-        createdAt={createdAt}
-        userWhoCreated={{ steamUserId64 }}
-        steamApp={{ steamAppId }}
-        rating={{ ratingMedal, frameRateAverage, frameRateStutters }}
-        numLikes={numLikes}
+        performancePostMetadata={{
+          performancePostId,
+          createdAt,
+          userWhoCreated: { steamUserId64 },
+          steamApp: { steamAppId },
+          rating: {
+            ratingMedal,
+            frameRateAverage,
+            frameRateStutters,
+          },
+          numLikes,
+        }}
       />
-      <div className="flex flex-row w-full gap-[1px]" {...rest}>
+      <div className="flex flex-row w-full gap-[1px]">
         <div className="flex flex-col gap-1 items-center justify-start pr-3 border-r-2 border-r-secondary md:w-full md:max-w-[10rem]">
           {avatarMedium && (
             <div>

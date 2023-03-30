@@ -5,8 +5,7 @@ import type {
 } from '~/interfaces';
 import PostLayoutCard from './PerformancePostLayoutCard';
 
-type PerformancePostLayoutProps =
-{
+type PerformancePostLayoutProps = {
   performancePosts: PerformancePost[];
 }
 
@@ -35,7 +34,11 @@ export default function PerformancePostLayout({
             ...rest
           }, idx) => {
             return (
-              <div key={performancePostId} id={performancePostId.toString()} className="flex flex-col gap-6">
+              <div
+                key={performancePostId}
+                id={performancePostId.toString()}
+                className="flex flex-col gap-6"
+              >
                 <PerformancePostDisplay
                   performancePost={{ performancePostId, ...rest }}
                 />
