@@ -36,7 +36,7 @@ export default function PerformancePostMetaBar({
     deepestMatch && deepestMatch.id === 'routes/apps/$steamAppId/posts.edit.$performancePostId'
       ? true
       : false;
-  const redirectToAfterEdit = deepestMatch && deepestMatch.pathname;
+  const redirectToAfterEdit = deepestMatch && `${deepestMatch.pathname}#${performancePostId}`;
 
   const didSteamUserCreatePost = userSession
     ? userWhoCreated.steamUserId64 === userSession.steamUserProfile.steamUserId64
