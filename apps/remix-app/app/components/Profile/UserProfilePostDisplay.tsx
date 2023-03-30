@@ -29,7 +29,7 @@ export default function UserProfilePostDisplay({
   } = performancePost;
   return (
     <div
-      key={performancePostId}
+      id={performancePostId.toString()}
       className="rounded-md p-3 md:px-4 md:py-3 bg-tertiary focus:show-ring
                  w-full max-w-4xl flex items-center justify-start"
     >
