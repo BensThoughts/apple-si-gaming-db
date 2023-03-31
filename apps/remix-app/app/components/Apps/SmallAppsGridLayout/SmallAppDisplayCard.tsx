@@ -17,7 +17,7 @@ export default function SmallAppDisplayCard({
       to={`/apps/${steamAppId}/posts`}
       className={`flex flex-col justify-center items-center gap-1 bg-tertiary p-2
                   hover:bg-tertiary-highlight rounded-xl w-full md:max-w-[210px]
-                   focus-visible:show-ring group/small-app-card hover:scale-105 duration-300 ease-in-out
+                   focus-visible:show-ring-app-bg group/small-app-card hover:scale-105 duration-300 ease-in-out
                   ${className}`}
     >
       <div

@@ -42,7 +42,7 @@ export default function NavBar({
                 to={menuItem.to}
                 onClick={() => setIsOpen(false)}
                 className="flex items-center justify-center w-full h-10 text-xl text-center
-                           hover:bg-primary focus-visible:show-ring rounded-sm"
+                           hover:bg-primary focus:outline-none focus-visible:show-ring-app-bg rounded-sm"
               >
                 {menuItem.name}
               </NavLink>
@@ -51,7 +51,7 @@ export default function NavBar({
               to={'/profile'}
               onClick={() => setIsOpen(false)}
               className="flex items-center justify-center w-full h-10 text-xl text-center
-                         hover:bg-primary focus-visible:show-ring rounded-sm"
+                         hover:bg-primary focus:outline-none focus-visible:show-ring-app-bg rounded-sm"
             >
               {isLoggedIn ? 'Profile' : 'Login'}
             </NavLink>
@@ -74,7 +74,7 @@ export default function NavBar({
                   <NavLink
                     key={`${menuItem.to}-${idx}`}
                     to={menuItem.to}
-                    className="outline-none focus-visible:show-ring px-1 rounded-sm"
+                    className="outline-none focus-visible:show-ring-app-bg px-1 rounded-sm"
                   >
                     <AnimatedUnderline>
                       {menuItem.name}
@@ -84,7 +84,7 @@ export default function NavBar({
                 <NavLink
                   to={'/profile'}
                   onClick={() => setIsOpen(false)}
-                  className="focus-visible:show-ring px-1 rounded-sm"
+                  className="focus-visible:show-ring-app-bg px-1 rounded-sm"
                 >
                   <AnimatedUnderline>
                     {isLoggedIn ? 'Profile' : 'Login'}
@@ -110,7 +110,7 @@ export default function NavBar({
               to="/profile"
               className={`ml-3 text-sm text-primary-highlight inline-flex justify-center items-center
                           border border-transparent font-medium rounded
-                          bg-primary hover:bg-primary-highlight focus-visible:show-ring
+                          bg-primary hover:bg-primary-highlight focus-visible:show-ring-app-bg
                           h-[40px] w-[58px]`}
             >
               <SteamIcon size={40} className="fill-secondary stroke-0" />
@@ -120,7 +120,7 @@ export default function NavBar({
               aria-label="navigation menu"
               className={`mr-3 text-sm text-primary-highlight inline-flex justify-center items-center
                           border border-transparent font-medium px-4 py-2 rounded
-                          bg-primary hover:bg-primary-highlight focus-visible:show-ring
+                          bg-primary hover:bg-primary-highlight focus-visible:show-ring-app-bg
                           h-[40px] w-[58px]`}
             >
               <BarsIcon size={24} className="fill-transparent stroke-secondary stroke-2" />

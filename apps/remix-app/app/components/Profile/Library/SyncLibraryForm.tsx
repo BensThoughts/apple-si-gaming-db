@@ -37,7 +37,12 @@ export default function SyncLibraryForm() {
           method="post"
         >
           <input type="hidden" name="_profileAction" value="updateOwnedGames" />
-          <RoundedButton width="wide" type="submit" disabled={fetcher.state != 'idle'}>
+          <RoundedButton
+            width="wide"
+            type="submit"
+            className="focus:outline-none focus-visible:show-ring-tertiary"
+            disabled={fetcher.state != 'idle'}
+          >
             {isSubmitting ? <span>Updating...</span> : <span>Resync Library</span>}
           </RoundedButton>
         </fetcher.Form>
