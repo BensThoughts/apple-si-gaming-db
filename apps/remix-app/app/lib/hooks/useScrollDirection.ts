@@ -4,13 +4,13 @@ import { useWindowScroll } from 'react-use';
 type ScrollDirection = 'up' | 'down';
 
 export default function useScrollDirection() {
-  const [lastScrollTop, setLastScrollTop] = useState(0);
+  const [lastScrollYCoordinate, setLastScrollYCoordinate] = useState(0);
   const { y } = useWindowScroll();
   const [scrollDirection, setScrollDirection] = useState<ScrollDirection>('up');
 
   const listener = (e: any) => {
-    setScrollDirection(y > lastScrollTop ? 'down' : 'up');
-    setLastScrollTop(y);
+    setScrollDirection(y > lastScrollYCoordinate ? 'down' : 'up');
+    setLastScrollYCoordinate(y);
   };
 
   useEffect(() => {
