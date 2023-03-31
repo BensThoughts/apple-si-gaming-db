@@ -51,7 +51,7 @@ export default function LikeButton({
       type="submit"
       className="border-1 border-secondary-highlight rounded-full px-3 py-1.5
                  min-w-[75px] focus-visible:show-ring-primary group
-                 flex justify-between items-center gap-1"
+                 flex justify-between items-center gap-1 bg-primary hover:bg-primary-highlight"
       aria-label={likedPostRaw ? 'unlike post' : 'like post'}
     >
       <BleedingHeartSimpleSolidIcon
