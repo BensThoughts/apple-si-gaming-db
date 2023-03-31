@@ -30,7 +30,7 @@ export default function RequirementTabs({
                       'w-full rounded py-1.5 text-sm font-medium leading-5 text-primary',
                       'focus-visible:show-ring-tertiary ring-secondary-highlight',
                       selected
-                      ? 'text-primary-highlight bg-primary-highlight shadow'
+                      ? 'text-primary-highlight bg-primary-highlight'
                       : 'text-primary hover:bg-primary-highlight hover:text-secondary-highlight',
                   )}
                 >
