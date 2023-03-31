@@ -91,27 +91,23 @@ export default function PerformancePostsRoute() {
     navigation.formData.get('_performancePostAction') === 'createPerformancePost';
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="w-full">
-        <PerformancePostLayout
-          performancePosts={performancePosts.map((post) => ({
-            ...post,
-            createdAt: new Date(post.createdAt),
-          }))}
-        />
-      </div>
-      <div className="w-full">
-        <CreatePerformancePostForm
-          steamAppId={steamAppId}
-          steamUserProfileOwnsApp={steamUserProfileOwnsApp}
-          formError={actionData?.formError}
-          fieldErrors={actionData?.fieldErrors}
-          fields={actionData?.fields}
-          isSubmittingForm={isSubmittingCreatePerformancePost}
-          postTagOptions={postTagOptions}
-          gamepadOptions={gamepadOptions}
-        />
-      </div>
+    <div className="flex flex-col justify-center items-center gap-4 w-full">
+      <PerformancePostLayout
+        performancePosts={performancePosts.map((post) => ({
+          ...post,
+          createdAt: new Date(post.createdAt),
+        }))}
+      />
+      <CreatePerformancePostForm
+        steamAppId={steamAppId}
+        steamUserProfileOwnsApp={steamUserProfileOwnsApp}
+        formError={actionData?.formError}
+        fieldErrors={actionData?.fieldErrors}
+        fields={actionData?.fields}
+        isSubmittingForm={isSubmittingCreatePerformancePost}
+        postTagOptions={postTagOptions}
+        gamepadOptions={gamepadOptions}
+      />
     </div>
   );
 }
