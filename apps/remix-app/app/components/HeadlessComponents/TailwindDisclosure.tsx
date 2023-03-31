@@ -34,9 +34,9 @@ export default function TailwindDisclosure({
               show={open}
               enter="transition-all duration-300 ease-in-out"
               enterFrom="transform max-h-0 opacity-0"
-              enterTo="transform max-h-[400px] opacity-100"
-              leave="transition-all duration-300 ease-in-out"
-              leaveFrom="transform max-h-[400px] opacity-100"
+              enterTo="transform max-h-[60rem] opacity-100"
+              leave="transition-all duration-200 ease-in-out"
+              leaveFrom="transform max-h-[60rem] opacity-100"
               leaveTo="transform max-h-0 opacity-0"
               className="peer-focus-visible:show-ring rounded-b-lg"
             >
