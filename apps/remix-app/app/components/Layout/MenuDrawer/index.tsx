@@ -46,14 +46,23 @@ export default function MenuDrawer({
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <Dialog.Panel className="flex overflow-hidden z-50 flex-col justify-between p-6 w-full max-w-sm text-left align-middle bg-opacity-70 rounded-br-md shadow-xl backdrop-filter backdrop-blur-sm bg-app-bg">
+            <Dialog.Panel className="flex overflow-hidden z-50 flex-col justify-between
+                                     p-6 w-full max-w-sm text-left align-middle bg-opacity-80
+                                     rounded-br-md shadow-xl backdrop-filter backdrop-blur-sm
+                                     bg-app-bg">
               <div className={`${!description ? 'self-center w-full' : 'w-full'}`}>
-                <Dialog.Title className="text-2xl font-bold md:text-4xl text-secondary text-center">{title}</Dialog.Title>
+                <Dialog.Title
+                  className="text-2xl font-bold md:text-4xl text-secondary text-center"
+                >
+                  {title}
+                </Dialog.Title>
                 {description && <Dialog.Description>{description}</Dialog.Description>}
                 {children}
               </div>
               <div className="self-center mt-10">
-                <RoundedButton className="bg-secondary" onClick={() => setIsOpen(!isOpen)}>Close</RoundedButton>
+                <RoundedButton onClick={() => setIsOpen(!isOpen)}>
+                  Close
+                </RoundedButton>
               </div>
             </Dialog.Panel>
           </Transition.Child>
