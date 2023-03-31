@@ -1,18 +1,29 @@
-import { Link } from '@remix-run/react';
+import { Link, useMatches } from '@remix-run/react';
 import { EditIcon } from '~/components/Icons';
 import { EditPostURLParams } from '~/interfaces/remix-app/URLSearchParams/EditPost';
 
 interface EditButtonProps {
   steamAppId: number;
   performancePostId: number;
-  redirectToAfterEdit?: string;
 }
 
 export default function EditButton({
   steamAppId,
   performancePostId,
-  redirectToAfterEdit,
 }: EditButtonProps) {
+  const matches = useMatches();
+  const deepestMatch = matches.length > 0
+    ? matches[matches.length - 1]
+    : undefined;
+  const currentlyOnEditPage =
+    deepestMatch && deepestMatch.id === 'routes/apps/$steamAppId/posts.edit.$performancePostId'
+      ? true
+      : false;
+  if (currentlyOnEditPage) {
+    return null;
+  }
+  const redirectToAfterEdit = deepestMatch && `${deepestMatch.pathname}#${performancePostId}`;
+
   let editURL = `/apps/${steamAppId}/posts/edit/${performancePostId}`;
   if (redirectToAfterEdit) {
     const params = new URLSearchParams([

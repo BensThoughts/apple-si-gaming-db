@@ -1,4 +1,3 @@
-import { useMatches } from '@remix-run/react';
 import LikeButton from '~/components/LikeButton';
 import type {
   PerformancePostMetaBarData,
@@ -29,15 +28,7 @@ export default function PerformancePostMetaBar({
   },
 }: PerformancePostMetaBarProps) {
   const { userSession } = useUserSession();
-  const matches = useMatches();
-  const deepestMatch = matches.length > 0
-    ? matches[matches.length - 1]
-    : undefined;
-  const currentlyOnEditPage =
-    deepestMatch && deepestMatch.id === 'routes/apps/$steamAppId/posts.edit.$performancePostId'
-      ? true
-      : false;
-  const redirectToAfterEdit = deepestMatch && `${deepestMatch.pathname}#${performancePostId}`;
+
 
   const didSteamUserCreatePost = userSession
     ? userWhoCreated.steamUserId64 === userSession.steamUserProfile.steamUserId64
@@ -67,7 +58,7 @@ export default function PerformancePostMetaBar({
               performancePostId={performancePostId}
               numLikes={numLikes}
             />
-            {(didSteamUserCreatePost && !currentlyOnEditPage) && (
+            {didSteamUserCreatePost && (
               <div
                 className="block @[650px]:hidden
                     supports-[not(container-type:inline-size)]:postMetaBarQuery:hidden"
@@ -75,7 +66,6 @@ export default function PerformancePostMetaBar({
                 <EditButton
                   steamAppId={steamAppId}
                   performancePostId={performancePostId}
-                  redirectToAfterEdit={redirectToAfterEdit}
                 />
               </div>
             )}
@@ -102,7 +92,7 @@ export default function PerformancePostMetaBar({
             </span>}
             </div>
           </div>
-          {(didSteamUserCreatePost && !currentlyOnEditPage) && (
+          {didSteamUserCreatePost && (
             <span
               className="hidden @[650px]:inline
                          supports-[not(container-type:inline-size)]:postMetaBarQuery:hidden"
@@ -110,7 +100,6 @@ export default function PerformancePostMetaBar({
               <EditButton
                 steamAppId={steamAppId}
                 performancePostId={performancePostId}
-                redirectToAfterEdit={redirectToAfterEdit}
               />
             </span>
           )}
