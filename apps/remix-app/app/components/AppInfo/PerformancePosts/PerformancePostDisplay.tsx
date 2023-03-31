@@ -63,15 +63,19 @@ export default function PerformancePostDisplay({
         }}
       />
       <div className="flex flex-row w-full gap-[1px]">
-        <div className="flex flex-col gap-1 items-center justify-start pr-3 border-r-2 border-r-secondary md:w-full md:max-w-[10rem]">
-          {avatarMedium && (
-            <div>
-              <AvatarImage avatarMedium={avatarMedium} />
-            </div>
-          )}
-          {displayName && (
-            <span className="text-sm">{displayName}</span>
-          )}
+        <div className="flex flex-col gap-2 items-center justify-start
+                        pr-3 border-r-2 border-r-secondary md:w-full md:max-w-[10rem]">
+          <div className="flex flex-col gap-1 items-center w-full">
+            {avatarMedium && (
+              <div>
+                <AvatarImage avatarMedium={avatarMedium} />
+              </div>
+            )}
+            {displayName && (
+              <span className="text-sm">{displayName}</span>
+            )}
+          </div>
+
           {/* // ! Below Added to allow for no system specs on a post */}
           {(
             manufacturer ||
@@ -95,10 +99,11 @@ export default function PerformancePostDisplay({
                 memoryRAM,
               }}
             >
-              <span className="underline underline-offset-4 hover:text-tertiary
-                               transition-colors duration-200 text-sm">
+              <div className="underline underline-offset-4 hover:text-tertiary
+                              transition-colors duration-200 text-sm
+                              pb-2">
                 System
-              </span>
+              </div>
             </SystemSpecsPopover>
           }
           {/* Gamepad and Post Tags Small Screens Only */}
