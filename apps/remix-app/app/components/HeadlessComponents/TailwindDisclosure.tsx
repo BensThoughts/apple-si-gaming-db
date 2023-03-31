@@ -2,10 +2,9 @@ import {
   Disclosure,
   Transition,
 } from '@headlessui/react';
-import { Fragment } from 'react';
 import { ChevronUpIcon } from '~/components/Icons';
 
-export default function TailwindDisclosureUncontrolled({
+export default function TailwindDisclosure({
   title,
   defaultOpen,
   children,
@@ -21,7 +20,7 @@ export default function TailwindDisclosureUncontrolled({
           <>
             <Disclosure.Button
               className={`peer flex w-full justify-between px-4 py-2 text-left text-sm
-                        font-medium focus-visible:show-ring transition-colors
+                        font-medium focus-visible:show-ring transition-all duration-300
                         bg-primary hover:bg-primary-highlight border-b-1
                         ${open ? 'rounded-t-lg border-b-primary-highlight' : 'rounded-lg border-b-transparent'}`}
             >
@@ -32,17 +31,16 @@ export default function TailwindDisclosureUncontrolled({
             </Disclosure.Button>
             <Transition
               as="div"
+              show={open}
               enter="transition-all duration-300 ease-in-out"
               enterFrom="transform max-h-0 opacity-0"
-              enterTo="transform max-h-[200px] opacity-100"
+              enterTo="transform max-h-[400px] opacity-100"
               leave="transition-all duration-300 ease-in-out"
-              leaveFrom="transform max-h-[200px] opacity-100"
+              leaveFrom="transform max-h-[400px] opacity-100"
               leaveTo="transform max-h-0 opacity-0"
               className="peer-focus-visible:show-ring rounded-b-lg"
             >
-              <Disclosure.Panel
-                className="p-3 bg-primary rounded-b-lg"
-              >
+              <Disclosure.Panel>
                 {children}
               </Disclosure.Panel>
             </Transition>

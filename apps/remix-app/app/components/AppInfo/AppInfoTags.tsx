@@ -1,5 +1,5 @@
 import TextPill from '~/components/TextPill';
-import TailwindDisclosure from './TailwindDisclosure';
+import TailwindDisclosure from '~/components/HeadlessComponents/TailwindDisclosure';
 
 interface AppInfoTagsProps {
   genres: {
@@ -17,9 +17,9 @@ export default function AppInfoTags({
   categories,
 }: AppInfoTagsProps) {
   return (
-    <div className="w-full">
-      <TailwindDisclosure title="Tags">
-        <div className="flex flex-col gap-3">
+    <div className="w-full rounded-lg">
+      <TailwindDisclosure title="Tags" defaultOpen={false}>
+        <div className="flex flex-col gap-3 bg-tertiary p-3 rounded-b-lg">
           {genres.length > 0 && (
             <div className="flex gap-2 flex-wrap">
               Genres:

@@ -1,4 +1,4 @@
-import TailwindDisclosure from '~/components/AppInfo/TailwindDisclosure';
+import TailwindDisclosure from '~/components/HeadlessComponents/TailwindDisclosure';
 import RequirementTabs from '~/components/AppInfo/RequirementTabs';
 
 export default function AppInfoRequirements({
@@ -24,26 +24,29 @@ export default function AppInfoRequirements({
   const { platformLinux, linuxRequirementsMinimum } = linux;
   return (
     <div className="w-full">
-      <TailwindDisclosure title="Requirements">
-        <RequirementTabs
-          platforms={[
-            {
-              platformName: 'Apple',
-              platformSupported: platformMac,
-              requirementsMinimum: macRequirementsMinimum,
-            },
-            {
-              platformName: 'Windows',
-              platformSupported: platformWindows,
-              requirementsMinimum: pcRequirementsMinimum,
-            },
-            {
-              platformName: 'Linux',
-              platformSupported: platformLinux,
-              requirementsMinimum: linuxRequirementsMinimum,
-            },
-          ]}
-        />
+      <TailwindDisclosure title="Requirements" defaultOpen={false}>
+        <div className="p-2 bg-tertiary rounded-b-lg">
+          <RequirementTabs
+            platforms={[
+              {
+                platformName: 'Apple',
+                platformSupported: platformMac,
+                requirementsMinimum: macRequirementsMinimum,
+              },
+              {
+                platformName: 'Windows',
+                platformSupported: platformWindows,
+                requirementsMinimum: pcRequirementsMinimum,
+              },
+              {
+                platformName: 'Linux',
+                platformSupported: platformLinux,
+                requirementsMinimum: linuxRequirementsMinimum,
+              },
+            ]}
+          />
+        </div>
+
       </TailwindDisclosure>
     </div>
   );

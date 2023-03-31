@@ -8,7 +8,7 @@ import type { CreateSystemSpecActionData } from '~/lib/form-actions/profile/inte
 import { showToast } from '~/components/Toasts';
 import { useEffect, useState } from 'react';
 import { validateNewSystemName, validateSystemInfo } from '~/lib/form-validators/profile';
-import TailwindDisclosureUncontrolled from '~/components/HeadlessComponents/TailwindDisclosureUncontrolled';
+import TailwindDisclosure from '~/components/HeadlessComponents/TailwindDisclosure';
 import CreateSystemInstructions from './CreateSystemInstructions';
 
 interface CreateSystemFormProps {
@@ -72,9 +72,12 @@ export default function CreateSystemForm({
   return (
     <div className="flex flex-col gap-6 justify-center items-center w-full  max-w-lg bg-tertiary rounded-lg p-6">
       <h3 className="text-secondary text-lg">Create a New System</h3>
-      <TailwindDisclosureUncontrolled title="How to Create a System" defaultOpen={false}>
-        <CreateSystemInstructions />
-      </TailwindDisclosureUncontrolled>
+      <TailwindDisclosure title="How to Create a System" defaultOpen={false}>
+        <div className="p-3 bg-primary rounded-b-lg">
+          <CreateSystemInstructions />
+
+        </div>
+      </TailwindDisclosure>
       <Form
         action="/profile/systems"
         method="post"
