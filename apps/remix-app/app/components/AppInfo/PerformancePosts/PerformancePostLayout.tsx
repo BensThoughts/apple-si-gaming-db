@@ -25,7 +25,7 @@ export default function PerformancePostLayout({
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-2">
+    <div className="flex flex-col items-center justify-center gap-4 w-full">
       <AppRatingOverview performancePostRatings={performancePosts.map((post) => post.rating)} />
       <PostLayoutCard>
         <div className="flex flex-col gap-6 w-full">
