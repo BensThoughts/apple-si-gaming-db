@@ -22,13 +22,13 @@ export default function SystemSpecsPopover({
     memoryRAM,
   } = systemSpec;
   return (
-    <Popover className={`relative`} as="div">
+    <Popover className="relative" as="div">
       {({ open }) => (
         <>
           <Popover.Button
             onMouseEnter={() => setIsShowing(true)}
             onMouseLeave={() => setIsShowing(false)}
-            className="text-primary select-none focus-visible:show-ring rounded-sm"
+            className="text-primary select-none outline-none focus-visible:show-ring-tertiary rounded-sm"
             aria-label="show system hardware"
           >
             {children}
