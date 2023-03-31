@@ -10,7 +10,6 @@ import PageWrapper from '~/components/Layout/PageWrapper';
 import { metaTags } from '~/lib/meta-tags';
 import LoginCard from '~/components/Profile/LoginCard';
 import PrivacyCard from '~/components/Profile/PrivacyCard';
-import AnimatedUnderline from '~/components/AnimatedUnderline';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
 import type { SerializedRootLoaderData } from '~/root';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
