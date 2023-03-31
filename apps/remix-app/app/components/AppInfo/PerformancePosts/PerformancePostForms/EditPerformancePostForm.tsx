@@ -124,7 +124,10 @@ export default function EditPerformancePostForm({
           fieldErrors={fieldErrors}
         />
         <div className="w-full flex gap-x-3 justify-around">
-          <RoundedButtonRemixLink to={`/apps/${steamAppId}/posts/`} className="focus-visible:show-ring-tertiary">
+          <RoundedButtonRemixLink
+            to={redirectToAfterEdit ? redirectToAfterEdit : `/apps/${steamAppId}/posts/`}
+            className="focus-visible:show-ring-tertiary"
+          >
             Cancel
           </RoundedButtonRemixLink>
           <RoundedButton
