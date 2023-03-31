@@ -1,11 +1,11 @@
-import LikeButton from '~/components/LikeButton';
+import LikeButton from '~/components/Buttons/LikeButton';
 import type {
   PerformancePostMetaBarData,
 } from '~/interfaces';
 import { convertFrameRateToDescription, convertRatingMedalToDescription } from '~/lib/conversions/rating-conversions';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
 // import EditAndDeleteButtons from './EditAndDeleteButtons';
-import EditButton from './EditButton';
+import EditButton from '~/components/Buttons/EditButton';
 
 type PerformancePostMetaBarProps = {
   performancePostMetadata: PerformancePostMetaBarData;

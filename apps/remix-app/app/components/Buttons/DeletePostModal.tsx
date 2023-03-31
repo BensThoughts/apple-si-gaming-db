@@ -1,6 +1,6 @@
 import { useFetcher } from '@remix-run/react';
 import React from 'react';
-import RoundedButton from '~/components/RoundedButton';
+import RoundedButton from '~/components/Buttons/RoundedButton';
 import BasicModal from '~/components/BasicModal';
 
 interface DeletePostModalProps {

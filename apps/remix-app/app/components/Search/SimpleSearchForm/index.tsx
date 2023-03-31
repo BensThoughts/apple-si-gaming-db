@@ -1,4 +1,4 @@
-import RoundedButton from '../../RoundedButton';
+import RoundedButton from '~/components/Buttons/RoundedButton';
 import MaterialInputOutlined from '~/components/FormComponents/MaterialInputOutlined';
 import { Form } from '@remix-run/react';
 import { useEffect, useRef } from 'react';

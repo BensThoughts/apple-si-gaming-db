@@ -3,7 +3,7 @@ import MaterialInputOutlinedV2 from '~/components/FormComponents/MaterialInputOu
 // import MaterialInputOutlined from '~/components/FormComponents/MaterialInputOutlined';
 // import TextArea from '~/components/FormComponents/TextArea';
 import MaterialTextAreaOutlined from '~/components/FormComponents/MaterialTextAreaOutlined';
-import RoundedButton from '~/components/RoundedButton';
+import RoundedButton from '~/components/Buttons/RoundedButton';
 import type { CreateSystemSpecActionData } from '~/lib/form-actions/profile/interfaces';
 import { showToast } from '~/components/Toasts';
 import { useEffect, useState } from 'react';

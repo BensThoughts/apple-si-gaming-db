@@ -5,7 +5,7 @@ import { searchReleasedSteamAppsByName } from '~/models/Steam/steamApp.server';
 import SearchTitleCard from '~/components/Search/SearchTitleCard';
 import LoadingComponent from '~/components/LoadingComponent';
 import SearchForm from '~/components/Search/SearchForm';
-import RoundedButtonRemixLink from '~/components/RoundedButtonRemixLink';
+import RoundedButtonRemixLink from '~/components/Buttons/RoundedButtonRemixLink';
 import { metaTags } from '~/lib/meta-tags';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
 import { getSearchOptions } from '~/lib/loader-functions/search.server';

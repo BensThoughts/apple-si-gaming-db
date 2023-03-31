@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import RoundedButton from '~/components/RoundedButton';
+import RoundedButton from '~/components/Buttons/RoundedButton';
 
 type DrawerProps = {
   title?: string,

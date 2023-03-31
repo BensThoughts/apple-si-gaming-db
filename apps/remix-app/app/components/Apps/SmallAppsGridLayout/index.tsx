@@ -3,7 +3,7 @@ import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { SelectOption } from '~/components/FormComponents/SelectMenu';
 import ToggleSwitch from '~/components/FormComponents/ToggleSwitch';
 import MaterialInputOutlined from '~/components/FormComponents/MaterialInputOutlined';
-import RoundedButton from '~/components/RoundedButton';
+import RoundedButton from '~/components/Buttons/RoundedButton';
 import SmallAppDisplayCard from './SmallAppDisplayCard';
 import type { SteamAppForSmallAppsGridLayout } from '~/interfaces';
 

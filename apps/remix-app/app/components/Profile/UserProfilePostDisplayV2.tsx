@@ -1,9 +1,8 @@
 import { Link } from '@remix-run/react';
 import type { PerformancePostForUserProfileDisplay } from '~/interfaces';
-import PerformancePostMetaBar from '../AppInfo/PerformancePosts/PerformancePostMetaBar';
-import EditButton from '../AppInfo/PerformancePosts/PerformancePostMetaBar/EditButton';
+import EditButton from '~/components/Buttons/EditButton';
 import AppHeaderImage from '../ImageWrappers/AppHeaderImage';
-import LikeButton from '../LikeButton';
+import LikeButton from '~/components/Buttons/LikeButton';
 
 export default function UserProfilePostDisplayV2({
   performancePost,

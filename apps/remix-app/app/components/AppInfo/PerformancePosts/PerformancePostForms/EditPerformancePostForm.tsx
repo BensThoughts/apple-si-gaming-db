@@ -1,5 +1,5 @@
 import { Form } from '@remix-run/react';
-import RoundedButton from '~/components/RoundedButton';
+import RoundedButton from '~/components/Buttons/RoundedButton';
 import { useEffect, useRef } from 'react';
 import { showToast } from '~/components/Toasts';
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
@@ -13,7 +13,7 @@ import type {
 } from '~/interfaces';
 import PerformancePostFormWrapper from './PerformancePostFormWrapper';
 import BasePerformancePostFormFields from './BasePerformancePostFormFields';
-import RoundedButtonRemixLink from '~/components/RoundedButtonRemixLink';
+import RoundedButtonRemixLink from '~/components/Buttons/RoundedButtonRemixLink';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
 import { EditPostURLParams } from '~/interfaces/remix-app/URLSearchParams/EditPost';
 

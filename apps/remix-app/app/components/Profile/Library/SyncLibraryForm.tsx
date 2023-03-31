@@ -1,7 +1,7 @@
 import { useFetcher } from '@remix-run/react';
 import { useEffect } from 'react';
 import { SyncOutlineIcon } from '~/components/Icons/FlatIcons/Outline';
-import RoundedButton from '~/components/RoundedButton';
+import RoundedButton from '~/components/Buttons/RoundedButton';
 import { showToast } from '~/components/Toasts';
 import type { LibraryActionData } from '~/routes/profile/library';
 

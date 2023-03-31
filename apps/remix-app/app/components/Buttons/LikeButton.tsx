@@ -2,7 +2,7 @@ import { useFetcher } from '@remix-run/react';
 import { useState } from 'react';
 import { useLikeButtonData } from '~/lib/hooks/useMatchesData';
 import { BleedingHeartSimpleSolidIcon } from '~/components/Icons/FlatIcons/Solid';
-import { showToast } from './Toasts';
+import { showToast } from '../Toasts';
 
 export default function LikeButton({
   performancePostId,

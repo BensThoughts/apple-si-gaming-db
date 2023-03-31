@@ -1,6 +1,6 @@
 import Card from '~/components/Cards/Card';
 import ProfileLayout from '~/components/Profile/ProfileLayout';
-import LogoutButton from '~/components/Profile/LogoutButton';
+import LogoutButton from '~/components/Buttons/LogoutButton';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
 
 export default function ProfileIndexRoute() {

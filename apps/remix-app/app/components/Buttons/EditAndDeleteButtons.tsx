@@ -1,4 +1,4 @@
-import { Link } from '@remix-run/react';
+import { Link, useMatches } from '@remix-run/react';
 import { useState } from 'react';
 import { EditIcon, TrashIcon } from '~/components/Icons';
 import DeletePostModal from './DeletePostModal';
@@ -7,15 +7,25 @@ import { EditPostURLParams } from '~/interfaces/remix-app/URLSearchParams/EditPo
 interface EditAndDeleteButtonsProps {
   steamAppId: number;
   performancePostId: number;
-  redirectToAfterEdit?: string;
 }
 
 export default function EditAndDeleteButtons({
   steamAppId,
   performancePostId,
-  redirectToAfterEdit,
 }: EditAndDeleteButtonsProps) {
   const [isDeleteModalOpen, setDeleteModalIsOpen] = useState(false);
+  const matches = useMatches();
+  const deepestMatch = matches.length > 0
+    ? matches[matches.length - 1]
+    : undefined;
+  const currentlyOnEditPage =
+    deepestMatch && deepestMatch.id === 'routes/apps/$steamAppId/posts.edit.$performancePostId'
+      ? true
+      : false;
+  if (currentlyOnEditPage) {
+    return null;
+  }
+  const redirectToAfterEdit = deepestMatch && `${deepestMatch.pathname}#${performancePostId}`;
   let editURL = `/apps/${steamAppId}/posts/edit/${performancePostId}`;
   if (redirectToAfterEdit) {
     const params = new URLSearchParams([

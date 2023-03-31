@@ -1,7 +1,7 @@
 import { Transition } from '@headlessui/react';
 import toast from 'react-hot-toast';
 import type { Toast } from 'react-hot-toast';
-import RoundedButton from '~/components/RoundedButton';
+import RoundedButton from '~/components/Buttons/RoundedButton';
 
 type ToastProps = {
   message?: string,

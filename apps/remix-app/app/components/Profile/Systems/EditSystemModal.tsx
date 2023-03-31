@@ -2,7 +2,7 @@ import { Form, useSubmit } from '@remix-run/react';
 import React, { useState } from 'react';
 import MaterialInputOutlinedV2 from '~/components/FormComponents/MaterialInputOutlinedV2';
 // import MaterialInputOutlinedNew from '~/components/FormComponents/MaterialInputOutlinedNew';
-import RoundedButton from '~/components/RoundedButton';
+import RoundedButton from '~/components/Buttons/RoundedButton';
 import { validateNewSystemName } from '~/lib/form-validators/profile';
 import BasicModal from '~/components/BasicModal';
 
