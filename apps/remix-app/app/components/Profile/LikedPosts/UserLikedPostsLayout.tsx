@@ -17,7 +17,7 @@ export default function UserLikedPostsLayout({
     );
   }
   return (
-    <div className="flex flex-col gap-8 items-center w-full">
+    <div className="flex flex-col gap-6 items-center w-full">
       {likedPosts.map((performancePost) => (
         <Fragment key={performancePost.performancePostId}>
           <UserProfilePostDisplay

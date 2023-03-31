@@ -28,7 +28,7 @@ export default function UsersPostsLayout({
     );
   }
   return (
-    <div className="flex flex-col gap-8 items-center w-full">
+    <div className="flex flex-col gap-6 items-center w-full">
       {steamUsersPosts.map((performancePost) => (
         <Fragment key={performancePost.performancePostId}>
           <UserProfilePostDisplay
