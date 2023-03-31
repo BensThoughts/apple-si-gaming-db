@@ -121,7 +121,7 @@ export default function PerformancePostDisplay({
             </div>
           }
         </div>
-        <div className="w-full flex flex-col gap-2 h-full border-l-1 border-l-secondary-highlight pl-3">
+        <div className="w-full flex flex-col gap-2 h-full pl-3">
           {/* Gamepad and Post Tags Medium Screens Only */}
           {(postTags.length > 0 || gamepadMetadata) &&
             <div className="hidden md:flex flex-row flex-wrap gap-1 w-full justify-start">

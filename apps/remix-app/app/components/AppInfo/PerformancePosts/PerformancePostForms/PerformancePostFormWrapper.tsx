@@ -2,12 +2,11 @@ import React from 'react';
 
 export default function PerformancePostFormWrapper({
   children,
-}: React.HTMLAttributes<HTMLDivElement>) {
+}: { children: React.ReactNode }) {
   return (
     <div
-      className={`flex flex-col gap-3 items-center justify-center bg-tertiary
-                  border-solid border-1 border-secondary p-6 rounded-lg w-full
-                  `}
+      className="flex flex-col gap-3 items-center justify-center bg-tertiary
+                 p-6 rounded-lg w-full max-w-2xl"
     >
       {children}
     </div>

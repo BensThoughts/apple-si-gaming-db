@@ -26,7 +26,7 @@ export default function AppInfoHeader({
   return (
     <div
       className="flex flex-col gap-4 justify-center items-center w-full
-                 bg-tertiary p-2 rounded-lg border-1 border-secondary-highlight"
+                 bg-tertiary p-2 rounded-lg"
     >
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-center p-[3px] md:p-[6px] rounded-lg">
