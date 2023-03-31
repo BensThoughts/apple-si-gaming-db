@@ -9,7 +9,7 @@ import {
   // convertSteamApiDataToPrisma,
 } from '~/models/Steam/steamApp.server';
 import AppInfoTags from '~/components/AppInfo/AppInfoTags';
-import AppInfoMainAppCard from '~/components/AppInfo/AppInfoMainAppCard';
+import AppInfoDescriptionCard from '~/components/AppInfo/AppInfoDescriptionCard';
 import AppInfoHeader from '~/components/AppInfo/AppInfoHeader';
 import AppInfoRequirements from '~/components/AppInfo/AppInfoRequirements';
 import PageWrapper from '~/components/Layout/PageWrapper';
@@ -129,10 +129,10 @@ export default function AppsRoute() {
   } = steamApp;
   return (
     <PageWrapper title={name} topSpacer>
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 min-h-screen">
+      <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] grid-rows-[auto_1fr] gap-4 min-h-screen">
 
-        <div className="col-start-1 col-span-1 md:col-span-4 xl:col-span-3">
-          <div className="flex flex-col gap-3 h-full items-center">
+        <div className="col-start-1 col-span-1 row-start-1 row-span-1 flex justify-center">
+          <div className="flex flex-col gap-3 w-full h-full items-center sm:max-w-md md:max-w-xs">
             <AppInfoHeader
               steamAppId={steamAppId}
               name={name}
@@ -160,14 +160,14 @@ export default function AppsRoute() {
               />
             )}
             {shortDescription &&
-                <AppInfoMainAppCard
+                <AppInfoDescriptionCard
                   requiredAge={requiredAge}
                   shortDescription={shortDescription}
                 />
             }
           </div>
         </div>
-        <div className="md:col-start-5 xl:col-start-4 col-end-[-1]">
+        <div className="col-start-1 md:col-start-2 col-end-[-1] row-start-2 md:row-start-1 row-end-[-1]">
           <Outlet />
         </div>
       </div>
