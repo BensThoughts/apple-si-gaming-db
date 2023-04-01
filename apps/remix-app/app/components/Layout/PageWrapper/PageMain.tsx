@@ -7,7 +7,7 @@ export default function PageMain({
   className,
 }: MainProps) {
   return (
-    <main className={`px-4 md:px-10 mx-auto ${className}`}>
+    <main className={`px-4 md:px-10 mx-auto ${className ? className : ''}`}>
       {children}
     </main>
   );
