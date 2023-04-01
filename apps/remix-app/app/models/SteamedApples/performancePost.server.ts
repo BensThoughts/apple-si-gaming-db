@@ -238,6 +238,13 @@ export async function findPerformancePostsBySteamUserId(
       frameRateAverage: true,
       frameRateStutters: true,
       ratingMedal: true,
+      gamepadMetadata: {
+        select: {
+          description: true,
+        },
+      },
+      gamepadRating: true,
+      postTags: true,
       steamApp: {
         select: {
           steamAppId: true,
@@ -258,6 +265,9 @@ export async function findPerformancePostsBySteamUserId(
     frameRateAverage,
     frameRateStutters,
     ratingMedal,
+    gamepadMetadata,
+    gamepadRating,
+    postTags,
     steamApp: {
       steamAppId,
       name,
@@ -268,6 +278,7 @@ export async function findPerformancePostsBySteamUserId(
     performancePostId: id,
     createdAt,
     postText,
+    postTags,
     userWhoCreated: {
       steamUserId64: steamUserId64.toString(),
     },
@@ -280,6 +291,8 @@ export async function findPerformancePostsBySteamUserId(
       ratingMedal,
       frameRateAverage,
       frameRateStutters,
+      gamepadMetadata,
+      gamepadRating,
     },
     numLikes: usersWhoLiked,
   }));
