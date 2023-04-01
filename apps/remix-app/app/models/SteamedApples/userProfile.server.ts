@@ -4,7 +4,6 @@ import type {
 
 import type {
   AppLoadContextSteamUser,
-  PerformancePost,
 } from '~/interfaces';
 
 import prisma from '~/lib/database/db.server';
@@ -213,103 +212,6 @@ export async function findUserSessionByUserProfileId(
       },
     },
   };
-}
-
-export async function findUserProfileLikedPosts(
-    userProfileId: number,
-): Promise<Omit<PerformancePost, 'postTags' | 'systemSpec'>[]> {
-  const userProfile = await prisma.userProfile.findUnique({
-    where: {
-      id: userProfileId,
-    },
-    select: {
-      likedPerformancePosts: {
-        orderBy: {
-          updatedAt: 'desc',
-        },
-        select: {
-          performancePost: {
-            select: {
-              id: true,
-              createdAt: true,
-              _count: {
-                select: {
-                  usersWhoLiked: true,
-                },
-              },
-              frameRateAverage: true,
-              frameRateStutters: true,
-              postText: true,
-              ratingMedal: true,
-              steamApp: {
-                select: {
-                  steamAppId: true,
-                  name: true,
-                  headerImage: true,
-                },
-              },
-              steamUserProfile: {
-                select: {
-                  steamUserId64: true,
-                  displayName: true,
-                  avatarMedium: true,
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  });
-  if (!userProfile) {
-    return [];
-  }
-  const {
-    likedPerformancePosts,
-  } = userProfile;
-  return likedPerformancePosts.map(({
-    performancePost: {
-      id,
-      createdAt,
-      _count: {
-        usersWhoLiked,
-      },
-      ratingMedal,
-      frameRateAverage,
-      frameRateStutters,
-      postText,
-      steamApp: {
-        steamAppId,
-        name,
-        headerImage,
-      },
-      steamUserProfile: {
-        steamUserId64,
-        avatarMedium,
-        displayName,
-      },
-    },
-  }) => ({
-    performancePostId: id,
-    createdAt,
-    numLikes: usersWhoLiked,
-    rating: {
-      ratingMedal,
-      frameRateAverage,
-      frameRateStutters,
-    },
-    postText,
-    steamApp: {
-      steamAppId,
-      name,
-      headerImage,
-    },
-    userWhoCreated: {
-      steamUserId64: steamUserId64.toString(),
-      displayName,
-      avatarMedium,
-    },
-  }));
 }
 
 export async function upsertUserProfileBySteamUserId64(
