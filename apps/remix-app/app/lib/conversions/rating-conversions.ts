@@ -37,7 +37,7 @@ export function convertRatingMedalToDescription(ratingMedal: RatingMedal) {
 export function convertFrameRateToDescription(frameRateAverage: FrameRate) {
   switch (frameRateAverage) {
     case 'VeryLow':
-      return '<25 FPS';
+      return '0 - 25 FPS';
     case 'Low':
       return '25 - 40 FPS';
     case 'Medium':
