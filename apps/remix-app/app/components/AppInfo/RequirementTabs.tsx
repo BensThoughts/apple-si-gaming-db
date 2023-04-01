@@ -1,9 +1,6 @@
 import { Fragment } from 'react';
 import { Tab } from '@headlessui/react';
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
+import { classNames } from '~/lib/css/classNames';
 
 export default function RequirementTabs({
   platforms,
