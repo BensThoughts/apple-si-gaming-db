@@ -59,6 +59,10 @@ export type PerformancePostForUserProfileDisplay = {
     ratingMedal: RatingMedal;
     frameRateAverage?: FrameRate | null;
     frameRateStutters?: boolean | null;
+    gamepadRating?: GamepadRating | null;
+    gamepadMetadata?: {
+      description: string;
+    } | null;
   }
   userWhoCreated: {
     steamUserId64: string;
@@ -68,6 +72,10 @@ export type PerformancePostForUserProfileDisplay = {
     name: string;
     headerImage?: string | null;
   };
+  postTags: {
+    id: number;
+    description: string;
+  }[];
   numLikes: number;
 }
 
