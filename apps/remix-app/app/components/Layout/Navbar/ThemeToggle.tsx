@@ -6,6 +6,7 @@ import {
   CloudMoonIcon,
   SunIcon,
 } from '~/components/Icons';
+import { classNames } from '~/lib/css/classNames';
 
 export default function ThemeToggle() {
   const [theme, setTheme] = useTheme();
@@ -26,9 +27,11 @@ export default function ThemeToggle() {
                  focus-visible:show-ring outline-none"
     >
       <span
-        className={`absolute top-[3px] left-[3px] w-[32px] h-[32px] rounded-[50%]
-                    bg-secondary transition-transform
-                    ${theme === Theme.DARK ? 'translate-x-[40px]' : 'translate-x-0'}`}
+        className={classNames(
+            'absolute top-[3px] left-[3px] w-[32px] h-[32px] rounded-[50%]',
+            'bg-secondary transition-transform',
+            theme === Theme.DARK ? 'translate-x-[40px]' : 'translate-x-0',
+        )}
       />
       <span aria-hidden="true">
         <CloudMoonIcon className="fill-secondary stroke-0" />

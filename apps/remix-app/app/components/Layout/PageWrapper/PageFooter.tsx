@@ -1,10 +1,15 @@
+import { classNames } from '~/lib/css/classNames';
 import { DiscordIcon, RedditIcon, TwitterIcon } from '../../Icons';
 
 export default function PageFooter({
   className,
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <footer className={`w-full h-fit min-h-min col bg-app-bg-secondary px-4 py-2 ${className}`}>
+    <footer className={classNames(
+        'w-full h-fit min-h-min col bg-app-bg-secondary px-4 py-2',
+        className ? className : '',
+    )}
+    >
       <div className="flex justify-between items-center w-full h-full">
         <div className="flex flex-col gap-1 text-xs md:text-sm">
           <i className="italic text-sm">Designed by BensThoughts</i>

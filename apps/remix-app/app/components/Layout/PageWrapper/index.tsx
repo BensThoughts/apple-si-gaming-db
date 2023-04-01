@@ -1,5 +1,6 @@
 // import SignInBannerAlert from '~/components/Banners/SignInBannerAlert';
 import { useTheme } from '~/lib/context/theme-provider';
+import { classNames } from '~/lib/css/classNames';
 import PageFooter from './PageFooter';
 import PageHeader from './PageHeader';
 import PageMain from './PageMain';
@@ -13,9 +14,11 @@ function Background() {
   return (
     <>
       <div
-        className={`absolute top-0 bg-no-repeat bg-cover
-                    max-h-[calc(100vh_-_3.5rem)] min-h-[540px] w-screen
-                    -z-50 ${bgImageCss} bg-cover`}
+        className={classNames(
+            'absolute top-0 bg-no-repeat bg-cover -z-50',
+            'max-h-[calc(100vh_-_3.5rem)] min-h-[540px] w-screen',
+            bgImageCss,
+        )}
       />
     </>
   );

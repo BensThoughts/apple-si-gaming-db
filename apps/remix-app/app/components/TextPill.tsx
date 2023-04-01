@@ -1,3 +1,5 @@
+import { classNames } from '~/lib/css/classNames';
+
 export default function TextPill({
   children,
   className,
@@ -6,9 +8,14 @@ export default function TextPill({
   className?: string,
 }) {
   return (
-    <div className={`flex justify-center items-center py-1 px-2 text-xs
-                     rounded-md border-solid border-1 border-secondary
-                     select-none ${className}`}>
+    <div
+      className={classNames(
+          'flex justify-center items-center py-1 px-2 text-xs',
+          'rounded-md border-solid border-1 border-secondary',
+          'select-none max-w-fit',
+          className ? className : '',
+      )}
+    >
       {children}
     </div>
   );

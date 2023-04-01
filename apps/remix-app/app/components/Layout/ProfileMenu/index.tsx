@@ -5,6 +5,7 @@ import {
 } from '@remix-run/react';
 import { Fragment } from 'react';
 import { SteamIcon } from '~/components/Icons';
+import { classNames } from '~/lib/css/classNames';
 import { loggedInMenuLinks } from './profileMenuLinks';
 
 export default function ProfileMenu({
@@ -43,9 +44,13 @@ export default function ProfileMenu({
                       {({ active }) => (
                         <NavLink
                           to={link.to}
-                          className={`${
-                            active ? 'bg-primary-highlight text-primary-highlight' : 'text-primary'
-                          } flex w-full items-center rounded-md px-2 py-2 text-base hover:bg-primary-highlight hover:text-primary-highlight`}
+                          className={classNames(
+                              'flex w-full items-center rounded-md px-2 py-2 text-base',
+                              'hover:bg-primary-highlight hover:text-primary-highlight',
+                              active
+                                ? 'bg-primary-highlight text-primary-highlight'
+                                : 'text-primary',
+                          )}
                         >
                           {link.title}
                         </NavLink>
@@ -57,9 +62,13 @@ export default function ProfileMenu({
                       <button
                         onClick={() => fetcher.submit({}, { action: '/actions/logout', method: 'post' })}
                         // href="/api/auth/steam/logout"
-                        className={`${
-                          active ? 'bg-primary-highlight text-primary-highlight' : 'text-primary'
-                        } flex w-full items-center rounded-md px-2 py-2 text-base hover:bg-primary-highlight hover:text-primary-highlight`}
+                        className={classNames(
+                            'flex w-full items-center rounded-md px-2 py-2 text-base',
+                            'hover:bg-primary-highlight hover:text-primary-highlight',
+                            active
+                              ? 'bg-primary-highlight text-primary-highlight'
+                              : 'text-primary',
+                        )}
                       >
                         Logout
                       </button>
@@ -71,9 +80,13 @@ export default function ProfileMenu({
                   {({ active }) => (
                     <a
                       href="/api/auth/steam/login"
-                      className={`${
-                        active ? 'bg-primary-highlight text-primary-highlight' : 'text-primary'
-                      } flex w-full items-center justify-between rounded-md px-2 py-2 text-base hover:bg-primary-highlight hover:text-primary-highlight`}
+                      className={classNames(
+                          'flex w-full items-center justify-between rounded-md px-2 py-2',
+                          'text-base hover:bg-primary-highlight hover:text-primary-highlight',
+                          active
+                            ? 'bg-primary-highlight text-primary-highlight'
+                            : 'text-primary',
+                      )}
                     >
                       <span>
                         Login

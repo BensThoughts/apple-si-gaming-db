@@ -2,8 +2,7 @@
 
 export default function LoginCard() {
   return (
-    <div className={`flex flex-col items-center gap-6 p-6
-                      w-full max-w-md rounded-lg text-lg`}>
+    <div className="flex flex-col items-center gap-6 p-6 w-full max-w-md rounded-lg text-lg">
       <h2 className="text-center text-3xl"><strong>Login</strong></h2>
       <span className="text-center">
         Apple Silicon on Steam requires Steam authentication to post performance reports.
@@ -16,8 +15,9 @@ export default function LoginCard() {
         className="focus-visible:show-ring rounded-lg mt-2"
         // onClick={() => Fathom.trackGoal('7HVQUUZ4', 1)}
       >
-        <div className="p-5 border-solid border-secondary-highlight border-y-2 rounded-xl bg-tertiary-highlight">
-
+        <div className="p-5 border-solid border-secondary-highlight border-y-2
+                        rounded-xl bg-tertiary-highlight"
+        >
           <img
             src="/steam_sign_in.png"
             alt="login with steam"

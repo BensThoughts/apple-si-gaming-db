@@ -2,6 +2,7 @@ import type { PerformancePostForNewPostsCards } from '~/interfaces';
 import { Link } from '@remix-run/react';
 import AvatarImage from '~/components/ImageWrappers/AvatarImage';
 import { useState } from 'react';
+import { classNames } from '~/lib/css/classNames';
 
 export default function NewPerformancePostsSection({
   newPerformancePosts,
@@ -21,8 +22,10 @@ export default function NewPerformancePostsSection({
     <section className="relative max-w-7xl mx-auto px-4 sm:px-3 md:px-5 flex flex-col gap-6 justify-center items-center">
       <h2 className="sr-only">New Posts</h2>
       <div
-        className={`grid grid-cols-1 gap-6 lg:gap-8 sm:grid-cols-2 lg:grid-cols-3 p-1
-                    ${!expanded && 'max-h-[33rem] overflow-hidden'}`}
+        className={classNames(
+            'grid grid-cols-1 gap-6 lg:gap-8 sm:grid-cols-2 lg:grid-cols-3 p-1',
+            !expanded ? 'max-h-[33rem] overflow-hidden' : '',
+        )}
       >
         <ul className="space-y-8">
           {postsColOne.map((post) => (

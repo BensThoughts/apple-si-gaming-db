@@ -8,7 +8,7 @@ export default function ProfileCard({
   displayName?: string | null;
 }) {
   return (
-    <div className={`flex flex-col items-center gap-4 w-full max-w-md`}>
+    <div className="flex flex-col items-center gap-4 w-full max-w-md">
       <h2 className="text-2xl"><strong>{displayName}</strong></h2>
       {avatarFull && <img
         src={avatarFull}

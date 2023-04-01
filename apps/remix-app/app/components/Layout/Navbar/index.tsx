@@ -15,6 +15,7 @@ import { NavLink } from '@remix-run/react';
 import { AppleLogoSolidIcon } from '~/components/Icons/FlatIcons/Solid';
 import ProfileMenu from '~/components/Layout/ProfileMenu';
 import AnimatedUnderline from '~/components/AnimatedUnderline';
+import { classNames } from '~/lib/css/classNames';
 
 type NavBarProps = {
   className?: string;
@@ -62,9 +63,14 @@ export default function NavBar({
         </div>
       </MenuDrawer>
       <NavHider>
-        <div {...rest} className={`bg-opacity-70 bg-app-bg-secondary shadow-lg z-[49] flex items-center
-                                   justify-between w-full p-0 transition-colors ${className}`}>
-
+        <div
+          className={classNames(
+              'bg-opacity-70 bg-app-bg-secondary shadow-lg z-[49] flex items-center',
+              'justify-between w-full p-0 transition-colors',
+              className ? className : '',
+          )}
+          {...rest}
+        >
           {/* Medium+ Screens */}
           <div className="hidden md:flex md:justify-between md:items-center md:w-full md:pt-0 md:mx-3">
             <div className="flex gap-x-4 items-center">
@@ -108,20 +114,20 @@ export default function NavBar({
 
             <NavLink
               to="/profile"
-              className={`ml-3 text-sm text-primary-highlight inline-flex justify-center items-center
-                          border border-transparent font-medium rounded
-                          bg-primary hover:bg-primary-highlight focus-visible:show-ring-app-bg
-                          h-[40px] w-[58px]`}
+              className="ml-3 text-sm text-primary-highlight inline-flex justify-center items-center
+                         border border-transparent font-medium rounded
+                         bg-primary hover:bg-primary-highlight focus-visible:show-ring-app-bg
+                         h-[40px] w-[58px]"
             >
               <SteamIcon size={40} className="fill-secondary stroke-0" />
             </NavLink>
             <button
               onClick={() => setIsOpen(!isOpen)}
               aria-label="navigation menu"
-              className={`mr-3 text-sm text-primary-highlight inline-flex justify-center items-center
-                          border border-transparent font-medium px-4 py-2 rounded
-                          bg-primary hover:bg-primary-highlight focus-visible:show-ring-app-bg
-                          h-[40px] w-[58px]`}
+              className="mr-3 text-sm text-primary-highlight inline-flex justify-center items-center
+                         border border-transparent font-medium px-4 py-2 rounded
+                         bg-primary hover:bg-primary-highlight focus-visible:show-ring-app-bg
+                         h-[40px] w-[58px]"
             >
               <BarsIcon size={24} className="fill-transparent stroke-secondary stroke-2" />
             </button>

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useLikeButtonData } from '~/lib/hooks/useMatchesData';
 import { BleedingHeartSimpleSolidIcon } from '~/components/Icons/FlatIcons/Solid';
 import { showToast } from '../Toasts';
+import { classNames } from '~/lib/css/classNames';
 
 export default function LikeButton({
   performancePostId,
@@ -56,9 +57,10 @@ export default function LikeButton({
     >
       <BleedingHeartSimpleSolidIcon
         size={30}
-        className={likedPostRaw
-              ? 'fill-heart stroke-text-primary h-6 w-6 group-hover:stroke-text-primary-highlight'
-              : 'fill-transparent stroke-text-primary h-6 w-6 group-hover:stroke-text-primary-highlight'}
+        className={classNames(
+            'stroke-text-primary h-6 w-6 group-hover:stroke-text-primary-highlight stroke-1',
+            likedPostRaw ? 'fill-heart' : 'fill-transparent',
+        )}
       />
       <span className={`${isSubmittingLike ? 'text-primary' : 'text-primary-highlight'}`}>
         {numLikesRaw}

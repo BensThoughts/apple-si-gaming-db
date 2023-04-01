@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpIcon } from '~/components/Icons';
+import { classNames } from '~/lib/css/classNames';
 
 export type SelectOption<T = string> = {
   name: string;
@@ -73,7 +74,7 @@ export default function SelectMenu<T = string>({
                 </span>
                 <span className="flex absolute inset-y-0 right-0 items-center pr-2 pointer-events-none">
                   <ChevronUpIcon
-                    className="w-5 h-5 text-gray-400 rotate-180"
+                    className="rotate-180 w-5 h-5 text-gray-400"
                     aria-hidden="true"
                   />
                 </span>
@@ -103,18 +104,19 @@ export default function SelectMenu<T = string>({
                   {({ selected, active }) => (
                     <>
                       <span
-                        className={`${
-                          selected ? 'font-medium text-primary-highlight' : 'font-normal text-primary'
-                        } block truncate`}
+                        className={classNames(
+                            'block truncate',
+                            selected
+                              ? 'font-medium text-primary-highlight'
+                              : 'font-normal text-primary',
+                        )}
                       >
                         {option.name}
                       </span>
                       {selected ? (
                        <span
-                         className={`${
-                         active ? 'text-accent' : 'text-primary'
-                         }
-                             absolute inset-y-0 left-0 flex items-center pl-3`}
+                         className="absolute inset-y-0 left-0 flex items-center pl-3
+                                    text-primary-highlight"
                        >
                          <CheckIcon className="w-5 h-5" aria-hidden="true" />
                        </span>

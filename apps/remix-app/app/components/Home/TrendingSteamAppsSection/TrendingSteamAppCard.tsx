@@ -2,6 +2,7 @@ import { Link } from '@remix-run/react';
 import type { TrendingSteamApp } from '~/interfaces';
 import AppHeaderImage from '~/components/ImageWrappers/AppHeaderImage';
 import { useEffect, useRef, useState } from 'react';
+import { classNames } from '~/lib/css/classNames';
 
 type TrendingSteamAppProps = TrendingSteamApp & {
   reversed: boolean;
@@ -22,11 +23,13 @@ export default function TrendingSteamAppCard({
       ref={intersectionRef}
       to={`/apps/${steamAppId}/posts`}
       tabIndex={onScreen ? 0 : -1}
-      className={`h-auto relative rounded-2xl overflow-hidden transition-all ease-in-out
-                 duration-300 hover:rotate-0 hover:scale-110 bg-tertiary hover:bg-tertiary-highlight
-                 hover:shadow-lg lg:hover:shadow-xl group/app-card w-[15rem] md:w-[20rem] pb-2
-                 focus-visible:show-ring
-                 ${reversed ? 'rotate-[2deg]' : 'rotate-[-2deg]'}`}
+      className={classNames(
+          'h-auto relative rounded-2xl overflow-hidden transition-all ease-in-out',
+          'duration-300 hover:rotate-0 hover:scale-110 bg-tertiary hover:bg-tertiary-highlight',
+          'hover:shadow-lg lg:hover:shadow-xl group/app-card w-[15rem] md:w-[20rem] pb-2',
+          'focus-visible:show-ring-app-bg',
+          reversed ? 'rotate-[2deg]' : 'rotate-[-2deg]',
+      )}
     >
       {headerImage && (
         // <div className="w-full max-w-[15rem] rounded-full">

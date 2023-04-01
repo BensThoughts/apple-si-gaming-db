@@ -3,15 +3,18 @@ import {
   Transition,
 } from '@headlessui/react';
 import { ChevronUpIcon } from '~/components/Icons';
+import { classNames } from '~/lib/css/classNames';
 
 export default function TailwindDisclosure({
   title,
   defaultOpen,
   children,
+  roundedButton = true,
 }: {
   title: string;
   defaultOpen: boolean;
   children: React.ReactNode;
+  roundedButton?: boolean;
 }) {
   return (
     <div className="w-full max-w-lg">
@@ -19,10 +22,18 @@ export default function TailwindDisclosure({
         {({ open, close }) => (
           <>
             <Disclosure.Button
-              className={`peer flex w-full justify-between px-4 py-2 text-left text-sm
-                        font-medium focus-visible:show-ring transition-all duration-300
-                        bg-primary hover:bg-primary-highlight border-b-1
-                        ${open ? 'rounded-t-lg border-b-primary-highlight' : 'rounded-lg border-b-transparent'}`}
+              className={({ open }) => classNames(
+                  'peer flex w-full justify-between px-4 py-2 text-left text-sm',
+                  'font-medium focus-visible:show-ring transition-all duration-300',
+                  'bg-primary hover:bg-primary-highlight border-b-1',
+                  open
+                    ? roundedButton
+                      ? 'rounded-t-lg border-b-primary-highlight'
+                      : 'border-b-primary-highlight'
+                    : roundedButton
+                      ? 'rounded-lg border-b-transparent'
+                      : 'border-b-transparent',
+              )}
             >
               <span>{title}</span>
               <ChevronUpIcon

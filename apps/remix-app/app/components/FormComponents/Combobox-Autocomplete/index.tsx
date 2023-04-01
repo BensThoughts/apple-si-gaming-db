@@ -1,6 +1,7 @@
 import { Combobox, Transition } from '@headlessui/react';
 import React, { Fragment, useState } from 'react';
 import { CheckIcon, ChevronUpIcon } from '~/components/Icons';
+import { classNames } from '~/lib/css/classNames';
 
 export type ComboboxOption<T extends React.Key = string> = {
   label: string;
@@ -103,9 +104,9 @@ export default function ComboboxAutocomplete<T extends React.Key = string>({
             >
               <Combobox.Options
                 className="absolute mt-1 max-h-60 w-full overflow-auto
-                             rounded-md bg-primary py-1 text-base shadow-lg
-                             ring-black ring-opacity-5 focus:outline-none
-                             sm:text-sm border-1 border-secondary-highlight"
+                           rounded-md bg-primary py-1 text-base shadow-lg
+                           ring-black ring-opacity-5 focus:outline-none
+                           sm:text-sm border-1 border-secondary-highlight"
                 static
               >
                 {filteredOptions.length === 0 && query !== '' ? (
@@ -119,26 +120,27 @@ export default function ComboboxAutocomplete<T extends React.Key = string>({
                       <Combobox.Option
                         key={option.value}
                         value={option}
-                        className={({ active }) =>
-                          `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                            active ? 'bg-secondary' : 'bg-primary'
-                          }`
-                        }
+                        className={({ active }) => classNames(
+                            'relative cursor-default select-none py-2 pl-10 pr-4',
+                             active ? 'bg-secondary' : 'bg-primary',
+                        )}
                       >
                         {({ selected, active }) => (
                           <>
                             <span
-                              className={`block truncate ${
-                                selected ? 'font-medium' : 'font-normal'
-                              }`}
+                              className={classNames(
+                                  'block truncate',
+                                  selected ? 'font-medium' : 'font-normal',
+                              )}
                             >
                               {option.label}
                             </span>
                             {selected ? (
                               <span
-                                className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                                  active ? 'text-primary-highlight' : 'text-primary'
-                                }`}
+                                className={classNames(
+                                    'absolute inset-y-0 left-0 flex items-center pl-3',
+                                    active ? 'text-primary-highlight' : 'text-primary',
+                                )}
                               >
                                 <CheckIcon className="w-5 h-5" aria-hidden="true" />
                               </span>

@@ -1,3 +1,5 @@
+import { classNames } from '~/lib/css/classNames';
+
 type TextAreaProps = {
   labelText: string;
   fieldError?: string;
@@ -35,7 +37,11 @@ export default function TextArea({
       <textarea
         id={id}
         defaultValue={defaultValue}
-        className={`bg-primary rounded-lg p-2 w-full h-screen max-h-56 focus:outline-none focus-visible:show-ring-tertiary ${className}`}
+        className={classNames(
+            'bg-primary rounded-lg p-2 w-full h-screen max-h-56',
+            'focus:outline-none focus-visible:show-ring-tertiary',
+            className ? className : '',
+        )}
         required={required}
         {...rest}
       />

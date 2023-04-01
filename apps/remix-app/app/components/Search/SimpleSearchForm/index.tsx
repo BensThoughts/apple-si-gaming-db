@@ -46,7 +46,7 @@ export default function SimpleSearchForm({
       action="/search"
       ref={formRef}
     >
-      <div className={`flex justify-center items-center gap-2`}>
+      <div className="flex justify-center items-center gap-2">
         <div>
           <input type="hidden" name="page" value="1" />
           <MaterialInputOutlined

@@ -1,4 +1,5 @@
 import { Switch } from '@headlessui/react';
+import { classNames } from '~/lib/css/classNames';
 
 export default function ToggleSwitch({
   checked,
@@ -33,17 +34,23 @@ export default function ToggleSwitch({
             disabled={disabled}
             name={name}
             onChange={onChange}
-            className={`${checked ? 'bg-secondary' : 'bg-primary'}
-          relative inline-flex items-center h-[38px] w-[74px] shrink-0 cursor-pointer
-          rounded-full border-2 border-transparent transition-colors duration-200
-          ease-in-out focus:outline-none focus-visible:show-ring-tertiary`}
+            className={classNames(
+                'relative inline-flex items-center h-[38px] w-[74px] shrink-0 cursor-pointer',
+                'rounded-full border-2 border-transparent transition-colors duration-200',
+                'ease-in-out focus:outline-none focus-visible:show-ring-tertiary',
+                checked ? 'bg-secondary' : 'bg-primary',
+            )}
           >
             {/* <span className="sr-only">Filter Apple Only Games</span> */}
             <span
               aria-hidden="true"
-              className={`${checked ? 'translate-x-[38px] bg-text-primary-highlight' : 'translate-x-[4px] bg-text-primary'}
-            pointer-events-none inline-block h-[30px] w-[30px] transform rounded-full
-            shadow-lg ring-0 transition duration-200 ease-in-out`}
+              className={classNames(
+                  'pointer-events-none inline-block h-[30px] w-[30px] transform rounded-full',
+                  'shadow-lg ring-0 transition duration-200 ease-in-out',
+                  checked
+                    ? 'translate-x-[38px] bg-text-primary-highlight'
+                    : 'translate-x-[4px] bg-text-primary',
+              )}
             />
           </Switch>
         </div>

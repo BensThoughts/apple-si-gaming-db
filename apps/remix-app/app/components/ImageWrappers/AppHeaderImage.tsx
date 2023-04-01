@@ -15,7 +15,7 @@ export default function AppHeaderImage({
       alt={`cover art for ${name}`}
       width={460}
       height={215}
-      className={`rounded-md ${className}`}
+      className={`rounded-md ${className ? className : ''}`}
       loading={loading}
       onError={(e) => {
         e.currentTarget.src = '/svg-images/no-image-placeholder.svg';

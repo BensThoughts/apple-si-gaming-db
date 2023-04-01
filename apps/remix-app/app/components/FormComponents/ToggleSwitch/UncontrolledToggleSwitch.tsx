@@ -1,5 +1,6 @@
 import { Switch } from '@headlessui/react';
 import { Fragment } from 'react';
+import { classNames } from '~/lib/css/classNames';
 // import { AppleIcon } from '~/components/Icons';
 
 export default function ToggleSwitch({
@@ -58,16 +59,22 @@ export default function ToggleSwitch({
           {({ checked }) => (
             <button
               disabled={disabled}
-              className={`${checked ? 'bg-secondary' : 'bg-primary'}
-                         relative inline-flex items-center h-[38px] w-[74px] shrink-0 cursor-pointer
-                         rounded-full border-2 border-transparent transition-colors duration-200
-                         ease-in-out focus:outline-none focus-visible:show-ring-tertiary`}
+              className={classNames(
+                  'relative inline-flex items-center h-[38px] w-[74px] shrink-0 cursor-pointer',
+                  'rounded-full border-2 border-transparent transition-colors duration-200',
+                  'ease-in-out focus:outline-none focus-visible:show-ring-tertiary',
+                  checked ? 'bg-secondary' : 'bg-primary',
+              )}
             >
               <span
                 aria-hidden="true"
-                className={`${checked ? 'translate-x-[38px] bg-text-primary-highlight' : 'translate-x-[4px] bg-text-primary'}
-                            pointer-events-none h-[30px] w-[30px] transform rounded-full
-                            shadow-lg ring-0 transition duration-200 ease-in-out inline-block`}
+                className={classNames(
+                    'pointer-events-none h-[30px] w-[30px] transform rounded-full',
+                    'shadow-lg ring-0 transition duration-200 ease-in-out inline-block',
+                    checked
+                      ? 'translate-x-[38px] bg-text-primary-highlight'
+                      : 'translate-x-[4px] bg-text-primary',
+                )}
               />
             </button>
 

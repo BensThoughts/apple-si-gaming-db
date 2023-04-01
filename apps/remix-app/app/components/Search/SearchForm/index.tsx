@@ -37,11 +37,13 @@ export default function SearchForm({
   let defaultCategoryOptions: MultiSelectOption<number>[] | undefined = undefined;
   if (fields && fields.genreIds) {
     const genreIds = fields.genreIds;
-    defaultGenreOptions = genreOptions.filter((genreOption) => genreIds.includes(genreOption.value));
+    defaultGenreOptions =
+      genreOptions.filter((genreOption) => genreIds.includes(genreOption.value));
   }
   if (fields && fields.categoryIds) {
     const categoryIds = fields.categoryIds;
-    defaultCategoryOptions = categoryOptions.filter((categoryOption) => categoryIds.includes(categoryOption.value));
+    defaultCategoryOptions =
+      categoryOptions.filter((categoryOption) => categoryIds.includes(categoryOption.value));
   }
   // TODO: showToast doesn't seem to appear when inside useEffect
   // TODO: it appears twice when not in useEffect fieldErrors vs formError
@@ -81,7 +83,9 @@ export default function SearchForm({
       >
         <input type="hidden" name="page" value="1" className="hidden"/>
         <div className="flex flex-col items-center gap-4 w-full">
-          <div className={`flex flex-col md:flex-row md:justify-between w-full justify-center items-center gap-4 md:gap-0`}>
+          <div className="flex flex-col md:flex-row md:justify-between w-full
+                          justify-center items-center gap-4 md:gap-0"
+          >
             <MaterialInputOutlined
               name="appName"
               id={`${FORM_NAME}_appName`}
@@ -106,7 +110,7 @@ export default function SearchForm({
               </div>
               <div>
                 <RoundedButton
-                  className={`h-[38px] md:h-[46px]`}
+                  className="h-[38px] md:h-[46px]"
                   type="submit"
                   disabled={isSubmitting}
                 >
