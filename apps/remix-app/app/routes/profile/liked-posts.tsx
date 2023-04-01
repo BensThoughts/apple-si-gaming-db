@@ -1,6 +1,6 @@
 import type { LoaderArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { findUserProfileLikedPosts } from '~/models/SteamedApples/userProfile.server';
+import { findUserProfileLikedPosts } from '~/models/SteamedApples/performancePostLike.server';
 import { useLoaderData } from '@remix-run/react';
 import UserLikedPostsLayout from '~/components/Profile/LikedPosts/UserLikedPostsLayout';
 import type {
