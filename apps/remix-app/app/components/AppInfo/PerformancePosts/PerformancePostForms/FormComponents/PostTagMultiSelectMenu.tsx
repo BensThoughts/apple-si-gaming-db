@@ -4,11 +4,13 @@ import type { PostTagOption } from '~/interfaces';
 
 export default function PostTagMultiSelectMenu({
   formId,
+  name,
   postTags,
   defaultPostTagIds,
   fieldError,
 }: {
   formId: string;
+  name: string;
   postTags: PostTagOption[];
   defaultPostTagIds?: number[]; // defaultValue
   fieldError?: string;
@@ -22,8 +24,8 @@ export default function PostTagMultiSelectMenu({
   const defaultValue = postTagOptions.filter((option) => defaultPostTagIds?.includes(option.value));
   return (
     <MultiSelectMenu
-      name="performancePostTags"
-      id={`performancePostTags-${formId}`}
+      name={name}
+      id={`${name}-${formId}`}
       labelText="Tags"
       options={postTagOptions}
       defaultValue={defaultValue}

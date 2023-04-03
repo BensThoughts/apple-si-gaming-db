@@ -3,10 +3,12 @@ import type { SelectOption } from '~/components/FormComponents/SelectMenu';
 import type { GamepadOption } from '~/interfaces';
 
 export default function GamepadSelectMenu({
+  name,
   gamepads,
   defaultGamepadId,
   fieldError,
 }: {
+  name: string;
   gamepads: GamepadOption[];
   defaultGamepadId?: number; // defaultValue
   fieldError?: string;
@@ -26,7 +28,7 @@ export default function GamepadSelectMenu({
 
   return (
     <SelectMenu
-      name="performancePostGamepadId"
+      name={name}
       defaultValue={defaultValue ? defaultValue : gamepadOptions[0]}
       options={gamepadOptions}
       labelText="Controller"

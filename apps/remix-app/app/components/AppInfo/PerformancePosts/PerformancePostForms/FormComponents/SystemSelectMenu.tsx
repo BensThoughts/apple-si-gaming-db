@@ -3,9 +3,11 @@ import type { SelectOption } from '~/components/FormComponents/SelectMenu';
 import type { SystemSpecOption } from '~/interfaces';
 
 export default function SystemSelectMenu({
+  name,
   systemSpecOptions,
   defaultSystemSpecId,
 }: {
+  name: string;
   systemSpecOptions: SystemSpecOption[];
   defaultSystemSpecId?: number;
 }) {
@@ -25,7 +27,7 @@ export default function SystemSelectMenu({
 
   return (
     <SelectMenu
-      name="performancePostSystemSpecId"
+      name={name}
       defaultValue={defaultValue ? defaultValue : systemNameOptions[0]}
       options={systemNameOptions}
       labelText="Select System"
