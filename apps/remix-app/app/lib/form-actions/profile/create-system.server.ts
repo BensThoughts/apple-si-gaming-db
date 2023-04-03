@@ -6,6 +6,7 @@ import { createSystemSpec, findSystemSpecSystemNames } from '~/models/SteamedApp
 import type { PrismaUserSystemSpec } from '~/interfaces/database';
 import type { CreateSystemSpecActionData, ProfileSystemsActionData } from './interfaces';
 import { validateNewSystemName, validateSystemInfo, extractSystemSpecs } from '~/lib/form-validators/profile';
+import { CreateSystemFormFields } from '~/lib/enums/FormFields/SystemSpec';
 
 const badRequest = (data: CreateSystemSpecActionData) => (
   json<ProfileSystemsActionData>({
@@ -19,8 +20,8 @@ export async function createSystem(
     userProfileId: PrismaUserSystemSpec['userProfileId'],
     formData: FormData,
 ) {
-  const systemName = formData.get('systemName');
-  const systemInfo = formData.get('systemInfo');
+  const systemName = formData.get(CreateSystemFormFields.SystemName);
+  const systemInfo = formData.get(CreateSystemFormFields.SystemInfo);
   if (
     typeof systemName !== 'string' ||
     typeof systemInfo !== 'string'

@@ -5,6 +5,7 @@ import MaterialInputOutlinedV2 from '~/components/FormComponents/MaterialInputOu
 import RoundedButton from '~/components/Buttons/RoundedButton';
 import { validateNewSystemName } from '~/lib/form-validators/profile';
 import BasicModal from '~/components/BasicModal';
+import { EditSystemFormFields } from '~/lib/enums/FormFields/SystemSpec';
 
 interface EditSystemModalProps {
   systemSpecId: number;
@@ -68,22 +69,10 @@ export default function EditSystemModal({
         >
           <div>
             <input type="hidden" name="_profileAction" value="editSystem" />
-            <input type="hidden" name="systemSpecId" value={systemSpecId} />
-            <input type="hidden" name="systemName" value={systemName} />
-            <input type="hidden" name="systemNames" value={currentSystemNames} />
-            {/* <MaterialInputOutlined
-              name="updatedSystemName"
-              label="System Name"
-              defaultValue={systemName}
-              // getFieldError={(systemName) => validateNewSystemName(systemName, currentSystemNames)}
-              // wasSubmitted={false}
-              type="input"
-              required
-              minLength={3}
-              maxLength={25}
-            /> */}
+            <input type="hidden" name={EditSystemFormFields.SystemSpecId} value={systemSpecId} />
+            {/* <input type="hidden" name={EditSystemFormFields.CurrentSystemNames} value={currentSystemNames} /> */}
             <MaterialInputOutlinedV2
-              name="updatedSystemName"
+              name={EditSystemFormFields.UpdatedSystemName}
               value={systemNameValue}
               label="System Name"
               onChange={(e) => setSystemNameValue(e.currentTarget.value)}

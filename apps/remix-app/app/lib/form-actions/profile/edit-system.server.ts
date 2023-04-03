@@ -5,7 +5,11 @@ import {
   updateSystemSpecSystemName,
 } from '~/models/SteamedApples/userSystemSpecs.server';
 import type { EditSystemSpecActionData, ProfileSystemsActionData } from './interfaces';
-import { validateNewSystemName, validateSystemName, validateSystemSpecIdForProfile } from '~/lib/form-validators/profile';
+import {
+  validateNewSystemName,
+  validateSystemSpecIdForProfile,
+} from '~/lib/form-validators/profile';
+import { EditSystemFormFields } from '~/lib/enums/FormFields/SystemSpec';
 
 const badRequest = (data: EditSystemSpecActionData) => (
   json<ProfileSystemsActionData>({
@@ -19,28 +23,24 @@ export async function editSystem(
     userProfileId: PrismaUserSystemSpec['userProfileId'],
     formData: FormData,
 ) {
-  const systemSpecIdString = formData.get('systemSpecId');
-  const systemName = formData.get('systemName'); // TODO: Needed?
-  const updatedSystemName = formData.get('updatedSystemName');
+  const systemSpecIdString = formData.get(EditSystemFormFields.SystemSpecId);
+  const updatedSystemName = formData.get(EditSystemFormFields.UpdatedSystemName);
   if (
     typeof systemSpecIdString !== 'string' ||
-    typeof systemName !== 'string' || // TODO: Needed?
     typeof updatedSystemName !== 'string'
   ) {
     return badRequest({ formError: `Edit system form not submitted correctly.` });
   }
 
   const systemSpecId = Number(systemSpecIdString);
-  const systemNames = await findSystemSpecSystemNames(userProfileId);
+  const currentSystemNames = await findSystemSpecSystemNames(userProfileId);
 
   const fieldErrors = {
     systemSpecId: validateSystemSpecIdForProfile(systemSpecId),
-    systemName: validateSystemName(systemName), // TODO: Needed?
-    updatedSystemName: validateNewSystemName(updatedSystemName, systemNames),
+    updatedSystemName: validateNewSystemName(updatedSystemName, currentSystemNames),
   };
   const fields = {
     systemSpecId,
-    systemName, // TODO: Needed?
     updatedSystemName,
   };
 

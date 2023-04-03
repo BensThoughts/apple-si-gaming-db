@@ -57,7 +57,7 @@ export default function DeleteSystemModal({
             onSubmit={handleSubmitEvent}
           >
             <input type="hidden" name="_profileAction" value="deleteSystem" />
-            <input type="hidden" name="systemName" value={systemName} />
+            {/* <input type="hidden" name="systemName" value={systemName} /> */}
             <input type="hidden" name="systemSpecId" value={systemSpecId} />
             <RoundedButton
               type="submit"

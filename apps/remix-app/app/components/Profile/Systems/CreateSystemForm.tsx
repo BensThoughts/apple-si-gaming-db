@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { validateNewSystemName, validateSystemInfo } from '~/lib/form-validators/profile';
 import TailwindDisclosure from '~/components/HeadlessComponents/TailwindDisclosure';
 import CreateSystemInstructions from './CreateSystemInstructions';
+import { CreateSystemFormFields } from '~/lib/enums/FormFields/SystemSpec';
 
 interface CreateSystemFormProps {
   createSystemSpecActionData?: CreateSystemSpecActionData;
@@ -75,7 +76,6 @@ export default function CreateSystemForm({
       <TailwindDisclosure title="How to Create a System" defaultOpen={false}>
         <div className="p-3 bg-primary rounded-b-lg">
           <CreateSystemInstructions />
-
         </div>
       </TailwindDisclosure>
       <Form
@@ -88,7 +88,7 @@ export default function CreateSystemForm({
         <input type="hidden" name="_profileAction" value="createSystem" />
         <MaterialInputOutlinedV2
           label="System Name"
-          name="systemName"
+          name={CreateSystemFormFields.SystemName}
           value={systemNameValue}
           onChange={(e) => setSystemNameValue(e.currentTarget.value)}
           onBlur={() => setTouchedNameField(true)}
@@ -100,21 +100,21 @@ export default function CreateSystemForm({
         />
         <MaterialTextAreaOutlined
           label="System Information"
-          name="systemInfo"
+          name={CreateSystemFormFields.SystemInfo}
           value={systemInfoValue}
           onChange={(e) => setSystemInfoValue(e.currentTarget.value)}
           onBlur={() => setTouchedSystemInfoField(true)}
           errorMessage={displaySystemInfoError ? systemInfoErrorMessage : undefined}
-        // defaultValue={
-        //   createSystemSpecActionData?.fields
-        //   ? createSystemSpecActionData.fields.systemInfo
-        //   : ''
-        // }
-        // errorMessage={
-        //   (createSystemSpecActionData && createSystemSpecActionData.fieldErrors)
-        //   ? createSystemSpecActionData.fieldErrors.systemInfo
-        //   : undefined
-        // }
+          // defaultValue={
+          //   createSystemSpecActionData?.fields
+          //   ? createSystemSpecActionData.fields.systemInfo
+          //   : ''
+          // }
+          // errorMessage={
+          //   (createSystemSpecActionData && createSystemSpecActionData.fieldErrors)
+          //   ? createSystemSpecActionData.fieldErrors.systemInfo
+          //   : undefined
+          // }
         />
         <RoundedButton
           disabled={isSubmittingCreateSystemForm}

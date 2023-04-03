@@ -1,8 +1,8 @@
 import { json } from '@remix-run/node';
 import { deleteSystemSpec, doesUserOwnSystemSpec } from '~/models/SteamedApples/userSystemSpecs.server';
 import type { DeleteSystemSpecActionData, ProfileSystemsActionData } from './interfaces';
-import { validateSystemName, validateSystemSpecIdForProfile } from '~/lib/form-validators/profile';
-// import { validateSystemName } from '~/lib/form-validators/profile';
+import { validateSystemSpecIdForProfile } from '~/lib/form-validators/profile';
+import { DeleteSystemFormFields } from '~/lib/enums/FormFields/SystemSpec';
 
 const badRequest = (data: DeleteSystemSpecActionData) => (
   json<ProfileSystemsActionData>({
@@ -16,10 +16,8 @@ export async function deleteSystem(
     userProfileId: number,
     formData: FormData,
 ) {
-  const systemName = formData.get('systemName');
-  const systemSpecIdString = formData.get('systemSpecId');
+  const systemSpecIdString = formData.get(DeleteSystemFormFields.SystemSpecId);
   if (
-    typeof systemName !== 'string' ||
     typeof systemSpecIdString !== 'string'
   ) {
     return badRequest({ formError: `Delete system form not submitted correctly.` });
@@ -27,11 +25,9 @@ export async function deleteSystem(
   const systemSpecId = Number(systemSpecIdString);
   const fieldErrors = {
     systemSpecId: validateSystemSpecIdForProfile(systemSpecId),
-    systemName: validateSystemName(systemName),
   };
   const fields = {
     systemSpecId,
-    systemName,
   };
   if (Object.values(fieldErrors).some(Boolean)) {
     return badRequest({ fieldErrors, fields });
