@@ -51,7 +51,6 @@ export async function loader({ params, request }: LoaderArgs) {
 export async function action({
   request,
   params,
-  context,
 }: ActionArgs) {
   const steamAppId = validateSteamAppId(params);
   const { steamUserId64 } = await requireUserIds(request, `/apps/${steamAppId}/posts`);
