@@ -5,6 +5,9 @@ kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
+[deploy]
+  release_command = "yarn run db:migrate:deploy"
+
 [env]
   NODE_ENV = "production"
   REMIX_APP_PORT = "8080"
