@@ -1,6 +1,6 @@
 import { Link, useMatches } from '@remix-run/react';
 import { EditIcon } from '~/components/Icons';
-import { EditPostURLParams } from '~/interfaces/remix-app/URLSearchParams/EditPost';
+import { EditPostURLParams } from '~/lib/enums/URLSearchParams/EditPost';
 
 interface EditButtonProps {
   steamAppId: number;

@@ -2,7 +2,7 @@ import { Link, useMatches } from '@remix-run/react';
 import { useState } from 'react';
 import { EditIcon, TrashIcon } from '~/components/Icons';
 import DeletePostModal from './DeletePostModal';
-import { EditPostURLParams } from '~/interfaces/remix-app/URLSearchParams/EditPost';
+import { EditPostURLParams } from '~/lib/enums/URLSearchParams/EditPost';
 
 interface EditAndDeleteButtonsProps {
   steamAppId: number;
