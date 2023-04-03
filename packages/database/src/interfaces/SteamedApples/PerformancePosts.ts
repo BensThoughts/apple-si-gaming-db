@@ -1,10 +1,6 @@
 export type {
   PerformancePost,
-  RatingMedal,
-  FrameRate,
-
   GamepadMetadata,
-  GamepadRating,
-
   PerformancePostTag,
+  TierRank,
 } from '@prisma/client';

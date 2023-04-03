@@ -5,11 +5,11 @@ export type CreatePerformancePostActionData = {
   fields?: PerformancePostFormFieldsTyped; // used for defaultValue options
   fieldErrors?: {
     postText?: string;
-    frameRateAverage?: string;
-    ratingMedal?: string;
+    frameRateTierRank?: string;
+    ratingTierRank?: string;
     systemName?: string;
     postTagIds?: string;
     gamepadId?: string;
-    gamepadRating?: string;
+    gamepadTierRank?: string;
   };
 };

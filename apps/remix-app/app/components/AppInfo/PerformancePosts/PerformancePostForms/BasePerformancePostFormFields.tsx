@@ -1,11 +1,19 @@
 import { useState } from 'react';
 import ToggleSwitch from '~/components/FormComponents/ToggleSwitch';
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
-import type { FrameRate, RatingMedal, GamepadRating, SystemSpecOption, GamepadOption, PostTagOption } from '~/interfaces';
+import type {
+  RatingTierRank,
+  FrameRateTierRank,
+  GamepadTierRank,
+  SystemSpecOption,
+  GamepadOption,
+  PostTagOption,
+} from '~/interfaces';
+import { FieldNames } from '~/lib/form-actions/performance-post/types';
 import PerformancePostTextArea from './FormComponents/PerformancePostTextArea';
-import RatingMedalSelectMenu from './FormComponents/RatingMedalSelectMenu';
-import FrameRateAverageSelectMenu from './FormComponents/FrameRateAverageSelectMenu';
-import GamepadRatingSelectMenu from './FormComponents/GamepadRatingSelectMenu';
+import RatingTierRankSelectMenu from './FormComponents/RatingTierRankSelectMenu';
+import FrameRateTierRankSelectMenu from './FormComponents/FrameRateTierRankSelectMenu';
+import GamepadTierRankSelectMenu from './FormComponents/GamepadTierRankSelectMenu';
 import GamepadSelectMenu from './FormComponents/GamepadSelectMenu';
 import PostTagMultiSelectMenu from './FormComponents/PostTagMultiSelectMenu';
 import SystemSelectMenu from './FormComponents/SystemSelectMenu';
@@ -13,22 +21,22 @@ import SystemSelectMenu from './FormComponents/SystemSelectMenu';
 interface BasePerformancePostFormFieldsProps {
   fields?: { // used for defaultValue options
     postText?: string;
-    frameRateAverage?: FrameRate | null;
+    frameRateTierRank?: FrameRateTierRank | null;
     frameRateStutters?: boolean;
-    ratingMedal?: RatingMedal;
+    ratingTierRank?: RatingTierRank;
     postTagsIds?: number[];
     gamepadId?: number;
-    gamepadRating?: GamepadRating | null;
+    gamepadTierRank?: GamepadTierRank | null;
     systemSpecId?: number;
   };
   fieldErrors?: {
     postText?: string;
-    frameRateAverage?: string;
-    ratingMedal?: string;
+    frameRateTierRank?: string;
+    ratingTierRank?: string;
     systemName?: string;
     postTags?: string;
     gamepadId?: string;
-    gamepadRating?: string;
+    gamepadTierRank?: string;
   };
   postTagOptions: PostTagOption[];
   gamepadOptions: GamepadOption[];
@@ -51,34 +59,38 @@ export default function BasePerformancePostFormFields({
   return (
     <>
       <PerformancePostTextArea
+        name={FieldNames.PostText}
         defaultValue={fields?.postText}
         fieldError={fieldErrors?.postText}
       />
       <div className="flex flex-col gap-6 w-full max-w-md">
         <div className="z-[30]">
-          <RatingMedalSelectMenu
-            defaultValue={fields?.ratingMedal}
-            fieldError={fieldErrors?.ratingMedal}
+          <RatingTierRankSelectMenu
+            name={FieldNames.RatingTierRank}
+            defaultValue={fields?.ratingTierRank}
+            fieldError={fieldErrors?.ratingTierRank}
           />
         </div>
         <div className="z-[29] flex flex-col md:flex-row gap-6 items-start md:items-center justify-center md:justify-between w-full">
           <div>
-            <FrameRateAverageSelectMenu
-              defaultValue={fields?.frameRateAverage}
-              fieldError={fieldErrors?.frameRateAverage}
+            <FrameRateTierRankSelectMenu
+              name={FieldNames.FrameRateTierRank}
+              defaultValue={fields?.frameRateTierRank}
+              fieldError={fieldErrors?.frameRateTierRank}
             />
           </div>
           <div>
             <ToggleSwitch
+              name={FieldNames.FrameRateStutters}
               checked={frameRateStable}
               onChange={setFrameRateStable}
-              name="performancePostFrameRateStutters"
               label="Stutters"
             />
           </div>
         </div>
         <div className="z-[28]">
           <GamepadSelectMenu
+            name={FieldNames.GamepadId}
             // formId="TODO-FIX" // TODO: Change to appropriate ID
             gamepads={gamepadOptions}
             defaultGamepadId={fields?.gamepadId}
@@ -86,14 +98,16 @@ export default function BasePerformancePostFormFields({
           />
         </div>
         <div className="z-[27]">
-          <GamepadRatingSelectMenu
-            defaultValue={fields?.gamepadRating}
-            fieldError={fieldErrors?.gamepadRating}
+          <GamepadTierRankSelectMenu
+            name={FieldNames.GamepadTierRank}
+            defaultValue={fields?.gamepadTierRank}
+            fieldError={fieldErrors?.gamepadTierRank}
           />
         </div>
         <div className="z-[26]">
           <PostTagMultiSelectMenu
             formId="TODO-FIX" // TODO: Change to appropriate ID
+            name={FieldNames.PostTagIds}
             postTags={postTagOptions}
             defaultPostTagIds={fields?.postTagsIds}
             fieldError={fieldErrors?.postTags}
@@ -112,6 +126,7 @@ export default function BasePerformancePostFormFields({
             &nbsp;to easily attach system information to your post.
         </div>
         <SystemSelectMenu
+          name={FieldNames.SystemSpecId}
           systemSpecOptions={systemSpecOptions}
           defaultSystemSpecId={fields?.systemSpecId}
         />

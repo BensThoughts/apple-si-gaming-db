@@ -2,14 +2,14 @@ import { redirect, json } from '@remix-run/node';
 import type { EditPerformancePostActionData } from './types';
 import {
   validatePostText,
-  isTypeFrameRateAverage,
-  validatePostFrameRateAverage,
-  isTypeRatingMedal,
-  validatePostRatingMedal,
+  isTypeFrameRateTierRank,
+  validatePostFrameRateTierRank,
+  isTypeRatingTierRank,
+  validatePostRatingTierRank,
   validatePostTagIds,
   validatePostGamepadId,
-  validateGamepadRating,
-  isTypeGamepadRating,
+  validateGamepadTierRank,
+  isTypeGamepadTierRank,
   validateSystemSpecIdForPost,
 } from '~/lib/form-validators/posts';
 import { updatePerformancePost } from '~/models/SteamedApples/performancePost.server';
@@ -39,22 +39,22 @@ export async function editPerformancePostAction({
   }
   const {
     postText,
-    ratingMedal,
-    frameRateAverage,
+    ratingTierRank,
+    frameRateTierRank,
     frameRateStutters,
     systemSpecId,
     postTagIds,
     gamepadId,
-    gamepadRating,
+    gamepadTierRank,
   } = fieldsRaw;
 
   const fieldErrors = {
     postText: validatePostText(postText),
-    ratingMedal: validatePostRatingMedal(ratingMedal),
-    gamepadId: validatePostGamepadId(gamepadId, gamepadRating),
-    gamepadRating: validateGamepadRating(gamepadRating, gamepadId),
+    ratingTierRank: validatePostRatingTierRank(ratingTierRank),
+    gamepadId: validatePostGamepadId(gamepadId, gamepadTierRank),
+    gamepadTierRank: validateGamepadTierRank(gamepadTierRank, gamepadId),
     postTags: validatePostTagIds(postTagIds),
-    frameRateAverage: validatePostFrameRateAverage(frameRateAverage),
+    frameRateTierRank: validatePostFrameRateTierRank(frameRateTierRank),
     systemSpecId: validateSystemSpecIdForPost(systemSpecId),
     // systemName: validateSystemName(systemName),
   };
@@ -68,21 +68,21 @@ export async function editPerformancePostAction({
 
   // This should never return true (used for Typescript type validation)
   if (
-    frameRateAverage !== 'None' &&
-    !isTypeFrameRateAverage(frameRateAverage)
+    frameRateTierRank !== 'None' &&
+    !isTypeFrameRateTierRank(frameRateTierRank)
   ) {
     return badRequest({ fieldErrors, fields });
   }
 
   // This should never return true (used for Typescript type validation)
-  if (!isTypeRatingMedal(ratingMedal)) {
+  if (!isTypeRatingTierRank(ratingTierRank)) {
     return badRequest({ fieldErrors, fields });
   }
 
   // This should never return true (used for Typescript type validation)
   if (
-    gamepadRating !== 'None' &&
-    !isTypeGamepadRating(gamepadRating)
+    gamepadTierRank !== 'None' &&
+    !isTypeGamepadTierRank(gamepadTierRank)
   ) {
     return badRequest({ fieldErrors, fields });
   }
@@ -90,13 +90,13 @@ export async function editPerformancePostAction({
   await updatePerformancePost({
     performancePostId,
     postText,
-    frameRateAverage: frameRateAverage === 'None' ? undefined : frameRateAverage,
+    frameRateTierRank: frameRateTierRank === 'None' ? undefined : frameRateTierRank,
     frameRateStutters,
-    ratingMedal,
+    ratingTierRank,
     systemSpecId: systemSpecId < 0 ? undefined : systemSpecId,
     postTagIds,
     gamepadId: gamepadId < 0 ? undefined : gamepadId,
-    gamepadRating: gamepadRating === 'None' ? undefined : gamepadRating,
+    gamepadTierRank: gamepadTierRank === 'None' ? undefined : gamepadTierRank,
   });
 
   const redirectTo = redirectToAfterEdit

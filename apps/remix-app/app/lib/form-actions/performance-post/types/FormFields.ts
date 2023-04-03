@@ -1,24 +1,38 @@
-import type { FrameRate, GamepadRating, RatingMedal } from '~/interfaces/database';
+import type {
+  RatingTierRank,
+  FrameRateTierRank,
+  GamepadTierRank,
+} from '~/interfaces';
 
 export type PerformancePostFormFieldsTyped = {
   postText?: string;
-  ratingMedal?: RatingMedal;
-  frameRateAverage?: FrameRate;
+  ratingTierRank?: RatingTierRank;
+  frameRateTierRank?: FrameRateTierRank;
   frameRateStutters?: boolean;
   postTagIds?: number[];
   gamepadId?: number;
-  gamepadRating?: GamepadRating;
+  gamepadTierRank?: GamepadTierRank;
   systemSpecId?: number;
 }
 
 export type PerformancePostFormFieldsRaw = {
   postText: string;
-  frameRateAverage: string;
+  frameRateTierRank: string;
   frameRateStutters: boolean;
-  ratingMedal: string;
+  ratingTierRank: string;
   systemSpecId: number;
   gamepadId: number;
-  gamepadRating: string;
+  gamepadTierRank: string;
   postTagIds: number[];
 }
 
+export enum FieldNames {
+  PostText = 'performancePostText',
+  FrameRateTierRank = 'performancePostFrameRateTierRank',
+  FrameRateStutters = 'performancePostFrameRateStutters',
+  RatingTierRank = 'performancePostRatingTierRank',
+  SystemSpecId = 'performancePostSystemSpecId',
+  PostTagIds = 'performancePostTags',
+  GamepadId = 'performancePostGamepadId',
+  GamepadTierRank = 'performancePostGamepadTierRank'
+}

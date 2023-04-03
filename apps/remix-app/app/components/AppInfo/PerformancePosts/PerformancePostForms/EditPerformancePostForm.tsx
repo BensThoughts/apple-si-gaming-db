@@ -4,9 +4,9 @@ import { useEffect, useRef } from 'react';
 import { showToast } from '~/components/Toasts';
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
 import type {
-  FrameRate,
-  RatingMedal,
-  GamepadRating,
+  RatingTierRank,
+  FrameRateTierRank,
+  GamepadTierRank,
   PostTagOption,
   GamepadOption,
   SystemSpecOption,
@@ -15,7 +15,7 @@ import PerformancePostFormWrapper from './PerformancePostFormWrapper';
 import BasePerformancePostFormFields from './BasePerformancePostFormFields';
 import RoundedButtonRemixLink from '~/components/Buttons/RoundedButtonRemixLink';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
-import { EditPostURLParams } from '~/interfaces/remix-app/URLSearchParams/EditPost';
+import { EditPostURLParams } from '~/lib/enums/URLSearchParams/EditPost';
 
 interface EditPerformancePostFormProps {
   performancePostId: number;
@@ -23,22 +23,22 @@ interface EditPerformancePostFormProps {
   formError?: string;
   fields?: { // used for defaultValue options
     postText?: string;
-    frameRateAverage?: FrameRate | null;
+    frameRateTierRank?: FrameRateTierRank | null;
     frameRateStutters?: boolean;
-    ratingMedal?: RatingMedal;
+    ratingTierRank?: RatingTierRank;
     postTagsIds?: number[];
     gamepadId?: number;
-    gamepadRating?: GamepadRating | null;
+    gamepadTierRank?: GamepadTierRank | null;
     systemSpecId?: number;
   };
   fieldErrors?: {
     postText?: string;
-    frameRateAverage?: string;
-    ratingMedal?: string;
+    frameRateTierRank?: string;
+    ratingTierRank?: string;
     systemName?: string;
     postTags?: string;
     gamepadId?: string;
-    gamepadRating?: string;
+    gamepadTierRank?: string;
   };
   isSubmittingForm: boolean;
   postTagOptions: PostTagOption[];

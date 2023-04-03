@@ -1,18 +1,21 @@
 import type {
   PerformancePost,
   PerformancePostForUserProfileDisplay,
+  PerformancePostForNewPostsCard,
+  RatingTierRank,
+  FrameRateTierRank,
+  GamepadTierRank,
 } from '~/interfaces';
 import type {
   PrismaPerformancePost,
   PrismaSteamApp,
   PrismaUserSystemSpec,
-  FrameRate,
   PrismaPerformancePostTag,
   Prisma,
   PrismaGamepadMetadata,
-  GamepadRating,
 } from '~/interfaces/database';
 import prisma from '~/lib/database/db.server';
+import { isTypeFrameRateTierRank, isTypeGamepadTierRank } from '~/lib/form-validators/posts';
 import { findSystemSpecForPostBySystemSpecId } from './userSystemSpecs.server';
 
 
@@ -20,24 +23,24 @@ export async function createPerformancePost({
   steamUserId64,
   steamAppId,
   postText,
-  frameRateAverage,
+  frameRateTierRank,
   frameRateStutters,
-  ratingMedal,
+  ratingTierRank,
   systemSpecId,
   postTagIds,
   gamepadId,
-  gamepadRating,
+  gamepadTierRank,
 }: {
   steamUserId64: string;
   steamAppId: PrismaSteamApp['steamAppId'];
   postText: PrismaPerformancePost['postText'];
-  frameRateAverage?: FrameRate;
+  frameRateTierRank?: FrameRateTierRank;
   frameRateStutters: boolean;
-  ratingMedal: PrismaPerformancePost['ratingMedal'];
+  ratingTierRank: RatingTierRank;
   systemSpecId?: PrismaUserSystemSpec['id'];
   postTagIds: PrismaPerformancePostTag['id'][];
   gamepadId?: PrismaGamepadMetadata['id'];
-  gamepadRating?: GamepadRating;
+  gamepadTierRank?: GamepadTierRank;
 }) {
   const performancePostData: Prisma.PerformancePostCreateInput = {
     steamApp: {
@@ -51,15 +54,15 @@ export async function createPerformancePost({
       },
     },
     postText,
-    frameRateAverage,
+    frameRateTierRank,
     frameRateStutters,
-    ratingMedal,
+    ratingTierRank,
     gamepadMetadata: gamepadId ? {
       connect: {
         id: gamepadId,
       },
     } : undefined,
-    gamepadRating,
+    gamepadTierRank,
     postTags: {
       connect: postTagIds.map((id) => ({
         id,
@@ -121,8 +124,8 @@ export async function findPerformancePostsBySteamAppId(
         },
       },
       postText: true,
-      ratingMedal: true,
-      frameRateAverage: true,
+      ratingTierRank: true,
+      frameRateTierRank: true,
       frameRateStutters: true,
       gamepadMetadata: {
         select: {
@@ -130,7 +133,7 @@ export async function findPerformancePostsBySteamAppId(
           description: true,
         },
       },
-      gamepadRating: true,
+      gamepadTierRank: true,
       postTags: {
         select: {
           id: true,
@@ -167,11 +170,11 @@ export async function findPerformancePostsBySteamAppId(
       avatarMedium,
     },
     postText,
-    ratingMedal,
-    frameRateAverage,
+    ratingTierRank,
+    frameRateTierRank,
     frameRateStutters,
     gamepadMetadata,
-    gamepadRating,
+    gamepadTierRank,
     postTags,
     systemManufacturer,
     systemModel,
@@ -195,11 +198,13 @@ export async function findPerformancePostsBySteamAppId(
       avatarMedium,
     },
     rating: {
-      ratingMedal,
-      frameRateAverage,
+      ratingTierRank,
+      frameRateTierRank:
+        isTypeFrameRateTierRank(frameRateTierRank) ? frameRateTierRank : undefined,
       frameRateStutters,
       gamepadMetadata,
-      gamepadRating,
+      gamepadTierRank:
+        isTypeGamepadTierRank(gamepadTierRank) ? gamepadTierRank : undefined,
     },
     postTags,
     systemSpec: {
@@ -235,15 +240,15 @@ export async function findPerformancePostsBySteamUserId(
           usersWhoLiked: true,
         },
       },
-      frameRateAverage: true,
+      frameRateTierRank: true,
       frameRateStutters: true,
-      ratingMedal: true,
+      ratingTierRank: true,
       gamepadMetadata: {
         select: {
           description: true,
         },
       },
-      gamepadRating: true,
+      gamepadTierRank: true,
       postTags: true,
       steamApp: {
         select: {
@@ -262,11 +267,11 @@ export async function findPerformancePostsBySteamUserId(
     _count: {
       usersWhoLiked,
     },
-    frameRateAverage,
+    frameRateTierRank,
     frameRateStutters,
-    ratingMedal,
+    ratingTierRank,
     gamepadMetadata,
-    gamepadRating,
+    gamepadTierRank,
     postTags,
     steamApp: {
       steamAppId,
@@ -288,11 +293,13 @@ export async function findPerformancePostsBySteamUserId(
       headerImage,
     },
     rating: {
-      ratingMedal,
-      frameRateAverage,
+      ratingTierRank,
+      frameRateTierRank:
+        isTypeFrameRateTierRank(frameRateTierRank) ? frameRateTierRank : undefined,
       frameRateStutters,
       gamepadMetadata,
-      gamepadRating,
+      gamepadTierRank:
+        isTypeGamepadTierRank(gamepadTierRank) ? gamepadTierRank : undefined,
     },
     numLikes: usersWhoLiked,
   }));
@@ -301,7 +308,7 @@ export async function findPerformancePostsBySteamUserId(
 
 export async function findNewestPerformancePosts(
     numPerformancePosts: number,
-): Promise<Omit<PerformancePost, 'postTags' | 'systemSpec' | 'numLikes'>[]> {
+): Promise<PerformancePostForNewPostsCard[]> {
   const performancePosts = await prisma.performancePost.findMany({
     select: {
       id: true,
@@ -312,7 +319,7 @@ export async function findNewestPerformancePosts(
           name: true,
         },
       },
-      ratingMedal: true,
+      ratingTierRank: true,
       postText: true,
       steamUserProfile: {
         select: {
@@ -330,17 +337,15 @@ export async function findNewestPerformancePosts(
     // returning less than 7 posts
     take: numPerformancePosts * 20,
   });
-  const postsWithUniqueAuthor = new Map<BigInt, Omit<PerformancePost, 'postTags' | 'systemSpec' | 'numLikes'>>();
+  const postsWithUniqueAuthor = new Map<BigInt, PerformancePostForNewPostsCard>();
   for (let i = 0; i < performancePosts.length; i++) {
     const {
       id,
-      createdAt,
       postText,
       steamApp: {
         steamAppId,
         name,
       },
-      ratingMedal,
       steamUserProfile: {
         steamUserId64,
         displayName,
@@ -350,17 +355,12 @@ export async function findNewestPerformancePosts(
     if (!postsWithUniqueAuthor.has(steamUserId64)) {
       postsWithUniqueAuthor.set(steamUserId64, {
         performancePostId: id,
-        createdAt,
         postText,
         steamApp: {
           steamAppId,
           name,
         },
-        rating: {
-          ratingMedal,
-        },
         userWhoCreated: {
-          steamUserId64: steamUserId64.toString(),
           displayName,
           avatarFull,
         },
@@ -410,23 +410,23 @@ export async function deletePerformancePost(performancePostId: PrismaPerformance
 export async function updatePerformancePost({
   performancePostId,
   postText,
-  frameRateAverage,
+  frameRateTierRank,
   frameRateStutters,
-  ratingMedal,
+  ratingTierRank,
   systemSpecId,
   postTagIds,
   gamepadId,
-  gamepadRating,
+  gamepadTierRank,
 }: {
   performancePostId: PrismaPerformancePost['id'];
   postText: PrismaPerformancePost['postText'];
-  frameRateAverage?: FrameRate;
+  frameRateTierRank?: FrameRateTierRank;
   frameRateStutters: boolean;
-  ratingMedal: PrismaPerformancePost['ratingMedal'];
+  ratingTierRank: RatingTierRank;
   systemSpecId?: PrismaUserSystemSpec['id'];
   postTagIds: PrismaPerformancePostTag['id'][];
   gamepadId?: PrismaGamepadMetadata['id'];
-  gamepadRating?: GamepadRating;
+  gamepadTierRank?: GamepadTierRank;
 }) {
   const currentPerformancePost = await prisma.performancePost.findUnique({
     where: { id: performancePostId },
@@ -442,9 +442,9 @@ export async function updatePerformancePost({
 
   const performancePostData: Prisma.PerformancePostUpdateInput = {
     postText,
-    frameRateAverage,
+    frameRateTierRank,
     frameRateStutters,
-    ratingMedal,
+    ratingTierRank,
     gamepadMetadata: gamepadId ? {
       connect: {
         id: gamepadId,
@@ -453,7 +453,8 @@ export async function updatePerformancePost({
     } : {
       disconnect: true,
     },
-    gamepadRating: gamepadId ? gamepadRating : null,
+    gamepadTierRank: gamepadId ? gamepadTierRank : null,
+    // gamepadRating: gamepadId ? gamepadRating : null,
     postTags: {
       connect: postTagIds.map((id) => ({ id })),
       disconnect: performancePostTagIdsToDisconnect.map((id) => ({ id })),
@@ -528,7 +529,7 @@ export async function findPerformancePostById(
           avatarMedium: true,
         },
       },
-      frameRateAverage: true,
+      frameRateTierRank: true,
       frameRateStutters: true,
       gamepadMetadata: {
         select: {
@@ -536,7 +537,7 @@ export async function findPerformancePostById(
           description: true,
         },
       },
-      gamepadRating: true,
+      gamepadTierRank: true,
       postText: true,
       postTags: {
         select: {
@@ -544,7 +545,7 @@ export async function findPerformancePostById(
           description: true,
         },
       },
-      ratingMedal: true,
+      ratingTierRank: true,
       steamApp: {
         select: {
           steamAppId: true,
@@ -582,11 +583,11 @@ export async function findPerformancePostById(
     },
     postText,
     postTags,
-    ratingMedal,
-    frameRateAverage,
+    ratingTierRank,
+    frameRateTierRank,
     frameRateStutters,
     gamepadMetadata,
-    gamepadRating,
+    gamepadTierRank,
     userSystemSpecId,
     systemManufacturer,
     systemModel,
@@ -611,11 +612,13 @@ export async function findPerformancePostById(
       avatarMedium,
     },
     rating: {
-      ratingMedal,
-      frameRateAverage,
+      ratingTierRank,
+      frameRateTierRank:
+        isTypeFrameRateTierRank(frameRateTierRank) ? frameRateTierRank : undefined,
       frameRateStutters,
       gamepadMetadata,
-      gamepadRating,
+      gamepadTierRank:
+        isTypeGamepadTierRank(gamepadTierRank) ? gamepadTierRank : undefined,
     },
     systemSpec: {
       systemSpecId: userSystemSpecId,

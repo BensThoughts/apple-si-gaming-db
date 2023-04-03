@@ -2,6 +2,7 @@ import prisma from '~/lib/database/db.server';
 import type {
   PerformancePostForUserProfileDisplay,
 } from '~/interfaces';
+import { isTypeFrameRateTierRank, isTypeGamepadTierRank } from '~/lib/form-validators/posts';
 
 
 // Uses upsert to make it idempotent
@@ -56,16 +57,16 @@ export async function findUserProfileLikedPosts(
                   usersWhoLiked: true,
                 },
               },
-              frameRateAverage: true,
+              frameRateTierRank: true,
               frameRateStutters: true,
               gamepadMetadata: {
                 select: {
                   description: true,
                 },
               },
-              gamepadRating: true,
+              gamepadTierRank: true,
               postText: true,
-              ratingMedal: true,
+              ratingTierRank: true,
               postTags: true,
               steamApp: {
                 select: {
@@ -100,11 +101,11 @@ export async function findUserProfileLikedPosts(
       _count: {
         usersWhoLiked,
       },
-      ratingMedal,
-      frameRateAverage,
+      ratingTierRank,
+      frameRateTierRank,
       frameRateStutters,
       gamepadMetadata,
-      gamepadRating,
+      gamepadTierRank,
       postText,
       postTags,
       steamApp: {
@@ -123,11 +124,13 @@ export async function findUserProfileLikedPosts(
     createdAt,
     numLikes: usersWhoLiked,
     rating: {
-      ratingMedal,
-      frameRateAverage,
+      ratingTierRank,
+      frameRateTierRank:
+        isTypeFrameRateTierRank(frameRateTierRank) ? frameRateTierRank : undefined,
       frameRateStutters,
       gamepadMetadata,
-      gamepadRating,
+      gamepadTierRank:
+        isTypeGamepadTierRank(gamepadTierRank) ? gamepadTierRank : undefined,
     },
     postText,
     postTags,

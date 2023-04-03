@@ -1,7 +1,7 @@
 import TextPill from '~/components/TextPill';
 import PerformancePostMetaBar from './PerformancePostMetaBar';
 import SystemSpecsPopover from './SystemSpecsPopover';
-import { convertGamepadRatingToDescription } from '~/lib/conversions/rating-conversions';
+import { convertGamepadTierRankToDescription } from '~/lib/conversions/rating-conversions';
 import AvatarImage from '~/components/ImageWrappers/AvatarImage';
 import type {
   PerformancePost,
@@ -24,10 +24,10 @@ export default function PerformancePostDisplay({
       displayName,
     },
     rating: {
-      ratingMedal,
-      frameRateAverage,
+      ratingTierRank,
+      frameRateTierRank,
       frameRateStutters,
-      gamepadRating,
+      gamepadTierRank,
       gamepadMetadata,
     },
     numLikes,
@@ -55,8 +55,8 @@ export default function PerformancePostDisplay({
           userWhoCreated: { steamUserId64 },
           steamApp: { steamAppId },
           rating: {
-            ratingMedal,
-            frameRateAverage,
+            ratingTierRank,
+            frameRateTierRank,
             frameRateStutters,
           },
           numLikes,
@@ -109,7 +109,7 @@ export default function PerformancePostDisplay({
           {/* Gamepad and Post Tags Small Screens Only */}
           {(postTags.length > 0 || gamepadMetadata) &&
             <div className="md:hidden flex flex-col whitespace-nowrap gap-1 w-full justify-start">
-              {(gamepadMetadata && gamepadRating) &&
+              {(gamepadMetadata && gamepadTierRank) &&
                 <div>
                   <TextPill className="bg-primary hover:bg-primary-highlight">
                     {`${gamepadMetadata.description}`}
@@ -130,10 +130,10 @@ export default function PerformancePostDisplay({
           {/* Gamepad and Post Tags Medium Screens Only */}
           {(postTags.length > 0 || gamepadMetadata) &&
             <div className="hidden md:flex flex-row flex-wrap gap-1 w-full justify-start">
-              {(gamepadMetadata && gamepadRating) &&
+              {(gamepadMetadata && gamepadTierRank) &&
                 <div>
                   <TextPill className="bg-primary hover:bg-primary-highlight">
-                    {`${gamepadMetadata.description} - ${convertGamepadRatingToDescription(gamepadRating)}`}
+                    {`${gamepadMetadata.description} - ${convertGamepadTierRankToDescription(gamepadTierRank)}`}
                   </TextPill>
                 </div>
               }
@@ -147,7 +147,6 @@ export default function PerformancePostDisplay({
           <div>
             {postText}
           </div>
-          {/* {Array(ratingNum).fill(<RatingMedalIcon />)} */}
         </div>
       </div>
     </div>

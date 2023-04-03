@@ -19,7 +19,7 @@ import type { EditPerformancePostActionData } from '~/lib/form-actions/performan
 import { requireUserIds } from '~/lib/sessions/profile-session.server';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
-import { EditPostURLParams } from '~/interfaces/remix-app/URLSearchParams/EditPost';
+import { EditPostURLParams } from '~/lib/enums/URLSearchParams/EditPost';
 
 type EditPostLoaderData = {
   steamAppId: number;
@@ -129,11 +129,11 @@ export default function EditPerformancePostRoute() {
         fieldErrors={actionData?.fieldErrors}
         fields={actionData?.fields ? actionData.fields : {
           postText,
-          ratingMedal: rating.ratingMedal,
-          frameRateAverage: rating.frameRateAverage,
+          ratingTierRank: rating.ratingTierRank,
+          frameRateTierRank: rating.frameRateTierRank,
           frameRateStutters: rating.frameRateStutters ? rating.frameRateStutters : false,
           gamepadId: rating.gamepadMetadata?.id,
-          gamepadRating: rating.gamepadRating,
+          gamepadTierRank: rating.gamepadTierRank,
           postTagsIds: postTags.map((tag) => tag.id),
           systemSpecId: systemSpecId ? systemSpecId : undefined,
         }}

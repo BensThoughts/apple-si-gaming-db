@@ -1,12 +1,12 @@
 import { redirect, json } from '@remix-run/node';
 import {
-  isTypeFrameRateAverage,
-  isTypeGamepadRating,
-  isTypeRatingMedal,
-  validateGamepadRating,
-  validatePostFrameRateAverage,
+  isTypeFrameRateTierRank,
+  isTypeGamepadTierRank,
+  isTypeRatingTierRank,
+  validateGamepadTierRank,
+  validatePostFrameRateTierRank,
   validatePostGamepadId,
-  validatePostRatingMedal,
+  validatePostRatingTierRank,
   validatePostTagIds,
   validatePostText,
   validateSystemSpecIdForPost,
@@ -35,31 +35,31 @@ export async function createPerformancePostAction({
   }
   const {
     postText,
-    ratingMedal,
-    frameRateAverage,
+    ratingTierRank,
+    frameRateTierRank,
     frameRateStutters,
     systemSpecId,
     postTagIds,
     gamepadId,
-    gamepadRating,
+    gamepadTierRank,
   } = fieldsRaw;
 
   const fieldErrors = {
     postText: validatePostText(postText),
-    ratingMedal: validatePostRatingMedal(ratingMedal),
-    gamepadId: validatePostGamepadId(gamepadId, gamepadRating),
-    gamepadRating: validateGamepadRating(gamepadRating, gamepadId),
+    ratingTierRank: validatePostRatingTierRank(ratingTierRank),
+    gamepadId: validatePostGamepadId(gamepadId, gamepadTierRank),
+    gamepadTierRank: validateGamepadTierRank(gamepadTierRank, gamepadId),
     postTagIds: validatePostTagIds(postTagIds),
-    frameRateAverage: validatePostFrameRateAverage(frameRateAverage),
+    frameRateTierRank: validatePostFrameRateTierRank(frameRateTierRank),
     systemSpecId: validateSystemSpecIdForPost(systemSpecId),
   };
   const fields = {
     postText,
-    // ratingMedal,
+    // ratingTierRank,
     // gamepadId,
-    // gamepadRating,
+    // gamepadTierRank,
     // postTagIds,
-    // frameRateAverage,
+    // frameRateTierRank,
     // frameRateStutters,
     // systemSpecId,
   };
@@ -67,20 +67,20 @@ export async function createPerformancePostAction({
     return badRequest({ fieldErrors, fields });
   }
   // Used for Typescript type validation, should never return true by this point
-  if (!isTypeRatingMedal(ratingMedal)) {
+  if (!isTypeRatingTierRank(ratingTierRank)) {
     return { fieldErrors, fields };
   }
   // Used for Typescript type validation, should never return true by this point
   if (
-    frameRateAverage !== 'None' &&
-    !isTypeFrameRateAverage(frameRateAverage)
+    frameRateTierRank !== 'None' &&
+    !isTypeFrameRateTierRank(frameRateTierRank)
   ) {
     return { fieldErrors, fields };
   }
   // Used for Typescript type validation, should never return true by this point
   if (
-    gamepadRating !== 'None' &&
-    !isTypeGamepadRating(gamepadRating)
+    gamepadTierRank !== 'None' &&
+    !isTypeGamepadTierRank(gamepadTierRank)
   ) {
     return { fieldErrors, fields };
   }
@@ -89,13 +89,13 @@ export async function createPerformancePostAction({
     steamUserId64,
     steamAppId,
     postText,
-    ratingMedal,
-    frameRateAverage: frameRateAverage === 'None' ? undefined : frameRateAverage,
+    ratingTierRank,
+    frameRateTierRank: frameRateTierRank === 'None' ? undefined : frameRateTierRank,
     frameRateStutters,
     systemSpecId: systemSpecId < 0 ? undefined : systemSpecId,
     postTagIds,
     gamepadId: gamepadId < 0 ? undefined : gamepadId,
-    gamepadRating: gamepadRating === 'None' ? undefined : gamepadRating,
+    gamepadTierRank: gamepadTierRank === 'None' ? undefined : gamepadTierRank,
   });
 
   return redirect(`/apps/${steamAppId}/posts`);

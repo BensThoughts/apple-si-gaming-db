@@ -1,29 +1,58 @@
-import type { FrameRate, GamepadRating, RatingMedal } from '~/interfaces';
+import type {
+  RatingTierRank,
+  FrameRateTierRank,
+  GamepadTierRank,
+} from '~/interfaces';
 
 
-export function isTypeFrameRateAverage(frameRateAverage: string): frameRateAverage is FrameRate {
-  return ['VeryLow', 'Low', 'Medium', 'High', 'VeryHigh'].includes(frameRateAverage);
+export function isTypeFrameRateTierRank(
+    frameRateTierRank?: string | null,
+): frameRateTierRank is FrameRateTierRank {
+  if (frameRateTierRank != null && frameRateTierRank != undefined) {
+    return [
+      'STier',
+      'ATier',
+      'BTier',
+      'CTier',
+      'DTier',
+      'FTier',
+    ].includes(frameRateTierRank);
+  }
+  return false;
 }
 
-export function validatePostFrameRateAverage(frameRateAverageValue: string) {
+export function validatePostFrameRateTierRank(frameRateTierRank: string) {
   if (
-    frameRateAverageValue.toLowerCase() !== 'none' &&
-    !isTypeFrameRateAverage(frameRateAverageValue)
+    frameRateTierRank.toLowerCase() !== 'none' &&
+    !isTypeFrameRateTierRank(frameRateTierRank)
   ) {
-    return `${frameRateAverageValue} is not a valid frame rate option`;
+    return `${frameRateTierRank} is not a valid frame rate option`;
   }
 }
 
-export function isTypeRatingMedal(ratingMedal: string): ratingMedal is RatingMedal {
-  return ['Borked', 'Bronze', 'Silver', 'Gold', 'Platinum'].includes(ratingMedal);
+export function isTypeRatingTierRank(
+    ratingTierRank?: string | null,
+): ratingTierRank is RatingTierRank {
+  if (ratingTierRank != null && ratingTierRank != undefined) {
+    return [
+      'STier',
+      'ATier',
+      'BTier',
+      'CTier',
+      'DTier',
+      'ETier',
+      'FTier',
+    ].includes(ratingTierRank);
+  }
+  return false;
 }
 
-export function validatePostRatingMedal(ratingMedal: string) {
-  if (ratingMedal.toLowerCase() === 'none') {
+export function validatePostRatingTierRank(ratingTierRank: string) {
+  if (ratingTierRank.toLowerCase() === 'none') {
     return `rating cannot be none`;
   }
-  if (!isTypeRatingMedal(ratingMedal)) {
-    return `${ratingMedal} is not a valid option`;
+  if (!isTypeRatingTierRank(ratingTierRank)) {
+    return `${ratingTierRank} is not a valid option`;
   }
 }
 
@@ -52,11 +81,22 @@ export function validatePostTagIds(postTagIds: number[]) {
   }
 }
 
-export function isTypeGamepadRating(ratingMedal: string): ratingMedal is GamepadRating {
-  return ['GamepadBorked', 'GamepadBronze', 'GamepadSilver', 'GamepadGold', 'GamepadPlatinum'].includes(ratingMedal);
+export function isTypeGamepadTierRank(
+    gamepadTierRank?: string | null,
+): gamepadTierRank is GamepadTierRank {
+  if (gamepadTierRank != null && gamepadTierRank != undefined) {
+    return [
+      'STier',
+      'ATier',
+      'BTier',
+      'CTier',
+      'FTier',
+    ].includes(gamepadTierRank);
+  }
+  return false;
 }
 
-export function validatePostGamepadId(gamepadId: number, gamepadRating: string) {
+export function validatePostGamepadId(gamepadId: number, gamepadTierRank: string) {
   if (!isFinite(gamepadId)) {
     return 'gamepad ID was not a valid number';
   }
@@ -67,19 +107,19 @@ export function validatePostGamepadId(gamepadId: number, gamepadRating: string) 
   // By this point we know gamepadId is a valid >= 0 number
   if (
     gamepadId === -1 &&
-    isTypeGamepadRating(gamepadRating)
+    isTypeGamepadTierRank(gamepadTierRank)
   ) {
     return `controller rating given with no controller selected`;
   }
 }
 
-export function validateGamepadRating(gamepadRating: string, gamepadId: number) {
+export function validateGamepadTierRank(gamepadTierRank: string, gamepadId: number) {
   // The None Case for gamepadId is value 0
   if (gamepadId !== -1) {
-    if (gamepadRating.toLowerCase() === 'none') {
+    if (gamepadTierRank.toLowerCase() === 'none') {
       return `rating cannot be none when controller is selected`;
     }
-    if (!isTypeGamepadRating(gamepadRating)) {
+    if (!isTypeGamepadTierRank(gamepadTierRank)) {
       return `rating was not a valid rating option`;
     }
   }

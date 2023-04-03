@@ -3,7 +3,12 @@ import RoundedButton from '~/components/Buttons/RoundedButton';
 import { useEffect, useRef } from 'react';
 import { showToast } from '~/components/Toasts';
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
-import type { FrameRate, RatingMedal, GamepadRating, SystemSpecOption } from '~/interfaces';
+import type {
+  RatingTierRank,
+  FrameRateTierRank,
+  GamepadTierRank,
+  SystemSpecOption,
+} from '~/interfaces';
 import PerformancePostFormWrapper from './PerformancePostFormWrapper';
 import BasePerformancePostFormFields from './BasePerformancePostFormFields';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
@@ -12,22 +17,22 @@ interface CreatePerformancePostFormProps {
   steamAppId: number;
   fields?: { // used for defaultValue options
     postText?: string;
-    frameRateAverage?: FrameRate | null;
+    frameRateTierRank?: FrameRateTierRank | null;
     frameRateStutters?: boolean;
-    ratingMedal?: RatingMedal;
+    ratingTierRank?: RatingTierRank;
     // systemName?: string;
     postTagsIds?: number[];
     gamepadId?: number;
-    gamepadRating?: GamepadRating | null;
+    gamepadTierRank?: GamepadTierRank | null;
   };
   fieldErrors?: {
     postText?: string;
-    frameRateAverage?: string;
-    ratingMedal?: string;
+    frameRateTierRank?: string;
+    ratingTierRank?: string;
     systemName?: string;
     postTags?: string;
     gamepadId?: string;
-    gamepadRating?: string;
+    gamepadTierRank?: string;
   };
   formError?: string;
   isSubmittingForm: boolean;

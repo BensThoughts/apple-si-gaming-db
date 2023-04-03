@@ -2,7 +2,11 @@ import LikeButton from '~/components/Buttons/LikeButton';
 import type {
   PerformancePostMetaBarData,
 } from '~/interfaces';
-import { convertFrameRateToDescription, convertRatingMedalToDescription } from '~/lib/conversions/rating-conversions';
+import {
+  convertFrameRateTierRankToDescription,
+  convertRatingTierRankToDescription,
+  convertTierRankToName,
+} from '~/lib/conversions/rating-conversions';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
 // import EditAndDeleteButtons from './EditAndDeleteButtons';
 import EditButton from '~/components/Buttons/EditButton';
@@ -20,8 +24,8 @@ export default function PerformancePostMetaBar({
       steamAppId,
     },
     rating: {
-      ratingMedal,
-      frameRateAverage,
+      ratingTierRank,
+      frameRateTierRank,
       frameRateStutters,
     },
     numLikes,
@@ -73,18 +77,18 @@ export default function PerformancePostMetaBar({
           <div className="flex flex-col gap-1 md:flex-row md:gap-2">
             <div>
               <span className="text-primary-highlight text-base leading-4">
-                {ratingMedal}
+                {convertTierRankToName(ratingTierRank)}
               </span>
               <span>
                 {` - `}
-                {convertRatingMedalToDescription(ratingMedal)}
+                {convertRatingTierRankToDescription(ratingTierRank)}
               </span>
             </div>
             <div>
               {/* {(frameRateAverage || frameRateStutters) && <span>Frame Rate: </span>} */}
-              {frameRateAverage &&
+              {frameRateTierRank &&
             <span className="text-primary-highlight">
-              {convertFrameRateToDescription(frameRateAverage)}
+              {convertFrameRateTierRankToDescription(frameRateTierRank)}
             </span>}
               {frameRateStutters &&
             <span className="text-primary-highlight">

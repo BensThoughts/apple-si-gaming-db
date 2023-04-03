@@ -1,14 +1,14 @@
-import type { GamepadRating, FrameRate } from '~/interfaces';
-import { isTypeFrameRateAverage, isTypeGamepadRating } from '~/lib/form-validators/posts';
+import type { GamepadTierRank, FrameRateTierRank } from '~/interfaces';
+import { isTypeFrameRateTierRank, isTypeGamepadTierRank } from '~/lib/form-validators/posts';
 import {
-  convertRatingMedalToNumber,
-  convertNumberToRatingMedal,
-  convertFrameRateToNumber,
-  convertNumberToFrameRate,
-  convertFrameRateToDescription,
-  convertGamepadRatingToNumber,
-  convertNumberToGamepadRating,
-  convertGamepadRatingToMedalText,
+  convertRatingTierRankToNumber,
+  convertNumberToRatingTierRank,
+  convertFrameRateTierRankToNumber,
+  convertNumberToFrameRateTierRank,
+  convertFrameRateTierRankToDescription,
+  convertGamepadTierRankToNumber,
+  convertNumberToGamepadTierRank,
+  convertTierRankToName,
 } from '~/lib/conversions/rating-conversions';
 import type { PerformancePost } from '~/interfaces';
 
@@ -20,52 +20,62 @@ interface AppRatingOverviewProps {
 
 const arrAvg = (arr: number[]) => arr.reduce((a, b) => a + b, 0) / arr.length;
 
-function getAverageMedalRating(performancePostRatings: PerformancePostRating[]) {
-  const medalRatingNumbers =
+function getAverageRatingTierRank(performancePostRatings: PerformancePostRating[]) {
+  const ratingTierRankNumbers =
     performancePostRatings
-        .map((rating) => convertRatingMedalToNumber(rating.ratingMedal));
-  const avg = arrAvg(medalRatingNumbers);
+        .map((rating) => convertRatingTierRankToNumber(rating.ratingTierRank));
+  const avg = arrAvg(ratingTierRankNumbers);
   const avgInt = Math.round(avg);
-  const medal = convertNumberToRatingMedal(avgInt as 0 | 1 | 2 | 3 | 4);
-  return medal;
+  const tierRank = convertNumberToRatingTierRank(avgInt as 0 | 1 | 2 | 3 | 4 | 5 | 6);
+  return tierRank;
 }
 
-function getAverageFrameRate(performancePostRatings: PerformancePostRating[]) {
+function getAverageFrameRateTierRank(performancePostRatings: PerformancePostRating[]) {
   const frameRateNumbers =
     performancePostRatings
-        .map((performancePostRating) => performancePostRating.frameRateAverage)
-        .filter((frameRateAverage) => isTypeFrameRateAverage(frameRateAverage as string))
-        .map((frameRate) => convertFrameRateToNumber(frameRate as FrameRate));
+        .map((rating) => rating.frameRateTierRank)
+        .filter((frameRateTierRank) => isTypeFrameRateTierRank(frameRateTierRank))
+        .map((frameRateTierRank) =>
+          convertFrameRateTierRankToNumber(frameRateTierRank as FrameRateTierRank),
+        );
+  if (frameRateNumbers.length < 1) {
+    return undefined;
+  }
   const avg = arrAvg(frameRateNumbers);
   const avgInt = Math.round(avg);
-  const frameRate = convertNumberToFrameRate(avgInt as 0 | 1 | 2 | 3 | 4);
-  return frameRate;
+  const tierRank = convertNumberToFrameRateTierRank(avgInt as 0 | 1 | 2 | 3 | 4 | 5);
+  return tierRank;
 }
 
 function getPercentPostsStutters(perfPostRatings: PerformancePostRating[]) {
   const numPostsStutters =
     perfPostRatings
-        .filter((perfPostRating) => perfPostRating.frameRateStutters).length;
+        .filter((rating) => rating.frameRateStutters).length;
   const percentStutters = (numPostsStutters / perfPostRatings.length) * 100;
   return Math.round(percentStutters);
 }
 
-function getAverageGamepadRating(perfPostRatings: PerformancePostRating[]) {
+function getAverageGamepadTierRank(perfPostRatings: PerformancePostRating[]) {
   const gamepadRatingNumbers =
     perfPostRatings
-        .filter((perfPostRating) => isTypeGamepadRating(perfPostRating.gamepadRating as string))
-        .map((perfPostRating) => convertGamepadRatingToNumber(perfPostRating.gamepadRating as GamepadRating));
+        .map((rating) => rating.gamepadTierRank)
+        .filter((gamepadTierRank) => isTypeGamepadTierRank(gamepadTierRank))
+        .map((gamepadTierRank) =>
+          convertGamepadTierRankToNumber(gamepadTierRank as GamepadTierRank));
+  if (gamepadRatingNumbers.length < 1) {
+    return undefined;
+  }
   const avg = arrAvg(gamepadRatingNumbers);
   const avgInt = Math.round(avg);
-  const gamepadRating = convertNumberToGamepadRating(avgInt as 0 | 1 | 2 | 3 | 4);
-  return gamepadRating;
+  const gamepadTierRank = convertNumberToGamepadTierRank(avgInt as 0 | 1 | 2 | 3 | 4);
+  return gamepadTierRank;
 }
 
 export default function AppRatingOverview({ performancePostRatings }: AppRatingOverviewProps) {
-  const avgMedalInt = getAverageMedalRating(performancePostRatings);
-  const avgFrameRate = getAverageFrameRate(performancePostRatings);
+  const avgRatingTierRank = getAverageRatingTierRank(performancePostRatings);
+  const avgFrameRateTierRank = getAverageFrameRateTierRank(performancePostRatings);
   const percentStutters = getPercentPostsStutters(performancePostRatings);
-  const avgGamepadRating = getAverageGamepadRating(performancePostRatings);
+  const avgGamepadTierRank = getAverageGamepadTierRank(performancePostRatings);
   return (
     <div className="flex flex-col items-center gap-2 w-full bg-tertiary
                     p-3 rounded-lg text-primary-highlight">
@@ -75,15 +85,15 @@ export default function AppRatingOverview({ performancePostRatings }: AppRatingO
       <div className="flex gap-1 md:gap-2">
         <div>
           {`[ `}
-          {avgMedalInt}
+          {convertTierRankToName(avgRatingTierRank)}
           {` ] `}
         </div>
-        <span className="text-primary-faded">Overall Medal Rating</span>
+        <span className="text-primary-faded">Overall Rating</span>
       </div>
       <div className="flex gap-1 md:gap-2">
         <div>
           {`[ `}
-          {avgFrameRate ? convertFrameRateToDescription(avgFrameRate) : 'None Given'}
+          {avgFrameRateTierRank ? convertFrameRateTierRankToDescription(avgFrameRateTierRank) : 'None Given'}
           {` ] `}
         </div>
         <span className="text-primary-faded"> Average Frame Rate</span>
@@ -103,7 +113,7 @@ export default function AppRatingOverview({ performancePostRatings }: AppRatingO
       <div className="flex gap-1 md:gap-2">
         <div>
           {`[ `}
-          {avgGamepadRating ? convertGamepadRatingToMedalText(avgGamepadRating) : 'None Given'}
+          {avgGamepadTierRank ? convertTierRankToName(avgGamepadTierRank) : 'None Given'}
           {` ] `}
         </div>
         <span className="text-primary-faded">Average Controller Rating</span>

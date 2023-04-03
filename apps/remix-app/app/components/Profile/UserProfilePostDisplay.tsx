@@ -1,5 +1,6 @@
 import { Link } from '@remix-run/react';
 import type { PerformancePostForUserProfileDisplay } from '~/interfaces';
+import { convertTierRankToName } from '~/lib/conversions/rating-conversions';
 import PerformancePostMetaBar from '../AppInfo/PerformancePosts/PerformancePostMetaBar';
 import AppHeaderImage from '../ImageWrappers/AppHeaderImage';
 
@@ -16,8 +17,8 @@ export default function UserProfilePostDisplay({
     },
     numLikes,
     rating: {
-      ratingMedal,
-      frameRateAverage,
+      ratingTierRank,
+      frameRateTierRank,
       frameRateStutters,
     },
     postText,
@@ -52,7 +53,7 @@ export default function UserProfilePostDisplay({
                   <span className="font-semibold">
                     {name}
                   </span>
-                  {` - `}<i className="italic">{ratingMedal}</i>
+                  {` - `}<i className="italic">{convertTierRankToName(ratingTierRank)}</i>
                 </div>
                 <span className="text-secondary font-medium relative px-0 py-[0.1em]
                   after:block after:absolute after:bottom-[-3px] after:left-0
@@ -83,8 +84,8 @@ export default function UserProfilePostDisplay({
               steamApp: { steamAppId },
               userWhoCreated: { steamUserId64 },
               rating: {
-                ratingMedal,
-                frameRateAverage,
+                ratingTierRank,
+                frameRateTierRank,
                 frameRateStutters,
               },
               numLikes,
@@ -117,7 +118,7 @@ export default function UserProfilePostDisplay({
                 <span className="font-semibold">
                   {name}
                 </span>
-                {` - `}<i className="italic">{ratingMedal}</i>
+                {` - `}<i className="italic">{convertTierRankToName(ratingTierRank)}</i>
               </div>
               <div className="self-start">
                 <span className="text-secondary font-medium relative px-0 py-[0.1em]
@@ -147,8 +148,8 @@ export default function UserProfilePostDisplay({
               steamApp: { steamAppId },
               userWhoCreated: { steamUserId64 },
               rating: {
-                ratingMedal,
-                frameRateAverage,
+                ratingTierRank,
+                frameRateTierRank,
                 frameRateStutters,
               },
               numLikes,
