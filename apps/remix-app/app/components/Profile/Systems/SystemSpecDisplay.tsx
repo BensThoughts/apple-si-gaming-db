@@ -44,9 +44,6 @@ export default function SystemSpecDisplay({
       if (formError) {
         showToast.error(formError);
       }
-      if (fieldErrors && fieldErrors.systemName) {
-        showToast.error(fieldErrors.systemName);
-      }
       if (fieldErrors && fieldErrors.updatedSystemName) {
         showToast.error(fieldErrors.updatedSystemName);
       }
@@ -64,9 +61,6 @@ export default function SystemSpecDisplay({
       } = deleteSystemSpecActionData;
       if (formError) {
         showToast.error(formError);
-      }
-      if (fieldErrors && fieldErrors.systemName) {
-        showToast.error(fieldErrors.systemName);
       }
       if (fieldErrors && fieldErrors.systemSpecId) {
         showToast.error(fieldErrors.systemSpecId);
