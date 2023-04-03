@@ -70,6 +70,15 @@ body[data-theme="light"] {
 
   --color-text-snackbar-error: 207, 207, 207;
   --color-snackbar-error: 181, 5, 37;
+
+  --color-tier-rank-s: 255, 127, 127;
+  --color-tier-rank-a: 255, 191, 127;
+  --color-tier-rank-b: 255, 223, 127;
+  --color-tier-rank-c: 255, 255, 127;
+  --color-tier-rank-d: 191, 255, 127;
+  --color-tier-rank-e: 127, 255, 127;
+  --color-tier-rank-f: 127, 255, 255;
+  /* --color-tier-rank-f: 0, 189, 188; */
 }
 
 body[data-theme="dark"] {
@@ -113,4 +122,12 @@ body[data-theme="dark"] {
 
   --color-text-snackbar-error: 207, 207, 207;
   --color-snackbar-error: 158, 0, 14;
+
+  --color-tier-rank-s: 255, 127, 127;
+  --color-tier-rank-a: 255, 191, 127;
+  --color-tier-rank-b: 255, 223, 127;
+  --color-tier-rank-c: 255, 255, 127;
+  --color-tier-rank-d: 191, 255, 127;
+  --color-tier-rank-e: 127, 255, 127;
+  --color-tier-rank-f: 127, 255, 255;
 }

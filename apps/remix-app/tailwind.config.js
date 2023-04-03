@@ -30,6 +30,13 @@ module.exports = {
         'text-primary': generateColorClass('color-text-primary'),
         'text-primary-highlight': generateColorClass('color-text-primary-highlight'),
         'text-error': generateColorClass('color-text-error'),
+        'tier-rank-s': generateColorClass('color-tier-rank-s'),
+        'tier-rank-a': generateColorClass('color-tier-rank-a'),
+        'tier-rank-b': generateColorClass('color-tier-rank-b'),
+        'tier-rank-c': generateColorClass('color-tier-rank-c'),
+        'tier-rank-d': generateColorClass('color-tier-rank-d'),
+        'tier-rank-e': generateColorClass('color-tier-rank-e'),
+        'tier-rank-f': generateColorClass('color-tier-rank-f'),
       },
       screens: {
         'navBarQuery': '960px',
