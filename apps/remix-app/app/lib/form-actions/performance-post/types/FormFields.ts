@@ -25,14 +25,3 @@ export type PerformancePostFormFieldsRaw = {
   gamepadTierRank: string;
   postTagIds: number[];
 }
-
-export enum FieldNames {
-  PostText = 'performancePostText',
-  FrameRateTierRank = 'performancePostFrameRateTierRank',
-  FrameRateStutters = 'performancePostFrameRateStutters',
-  RatingTierRank = 'performancePostRatingTierRank',
-  SystemSpecId = 'performancePostSystemSpecId',
-  PostTagIds = 'performancePostTags',
-  GamepadId = 'performancePostGamepadId',
-  GamepadTierRank = 'performancePostGamepadTierRank'
-}

@@ -3,8 +3,8 @@ import type {
 } from './types';
 
 import {
-  FieldNames,
-} from './types';
+  PerformancePostFieldNames,
+} from '~/lib/enums/FormFields/PerformancePost';
 
 /**
   Converts performance post form data into usable data for creating or editing a
@@ -15,14 +15,14 @@ export function extractFormData(formData: FormData): {
   formError?: string;
   fieldsRaw?: PerformancePostFormFieldsRaw;
 } {
-  const postText = formData.get(FieldNames.PostText);
-  const frameRateTierRank = formData.get(FieldNames.FrameRateTierRank + '[value]');
-  const frameRateStutters = formData.get(FieldNames.FrameRateStutters);
-  const ratingTierRank = formData.get(FieldNames.RatingTierRank + '[value]');
-  const systemSpecIdData = formData.get(FieldNames.SystemSpecId + '[value]');
-  const postTagIdsData = formData.getAll(FieldNames.PostTagIds);
-  const gamepadIdData = formData.get(FieldNames.GamepadId + '[value]');
-  const gamepadTierRank = formData.get(FieldNames.GamepadTierRank + '[value]');
+  const postText = formData.get(PerformancePostFieldNames.PostText);
+  const frameRateTierRank = formData.get(PerformancePostFieldNames.FrameRateTierRank + '[value]');
+  const frameRateStutters = formData.get(PerformancePostFieldNames.FrameRateStutters);
+  const ratingTierRank = formData.get(PerformancePostFieldNames.RatingTierRank + '[value]');
+  const systemSpecIdData = formData.get(PerformancePostFieldNames.SystemSpecId + '[value]');
+  const postTagIdsData = formData.getAll(PerformancePostFieldNames.PostTagIds);
+  const gamepadIdData = formData.get(PerformancePostFieldNames.GamepadId + '[value]');
+  const gamepadTierRank = formData.get(PerformancePostFieldNames.GamepadTierRank + '[value]');
 
   if (
     typeof postText !== 'string' ||
