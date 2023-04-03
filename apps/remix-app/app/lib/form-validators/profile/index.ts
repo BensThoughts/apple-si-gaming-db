@@ -20,13 +20,13 @@ export function validateSystemName(systemName: string) {
   }
 }
 
-export function validateNewSystemName(systemName: string, systemNames: string[]) {
+export function validateNewSystemName(systemName: string, currentSystemNames: string[]) {
   const systemNameTrimmed = systemName.trim();
   const systemNameError = validateSystemName(systemNameTrimmed);
   if (systemNameError) {
     return systemNameError;
   }
-  if (systemNames.includes(systemNameTrimmed)) {
+  if (currentSystemNames.includes(systemNameTrimmed)) {
     return `The system name ${systemName} is already taken`;
   }
   // ! Added to allow for no system specs on a post
