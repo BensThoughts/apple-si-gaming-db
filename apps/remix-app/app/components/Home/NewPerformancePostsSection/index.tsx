@@ -1,4 +1,4 @@
-import type { PerformancePostForNewPostsCards } from '~/interfaces';
+import type { PerformancePostForNewPostsCard } from '~/interfaces';
 import { Link } from '@remix-run/react';
 import AvatarImage from '~/components/ImageWrappers/AvatarImage';
 import { useState } from 'react';
@@ -7,7 +7,7 @@ import { classNames } from '~/lib/css/classNames';
 export default function NewPerformancePostsSection({
   newPerformancePosts,
 }: {
-  newPerformancePosts: PerformancePostForNewPostsCards[]
+  newPerformancePosts: PerformancePostForNewPostsCard[]
 }) {
   const [expanded, setExpanded] = useState(false);
   const MINIMUM_NUMBER_OF_POSTS = 6; // won't display right without at least
@@ -74,7 +74,7 @@ export default function NewPerformancePostsSection({
 function NewPerformancePostCard({
   performancePost,
 }: {
-  performancePost: PerformancePostForNewPostsCards;
+  performancePost: PerformancePostForNewPostsCard;
 }) {
   const {
     performancePostId,

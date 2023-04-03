@@ -5,7 +5,7 @@ import { findTrendingSteamApps } from '~/models/Steam/steamApp.server';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import type {
   TrendingSteamApp,
-  PerformancePost,
+  PerformancePostForNewPostsCard,
 } from '~/interfaces';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
@@ -16,7 +16,7 @@ import TrendingSteamAppsSection from '~/components/Home/TrendingSteamAppsSection
 
 interface LoaderData {
   trendingSteamApps: TrendingSteamApp[];
-  newPerformancePosts: Omit<PerformancePost, 'postTags' | 'systemSpec' | 'numLikes'>[];
+  newPerformancePosts: PerformancePostForNewPostsCard[];
 }
 
 export async function loader() {
