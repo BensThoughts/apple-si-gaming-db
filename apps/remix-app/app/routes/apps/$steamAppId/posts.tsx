@@ -2,7 +2,6 @@ import type { LoaderArgs, ActionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useActionData, useCatch, useLoaderData, useNavigation } from '@remix-run/react';
 import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
-// import type { GamepadRating, RatingMedal, FrameRate } from '~/interfaces/database';
 import { findPerformancePostsBySteamAppId } from '~/models/SteamedApples/performancePost.server';
 import { findPostTags } from '~/models/SteamedApples/performancePostTag.server';
 import { doesSteamUserOwnApp } from '~/models/Steam/steamUserProfile.server';
