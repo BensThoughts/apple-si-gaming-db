@@ -2,6 +2,7 @@ export * from './BleedingHeart';
 export * from './Book';
 export * from './Comments';
 export * from './GameBoy';
+export * from './Gamepad';
 export * from './Gear';
 export * from './LikeHeartCircle';
 export * from './Message';
