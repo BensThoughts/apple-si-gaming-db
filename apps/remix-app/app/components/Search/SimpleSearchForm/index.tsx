@@ -3,6 +3,7 @@ import MaterialInputOutlined from '~/components/FormComponents/MaterialInputOutl
 import { Form } from '@remix-run/react';
 import { useEffect, useRef } from 'react';
 import { showToast } from '~/components/Toasts';
+import { SearchFormURLParams } from '~/lib/enums/URLSearchParams/Search';
 
 const FORM_NAME = 'game-search-form';
 
@@ -50,7 +51,7 @@ export default function SimpleSearchForm({
         <div>
           <input type="hidden" name="page" value="1" />
           <MaterialInputOutlined
-            name="appName"
+            name={SearchFormURLParams.APP_NAME}
             id={`${FORM_NAME}_appName`}
             label="Search Games..."
             componentSize="small"
@@ -68,13 +69,6 @@ export default function SimpleSearchForm({
           {isSubmitting ? 'Loading' : 'Search' }
         </RoundedButton>
       </div>
-      {(fieldErrors && fieldErrors.searchQuery) ? (
-        <div className="text-error">
-          {fieldErrors.searchQuery}
-        </div>
-      ) : (
-        null
-      )}
     </Form>
   );
 }

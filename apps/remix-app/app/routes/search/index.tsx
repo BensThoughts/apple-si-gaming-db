@@ -19,6 +19,7 @@ import {
   validateCategoryIds,
   validatePageNumber,
 } from '~/lib/form-validators/search';
+import { SearchFormURLParams } from '~/lib/enums/URLSearchParams/Search';
 
 export type SearchFormState = {
   formError?: string;
@@ -54,13 +55,6 @@ export type SearchPageLoaderData = {
 
 const badRequest = (data: SearchPageLoaderData) => json<SearchPageLoaderData>(data, { status: 400 });
 
-enum SearchFormParams {
-  PAGE = 'page',
-  APP_NAME = 'appName',
-  APPLE_ONLY = 'appleOnly',
-  GENRE_IDS = 'genreIds',
-  CATEGORY_IDS = 'categoryIds',
-}
 
 export async function loader({
   request,
@@ -69,7 +63,7 @@ export async function loader({
 
   const url = new URL(request.url);
   const searchParams = url.searchParams;
-  const appName = searchParams.get(SearchFormParams.APP_NAME)?.trim();
+  const appName = searchParams.get(SearchFormURLParams.APP_NAME)?.trim();
   // !This is the case where someone navigates to /search initially
   // !with no appName in the searchQuery
   if (
@@ -79,7 +73,7 @@ export async function loader({
     return json<SearchPageLoaderData>({ availableSearchOptions });
   }
   // If searchQuery exists we extract all other data
-  const pageParam = searchParams.get(SearchFormParams.PAGE)?.trim() || '1';
+  const pageParam = searchParams.get(SearchFormURLParams.PAGE)?.trim() || '1';
   const page = Number(pageParam);
   // page falls under formError because it has no field in the form representing it
   const formError = validatePageNumber(page);
@@ -87,14 +81,14 @@ export async function loader({
     throw new Response(formError, { status: 400 });
     // return badRequest({ availableSearchOptions, searchFormState: { formError } });
   }
-  const appleOnlyParam = searchParams.get(SearchFormParams.APPLE_ONLY);
+  const appleOnlyParam = searchParams.get(SearchFormURLParams.APPLE_ONLY);
   const appleOnly = appleOnlyParam ? true : false;
-  const genreIdParams = searchParams.getAll(SearchFormParams.GENRE_IDS);
+  const genreIdParams = searchParams.getAll(SearchFormURLParams.GENRE_IDS);
   let genreIds: string[] = [];
   if (genreIdParams[0] !== '' && genreIdParams.length > 0) {
     genreIds = genreIdParams;
   }
-  const categoryIdParams = searchParams.getAll(SearchFormParams.CATEGORY_IDS);
+  const categoryIdParams = searchParams.getAll(SearchFormURLParams.CATEGORY_IDS);
   let categoryIds: number[] = [];
   if (categoryIdParams[0] !== '' && categoryIdParams.length > 0) {
     categoryIds = categoryIdParams.map((categoryId) => Number(categoryId));
@@ -181,9 +175,9 @@ function PageButtons({
   searchParams: URLSearchParams;
 }) {
   const nextPageSearchParams = new URLSearchParams(searchParams);
-  nextPageSearchParams.set(SearchFormParams.PAGE, (page + 1).toString());
+  nextPageSearchParams.set(SearchFormURLParams.PAGE, (page + 1).toString());
   const prevPageSearchParams = new URLSearchParams(searchParams);
-  prevPageSearchParams.set(SearchFormParams.PAGE, (page - 1).toString());
+  prevPageSearchParams.set(SearchFormURLParams.PAGE, (page - 1).toString());
   return (
     <div className="flex justify-between w-full">
       {page > 1 &&
@@ -294,16 +288,16 @@ export default function SearchIndexRoute() {
     categoryIds: undefined,
   };
   const searchParams = new URLSearchParams();
-  searchParams.set(SearchFormParams.PAGE, page.toString());
-  searchParams.set(SearchFormParams.APP_NAME, appName);
+  searchParams.set(SearchFormURLParams.PAGE, page.toString());
+  searchParams.set(SearchFormURLParams.APP_NAME, appName);
   if (appleOnly) {
-    searchParams.set(SearchFormParams.APPLE_ONLY, 'On');
+    searchParams.set(SearchFormURLParams.APPLE_ONLY, 'On');
   }
   if (genreIds) {
-    genreIds.forEach((genreId) => searchParams.append(SearchFormParams.GENRE_IDS, genreId));
+    genreIds.forEach((genreId) => searchParams.append(SearchFormURLParams.GENRE_IDS, genreId));
   }
   if (categoryIds) {
-    categoryIds.forEach((categoryId) => searchParams.append(SearchFormParams.CATEGORY_IDS, categoryId.toString()));
+    categoryIds.forEach((categoryId) => searchParams.append(SearchFormURLParams.CATEGORY_IDS, categoryId.toString()));
   }
   return (
     <SearchIndexWrap

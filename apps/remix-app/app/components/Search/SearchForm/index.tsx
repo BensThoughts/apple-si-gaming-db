@@ -9,6 +9,7 @@ import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectM
 import type {
   SearchFormState,
 } from '~/routes/search/index';
+import { SearchFormURLParams } from '~/lib/enums/URLSearchParams/Search';
 
 const FORM_NAME = 'game-search-form';
 
@@ -81,13 +82,13 @@ export default function SearchForm({
         ref={formRef}
         className="w-full"
       >
-        <input type="hidden" name="page" value="1" className="hidden"/>
+        <input type="hidden" name={SearchFormURLParams.PAGE} value="1" className="hidden"/>
         <div className="flex flex-col items-center gap-4 w-full">
           <div className="flex flex-col md:flex-row md:justify-between w-full
                           justify-center items-center gap-4 md:gap-0"
           >
             <MaterialInputOutlined
-              name="appName"
+              name={SearchFormURLParams.APP_NAME}
               id={`${FORM_NAME}_appName`}
               label="Search Games..."
               defaultValue={fields ? fields.appName : ''}
@@ -103,7 +104,7 @@ export default function SearchForm({
               <div className="md:w-full md:justify-self-center">
                 <UncontrolledToggleSwitch
                   defaultChecked={fields ? fields.appleOnly : false}
-                  name="appleOnly"
+                  name={SearchFormURLParams.APPLE_ONLY}
                   label="Apple"
                   labelPosition="left"
                 />
@@ -124,7 +125,7 @@ export default function SearchForm({
           <div className="flex flex-col items-start justify-center gap-4 w-full">
             <div className="w-full">
               <MultiSelectMenu
-                name="genreIds"
+                name={SearchFormURLParams.GENRE_IDS}
                 id={`${FORM_NAME}_genreIds`}
                 labelText="Genres"
                 options={genreOptions}
@@ -138,7 +139,7 @@ export default function SearchForm({
             </div>
             <div className="w-full">
               <MultiSelectMenu
-                name="categoryIds"
+                name={SearchFormURLParams.CATEGORY_IDS}
                 id={`${FORM_NAME}_categoryIds`}
                 labelText="Categories"
                 options={categoryOptions}
