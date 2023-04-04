@@ -12,6 +12,7 @@ import { useUserSession } from '~/lib/hooks/useMatchesData';
 import TextPill from '~/components/TextPill';
 import TailwindDisclosure from '~/components/HeadlessComponents/TailwindDisclosure';
 import TierRankBadge from '~/components/TierRankBadge';
+import TierRankPill from '~/components/TierRankPill';
 
 
 export default function UserProfilePostDisplayV2({
@@ -50,24 +51,24 @@ export default function UserProfilePostDisplayV2({
     <div
       id={performancePostId.toString()}
       className="rounded-xl px-0 py-0 bg-tertiary focus:show-ring
-                 w-full max-w-sm flex items-center justify-center"
+                 w-full max-w-md md:max-w-xs flex items-center justify-center"
     >
       <div
         className="flex flex-col gap-3 items-center w-full"
       >
-        <div className="flex flex-col gap-1">
+        <figure className="flex flex-col gap-1">
           <AppHeaderImage
             headerImageSrc={headerImage}
             name={name}
             className="h-full w-full flex justify-center object-cover
                          bg-tertiary rounded-t-xl rounded-b-none"
           />
-          <span className="font-semibold self-start pl-2">
+          <figcaption className="font-semibold self-start px-2">
             {name}
-          </span>
-        </div>
+          </figcaption>
+        </figure>
 
-        <div className="flex justify-between w-full px-2 pb-1">
+        <div className="flex justify-between w-full px-2">
           <LikeButton performancePostId={performancePostId} numLikes={numLikes} />
           {didSteamUserCreatePost && (
             <EditButton
@@ -76,14 +77,14 @@ export default function UserProfilePostDisplayV2({
             />
           )}
         </div>
-        <TailwindDisclosure title="Rating & Tags" defaultOpen={false} roundedButton={false}>
 
+        <TailwindDisclosure title="Rating & Tags" defaultOpen={false} roundedButton={false}>
           <div className="bg-primary w-full flex flex-col gap-2 p-2">
             <div className="flex items-center gap-2">
               <span className="text-primary-faded italic text-sm">
               Rating
               </span>
-              <TierRankBadge tierRank={ratingTierRank}>
+              <TierRankBadge tierRank={ratingTierRank} className="bg-primary-highlight">
                 {convertRatingTierRankToDescription(ratingTierRank)}
               </TierRankBadge>
             </div>
@@ -97,7 +98,14 @@ export default function UserProfilePostDisplayV2({
                     {`${convertFrameRateTierRankToDescription(frameRateTierRank)}`}
                   </TierRankBadge>
                 )}
-                {frameRateStutters && <TierRankBadge tierRank={frameRateTierRank} includeRatingLetter={false} className="bg-primary-highlight">{`Stutters`}</TierRankBadge>}
+                {frameRateStutters &&(
+                  <TierRankPill
+                    tierRank={frameRateTierRank ? frameRateTierRank : ratingTierRank}
+                    className="bg-primary-highlight"
+                  >
+                    {`Stutters`}
+                  </TierRankPill>
+                )}
               </div>
             )}
             {(gamepadMetadata && gamepadTierRank) && (
@@ -110,7 +118,6 @@ export default function UserProfilePostDisplayV2({
                 </TierRankBadge>
               </div>
             )}
-
             {postTags.length > 0 && (
               <div className="flex gap-2 items-center">
                 <span className="text-primary-faded italic text-sm">
@@ -122,25 +129,21 @@ export default function UserProfilePostDisplayV2({
                   ))}
                 </div>
               </div>
-
             )}
-
           </div>
-
         </TailwindDisclosure>
 
         <Link
           to={`/apps/${steamAppId}/posts#${performancePostId}`}
           className="group flex flex-col gap-3 w-full select-none
-                     bg-tertiary hover:bg-tertiary-highlight pb-4 pt-2 rounded-xl
+                     bg-tertiary hover:bg-tertiary-highlight pb-4 rounded-xl
                      focus:outline-none focus-visible:show-ring-app-bg"
         >
-
           <div className="flex justify-between w-full px-2">
             <i className="italic">
               {createdAt}
             </i>
-            <span className="text-secondary font-medium relative px-0 py-[0.1em]
+            <span className="text-secondary font-medium relative px-0 pb-[0.1em]
                   after:block after:absolute after:bottom-[-1px] after:left-0
                   after:w-0 after:h-[0.2em] after:bg-secondary after:transition-all
                   group-hover:after:w-full group-focus-visible:after:w-full after:rounded-full
@@ -150,7 +153,7 @@ export default function UserProfilePostDisplayV2({
               </span>
             </span>
           </div>
-          <p className="line-clamp-4 px-2">
+          <p className="line-clamp-[7] px-2">
             {postText}
           </p>
         </Link>
