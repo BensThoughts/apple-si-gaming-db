@@ -24,22 +24,10 @@ interface LoaderData {
   steamApp: SteamAppSidebarData;
 }
 
-function isMoreThanDaysAgo(dateToTest: Date, daysAgo: number) {
-  //                   days  hours min  sec  ms
-  const daysAgoInMs = daysAgo * 24 * 60 * 60 * 1000;
-  const timestampDaysAgo = new Date().getTime() - daysAgoInMs;
-
-  if (timestampDaysAgo > dateToTest.getTime()) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 export async function loader({ params }: LoaderArgs) {
   const steamAppId = validateSteamAppId(params);
   const steamApp = await findSteamAppByAppId(steamAppId);
-  const throwSteamAppError = () => {
+  const throwSteamAppFourOhFourError = () => {
     logger.debug(`steam app with steamAppId ${steamAppId} not found in db`, {
       metadata: {
         steamApp: {
@@ -52,9 +40,18 @@ export async function loader({ params }: LoaderArgs) {
     });
   };
   if (!steamApp) {
-    throw throwSteamAppError();
+    throw throwSteamAppFourOhFourError();
   }
   const DAYS_TILL_STALE_DATA = 7;
+  const isMoreThanDaysAgo = (dateToTest: Date, daysAgo: number) => {
+    const daysAgoInMs = daysAgo * 24 * 60 * 60 * 1000; // days  hours min  sec  ms
+    const timestampDaysAgo = new Date().getTime() - daysAgoInMs;
+    if (timestampDaysAgo > dateToTest.getTime()) {
+      return true;
+    } else {
+      return false;
+    }
+  };
   if (
     !steamApp.dataDownloadAttempted ||
     !steamApp.dataDownloaded ||
