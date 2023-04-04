@@ -34,7 +34,7 @@ export default function UserProfilePostDisplay({
       className="rounded-xl px-0 py-0 pb-4 bg-tertiary focus:show-ring
                  w-full max-w-md lg:max-w-4xl flex items-center justify-start"
     >
-      {/* Large+ Screens */}
+      {/* Large Screens */}
       <div className="hidden lg:flex lg:flex-col lg:gap-0 lg:w-full">
         <Link
           to={`/apps/${steamAppId}/posts#${performancePostId}`}
@@ -95,7 +95,7 @@ export default function UserProfilePostDisplay({
       </div>
 
 
-      {/* Small- Screens */}
+      {/* Small Screens */}
       <div
         className="lg:hidden flex flex-col items-center w-full"
       >
