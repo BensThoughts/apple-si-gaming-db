@@ -9,16 +9,11 @@ export default function TierRankBadge({
 }: {
   children: string,
   className?: string,
-  tierRank?: TierRank | null;
+  tierRank: TierRank;
   includeRatingLetter?: boolean;
 }) {
-  const getTierRankColorCSS = (tierRank?: TierRank | null) => {
+  const getTierRankColorCSS = (tierRank: TierRank) => {
     switch (tierRank) {
-      case undefined:
-        return classNames(
-            `border-tier-rank-f after:bg-tier-rank-f after:border-l-tier-rank-f`,
-          includeRatingLetter ? `after:content-['F']` : ``,
-        );
       case 'FTier':
         return classNames(
             `border-tier-rank-f after:bg-tier-rank-f after:border-l-tier-rank-f`,
@@ -57,7 +52,7 @@ export default function TierRankBadge({
       default:
         return classNames(
             `border-tier-rank-s after:bg-tier-rank-s after:border-l-tier-rank-s`,
-          includeRatingLetter ? `after:content-['S']` : ``,
+            includeRatingLetter ? `after:content-['S']` : ``,
         );
     }
   };
@@ -67,13 +62,13 @@ export default function TierRankBadge({
         `flex justify-center items-center select-none w-full max-w-fit h-6 px-2 py-1 text-xs`,
         `rounded-md border-1 relative z-10 after:absolute after:flex after:items-center`,
         `after:justify-center after:w-8 after:h-6 after:left-0 after:rounded-l-md after:z-20`,
-        `after:border-l-1 bg-primary-highlight after:text-black after:font-medium`,
+        `after:border-l-1 after:text-black after:font-medium`,
         `after:text-sm`,
         tierRankColorCSS,
         className ? className : '',
     )}
     >
-      <span className="ml-8 relative inset-0 z-30 bg-primary-highlight">
+      <span className="ml-8 relative inset-0 z-30">
         {children}
       </span>
     </div>
