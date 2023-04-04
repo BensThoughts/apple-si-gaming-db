@@ -22,11 +22,6 @@ export async function loader({ request }: LoaderArgs) {
 export default function ProfilePostsRoute() {
   const { steamUsersPosts } = useLoaderData<ProfilePostsRouteLoaderData>();
   return (
-    <UsersPostsLayout
-      steamUsersPosts={steamUsersPosts.map((performancePost) => ({
-        ...performancePost,
-        createdAt: new Date(performancePost.createdAt),
-      }))}
-    />
+    <UsersPostsLayout steamUsersPosts={steamUsersPosts} />
   );
 }

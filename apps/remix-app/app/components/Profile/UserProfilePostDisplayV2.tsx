@@ -114,7 +114,7 @@ export default function UserProfilePostDisplayV2({
             {postTags.length > 0 && (
               <div className="flex gap-2 items-center">
                 <span className="text-primary-faded italic text-sm">
-                            Tags
+                  Tags
                 </span>
                 <div className="flex gap-1 flex-wrap">
                   {postTags.map(({ id, description }) => (
@@ -138,7 +138,7 @@ export default function UserProfilePostDisplayV2({
 
           <div className="flex justify-between w-full px-2">
             <i className="italic">
-              {createdAt.toDateString()}
+              {createdAt}
             </i>
             <span className="text-secondary font-medium relative px-0 py-[0.1em]
                   after:block after:absolute after:bottom-[-1px] after:left-0

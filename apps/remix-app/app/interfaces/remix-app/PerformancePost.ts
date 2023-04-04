@@ -13,7 +13,7 @@ import type {
 
 export type PerformancePost = {
   performancePostId: number;
-  createdAt: Date;
+  createdAt: string;
   postText: string;
   rating: {
     ratingTierRank: RatingTierRank;
@@ -57,7 +57,7 @@ export type PerformancePost = {
 
 export type PerformancePostForUserProfileDisplay = {
   performancePostId: number;
-  createdAt: Date;
+  createdAt: string;
   postText: string;
   rating: {
     ratingTierRank: RatingTierRank;
@@ -99,7 +99,7 @@ export type PerformancePostSystemSpecPopover = {
 
 export type PerformancePostMetaBarData = {
   performancePostId: number;
-  createdAt: Date;
+  createdAt: string;
   steamApp: {
     steamAppId: number;
   };

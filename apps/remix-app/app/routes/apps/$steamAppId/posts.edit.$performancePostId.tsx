@@ -114,12 +114,7 @@ export default function EditPerformancePostRoute() {
     <div className="flex flex-col items-center gap-3">
 
       <PostLayoutCard>
-        <PerformancePostDisplay
-          performancePost={{
-            ...performancePost,
-            createdAt: new Date(performancePost.createdAt),
-          }}
-        />
+        <PerformancePostDisplay performancePost={performancePost} />
       </PostLayoutCard>
 
       <EditPerformancePostForm

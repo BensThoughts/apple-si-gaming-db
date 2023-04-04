@@ -23,11 +23,6 @@ export async function loader({ request }: LoaderArgs) {
 export default function ProfilePostsRoute() {
   const { userProfileLikedPosts } = useLoaderData<ProfilePostsRouteLoaderData>();
   return (
-    <UserLikedPostsLayout
-      likedPosts={userProfileLikedPosts.map((performancePost) => ({
-        ...performancePost,
-        createdAt: new Date(performancePost.createdAt),
-      }))}
-    />
+    <UserLikedPostsLayout likedPosts={userProfileLikedPosts} />
   );
 }

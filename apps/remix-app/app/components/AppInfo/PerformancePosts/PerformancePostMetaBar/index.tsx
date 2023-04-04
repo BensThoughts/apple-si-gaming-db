@@ -110,7 +110,7 @@ export default function PerformancePostMetaBar({
         </div>
 
         <i className="italic">
-          {createdAt.toDateString()}
+          {createdAt}
         </i>
       </div>
     </div>

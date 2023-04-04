@@ -121,7 +121,7 @@ export async function findUserProfileLikedPosts(
     },
   }) => ({
     performancePostId: id,
-    createdAt,
+    createdAt: createdAt.toDateString(),
     numLikes: usersWhoLiked,
     rating: {
       ratingTierRank,

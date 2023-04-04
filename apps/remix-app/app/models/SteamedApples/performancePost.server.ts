@@ -187,7 +187,7 @@ export async function findPerformancePostsBySteamAppId(
   }) => ({
     performancePostId: id,
     postText,
-    createdAt,
+    createdAt: createdAt.toDateString(),
     steamApp: {
       steamAppId,
       name,
@@ -281,7 +281,7 @@ export async function findPerformancePostsBySteamUserId(
     steamUserId64,
   }) => ({
     performancePostId: id,
-    createdAt,
+    createdAt: createdAt.toDateString(),
     postText,
     postTags,
     userWhoCreated: {
@@ -600,7 +600,7 @@ export async function findPerformancePostById(
   } = performancePost;
   return {
     performancePostId: id,
-    createdAt,
+    createdAt: createdAt.toDateString(),
     postText,
     steamApp: {
       steamAppId,

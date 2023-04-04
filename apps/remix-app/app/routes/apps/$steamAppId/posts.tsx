@@ -90,12 +90,7 @@ export default function PerformancePostsRoute() {
 
   return (
     <div className="flex flex-col justify-center items-center gap-4 w-full">
-      <PerformancePostLayout
-        performancePosts={performancePosts.map((post) => ({
-          ...post,
-          createdAt: new Date(post.createdAt),
-        }))}
-      />
+      <PerformancePostLayout performancePosts={performancePosts} />
       <CreatePerformancePostForm
         steamAppId={steamAppId}
         steamUserProfileOwnsApp={steamUserProfileOwnsApp}
