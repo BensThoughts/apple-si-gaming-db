@@ -442,9 +442,9 @@ export async function updatePerformancePost({
 
   const performancePostData: Prisma.PerformancePostUpdateInput = {
     postText,
-    frameRateTierRank,
-    frameRateStutters,
     ratingTierRank,
+    frameRateTierRank: frameRateTierRank ? frameRateTierRank : null,
+    frameRateStutters,
     gamepadMetadata: gamepadId ? {
       connect: {
         id: gamepadId,
