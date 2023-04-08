@@ -29,3 +29,16 @@ export interface SteamSystemSpec {
     memoryRAM: string | null;
   }
 }
+
+export type SystemSpec = {
+  systemSpecId: number; // id in database
+  systemName: string;
+  manufacturer: string | null;
+  model: string | null;
+  cpuBrand: string | null;
+  osVersion: string | null;
+  videoDriver: string | null;
+  videoDriverVersion: string | null;
+  videoPrimaryVRAM: string | null;
+  memoryRAM: string | null;
+}
