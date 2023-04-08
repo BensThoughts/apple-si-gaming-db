@@ -14,7 +14,7 @@ interface SystemSpecLayoutProps {
   deleteSystemSpecActionData?: DeleteSystemSpecActionData;
 }
 
-export default function SystemSpecLayout({
+export default function SystemsLayout({
   systemSpecs,
   createSystemSpecActionData,
   editSystemSpecActionData,

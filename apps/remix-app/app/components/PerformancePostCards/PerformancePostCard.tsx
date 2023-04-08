@@ -1,19 +1,17 @@
-import TierRankContainer from './TierRankContainer';
+import TierRankContainer from './CardComponents/TierRankContainer';
 import type {
   PerformancePost,
 } from '~/types';
-import PerformancePostUserBadge from './UserBadge';
+import PerformancePostUserBadge from './CardComponents/UserBadge';
 import LikeButton from '~/components/Buttons/LikeButton';
 import SystemSpecsPopover from '~/components/HeadlessComponents/SystemSpecPopover';
 import EditButton from '~/components/Buttons/EditButton';
 
-type PerformancePostDisplayProps = {
-  performancePost: PerformancePost;
-}
-
-export default function PerformancePostDisplay({
+export default function PerformancePostCard({
   performancePost,
-}: PerformancePostDisplayProps) {
+}: {
+  performancePost: PerformancePost;
+}) {
   const {
     performancePostId,
     createdAt,
@@ -59,9 +57,9 @@ export default function PerformancePostDisplay({
           />
         </div>
       </div>
-      <div className="text-primary-highlight">
+      <p className="text-primary-highlight">
         {postText}
-      </div>
+      </p>
       <TierRankContainer
         rating={{
           ratingTierRank,

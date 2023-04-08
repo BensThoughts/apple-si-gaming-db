@@ -6,7 +6,7 @@ import { findSteamAppsWherePostsExist } from '~/models/Steam/steamApp.server';
 import { metaTags } from '~/lib/meta-tags';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
-import SmallAppsGridLayout from '~/components/Apps/SmallAppsGridLayout';
+import SmallAppsGridLayout from '~/components/SmallAppsGridLayout';
 
 
 export async function loader() {

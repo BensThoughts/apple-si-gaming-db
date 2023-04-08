@@ -1,4 +1,4 @@
-import SmallAppsGridLayout from '~/components/Apps/SmallAppsGridLayout';
+import SmallAppsGridLayout from '~/components/SmallAppsGridLayout';
 import type { SteamAppForSmallAppsGridLayout } from '~/types';
 import SyncLibraryForm from './SyncLibraryForm';
 

@@ -3,8 +3,7 @@ import type {
   PerformancePost,
 } from '~/types';
 import { Fragment, useState } from 'react';
-// import UserProfilePostDisplayV2 from '../UserProfilePostDisplayV2';
-import UserProfilePostDisplay from '../UserProfilePostDisplay';
+import PerformancePostCardWithSteamAppBadge from '~/components/PerformancePostCards/PerformancePostCardWithSteamAppBadge';
 import MaterialInputOutlined from '~/components/FormComponents/MaterialInputOutlined';
 
 interface UsersPostsLayoutProps {
@@ -53,11 +52,9 @@ export default function UsersPostsLayout({
         />
       </div>
       <div className="flex flex-col gap-6 items-center w-full">
-        {filteredPosts.map((performancePost) => (
-          <Fragment key={performancePost.performancePostId}>
-            <UserProfilePostDisplay
-              performancePost={performancePost}
-            />
+        {filteredPosts.map((post) => (
+          <Fragment key={post.performancePostId}>
+            <PerformancePostCardWithSteamAppBadge performancePost={post} />
           </Fragment>
         ))}
       </div>

@@ -2,7 +2,7 @@ import type { LoaderArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { findUserProfileLikedPosts } from '~/models/SteamedApples/performancePostLike.server';
 import { useLoaderData } from '@remix-run/react';
-import UserLikedPostsLayout from '~/components/Profile/LikedPosts/UserLikedPostsLayout';
+import LikedPostsLayout from '~/components/Profile/LikedPosts/LikedPostsLayout';
 import type {
   PerformancePost,
 } from '~/types';
@@ -23,6 +23,6 @@ export async function loader({ request }: LoaderArgs) {
 export default function ProfilePostsRoute() {
   const { userProfileLikedPosts } = useLoaderData<ProfilePostsRouteLoaderData>();
   return (
-    <UserLikedPostsLayout likedPosts={userProfileLikedPosts} />
+    <LikedPostsLayout likedPosts={userProfileLikedPosts} />
   );
 }

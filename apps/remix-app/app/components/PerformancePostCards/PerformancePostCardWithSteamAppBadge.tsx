@@ -1,12 +1,12 @@
 import type { PerformancePost } from '~/types';
-import PerformancePostTierRankContainer from '../Apps/PerformancePosts/Display/TierRankContainer';
-import EditButton from '../Buttons/EditButton';
-import SystemSpecsPopover from '../HeadlessComponents/SystemSpecPopover';
-import LikeButton from '../Buttons/LikeButton';
-import PerformancePostAppBadge from '../Apps/PerformancePosts/Display/AppBadge';
-import ViewButton from '../Buttons/ViewButton';
+import TierRankContainer from '~/components/PerformancePostCards/CardComponents/TierRankContainer';
+import EditButton from '~/components/Buttons/EditButton';
+import SystemSpecsPopover from '~/components/HeadlessComponents/SystemSpecPopover';
+import LikeButton from '~/components/Buttons/LikeButton';
+import PerformancePostAppBadge from '~/components/PerformancePostCards/CardComponents/AppBadge';
+import ViewButton from '~/components/Buttons/ViewButton';
 
-export default function UserProfilePostDisplay({
+export default function PerformancePostCardWithSteamAppBadge({
   performancePost,
 }: {
   performancePost: PerformancePost;
@@ -19,8 +19,8 @@ export default function UserProfilePostDisplay({
     postText,
     steamApp: {
       steamAppId,
-      name,
       headerImage,
+      name,
     },
     rating,
     postTags,
@@ -48,7 +48,7 @@ export default function UserProfilePostDisplay({
         {postText}
       </p>
       <div>
-        <PerformancePostTierRankContainer rating={rating} postTags={postTags} />
+        <TierRankContainer rating={rating} postTags={postTags} />
       </div>
     </div>
   );

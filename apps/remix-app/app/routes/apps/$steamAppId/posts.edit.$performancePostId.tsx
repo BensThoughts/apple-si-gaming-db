@@ -11,8 +11,7 @@ import { findPostTags } from '~/models/SteamedApples/performancePostTag.server';
 import { findAllGamepads } from '~/models/SteamedApples/gamepadMetadata.server';
 // import { doesSteamUserOwnApp } from '~/models/steamUser.server';
 import EditPerformancePostForm from '~/components/Apps/PerformancePosts/Forms/EditPerformancePostForm';
-import PerformancePostDisplay from '~/components/Apps/PerformancePosts/Display/PerformancePostDisplay';
-import PostLayoutCard from '~/components/Apps/PerformancePosts/PerformancePostLayoutCard';
+import PerformancePostCard from '~/components/PerformancePostCards/PerformancePostCard';
 import { editPerformancePostAction } from '~/lib/form-actions/performance-post/edit-post.server';
 import type { PostTagOption, GamepadOption } from '~/types';
 import type { EditPerformancePostActionData } from '~/lib/form-actions/performance-post/types';
@@ -112,11 +111,7 @@ export default function EditPerformancePostRoute() {
 
   return (
     <div className="flex flex-col justify-center items-center gap-6 w-full max-w-[50rem]">
-
-      <PostLayoutCard>
-        <PerformancePostDisplay performancePost={performancePost} />
-      </PostLayoutCard>
-
+      <PerformancePostCard performancePost={performancePost} />
       <EditPerformancePostForm
         performancePostId={performancePostId}
         steamAppId={steamAppId}

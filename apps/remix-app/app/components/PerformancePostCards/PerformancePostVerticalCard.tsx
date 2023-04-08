@@ -6,7 +6,7 @@ import {
   convertRatingTierRankToDescription,
 } from '~/lib/conversions/rating-conversions';
 import EditButton from '~/components/Buttons/EditButton';
-import AppHeaderImage from '../ImageWrappers/AppHeaderImage';
+import AppHeaderImage from '~/components/ImageWrappers/AppHeaderImage';
 import LikeButton from '~/components/Buttons/LikeButton';
 import TextPill from '~/components/TextPill';
 import TailwindDisclosure from '~/components/HeadlessComponents/TailwindDisclosure';
@@ -14,7 +14,7 @@ import TierRankBadge from '~/components/TierRankBadge';
 import TierRankPill from '~/components/TierRankPill';
 
 
-export default function UserProfilePostDisplayV2({
+export default function PerformancePostVerticalCard({
   performancePost,
 }: {
   performancePost: PerformancePost;

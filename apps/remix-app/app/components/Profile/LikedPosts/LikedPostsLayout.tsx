@@ -1,6 +1,6 @@
 import type { PerformancePost } from '~/types';
 import { useState } from 'react';
-import UserProfilePostDisplayV2 from '../UserProfilePostDisplayV2';
+import PerformancePostVerticalCard from '~/components/PerformancePostCards/PerformancePostVerticalCard';
 import MaterialInputOutlined from '~/components/FormComponents/MaterialInputOutlined';
 
 interface UserLikedPostsLayoutProps {
@@ -20,7 +20,7 @@ interface UserLikedPostsLayoutProps {
 // }
 
 
-export default function UserLikedPostsLayout({
+export default function LikedPostsLayout({
   likedPosts,
 }: UserLikedPostsLayoutProps) {
   const [nameQuery, setNameQuery] = useState('');
@@ -57,7 +57,7 @@ export default function UserLikedPostsLayout({
       <ul className="w-full user-profile-liked-posts-grid">
         {filteredPosts.map((post) => (
           <li key={post.performancePostId} className="flex justify-center items-stretch">
-            <UserProfilePostDisplayV2 performancePost={post} />
+            <PerformancePostVerticalCard performancePost={post} />
           </li>
         ))}
       </ul>

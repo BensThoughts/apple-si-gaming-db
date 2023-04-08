@@ -1,7 +1,7 @@
 import { json } from '@remix-run/node';
 import type { ActionArgs, LoaderArgs } from '@remix-run/node';
 import { useActionData } from '@remix-run/react';
-import SystemSpecLayout from '~/components/Profile/Systems/SystemSpecLayout';
+import SystemsLayout from '~/components/Profile/Systems/SystemsLayout';
 import { createSystem } from '~/lib/form-actions/profile/create-system.server';
 import { deleteSystem } from '~/lib/form-actions/profile/delete-system.server';
 import { editSystem } from '~/lib/form-actions/profile/edit-system.server';
@@ -39,7 +39,7 @@ export default function ProfileSystemsRoute() {
   const actionData = useActionData<typeof action>();
 
   return (
-    <SystemSpecLayout
+    <SystemsLayout
       systemSpecs={userProfileSystemSpecs}
       // isSubmittingCreateSystemForm={isSubmittingCreateSystemForm}
       createSystemSpecActionData={actionData?._profileAction.createSystemSpec}

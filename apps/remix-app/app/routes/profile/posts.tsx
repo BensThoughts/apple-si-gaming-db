@@ -1,6 +1,6 @@
 import type { LoaderArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import UsersPostsLayout from '~/components/Profile/Posts/UsersPostsLayout';
+import ProfilePostsLayout from '~/components/Profile/Posts/ProfilePostsLayout';
 import { useLoaderData } from '@remix-run/react';
 import type {
   PerformancePost,
@@ -22,6 +22,6 @@ export async function loader({ request }: LoaderArgs) {
 export default function ProfilePostsRoute() {
   const { steamUsersPosts } = useLoaderData<ProfilePostsRouteLoaderData>();
   return (
-    <UsersPostsLayout steamUsersPosts={steamUsersPosts} />
+    <ProfilePostsLayout steamUsersPosts={steamUsersPosts} />
   );
 }
