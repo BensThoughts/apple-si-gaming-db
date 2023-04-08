@@ -1,3 +1,4 @@
+import type { SystemSpec } from './SystemSpec';
 
 // Server side we get an array of liked post ids
 // a map does not easily serialize.
@@ -6,7 +7,7 @@ export type UserSessionServerSide = {
     userProfile: {
       userProfileId: number;
       likedPerformancePostIds: number[];
-      systemSpecs: UserProfileSystemSpec[];
+      systemSpecs: SystemSpec[];
     };
     steamUserProfile: {
       steamUserId64: string;
@@ -23,7 +24,7 @@ export type UserSessionClientSide = {
     userProfile: {
       userProfileId: number;
       likedPerformancePostIds: Map<number, number>;
-      systemSpecs: UserProfileSystemSpec[];
+      systemSpecs: SystemSpec[];
     };
     steamUserProfile: {
       steamUserId64: string;
@@ -32,17 +33,4 @@ export type UserSessionClientSide = {
       avatarMedium?: string | null;
     }
   }
-}
-
-export type UserProfileSystemSpec = {
-  systemSpecId: number; // id in database
-  systemName: string;
-  manufacturer: string | null;
-  model: string | null;
-  cpuBrand: string | null;
-  osVersion: string | null;
-  videoDriver: string | null;
-  videoDriverVersion: string | null;
-  videoPrimaryVRAM: string | null;
-  memoryRAM: string | null;
 }
