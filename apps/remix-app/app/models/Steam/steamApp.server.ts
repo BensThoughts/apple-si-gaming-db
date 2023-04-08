@@ -1,8 +1,8 @@
-import {
-  updateSteamApp,
-  updateSteamAppDownloadAttempted,
-  convertSteamApiDataToPrisma,
-} from '@apple-si-gaming-db/database';
+// import {
+//   updateSteamApp,
+//   updateSteamAppDownloadAttempted,
+//   convertSteamApiDataToPrisma,
+// } from '@apple-si-gaming-db/database';
 
 import type {
   Prisma,
@@ -14,15 +14,11 @@ import type {
   TrendingSteamApp,
   SteamAppForSmallAppsGridLayout,
   SteamAppForSearchPage,
+  SteamApp,
 } from '~/interfaces';
 
 import prisma from '~/lib/database/db.server';
-
-export {
-  updateSteamApp,
-  updateSteamAppDownloadAttempted,
-  convertSteamApiDataToPrisma,
-};
+import { logger } from '~/lib/logger/logger.server';
 
 /**
  * Filter to keep only appIds that exist in db. The steam api
@@ -47,8 +43,8 @@ export async function filterAppIdsExistInDatabase(
 
 export async function findSteamAppByAppId(
     steamAppId: PrismaSteamApp['steamAppId'],
-) {
-  return prisma.steamApp.findUnique({
+): Promise<SteamApp | null> {
+  const steamApp = await prisma.steamApp.findUnique({
     where: {
       steamAppId,
     },
@@ -72,7 +68,61 @@ export async function findSteamAppByAppId(
       linuxRequirementsMinimum: true,
     },
   });
+  if (!steamApp) {
+    return null;
+  }
+  const DAYS_TILL_STALE_DATA = 7;
+  const isMoreThanDaysAgo = (dateToTest: Date, daysAgo: number) => {
+    const daysAgoInMs = daysAgo * 24 * 60 * 60 * 1000; // days  hours min  sec  ms
+    const timestampDaysAgo = new Date().getTime() - daysAgoInMs;
+    if (timestampDaysAgo > dateToTest.getTime()) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+  let dataNeedsRefresh = false;
+  if (
+    !steamApp.dataDownloadAttempted ||
+    !steamApp.dataDownloaded ||
+    (
+      steamApp.dataDownloadAttemptedAt &&
+      isMoreThanDaysAgo(steamApp.dataDownloadAttemptedAt, DAYS_TILL_STALE_DATA)
+    )
+  ) {
+    dataNeedsRefresh = true;
+    logger.info(
+        `stale data for steam app with steamAppId ${steamAppId} found, last dataDownloadAttemptedAt is more than ${DAYS_TILL_STALE_DATA} days old for ${steamApp.name}`, {
+          metadata: {
+            steamApp: {
+              steamAppId,
+              name: steamApp.name,
+            },
+            extra: {
+              dataDownloadAttemptedAt: steamApp.dataDownloadAttemptedAt,
+            },
+          },
+        },
+    );
+  }
+  return {
+    ...steamApp,
+    dataNeedsRefresh,
+  };
 }
+
+// const steamApiApp = await getSteamAppDetailsRequest(steamApp.steamAppId);
+// if (steamApiApp.data) {
+//   const prismaSteamApp = convertSteamApiDataToPrisma(steamApiApp.data);
+//   // TODO: Performing these updates in a loader doesn't work when
+//   // TODO: the fly app is not in primary region, ALL mutations need to
+//   // TODO: somehow move to an action
+//   await updateSteamApp(prismaSteamApp);
+//   steamApp = await findSteamAppByAppId(steamAppId);
+// }
+// if (!steamApp) {
+//   throw throwSteamAppError();
+// }
 
 export async function searchReleasedSteamAppsByName({
   appName,
