@@ -1,6 +1,6 @@
 import { useMatches } from '@remix-run/react';
 import { useMemo } from 'react';
-import type { UserProfileSystemSpec, UserSessionClientSide } from '~/interfaces/remix-app/UserSession';
+import type { SystemSpec, UserSessionClientSide } from '~/interfaces/remix-app';
 import type { SerializedRootLoaderData } from '~/root';
 
 /**
@@ -59,7 +59,7 @@ export function useUserSession(): UserSessionClientSide {
   };
 }
 
-export function useUserProfileSystemSpecs(): UserProfileSystemSpec[] {
+export function useUserProfileSystemSpecs(): SystemSpec[] {
   const { userSession } = useUserSession();
   return userSession ? userSession.userProfile.systemSpecs : [];
 }
