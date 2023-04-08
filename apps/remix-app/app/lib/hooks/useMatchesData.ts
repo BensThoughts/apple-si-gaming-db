@@ -1,6 +1,6 @@
 import { useMatches } from '@remix-run/react';
 import { useMemo } from 'react';
-import type { SystemSpec, UserSessionClientSide } from '~/interfaces/remix-app';
+import type { SystemSpec, UserSessionClientSide } from '~/types/remix-app';
 import type { SerializedRootLoaderData } from '~/root';
 
 /**

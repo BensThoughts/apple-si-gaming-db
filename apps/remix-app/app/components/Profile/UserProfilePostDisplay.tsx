@@ -1,4 +1,4 @@
-import type { PerformancePost } from '~/interfaces';
+import type { PerformancePost } from '~/types';
 import PerformancePostTierRankContainer from '../Apps/PerformancePosts/Display/TierRankContainer';
 import EditButton from '../Buttons/EditButton';
 import SystemSpecsPopover from '../HeadlessComponents/SystemSpecPopover';

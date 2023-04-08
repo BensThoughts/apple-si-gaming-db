@@ -1,6 +1,6 @@
 import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { SelectOption } from '~/components/FormComponents/SelectMenu';
-import type { GamepadOption } from '~/interfaces';
+import type { GamepadOption } from '~/types';
 
 export default function GamepadSelectMenu({
   name,

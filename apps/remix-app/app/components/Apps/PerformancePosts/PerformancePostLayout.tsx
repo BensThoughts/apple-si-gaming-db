@@ -1,7 +1,7 @@
 import PerformancePostDisplay from './Display/PerformancePostDisplay';
 import type {
   PerformancePost,
-} from '~/interfaces';
+} from '~/types';
 import PostLayoutCard from './PerformancePostLayoutCard';
 import { Fragment } from 'react';
 

@@ -1,7 +1,7 @@
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
 import type {
   PerformancePost,
-} from '~/interfaces';
+} from '~/types';
 import { Fragment, useState } from 'react';
 // import UserProfilePostDisplayV2 from '../UserProfilePostDisplayV2';
 import UserProfilePostDisplay from '../UserProfilePostDisplay';

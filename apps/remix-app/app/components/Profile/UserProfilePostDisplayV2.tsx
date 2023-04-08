@@ -1,5 +1,5 @@
 import { Link } from '@remix-run/react';
-import type { PerformancePost } from '~/interfaces';
+import type { PerformancePost } from '~/types';
 import {
   convertFrameRateTierRankToDescription,
   convertGamepadTierRankToDescription,

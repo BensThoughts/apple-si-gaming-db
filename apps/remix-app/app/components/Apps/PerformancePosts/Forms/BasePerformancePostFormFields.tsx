@@ -8,7 +8,7 @@ import type {
   SystemSpecOption,
   GamepadOption,
   PostTagOption,
-} from '~/interfaces';
+} from '~/types';
 import { PerformancePostFieldNames } from '~/lib/enums/FormFields/PerformancePost';
 import PerformancePostTextArea from './FormComponents/PerformancePostTextArea';
 import RatingTierRankSelectMenu from './FormComponents/RatingTierRankSelectMenu';

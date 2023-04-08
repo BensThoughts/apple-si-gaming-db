@@ -1,6 +1,6 @@
 import MultiSelectMenu from '~/components/FormComponents/MultiSelectMenu';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
-import type { PostTagOption } from '~/interfaces';
+import type { PostTagOption } from '~/types';
 
 export default function PostTagMultiSelectMenu({
   formId,

@@ -2,7 +2,7 @@ import type {
   RatingTierRank,
   FrameRateTierRank,
   GamepadTierRank,
-} from '~/interfaces';
+} from '~/types';
 
 
 export function isTypeFrameRateTierRank(

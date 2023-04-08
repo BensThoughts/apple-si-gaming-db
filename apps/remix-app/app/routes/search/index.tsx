@@ -12,7 +12,7 @@ import { getSearchOptions } from '~/lib/loader-functions/search.server';
 import { Fragment } from 'react';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
-import type { SteamAppForSearchPage } from '~/interfaces';
+import type { SteamAppForSearchPage } from '~/types';
 import {
   validateAppName,
   validateGenreIds,

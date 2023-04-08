@@ -2,7 +2,7 @@ import type {
   RatingTierRank,
   FrameRateTierRank,
   GamepadTierRank,
-} from '~/interfaces';
+} from '~/types';
 
 export type PerformancePostFormFieldsTyped = {
   postText?: string;

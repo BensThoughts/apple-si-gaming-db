@@ -3,7 +3,7 @@ import {
   json,
 } from '@remix-run/node';
 import { createSystemSpec, findSystemSpecSystemNames } from '~/models/SteamedApples/userSystemSpecs.server';
-import type { PrismaUserSystemSpec } from '~/interfaces/database';
+import type { PrismaUserSystemSpec } from '~/types/database';
 import type { CreateSystemSpecActionData, ProfileSystemsActionData } from './interfaces';
 import { validateNewSystemName, validateSystemInfo, extractSystemSpecs } from '~/lib/form-validators/profile';
 import { CreateSystemFormFields } from '~/lib/enums/FormFields/SystemSpec';

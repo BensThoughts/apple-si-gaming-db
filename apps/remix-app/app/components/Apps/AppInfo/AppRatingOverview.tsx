@@ -1,4 +1,4 @@
-import type { AveragePerformancePostRating } from '~/interfaces';
+import type { AveragePerformancePostRating } from '~/types';
 import {
   convertFrameRateTierRankToDescription,
   convertGamepadTierRankToDescription,

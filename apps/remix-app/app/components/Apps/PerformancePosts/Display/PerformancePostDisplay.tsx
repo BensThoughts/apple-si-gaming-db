@@ -1,7 +1,7 @@
 import TierRankContainer from './TierRankContainer';
 import type {
   PerformancePost,
-} from '~/interfaces';
+} from '~/types';
 import PerformancePostUserBadge from './UserBadge';
 import LikeButton from '~/components/Buttons/LikeButton';
 import SystemSpecsPopover from '~/components/HeadlessComponents/SystemSpecPopover';

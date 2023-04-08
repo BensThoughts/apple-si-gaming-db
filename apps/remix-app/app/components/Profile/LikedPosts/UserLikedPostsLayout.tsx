@@ -1,4 +1,4 @@
-import type { PerformancePost } from '~/interfaces';
+import type { PerformancePost } from '~/types';
 import { useState } from 'react';
 import UserProfilePostDisplayV2 from '../UserProfilePostDisplayV2';
 import MaterialInputOutlined from '~/components/FormComponents/MaterialInputOutlined';

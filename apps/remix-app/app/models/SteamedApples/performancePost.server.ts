@@ -5,7 +5,7 @@ import type {
   FrameRateTierRank,
   GamepadTierRank,
   AveragePerformancePostRating,
-} from '~/interfaces';
+} from '~/types';
 import type {
   PrismaPerformancePost,
   PrismaSteamApp,
@@ -14,7 +14,7 @@ import type {
   Prisma,
   PrismaGamepadMetadata,
   TierRank,
-} from '~/interfaces/database';
+} from '~/types/database';
 import prisma from '~/lib/database/db.server';
 import { isTypeFrameRateTierRank, isTypeGamepadTierRank } from '~/lib/form-validators/posts';
 import { findSystemSpecForPostBySystemSpecId } from './userSystemSpecs.server';

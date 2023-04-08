@@ -1,6 +1,6 @@
 import { Popover } from '@headlessui/react';
 import { useState } from 'react';
-import type { SystemSpec } from '~/interfaces';
+import type { SystemSpec } from '~/types';
 import { classNames } from '~/lib/css/classNames';
 import { HardDriveIcon } from '../Icons';
 

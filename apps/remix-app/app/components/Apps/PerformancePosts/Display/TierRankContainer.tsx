@@ -1,6 +1,6 @@
 import type {
   PerformancePost,
-} from '~/interfaces';
+} from '~/types';
 import {
   convertFrameRateTierRankToDescription,
   convertGamepadTierRankToDescription,

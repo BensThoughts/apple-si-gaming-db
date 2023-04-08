@@ -1,13 +1,13 @@
 import type {
   PrismaUserProfile,
-} from '~/interfaces/database';
+} from '~/types/database';
 
 import type {
   AppLoadContextSteamUser,
-} from '~/interfaces';
+} from '~/types';
 
 import prisma from '~/lib/database/db.server';
-import type { UserSessionServerSide } from '~/interfaces/remix-app/UserSession';
+import type { UserSessionServerSide } from '~/types/remix-app/UserSession';
 
 export async function findUserSystemsBySteamUserId64(
     steamUserId64: PrismaUserProfile['steamUserId64'],

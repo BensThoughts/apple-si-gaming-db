@@ -1,5 +1,5 @@
 import { classNames } from '~/lib/css/classNames';
-import type { TierRank } from '~/interfaces';
+import type { TierRank } from '~/types';
 
 export default function TierRankPill({
   tierRank,

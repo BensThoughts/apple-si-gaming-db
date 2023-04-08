@@ -3,7 +3,7 @@ import type {
   FrameRateTierRank,
   GamepadTierRank,
   TierRank,
-} from '~/interfaces';
+} from '~/types';
 
 export function convertTierRankToName(tierRank: TierRank) {
   switch (tierRank) {

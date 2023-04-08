@@ -5,7 +5,7 @@ import EditSystemModal from './EditSystemModal';
 import SystemSpecsPopover from '~/components/HeadlessComponents/SystemSpecPopover';
 import { showToast } from '~/components/Toasts';
 import type { DeleteSystemSpecActionData, EditSystemSpecActionData } from '~/lib/form-actions/profile/interfaces';
-import type { SystemSpec } from '~/interfaces';
+import type { SystemSpec } from '~/types';
 
 interface SystemSpecDisplayProps {
   systemSpecs: SystemSpec[];

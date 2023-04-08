@@ -1,4 +1,4 @@
-import type { TrendingSteamApp } from '~/interfaces';
+import type { TrendingSteamApp } from '~/types';
 import TrendingSteamAppCard from './TrendingSteamAppCard';
 
 export default function TrendingSteamAppsSection({

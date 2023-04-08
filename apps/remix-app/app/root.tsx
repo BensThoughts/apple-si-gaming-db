@@ -36,7 +36,7 @@ import { useTheme, ThemeProvider, NonFlashOfWrongThemeEls } from '~/lib/context/
 import { getThemeSession } from '~/lib/sessions/theme-session.server';
 import type {
   UserSessionServerSide,
-} from '~/interfaces/remix-app/UserSession';
+} from '~/types/remix-app/UserSession';
 import { logger } from '~/lib/logger/logger.server';
 import { useEffect } from 'react';
 import CatchDisplay from './components/Layout/CatchDisplay';

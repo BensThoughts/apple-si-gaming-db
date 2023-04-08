@@ -14,7 +14,7 @@ import AppInfoHeader from '~/components/Apps/AppInfo/AppInfoHeader';
 import AppInfoRequirements from '~/components/Apps/AppInfo/AppInfoRequirements';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import { validateSteamAppId } from '~/lib/loader-functions/params-validators.server';
-import type { AveragePerformancePostRating, SteamApp } from '~/interfaces';
+import type { AveragePerformancePostRating, SteamApp } from '~/types';
 import { logger } from '~/lib/logger/logger.server';
 import FourOhFour from '~/components/Layout/FourOhFour';
 import CatchDisplay from '~/components/Layout/CatchDisplay';

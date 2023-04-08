@@ -1,4 +1,4 @@
-import type { FrameRateTierRank, GamepadTierRank, RatingTierRank } from '~/interfaces';
+import type { FrameRateTierRank, GamepadTierRank, RatingTierRank } from '~/types';
 import {
   convertFrameRateTierRankToNumber,
   convertGamepadTierRankToNumber,

@@ -10,9 +10,9 @@ import { findAllGamepads } from '~/models/SteamedApples/gamepadMetadata.server';
 import { createPerformancePostAction } from '~/lib/form-actions/performance-post/create-post.server';
 import type {
   PerformancePost,
-} from '~/interfaces';
+} from '~/types';
 import CreatePerformancePostForm from '~/components/Apps/PerformancePosts/Forms/CreatePerformancePostForm';
-import type { PostTagOption, GamepadOption } from '~/interfaces';
+import type { PostTagOption, GamepadOption } from '~/types';
 import type { CreatePerformancePostActionData } from '~/lib/form-actions/performance-post/types';
 import { getIsLoggedIn, getUserIds, requireUserIds } from '~/lib/sessions/profile-session.server';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';

@@ -5,7 +5,7 @@ import ToggleSwitch from '~/components/FormComponents/ToggleSwitch';
 import MaterialInputOutlined from '~/components/FormComponents/MaterialInputOutlined';
 import RoundedButton from '~/components/Buttons/RoundedButton';
 import SmallAppDisplayCard from './SmallAppDisplayCard';
-import type { SteamAppForSmallAppsGridLayout } from '~/interfaces';
+import type { SteamAppForSmallAppsGridLayout } from '~/types';
 
 function computeGenreOptions(ownedApps: SteamAppForSmallAppsGridLayout[], ALL_FILTER: SelectOption) {
   const genreSet = new Set<string>();

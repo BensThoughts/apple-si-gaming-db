@@ -9,13 +9,13 @@ import type {
   PrismaSteamApp,
   PrismaSteamGenre,
   PrismaSteamCategory,
-} from '~/interfaces/database';
+} from '~/types/database';
 import type {
   TrendingSteamApp,
   SteamAppForSmallAppsGridLayout,
   SteamAppForSearchPage,
   SteamApp,
-} from '~/interfaces';
+} from '~/types';
 
 import prisma from '~/lib/database/db.server';
 import { logger } from '~/lib/logger/logger.server';

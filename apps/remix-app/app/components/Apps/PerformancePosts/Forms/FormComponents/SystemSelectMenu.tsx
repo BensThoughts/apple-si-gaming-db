@@ -1,6 +1,6 @@
 import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { SelectOption } from '~/components/FormComponents/SelectMenu';
-import type { SystemSpecOption } from '~/interfaces';
+import type { SystemSpecOption } from '~/types';
 
 export default function SystemSelectMenu({
   name,

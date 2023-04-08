@@ -3,7 +3,7 @@ import type {
   AppLoadContextSteamUser,
   ExtendedAppLoadContext,
   PassportSteamUser,
-} from '~/interfaces';
+} from '~/types';
 
 export function extractAppLoadContext(context: AppLoadContext): ExtendedAppLoadContext {
   const steamUser = context.steamUser ? context.steamUser as AppLoadContextSteamUser : null;

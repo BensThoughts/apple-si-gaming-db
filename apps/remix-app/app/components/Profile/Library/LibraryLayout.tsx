@@ -1,5 +1,5 @@
 import SmallAppsGridLayout from '~/components/Apps/SmallAppsGridLayout';
-import type { SteamAppForSmallAppsGridLayout } from '~/interfaces';
+import type { SteamAppForSmallAppsGridLayout } from '~/types';
 import SyncLibraryForm from './SyncLibraryForm';
 
 type LibraryLayoutProps = {

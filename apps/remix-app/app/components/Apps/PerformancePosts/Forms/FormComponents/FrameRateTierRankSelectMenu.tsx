@@ -1,7 +1,7 @@
 import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { SelectOption } from '~/components/FormComponents/SelectMenu';
 import { convertFrameRateTierRankToDescription } from '~/lib/conversions/rating-conversions';
-import type { FrameRateTierRank } from '~/interfaces';
+import type { FrameRateTierRank } from '~/types';
 
 export const frameRateAverageOptions: SelectOption<FrameRateTierRank | 'None'>[] = [
   {

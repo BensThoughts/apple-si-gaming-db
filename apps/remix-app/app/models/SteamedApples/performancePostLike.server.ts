@@ -1,7 +1,7 @@
 import prisma from '~/lib/database/db.server';
 import type {
   PerformancePost,
-} from '~/interfaces';
+} from '~/types';
 import { isTypeFrameRateTierRank, isTypeGamepadTierRank } from '~/lib/form-validators/posts';
 
 

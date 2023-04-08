@@ -10,7 +10,7 @@ import type {
   PostTagOption,
   GamepadOption,
   SystemSpecOption,
-} from '~/interfaces';
+} from '~/types';
 import PerformancePostFormWrapper from './PerformancePostFormWrapper';
 import BasePerformancePostFormFields from './BasePerformancePostFormFields';
 import RoundedButtonRemixLink from '~/components/Buttons/RoundedButtonRemixLink';

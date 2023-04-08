@@ -1,8 +1,8 @@
 import { getSteamPlayerOwnedGamesRequest } from '~/lib/data-utils/steamApi.server';
 import { filterAppIdsExistInDatabase } from './steamApp.server';
-import type { PrismaSteamApp } from '~/interfaces/database';
+import type { PrismaSteamApp } from '~/types/database';
 import prisma from '~/lib/database/db.server';
-import type { SteamAppForSmallAppsGridLayout } from '~/interfaces';
+import type { SteamAppForSmallAppsGridLayout } from '~/types';
 
 export async function updateSteamUserProfileOwnedSteamApps(
     steamUserId64: string,

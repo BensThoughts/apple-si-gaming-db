@@ -1,5 +1,5 @@
 import { json } from '@remix-run/node';
-import type { PrismaUserSystemSpec } from '~/interfaces/database';
+import type { PrismaUserSystemSpec } from '~/types/database';
 import {
   findSystemSpecSystemNames,
   updateSystemSpecSystemName,

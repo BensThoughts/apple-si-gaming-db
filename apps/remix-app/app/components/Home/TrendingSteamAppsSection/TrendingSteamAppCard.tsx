@@ -1,5 +1,5 @@
 import { Link } from '@remix-run/react';
-import type { TrendingSteamApp } from '~/interfaces';
+import type { TrendingSteamApp } from '~/types';
 import AppHeaderImage from '~/components/ImageWrappers/AppHeaderImage';
 import { useEffect, useRef, useState } from 'react';
 import { classNames } from '~/lib/css/classNames';

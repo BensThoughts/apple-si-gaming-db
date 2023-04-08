@@ -1,4 +1,4 @@
-import type { SteamSystemSpec } from '~/interfaces';
+import type { SteamSystemSpec } from '~/types';
 
 // TODO: duplicate code between profile and post
 export function validateSystemSpecIdForProfile(systemSpecId: number) {
