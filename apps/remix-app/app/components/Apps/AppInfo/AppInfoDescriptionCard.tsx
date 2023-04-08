@@ -7,9 +7,12 @@ export default function AppInfoDescriptionCard({
   requiredAge,
   shortDescription,
 }: AppInfoDescriptionCardProps) {
+  if (!shortDescription) {
+    return null;
+  }
   return (
     <div
-      className="hidden md:flex flex-col items-center gap-2 justify-center p-3
+      className="flex flex-col items-center gap-2 justify-center p-3
                  bg-tertiary rounded-lg max-w-2xl"
     >
       {requiredAge &&
