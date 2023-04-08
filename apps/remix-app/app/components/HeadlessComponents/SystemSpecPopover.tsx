@@ -1,8 +1,9 @@
 import { Popover } from '@headlessui/react';
+import { usePopper } from 'react-popper';
 import { useState } from 'react';
 import type { SystemSpec } from '~/types';
 import { classNames } from '~/lib/css/classNames';
-import { HardDriveIcon } from '../Icons';
+import { HardDriveIcon } from '~/components/Icons';
 
 type SystemSpecsPopoverProps = {
   systemSpec: {
@@ -25,6 +26,14 @@ export default function SystemSpecsPopover({
   giveButtonStyles = false,
 }: SystemSpecsPopoverProps) {
   const [isShowing, setIsShowing] = useState(false);
+  const [referenceElement, setReferenceElement] = useState<HTMLButtonElement | null>(null);
+  const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
+  // const [arrowElement, setArrowElement] = useState(null);
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+    placement: 'bottom-start',
+    // modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
+  });
+
   if (!Object.values(systemSpec).some(Boolean)) {
     return null;
   }
@@ -43,6 +52,7 @@ export default function SystemSpecsPopover({
       {({ open }) => (
         <>
           <Popover.Button
+            ref={setReferenceElement}
             onMouseEnter={() => setIsShowing(true)}
             onMouseLeave={() => setIsShowing(false)}
             className={classNames(
@@ -77,12 +87,15 @@ export default function SystemSpecsPopover({
 
           {(isShowing || open) && (
             <Popover.Panel
+              ref={setPopperElement}
+              style={styles.popper}
               className="absolute z-[100] max-w-fit"
               onMouseEnter={() => setIsShowing(true)}
               onMouseLeave={() => setIsShowing(false)}
               static
+              {...attributes.popper}
             >
-              <div className="pt-1">
+              <div className="py-1">
                 <div className="flex flex-col gap-1 text-sm text-primary-faded bg-primary border-secondary-highlight
                          border-1 rounded-md py-2 px-6">
                   {manufacturer &&
