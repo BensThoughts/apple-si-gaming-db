@@ -150,7 +150,9 @@ export default function SystemSpecDisplay({
                   memoryRAM,
                 }}
               >
-                <InformationCircleIcon size={22} />
+                <div className="flex justify-center items-center p-1 pb-2 h-[34px]">
+                  <InformationCircleIcon size={24} />
+                </div>
               </SystemSpecsPopover>
             </div>
             <div>{systemName}</div>
