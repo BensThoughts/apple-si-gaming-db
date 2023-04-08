@@ -31,13 +31,13 @@ export default function GamepadSelectMenu({
       name={name}
       defaultValue={defaultValue ? defaultValue : gamepadOptions[0]}
       options={gamepadOptions}
-      labelText="Controller"
+      labelText="Gamepad"
       fieldError={fieldError}
     />
     // <MultiSelectMenu
     //   name="performancePostGamepadId"
     //   id={`performancePostGamepadId-${formId}`}
-    //   labelText="Controller"
+    //   labelText="Gamepad"
     //   options={gamepadOptions}
     //   fieldError={fieldError}
     //   isMulti={false}
