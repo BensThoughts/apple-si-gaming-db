@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import { classNames } from '~/lib/css/classNames';
 // import { AppleIcon } from '~/components/Icons';
 
-export default function ToggleSwitch({
+export default function ToggleSwitchUncontrolled({
   defaultChecked,
   name,
   label,

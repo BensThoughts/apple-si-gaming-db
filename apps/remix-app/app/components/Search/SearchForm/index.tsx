@@ -3,7 +3,7 @@ import MaterialInputOutlined from '~/components/FormComponents/MaterialInputOutl
 import { Form } from '@remix-run/react';
 import { useEffect, useRef } from 'react';
 import { showToast } from '~/components/Toasts';
-import UncontrolledToggleSwitch from '~/components/FormComponents/ToggleSwitch/UncontrolledToggleSwitch';
+import ToggleSwitchUncontrolled from '~/components/FormComponents/ToggleSwitchUncontrolled';
 import MultiSelectMenu from '~/components/FormComponents/MultiSelectMenu';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
 import type {
@@ -102,7 +102,7 @@ export default function SearchForm({
 
             <div className="flex justify-between items-center w-full">
               <div className="md:w-full md:justify-self-center">
-                <UncontrolledToggleSwitch
+                <ToggleSwitchUncontrolled
                   defaultChecked={fields ? fields.appleOnly : false}
                   name={SearchFormURLParams.APPLE_ONLY}
                   label="Apple"
