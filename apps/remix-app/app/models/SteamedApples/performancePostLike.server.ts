@@ -1,6 +1,6 @@
 import prisma from '~/lib/database/db.server';
 import type {
-  PerformancePostForUserProfileDisplay,
+  PerformancePost,
 } from '~/interfaces';
 import { isTypeFrameRateTierRank, isTypeGamepadTierRank } from '~/lib/form-validators/posts';
 
@@ -37,7 +37,7 @@ export async function unlikePerformancePost(
 
 export async function findUserProfileLikedPosts(
     userProfileId: number,
-): Promise<PerformancePostForUserProfileDisplay[]> {
+): Promise<PerformancePost[]> {
   const userProfile = await prisma.userProfile.findUnique({
     where: {
       id: userProfileId,
@@ -61,6 +61,7 @@ export async function findUserProfileLikedPosts(
               frameRateStutters: true,
               gamepadMetadata: {
                 select: {
+                  id: true,
                   description: true,
                 },
               },
@@ -82,6 +83,14 @@ export async function findUserProfileLikedPosts(
                   avatarMedium: true,
                 },
               },
+              systemManufacturer: true,
+              systemModel: true,
+              systemCpuBrand: true,
+              systemOsVersion: true,
+              systemVideoDriver: true,
+              systemVideoDriverVersion: true,
+              systemVideoPrimaryVRAM: true,
+              systemMemoryRAM: true,
             },
           },
         },
@@ -118,6 +127,14 @@ export async function findUserProfileLikedPosts(
         avatarMedium,
         displayName,
       },
+      systemManufacturer,
+      systemModel,
+      systemOsVersion,
+      systemCpuBrand,
+      systemVideoDriver,
+      systemVideoDriverVersion,
+      systemVideoPrimaryVRAM,
+      systemMemoryRAM,
     },
   }) => ({
     performancePostId: id,
@@ -143,6 +160,16 @@ export async function findUserProfileLikedPosts(
       steamUserId64: steamUserId64.toString(),
       displayName,
       avatarMedium,
+    },
+    systemSpec: {
+      manufacturer: systemManufacturer,
+      model: systemModel,
+      osVersion: systemOsVersion,
+      cpuBrand: systemCpuBrand,
+      videoDriver: systemVideoDriver,
+      videoDriverVersion: systemVideoDriverVersion,
+      videoPrimaryVRAM: systemVideoPrimaryVRAM,
+      memoryRAM: systemMemoryRAM,
     },
   }));
 }
