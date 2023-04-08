@@ -5,20 +5,10 @@ import type {
 } from '~/lib/form-actions/profile/interfaces';
 import CreateSystemForm from './CreateSystemForm';
 import SystemSpecDisplay from './SystemSpecDisplay';
+import type { SystemSpec } from '~/interfaces';
 
 interface SystemSpecLayoutProps {
-  systemSpecs: {
-    systemSpecId: number;
-    systemName: string;
-    manufacturer: string | null;
-    model: string | null;
-    cpuBrand: string | null;
-    osVersion: string | null;
-    videoDriver: string | null;
-    videoDriverVersion: string | null;
-    videoPrimaryVRAM: string | null;
-    memoryRAM: string | null;
-  }[];
+  systemSpecs: SystemSpec[];
   createSystemSpecActionData?: CreateSystemSpecActionData;
   editSystemSpecActionData?: EditSystemSpecActionData;
   deleteSystemSpecActionData?: DeleteSystemSpecActionData;
@@ -31,7 +21,6 @@ export default function SystemSpecLayout({
   deleteSystemSpecActionData,
 }: SystemSpecLayoutProps) {
   return (
-
     <div className="flex flex-col gap-8 items-center xl:items-start xl:flex-row
                     xl:justify-around w-full">
 

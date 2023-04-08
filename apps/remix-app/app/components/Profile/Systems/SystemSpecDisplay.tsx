@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { EditIcon, InformationCircleIcon, TrashIcon } from '~/components/Icons';
 import DeleteSystemModal from './DeleteSystemModal';
 import EditSystemModal from './EditSystemModal';
-import SystemSpecsPopover from '~/components/AppInfo/PerformancePosts/SystemSpecsPopover';
+import SystemSpecsPopover from '~/components/HeadlessComponents/SystemSpecPopover';
 import { showToast } from '~/components/Toasts';
 import type { DeleteSystemSpecActionData, EditSystemSpecActionData } from '~/lib/form-actions/profile/interfaces';
-import type { UserProfileSystemSpec } from '~/interfaces';
+import type { SystemSpec } from '~/interfaces';
 
 interface SystemSpecDisplayProps {
-  systemSpecs: UserProfileSystemSpec[];
+  systemSpecs: SystemSpec[];
   editSystemSpecActionData?: EditSystemSpecActionData;
   deleteSystemSpecActionData?: DeleteSystemSpecActionData;
 }
