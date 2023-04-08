@@ -65,7 +65,7 @@ export default function SystemSpecsPopover({
                              stroke-1"
                 />
                 <span className="text-primary group-hover:text-primary-highlight text-sm font-light">
-              System
+                  System
                 </span>
               </>
             ) : (
@@ -77,53 +77,55 @@ export default function SystemSpecsPopover({
 
           {(isShowing || open) && (
             <Popover.Panel
-              className="absolute z-[100] bg-primary border-secondary-highlight
-                 border-1 rounded-md p-2 w-screen max-w-[18rem] md:max-w-xs"
+              className="absolute z-[100] max-w-fit"
               onMouseEnter={() => setIsShowing(true)}
               onMouseLeave={() => setIsShowing(false)}
               static
             >
-              <div className="flex flex-col gap-1 text-sm text-primary-faded">
-                {manufacturer &&
+              <div className="pt-1">
+                <div className="flex flex-col gap-1 text-sm text-primary-faded bg-primary border-secondary-highlight
+                         border-1 rounded-md py-2 px-6">
+                  {manufacturer &&
                   <span>Manufacturer:&nbsp;
                     <span className="text-primary">{manufacturer}</span>
                   </span>
-                }
-                {model &&
+                  }
+                  {model &&
                   <span>Model:&nbsp;
                     <span className="text-primary">{model}</span>
                   </span>
-                }
-                {osVersion &&
+                  }
+                  {osVersion &&
                   <span>OS Version:&nbsp;
                     <span className="text-primary">{osVersion}</span>
                   </span>
-                }
-                {cpuBrand &&
+                  }
+                  {cpuBrand &&
                   <span>CPU Brand:&nbsp;
                     <span className="text-primary">{cpuBrand}</span>
                   </span>
-                }
-                {videoDriver&&
+                  }
+                  {videoDriver&&
                   <span>Video Driver:&nbsp;
                     <span className="text-primary">{videoDriver}</span>
                   </span>
-                }
-                {videoDriverVersion &&
+                  }
+                  {videoDriverVersion &&
                   <span>Video Driver Version:&nbsp;
                     <span className="text-primary">{videoDriverVersion}</span>
                   </span>
-                }
-                {videoPrimaryVRAM &&
+                  }
+                  {videoPrimaryVRAM &&
                   <span>Video VRAM:&nbsp;
                     <span className="text-primary">{videoPrimaryVRAM}</span>
                   </span>
-                }
-                {memoryRAM &&
+                  }
+                  {memoryRAM &&
                   <span>RAM:&nbsp;
                     <span className="text-primary">{memoryRAM}</span>
                   </span>
-                }
+                  }
+                </div>
               </div>
             </Popover.Panel>
           )}
