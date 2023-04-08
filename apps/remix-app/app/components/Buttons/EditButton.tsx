@@ -1,17 +1,30 @@
 import { Link, useMatches } from '@remix-run/react';
 import { EditIcon } from '~/components/Icons';
 import { EditPostURLParams } from '~/lib/enums/URLSearchParams/EditPost';
+import { useUserSession } from '~/lib/hooks/useMatchesData';
 
 interface EditButtonProps {
   steamAppId: number;
   performancePostId: number;
+  userWhoCreated: { steamUserId64: string };
 }
 
 export default function EditButton({
   steamAppId,
   performancePostId,
+  userWhoCreated,
 }: EditButtonProps) {
   const matches = useMatches();
+  const { userSession } = useUserSession();
+
+  const didSteamUserCreatePost = userSession
+    ? userWhoCreated.steamUserId64 === userSession.steamUserProfile.steamUserId64
+    : false;
+
+  if (!didSteamUserCreatePost) {
+    return null;
+  }
+
   const deepestMatch = matches.length > 0
     ? matches[matches.length - 1]
     : undefined;
