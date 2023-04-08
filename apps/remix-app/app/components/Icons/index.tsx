@@ -5,6 +5,7 @@ export { default as ChevronUpIcon } from './ChevronUp';
 export { default as CloudMoonIcon } from './CloudMoon';
 export { default as DiscordIcon } from './Discord';
 export { default as EditIcon } from './Edit';
+export { default as EyeIcon } from './Eye';
 export { default as HardDriveIcon } from './HardDrive';
 export { default as InformationCircleIcon } from './InformationCircle';
 export { default as LinuxIcon } from './Linux';
