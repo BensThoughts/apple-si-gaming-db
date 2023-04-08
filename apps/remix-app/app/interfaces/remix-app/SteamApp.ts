@@ -16,7 +16,7 @@ export type TrendingSteamApp = {
 }
 
 
-export type SteamAppSidebarData = {
+export type SteamApp = {
   steamAppId: number;
   name: string;
   headerImage: string | null;
@@ -31,6 +31,7 @@ export type SteamAppSidebarData = {
   linuxRequirementsMinimum: string | null;
   genres: SteamGenre[];
   categories: SteamCategory[];
+  dataNeedsRefresh: boolean;
 }
 
 export type SteamAppForSmallAppsGridLayout = {
