@@ -49,21 +49,30 @@
     mask-composite: subtract;
   }
 
-  .box-test {
-    position: relative;
-  }
+  .user-profile-liked-posts-grid {
+    /**
+      * User input values.
+      */
+    --grid-layout-gap: 1rem;
+    --grid-column-count: 4;
+    --grid-item--min-width: 320px;
 
-  .box-test:after {
-    content: "";
-    position: absolute;
-    left: 100%;
-    bottom: 0;
-    height: 20px;
-    width: 20px;
-    background-color: rgb(var(--color-app-tertiary));
-    --mask: radial-gradient(20px at 100% 0, #0000 98%, #000);
-    -webkit-mask: var(--mask);
-    mask: var(--mask);
+    /**
+      * Calculated values.
+      */
+    --gap-count: calc(var(--grid-column-count) - 1);
+    --total-gap-width: calc(var(--gap-count) * var(--grid-layout-gap));
+    --grid-item--max-width: calc(
+      (100% - var(--total-gap-width)) / var(--grid-column-count)
+    );
+
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(max(var(--grid-item--min-width), var(--grid-item--max-width)), 1fr)
+    );
+    grid-gap: var(--grid-layout-gap);
+    grid-auto-flow: dense;
   }
 }
 
