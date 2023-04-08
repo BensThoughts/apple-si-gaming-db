@@ -6,7 +6,7 @@ export default function PerformancePostFormWrapper({
   return (
     <div
       className="flex flex-col gap-3 items-center justify-center bg-tertiary
-                 p-6 rounded-lg w-full max-w-2xl"
+                 p-6 rounded-lg w-full"
     >
       {children}
     </div>
