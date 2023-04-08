@@ -3,7 +3,7 @@ import {
   WindowsIcon,
   LinuxIcon,
 } from '~/components/Icons';
-import AppHeaderImage from '../ImageWrappers/AppHeaderImage';
+import AppHeaderImage from '~/components/ImageWrappers/AppHeaderImage';
 import AppInfoExternalLinks from './AppInfoExternalLinks';
 
 export default function AppInfoHeader({
@@ -26,17 +26,18 @@ export default function AppInfoHeader({
   return (
     <div
       className="flex flex-col gap-4 justify-center items-center w-full
-                 bg-tertiary p-2 rounded-lg"
+                 bg-tertiary pb-3 pt-1 px-1 rounded-lg"
     >
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-center p-[3px] md:p-[6px] rounded-lg">
+      <div className="flex flex-col gap-2 w-full">
+        <div className="h-auto w-full flex items-center justify-center rounded-lg">
           {headerImage && <AppHeaderImage
             headerImageSrc={headerImage}
             name={name}
+            className="w-full object-cover rounded-lg"
           />}
         </div>
 
-        <div className="flex flex-row justify-between text-sm px-2">
+        <div className="flex flex-row justify-between text-sm px-1">
           {releaseDate && (
             <span>
               Released:&nbsp;
