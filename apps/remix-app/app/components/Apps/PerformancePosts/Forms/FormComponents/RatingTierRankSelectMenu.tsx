@@ -59,7 +59,7 @@ export default function RatingTierRankSelectMenu({
         value: defaultValue,
       } : { value: 'None', name: 'None' }}
       options={steamAppRatingOptions}
-      labelText="Rating"
+      labelText="Tier Rank"
       required
       fieldError={fieldError}
     />
