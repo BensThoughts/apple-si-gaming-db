@@ -12,7 +12,7 @@ export default function TextPill({
       className={classNames(
           'flex justify-center items-center py-1 px-2 text-xs',
           'rounded-md border-solid border-1 border-secondary',
-          'select-none max-w-fit',
+          'select-none max-w-fit shadow-md h-6',
           className ? className : '',
       )}
     >
