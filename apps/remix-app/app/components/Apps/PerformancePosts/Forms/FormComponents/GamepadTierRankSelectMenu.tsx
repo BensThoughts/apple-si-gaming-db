@@ -48,7 +48,7 @@ export default function GamepadTierRankSelectMenu({
         value: defaultValue,
       } : { name: 'None', value: 'None' }}
       options={gamepadRatingOptions}
-      labelText="Controller Rating"
+      labelText="Gamepad Tier Rank"
       fieldError={fieldError}
       // menuSize="large"
     />
