@@ -1,5 +1,5 @@
 import TailwindDisclosure from '~/components/HeadlessComponents/TailwindDisclosure';
-import RequirementTabs from '~/components/AppInfo/RequirementTabs';
+import RequirementTabs from '~/components/Apps/AppInfo/RequirementTabs';
 
 export default function AppInfoRequirements({
   mac,
@@ -22,6 +22,9 @@ export default function AppInfoRequirements({
   const { platformMac, macRequirementsMinimum } = mac;
   const { platformWindows, pcRequirementsMinimum } = windows;
   const { platformLinux, linuxRequirementsMinimum } = linux;
+  if (!macRequirementsMinimum && !pcRequirementsMinimum && !linuxRequirementsMinimum) {
+    return null;
+  }
   return (
     <div className="w-full">
       <TailwindDisclosure title="Requirements" defaultOpen={false}>
