@@ -30,7 +30,7 @@ export default function SystemSelectMenu({
       name={name}
       defaultValue={defaultValue ? defaultValue : systemNameOptions[0]}
       options={systemNameOptions}
-      labelText="Select System"
+      labelText="System"
     />
   );
 }
