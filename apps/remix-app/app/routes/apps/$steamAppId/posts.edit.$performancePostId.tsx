@@ -10,9 +10,9 @@ import { useActionData, useCatch, useLoaderData, useNavigation } from '@remix-ru
 import { findPostTags } from '~/models/SteamedApples/performancePostTag.server';
 import { findAllGamepads } from '~/models/SteamedApples/gamepadMetadata.server';
 // import { doesSteamUserOwnApp } from '~/models/steamUser.server';
-import EditPerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForms/EditPerformancePostForm';
-import PerformancePostDisplay from '~/components/AppInfo/PerformancePosts/PerformancePostDisplay';
-import PostLayoutCard from '~/components/AppInfo/PerformancePosts/PerformancePostLayoutCard';
+import EditPerformancePostForm from '~/components/Apps/PerformancePosts/Forms/EditPerformancePostForm';
+import PerformancePostDisplay from '~/components/Apps/PerformancePosts/Display/PerformancePostDisplay';
+import PostLayoutCard from '~/components/Apps/PerformancePosts/PerformancePostLayoutCard';
 import { editPerformancePostAction } from '~/lib/form-actions/performance-post/edit-post.server';
 import type { PostTagOption, GamepadOption } from '~/interfaces';
 import type { EditPerformancePostActionData } from '~/lib/form-actions/performance-post/types';
@@ -111,7 +111,7 @@ export default function EditPerformancePostRoute() {
 
 
   return (
-    <div className="flex flex-col items-center gap-3">
+    <div className="flex flex-col justify-center items-center gap-6 w-full max-w-[50rem]">
 
       <PostLayoutCard>
         <PerformancePostDisplay performancePost={performancePost} />
