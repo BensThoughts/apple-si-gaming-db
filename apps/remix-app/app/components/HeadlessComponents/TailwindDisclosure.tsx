@@ -2,7 +2,7 @@ import {
   Disclosure,
   Transition,
 } from '@headlessui/react';
-import { ChevronUpIcon } from '~/components/Icons';
+import { ChevronUpIcon } from '~/components/Icons/FeatherIcons';
 import { classNames } from '~/lib/css/classNames';
 
 export default function TailwindDisclosure({

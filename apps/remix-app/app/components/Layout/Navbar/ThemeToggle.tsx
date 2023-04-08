@@ -5,7 +5,7 @@ import { Theme, useTheme } from '~/lib/context/theme-provider';
 import {
   CloudMoonIcon,
   SunIcon,
-} from '~/components/Icons';
+} from '~/components/Icons/FontAwesomeIcons/Solid';
 import { classNames } from '~/lib/css/classNames';
 
 export default function ThemeToggle() {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { InformationCircleIcon } from '~/components/Icons';
+import { InformationCircleIcon } from '~/components/Icons/FeatherIcons';
 import { classNames } from '~/lib/css/classNames';
 
 export default function AsideCard({

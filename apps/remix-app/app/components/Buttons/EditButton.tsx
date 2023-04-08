@@ -1,5 +1,5 @@
 import { Link, useMatches } from '@remix-run/react';
-import { EditIcon } from '~/components/Icons';
+import { EditIcon } from '~/components/Icons/FeatherIcons';
 import { EditPostURLParams } from '~/lib/enums/URLSearchParams/EditPost';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
 

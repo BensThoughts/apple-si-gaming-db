@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
-import { CheckIcon, ChevronUpIcon } from '~/components/Icons';
+import { CheckIcon, ChevronUpIcon } from '~/components/Icons/FeatherIcons';
 import { classNames } from '~/lib/css/classNames';
 
 export type SelectOption<T = string> = {

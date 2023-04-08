@@ -1,6 +1,6 @@
 import type { MetaFunction } from '@remix-run/node';
 import AsideCard from '~/components/Cards/AsideCard';
-import { DiscordIcon, RedditIcon, TwitterIcon } from '~/components/Icons';
+import { DiscordIcon, RedditIcon, TwitterIcon } from '~/components/Icons/SimpleIcons';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import { metaTags } from '~/lib/meta-tags';
 

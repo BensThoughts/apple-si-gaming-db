@@ -1,6 +1,6 @@
 import { Combobox, Transition } from '@headlessui/react';
 import React, { Fragment, useState } from 'react';
-import { CheckIcon, ChevronUpIcon } from '~/components/Icons';
+import { CheckIcon, ChevronUpIcon } from '~/components/Icons/FeatherIcons';
 import { classNames } from '~/lib/css/classNames';
 
 export type ComboboxOption<T extends React.Key = string> = {

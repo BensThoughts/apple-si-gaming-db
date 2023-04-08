@@ -1,6 +1,5 @@
-export * from './Book';
-export * from './Chat';
-export * from './Gear';
-export * from './Monitor';
-export * from './Sync';
-
+export * from './Icons/Book';
+export * from './Icons/Chat';
+export * from './Icons/Gear';
+export * from './Icons/Monitor';
+export * from './Icons/Sync';

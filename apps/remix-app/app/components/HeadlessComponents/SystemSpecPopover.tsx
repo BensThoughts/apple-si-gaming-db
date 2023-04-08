@@ -3,7 +3,7 @@ import { usePopper } from 'react-popper';
 import { useState } from 'react';
 import type { SystemSpec } from '~/types';
 import { classNames } from '~/lib/css/classNames';
-import { HardDriveIcon } from '~/components/Icons';
+import { HardDriveIcon } from '~/components/Icons/FeatherIcons';
 
 type SystemSpecsPopoverProps = {
   systemSpec: {

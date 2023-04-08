@@ -1,5 +1,5 @@
 import { classNames } from '~/lib/css/classNames';
-import { DiscordIcon, RedditIcon, TwitterIcon } from '../../Icons';
+import { DiscordIcon, RedditIcon, TwitterIcon } from '~/components/Icons/SimpleIcons';
 
 export default function PageFooter({
   className,

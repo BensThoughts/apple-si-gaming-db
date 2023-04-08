@@ -1,4 +1,4 @@
-import { InformationCircleIcon } from '../Icons';
+import { InformationCircleIcon } from '~/components/Icons/FeatherIcons';
 
 export default function NewDomainBannerAlert() {
   return (

@@ -2,7 +2,7 @@ import {
   AppleIcon,
   WindowsIcon,
   LinuxIcon,
-} from '~/components/Icons';
+} from '~/components/Icons/SimpleIcons';
 import AppHeaderImage from '~/components/ImageWrappers/AppHeaderImage';
 import AppInfoExternalLinks from './AppInfoExternalLinks';
 

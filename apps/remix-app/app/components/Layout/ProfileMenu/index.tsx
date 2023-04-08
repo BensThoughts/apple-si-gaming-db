@@ -4,7 +4,7 @@ import {
   useFetcher,
 } from '@remix-run/react';
 import { Fragment } from 'react';
-import { SteamIcon } from '~/components/Icons';
+import { SteamIcon } from '~/components/Icons/FontAwesomeIcons/Solid';
 import { classNames } from '~/lib/css/classNames';
 import { loggedInMenuLinks } from './profileMenuLinks';
 

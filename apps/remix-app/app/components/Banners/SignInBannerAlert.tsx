@@ -1,6 +1,6 @@
 // import { useFetcher } from '@remix-run/react';
 import { useState } from 'react';
-import { InformationCircleIcon, XMarkIcon } from '~/components/Icons';
+import { InformationCircleIcon, XMarkIcon } from '~/components/Icons/FeatherIcons';
 
 export default function SignInBannerAlert({
   showBanner,

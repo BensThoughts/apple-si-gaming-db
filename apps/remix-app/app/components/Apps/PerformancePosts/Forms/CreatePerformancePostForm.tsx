@@ -12,6 +12,7 @@ import type {
 import PerformancePostFormWrapper from './PerformancePostFormWrapper';
 import BasePerformancePostFormFields from './BasePerformancePostFormFields';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
+import SelectMenuWithIcon from '~/components/FormComponents/SelectMenuWithIcon';
 
 interface CreatePerformancePostFormProps {
   steamAppId: number;
@@ -117,6 +118,7 @@ export default function CreatePerformancePostForm({
         action={`/apps/${steamAppId}/posts`}
       >
         <input type="hidden" name="_performancePostAction" value="createPerformancePost" />
+        <SelectMenuWithIcon options={[{ name: 'Test', value: 'Test' }]} name="Test" defaultValue={{ name: 'Test', value: 'Test' }} />
         <BasePerformancePostFormFields
           systemSpecOptions={systemSpecOptions}
           gamepadOptions={gamepadOptions}

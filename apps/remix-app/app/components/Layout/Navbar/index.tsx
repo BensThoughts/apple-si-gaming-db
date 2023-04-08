@@ -8,8 +8,10 @@ import { navMenuLinks } from './navMenuLinks';
 
 import {
   BarsIcon,
+} from '~/components/Icons/FeatherIcons';
+import {
   SteamIcon,
-} from '~/components/Icons';
+} from '~/components/Icons/FontAwesomeIcons/Solid';
 import SimpleSearchForm from '~/components/Search/SimpleSearchForm';
 import { NavLink } from '@remix-run/react';
 import { AppleLogoSolidIcon } from '~/components/Icons/FlatIcons/Solid';

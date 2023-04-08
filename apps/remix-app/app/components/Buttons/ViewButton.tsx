@@ -1,5 +1,5 @@
 import { Link } from '@remix-run/react';
-import { EyeIcon } from '~/components/Icons';
+import { EyeIcon } from '~/components/Icons/FeatherIcons';
 
 export default function ViewButton({
   steamAppId,

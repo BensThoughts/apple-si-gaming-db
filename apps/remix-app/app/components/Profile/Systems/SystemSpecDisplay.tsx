@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { EditIcon, InformationCircleIcon, TrashIcon } from '~/components/Icons';
+import { EditIcon, InformationCircleIcon, TrashIcon } from '~/components/Icons/FeatherIcons';
 import DeleteSystemModal from './DeleteSystemModal';
 import EditSystemModal from './EditSystemModal';
 import SystemSpecsPopover from '~/components/HeadlessComponents/SystemSpecPopover';
