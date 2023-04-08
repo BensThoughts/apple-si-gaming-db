@@ -5,7 +5,7 @@ import type {
 } from '~/interfaces';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
 import EditButton from '~/components/Buttons/EditButton';
-import PerformancePostBadge from './Badge';
+import PerformancePostBadge from './UserBadge';
 import LikeButton from '~/components/Buttons/LikeButton';
 
 type PerformancePostDisplayProps = {
