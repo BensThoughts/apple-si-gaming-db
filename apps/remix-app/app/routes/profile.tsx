@@ -73,8 +73,8 @@ export default function ProfilePage() {
 
   return (
     <PageWrapper title={title} topSpacer>
-      <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] grid-rows-[auto_1fr] gap-8 min-h-screen">
-        <div className="col-start-1 col-span-1 row-start-1 row-span-1">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_minmax(357px,55rem)_1fr] grid-rows-[auto_1fr] gap-8 min-h-screen">
+        <div className="col-start-1 col-span-full md:col-start-2 md:col-span-1 row-start-1 row-span-1">
           <div className="flex flex-col gap-2 items-center w-full min-w-[15rem] bg-tertiary rounded-lg p-4">
             <h2 className="text-lg text-secondary font-bold">Account Menu</h2>
             <MenuItem to="/profile" label="Profile" />
@@ -84,8 +84,8 @@ export default function ProfilePage() {
             <MenuItem to="/profile/liked-posts" label="Liked Posts" />
           </div>
         </div>
-        <div className="block col-start-1 md:col-start-2 col-end-[-1] row-start-2 md:row-start-1 row-span-1">
-          <div className="flex justify-center">
+        <div className="block col-start-1 col-span-full md:col-start-3 md:col-span-1 row-start-2 md:row-start-1 row-span-1">
+          <div className="flex justify-center w-full max-w-[55rem]">
             <Outlet />
           </div>
         </div>
