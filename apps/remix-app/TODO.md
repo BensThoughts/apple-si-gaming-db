@@ -13,6 +13,7 @@ Explicit (doesn't require db cleanup externally)
 
 ## Priority High
 
+- [ ] Make Like/System/Edit buttons smaller
 - [ ] Fix loading performance posts twice in $steamAppId and $steamAppId/posts,
       just pull data with useMatches() or only pull ratings from server
 - [ ] Add tests!
