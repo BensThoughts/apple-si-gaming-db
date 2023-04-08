@@ -2,6 +2,8 @@ import type {
   RatingTierRank,
   FrameRateTierRank,
   GamepadTierRank,
+  TierRank,
+  SystemSpec,
 } from '~/interfaces';
 
 //  type ExpandRecursively<T> = T extends object
@@ -41,78 +43,19 @@ export type PerformancePost = {
     description: string;
   }[];
   systemSpec: {
-    manufacturer?: string | null;
-    model?: string | null;
-    osVersion?: string | null;
-    cpuBrand?: string | null;
-    videoDriver?: string | null;
-    videoDriverVersion?: string | null;
-    videoPrimaryVRAM?: string | null;
-    memoryRAM?: string | null;
-    systemSpecId?: number | null;
+    manufacturer: SystemSpec['manufacturer'];
+    model: SystemSpec['model'];
+    osVersion: SystemSpec['osVersion'];
+    cpuBrand: SystemSpec['cpuBrand'];
+    videoDriver: SystemSpec['videoDriver'];
+    videoDriverVersion: SystemSpec['videoDriverVersion'];
+    videoPrimaryVRAM: SystemSpec['videoPrimaryVRAM'];
+    memoryRAM: SystemSpec['memoryRAM'];
+    systemSpecId?: SystemSpec['systemSpecId'] | null; // used for editing posts to pre-fill form
   };
   numLikes: number;
 }
 
-
-export type PerformancePostForUserProfileDisplay = {
-  performancePostId: number;
-  createdAt: string;
-  postText: string;
-  rating: {
-    ratingTierRank: RatingTierRank;
-    frameRateTierRank?: FrameRateTierRank | null;
-    frameRateStutters?: boolean | null;
-    gamepadTierRank?: GamepadTierRank | null;
-    gamepadMetadata?: {
-      description: string;
-    } | null;
-  }
-  userWhoCreated: {
-    steamUserId64: string;
-  }
-  steamApp: {
-    steamAppId: number;
-    name: string;
-    headerImage?: string | null;
-  };
-  postTags: {
-    id: number;
-    description: string;
-  }[];
-  numLikes: number;
-}
-
-export type PerformancePostSystemSpecPopover = {
-  systemSpec: {
-    manufacturer?: string | null;
-    model?: string | null;
-    osVersion?: string | null;
-    cpuBrand?: string | null;
-    videoDriver?: string | null;
-    videoDriverVersion?: string | null;
-    videoPrimaryVRAM?: string | null;
-    memoryRAM?: string | null;
-    systemSpecId?: number | null;
-  }
-};
-
-export type PerformancePostMetaBarData = {
-  performancePostId: number;
-  createdAt: string;
-  steamApp: {
-    steamAppId: number;
-  };
-  userWhoCreated: {
-    steamUserId64: string;
-  };
-  rating: {
-    ratingTierRank: RatingTierRank;
-    frameRateTierRank?: FrameRateTierRank | null;
-    frameRateStutters?: boolean | null;
-  };
-  numLikes: number;
-}
 
 export type PerformancePostForNewPostsCard = {
   performancePostId: number;
@@ -140,4 +83,12 @@ export interface PostTagOption {
 export interface SystemSpecOption {
   id: number;
   systemName: string;
+}
+
+export type AveragePerformancePostRating = {
+  avgRatingTierRank?: RatingTierRank;
+  avgFrameRateTierRank?: FrameRateTierRank;
+  percentPostsWhereFrameRateStutters: number | null;
+  frameRateStuttersTierRank: TierRank;
+  avgGamepadTierRank?: GamepadTierRank;
 }
