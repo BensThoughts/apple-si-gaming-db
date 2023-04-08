@@ -1,7 +1,7 @@
 import type { LoaderArgs, ActionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useActionData, useCatch, useLoaderData, useNavigation } from '@remix-run/react';
-import PerformancePostLayout from '~/components/AppInfo/PerformancePosts/PerformancePostLayout';
+import PerformancePostLayout from '~/components/Apps/PerformancePosts/PerformancePostLayout';
 import { findPerformancePostsBySteamAppId } from '~/models/SteamedApples/performancePost.server';
 import { findPostTags } from '~/models/SteamedApples/performancePostTag.server';
 import { doesSteamUserOwnApp } from '~/models/Steam/steamUserProfile.server';
@@ -11,7 +11,7 @@ import { createPerformancePostAction } from '~/lib/form-actions/performance-post
 import type {
   PerformancePost,
 } from '~/interfaces';
-import CreatePerformancePostForm from '~/components/AppInfo/PerformancePosts/PerformancePostForms/CreatePerformancePostForm';
+import CreatePerformancePostForm from '~/components/Apps/PerformancePosts/Forms/CreatePerformancePostForm';
 import type { PostTagOption, GamepadOption } from '~/interfaces';
 import type { CreatePerformancePostActionData } from '~/lib/form-actions/performance-post/types';
 import { getIsLoggedIn, getUserIds, requireUserIds } from '~/lib/sessions/profile-session.server';
@@ -89,7 +89,7 @@ export default function PerformancePostsRoute() {
     navigation.formData.get('_performancePostAction') === 'createPerformancePost';
 
   return (
-    <div className="flex flex-col justify-center items-center gap-4 w-full">
+    <div className="flex flex-col justify-center items-center gap-6 w-full max-w-[50rem]">
       <PerformancePostLayout performancePosts={performancePosts} />
       <CreatePerformancePostForm
         steamAppId={steamAppId}
