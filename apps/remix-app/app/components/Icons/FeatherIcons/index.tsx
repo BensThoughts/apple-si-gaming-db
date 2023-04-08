@@ -6,6 +6,7 @@ export * from './Icons/Edit';
 export * from './Icons/Eye';
 export * from './Icons/HardDrive';
 export * from './Icons/InformationCircle';
+export * from './Icons/Monitor';
 export * from './Icons/ThumbsUp';
 export * from './Icons/Trash';
 export * from './Icons/XMark';
