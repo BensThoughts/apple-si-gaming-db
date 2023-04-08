@@ -3,7 +3,9 @@ import type {
   PerformancePost,
 } from '~/interfaces';
 import PerformancePostUserBadge from './UserBadge';
-import ButtonContainer from './ButtonContainer';
+import LikeButton from '~/components/Buttons/LikeButton';
+import SystemSpecsPopover from '~/components/HeadlessComponents/SystemSpecPopover';
+import EditButton from '~/components/Buttons/EditButton';
 
 type PerformancePostDisplayProps = {
   performancePost: PerformancePost;
@@ -40,13 +42,15 @@ export default function PerformancePostDisplay({
       className="flex flex-col gap-4 w-full h-full bg-tertiary px-3 lg:px-4 py-4 rounded-lg"
     >
       <div className="flex flex-col gap-6 lg:flex-row lg:gap-0 lg:items-center lg:justify-between">
-        <ButtonContainer
-          performancePostId={performancePostId}
-          numLikes={numLikes}
-          systemSpec={systemSpec}
-          steamApp={{ steamAppId }}
-          userWhoCreated={{ steamUserId64 }}
-        />
+        <div className="flex items-center gap-2">
+          <LikeButton performancePostId={performancePostId} numLikes={numLikes} />
+          <SystemSpecsPopover systemSpec={systemSpec} giveButtonStyles />
+          <EditButton
+            steamAppId={steamAppId}
+            performancePostId={performancePostId}
+            userWhoCreated={{ steamUserId64 }}
+          />
+        </div>
         <div className="flex pr-2 min-w-[165px]">
           <PerformancePostUserBadge
             avatarMedium={avatarMedium}
