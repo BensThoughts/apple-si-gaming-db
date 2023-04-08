@@ -16,6 +16,9 @@ export default function AppInfoTags({
   genres,
   categories,
 }: AppInfoTagsProps) {
+  if (genres.length < 1 && categories.length < 1) {
+    return null;
+  }
   return (
     <div className="w-full rounded-lg">
       <TailwindDisclosure title="Tags" defaultOpen={false}>
