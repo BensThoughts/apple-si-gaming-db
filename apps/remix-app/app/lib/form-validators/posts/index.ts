@@ -49,10 +49,10 @@ export function isTypeRatingTierRank(
 
 export function validatePostRatingTierRank(ratingTierRank: string) {
   if (ratingTierRank.toLowerCase() === 'none') {
-    return `rating cannot be none`;
+    return `tier rank cannot be none`;
   }
   if (!isTypeRatingTierRank(ratingTierRank)) {
-    return `${ratingTierRank} is not a valid option`;
+    return `${ratingTierRank} is not a valid tier rank option`;
   }
 }
 
@@ -109,7 +109,7 @@ export function validatePostGamepadId(gamepadId: number, gamepadTierRank: string
     gamepadId === -1 &&
     isTypeGamepadTierRank(gamepadTierRank)
   ) {
-    return `controller rating given with no controller selected`;
+    return `gamepad tier rank given with no gamepad selected`;
   }
 }
 
@@ -117,10 +117,10 @@ export function validateGamepadTierRank(gamepadTierRank: string, gamepadId: numb
   // The None Case for gamepadId is value 0
   if (gamepadId !== -1) {
     if (gamepadTierRank.toLowerCase() === 'none') {
-      return `rating cannot be none when controller is selected`;
+      return `tier rank cannot be none when a gamepad is selected`;
     }
     if (!isTypeGamepadTierRank(gamepadTierRank)) {
-      return `rating was not a valid rating option`;
+      return `tier rank was not a valid rating option`;
     }
   }
 }
@@ -129,9 +129,9 @@ export function validateGamepadTierRank(gamepadTierRank: string, gamepadId: numb
 // TODO: duplicate code between profile and post
 export function validateSystemSpecIdForPost(systemSpecId: number) {
   if (!isFinite(systemSpecId)) {
-    return `The systemId ${systemSpecId} was not a valid number`;
+    return `the systemId ${systemSpecId} was not a valid number`;
   }
   if (systemSpecId < -1) {
-    return `The systemId ${systemSpecId} was not a positive number`;
+    return `the systemId ${systemSpecId} was not a positive number`;
   }
 }
