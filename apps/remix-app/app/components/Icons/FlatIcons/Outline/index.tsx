@@ -1,5 +1,6 @@
 export * from './BleedingHeart';
 export * from './Book';
+export * from './Chip';
 export * from './Comments';
 export * from './GameBoy';
 export * from './Gamepad';
