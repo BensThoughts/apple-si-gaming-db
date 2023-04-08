@@ -13,4 +13,4 @@ export * from './PassportSteamUser';
 export * from './PerformancePost';
 export * from './SteamApp';
 export * from './UserSession';
-export * from './SteamSystemSpec';
+export * from './SystemSpec';
