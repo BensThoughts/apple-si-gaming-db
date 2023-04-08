@@ -17,7 +17,7 @@ export default function TailwindDisclosure({
   roundedButton?: boolean;
 }) {
   return (
-    <div className="w-full max-w-lg">
+    <div className="w-full">
       <Disclosure defaultOpen={defaultOpen}>
         {({ open, close }) => (
           <>
