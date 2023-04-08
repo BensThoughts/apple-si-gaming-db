@@ -8,26 +8,33 @@ import {
   // updateSteamApp,
   // convertSteamApiDataToPrisma,
 } from '~/models/Steam/steamApp.server';
-import AppInfoTags from '~/components/AppInfo/AppInfoTags';
-import AppInfoDescriptionCard from '~/components/AppInfo/AppInfoDescriptionCard';
-import AppInfoHeader from '~/components/AppInfo/AppInfoHeader';
-import AppInfoRequirements from '~/components/AppInfo/AppInfoRequirements';
+import AppInfoTags from '~/components/Apps/AppInfo/AppInfoTags';
+import AppInfoDescriptionCard from '~/components/Apps/AppInfo/AppInfoDescriptionCard';
+import AppInfoHeader from '~/components/Apps/AppInfo/AppInfoHeader';
+import AppInfoRequirements from '~/components/Apps/AppInfo/AppInfoRequirements';
 import PageWrapper from '~/components/Layout/PageWrapper';
 import { validateSteamAppId } from '~/lib/loader-functions/params-validators.server';
-import type { SteamAppSidebarData } from '~/interfaces';
+import type { AveragePerformancePostRating, SteamApp } from '~/interfaces';
 import { logger } from '~/lib/logger/logger.server';
 import FourOhFour from '~/components/Layout/FourOhFour';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
+import AppRatingOverview from '~/components/Apps/AppInfo/AppRatingOverview';
+import {
+  findAverageTotalRatingsOfPerformancePosts,
+} from '~/models/SteamedApples/performancePost.server';
 
 interface LoaderData {
-  steamApp: SteamAppSidebarData;
+  steamApp: SteamApp;
+  avgPerformancePostRating: AveragePerformancePostRating;
 }
 
 export async function loader({ params }: LoaderArgs) {
   const steamAppId = validateSteamAppId(params);
   const steamApp = await findSteamAppByAppId(steamAppId);
-  const throwSteamAppFourOhFourError = () => {
+  const avgPerformancePostRating = await findAverageTotalRatingsOfPerformancePosts(steamAppId);
+
+  if (!steamApp) {
     logger.debug(`steam app with steamAppId ${steamAppId} not found in db`, {
       metadata: {
         steamApp: {
@@ -38,56 +45,10 @@ export async function loader({ params }: LoaderArgs) {
     throw new Response(`Steam app with appid ${steamAppId} not found in database!`, {
       status: 404,
     });
-  };
-  if (!steamApp) {
-    throw throwSteamAppFourOhFourError();
-  }
-  const DAYS_TILL_STALE_DATA = 7;
-  const isMoreThanDaysAgo = (dateToTest: Date, daysAgo: number) => {
-    const daysAgoInMs = daysAgo * 24 * 60 * 60 * 1000; // days  hours min  sec  ms
-    const timestampDaysAgo = new Date().getTime() - daysAgoInMs;
-    if (timestampDaysAgo > dateToTest.getTime()) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-  if (
-    !steamApp.dataDownloadAttempted ||
-    !steamApp.dataDownloaded ||
-    (
-      steamApp.dataDownloadAttemptedAt &&
-      isMoreThanDaysAgo(steamApp.dataDownloadAttemptedAt, DAYS_TILL_STALE_DATA)
-    )
-  ) {
-    logger.info(
-        `stale data for steam app with steamAppId ${steamAppId} found, last dataDownloadAttemptedAt is more than ${DAYS_TILL_STALE_DATA} days old for ${steamApp.name}`, {
-          metadata: {
-            steamApp: {
-              steamAppId,
-              name: steamApp.name,
-            },
-            extra: {
-              dataDownloadAttemptedAt: steamApp.dataDownloadAttemptedAt,
-            },
-          },
-        },
-    );
-    // const steamApiApp = await getSteamAppDetailsRequest(steamApp.steamAppId);
-    // if (steamApiApp.data) {
-    //   const prismaSteamApp = convertSteamApiDataToPrisma(steamApiApp.data);
-    //   // TODO: Performing these updates in a loader doesn't work when
-    //   // TODO: the fly app is not in primary region, ALL mutations need to
-    //   // TODO: somehow move to an action
-    //   await updateSteamApp(prismaSteamApp);
-    //   steamApp = await findSteamAppByAppId(steamAppId);
-    // }
-    // if (!steamApp) {
-    //   throw throwSteamAppError();
-    // }
   }
   return json<LoaderData>({
     steamApp,
+    avgPerformancePostRating,
   });
 }
 
@@ -105,7 +66,7 @@ export const meta: MetaFunction<LoaderData> = ({
 };
 
 export default function AppsRoute() {
-  const { steamApp } = useLoaderData<typeof loader>();
+  const { steamApp, avgPerformancePostRating } = useLoaderData<typeof loader>();
 
   const {
     name,
@@ -115,7 +76,6 @@ export default function AppsRoute() {
     platformLinux,
     platformMac,
     platformWindows,
-    // controllerSupport,
     releaseDate,
     shortDescription,
     pcRequirementsMinimum,
@@ -126,10 +86,10 @@ export default function AppsRoute() {
   } = steamApp;
   return (
     <PageWrapper title={name} topSpacer>
-      <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] grid-rows-[auto_1fr] gap-4 min-h-screen">
+      <div className="flex flex-col gap-6 items-center md:flex-row md:justify-center md:items-start w-full min-h-screen">
 
-        <div className="col-start-1 col-span-1 row-start-1 row-span-1 flex justify-center">
-          <div className="flex flex-col gap-3 w-full h-full items-center sm:max-w-md md:max-w-xs">
+        <div className="flex flex-col gap-6 md:gap-3 w-full h-full items-center md:max-w-xs">
+          <div className="flex flex-col gap-3 w-full">
             <AppInfoHeader
               steamAppId={steamAppId}
               name={name}
@@ -139,34 +99,27 @@ export default function AppsRoute() {
               platformLinux={platformLinux}
               platformWindows={platformWindows}
             />
-            {((genres.length > 0) || (categories.length > 0)) &&
-                <AppInfoTags
-                  genres={genres}
-                  categories={categories}
-                />
-            }
-            {(
-              (macRequirementsMinimum && platformMac) ||
-              (pcRequirementsMinimum && platformWindows) ||
-              (linuxRequirementsMinimum && platformLinux)
-            ) && (
-              <AppInfoRequirements
-                mac={{ platformMac, macRequirementsMinimum }}
-                windows={{ platformWindows, pcRequirementsMinimum }}
-                linux={{ platformLinux, linuxRequirementsMinimum }}
-              />
-            )}
-            {shortDescription &&
-                <AppInfoDescriptionCard
-                  requiredAge={requiredAge}
-                  shortDescription={shortDescription}
-                />
-            }
+            <AppInfoTags
+              genres={genres}
+              categories={categories}
+            />
+            <AppInfoRequirements
+              mac={{ platformMac, macRequirementsMinimum }}
+              windows={{ platformWindows, pcRequirementsMinimum }}
+              linux={{ platformLinux, linuxRequirementsMinimum }}
+            />
           </div>
+
+          <AppRatingOverview avgPerformancePostRating={avgPerformancePostRating} />
+          <div className="hidden md:block">
+            <AppInfoDescriptionCard
+              requiredAge={requiredAge}
+              shortDescription={shortDescription}
+            />
+          </div>
+
         </div>
-        <div className="col-start-1 md:col-start-2 col-end-[-1] row-start-2 md:row-start-1 row-end-[-1]">
-          <Outlet />
-        </div>
+        <Outlet />
       </div>
 
     </PageWrapper>
