@@ -1,3 +1,4 @@
+export * from './Icons/Award';
 export * from './Icons/Bars';
 export * from './Icons/Check';
 export * from './Icons/ChevronUp';
