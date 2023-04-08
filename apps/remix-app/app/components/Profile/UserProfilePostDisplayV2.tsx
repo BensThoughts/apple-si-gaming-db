@@ -1,5 +1,5 @@
 import { Link } from '@remix-run/react';
-import type { PerformancePostForUserProfileDisplay } from '~/interfaces';
+import type { PerformancePost } from '~/interfaces';
 import {
   convertFrameRateTierRankToDescription,
   convertGamepadTierRankToDescription,
@@ -8,7 +8,6 @@ import {
 import EditButton from '~/components/Buttons/EditButton';
 import AppHeaderImage from '../ImageWrappers/AppHeaderImage';
 import LikeButton from '~/components/Buttons/LikeButton';
-import { useUserSession } from '~/lib/hooks/useMatchesData';
 import TextPill from '~/components/TextPill';
 import TailwindDisclosure from '~/components/HeadlessComponents/TailwindDisclosure';
 import TierRankBadge from '~/components/TierRankBadge';
@@ -18,12 +17,12 @@ import TierRankPill from '~/components/TierRankPill';
 export default function UserProfilePostDisplayV2({
   performancePost,
 }: {
-  performancePost: PerformancePostForUserProfileDisplay;
+  performancePost: PerformancePost;
 }) {
   const {
     performancePostId,
     createdAt,
-    userWhoCreated,
+    userWhoCreated: { steamUserId64 },
     numLikes,
     rating: {
       ratingTierRank,
@@ -41,17 +40,12 @@ export default function UserProfilePostDisplayV2({
     },
   } = performancePost;
 
-  const { userSession } = useUserSession();
-
-  const didSteamUserCreatePost = userSession
-    ? userWhoCreated.steamUserId64 === userSession.steamUserProfile.steamUserId64
-    : false;
-
   return (
     <div
       id={performancePostId.toString()}
       className="rounded-xl px-0 py-0 bg-tertiary focus:show-ring
-                 w-full max-w-md md:max-w-xs flex items-center justify-center"
+                 w-full flex items-start justify-center
+                 max-w-[460px]"
     >
       <div
         className="flex flex-col gap-3 items-center w-full"
@@ -70,28 +64,27 @@ export default function UserProfilePostDisplayV2({
 
         <div className="flex justify-between w-full px-2">
           <LikeButton performancePostId={performancePostId} numLikes={numLikes} />
-          {didSteamUserCreatePost && (
-            <EditButton
-              steamAppId={steamAppId}
-              performancePostId={performancePostId}
-            />
-          )}
+          <EditButton
+            steamAppId={steamAppId}
+            performancePostId={performancePostId}
+            userWhoCreated={{ steamUserId64 }}
+          />
         </div>
 
         <TailwindDisclosure title="Rating & Tags" defaultOpen={false} roundedButton={false}>
           <div className="bg-primary w-full flex flex-col gap-2 p-2">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="text-primary-faded italic text-sm">
-              Rating
+                Rating
               </span>
               <TierRankBadge tierRank={ratingTierRank} className="bg-primary-highlight">
                 {convertRatingTierRankToDescription(ratingTierRank)}
               </TierRankBadge>
             </div>
             {(frameRateTierRank || frameRateStutters) && (
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-2 items-center flex-wrap">
                 <span className="text-primary-faded italic text-sm">
-                Framerate
+                  Framerate
                 </span>
                 {(frameRateTierRank) && (
                   <TierRankBadge className="bg-primary-highlight" tierRank={frameRateTierRank}>
@@ -109,9 +102,9 @@ export default function UserProfilePostDisplayV2({
               </div>
             )}
             {(gamepadMetadata && gamepadTierRank) && (
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-2 items-center flex-wrap">
                 <span className="text-primary-faded italic text-sm">
-                Gamepad
+                  Gamepad
                 </span>
                 <TierRankBadge className="bg-primary-highlight text-xs" tierRank={gamepadTierRank}>
                   {`${gamepadMetadata.description} - ${convertGamepadTierRankToDescription(gamepadTierRank)}`}
@@ -119,7 +112,7 @@ export default function UserProfilePostDisplayV2({
               </div>
             )}
             {postTags.length > 0 && (
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-2 items-center flex-wrap">
                 <span className="text-primary-faded italic text-sm">
                   Tags
                 </span>
