@@ -90,7 +90,7 @@ export default function SmallAppsGridLayout({
 
       <div className="flex flex-col items-center justify-center self-center gap-8 w-full">
 
-        <div className="flex flex-wrap justify-center items-center gap-3 md:gap-2">
+        <div className="flex flex-wrap justify-center items-center gap-3 md:gap-4">
           {paginatedSteamApps.map(({
             steamAppId,
             name,
