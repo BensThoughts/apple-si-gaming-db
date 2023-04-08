@@ -44,7 +44,7 @@ export default function EditButton({
         <div className="pb-0.5">
           <EditIcon className="stroke-1" />
         </div>
-        <span className="font-normal">
+        <span className="text-sm font-light">
           Edit
         </span>
 
