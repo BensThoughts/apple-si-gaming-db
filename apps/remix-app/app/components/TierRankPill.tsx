@@ -35,7 +35,7 @@ export default function TierRankPill({
   return (
     <div className={classNames(
         `flex justify-center items-center select-none w-full max-w-fit h-6 px-2 py-1 text-xs`,
-        `rounded-md border-1 border-tier-rank-`,
+        `rounded-md border-1 shadow-md`,
         tierRankColorCSS,
         className ? className : '',
     )}
