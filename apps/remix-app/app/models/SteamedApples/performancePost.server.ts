@@ -1,10 +1,10 @@
 import type {
   PerformancePost,
-  PerformancePostForUserProfileDisplay,
   PerformancePostForNewPostsCard,
   RatingTierRank,
   FrameRateTierRank,
   GamepadTierRank,
+  AveragePerformancePostRating,
 } from '~/interfaces';
 import type {
   PrismaPerformancePost,
@@ -13,10 +13,12 @@ import type {
   PrismaPerformancePostTag,
   Prisma,
   PrismaGamepadMetadata,
+  TierRank,
 } from '~/interfaces/database';
 import prisma from '~/lib/database/db.server';
 import { isTypeFrameRateTierRank, isTypeGamepadTierRank } from '~/lib/form-validators/posts';
 import { findSystemSpecForPostBySystemSpecId } from './userSystemSpecs.server';
+import { getAverageFrameRateTierRank, getAverageGamepadTierRank, getAverageRatingTierRank, getPercentPostsStutters } from '~/lib/conversions/rating-averages';
 
 
 export async function createPerformancePost({
@@ -97,6 +99,88 @@ export async function createPerformancePost({
     },
   });
 };
+
+export async function findAverageTotalRatingsOfPerformancePosts(
+    steamAppId: PrismaPerformancePost['steamAppId'],
+) : Promise<AveragePerformancePostRating> {
+  const performancePosts = await prisma.performancePost.findMany({
+    where: {
+      steamAppId,
+    },
+    select: {
+      ratingTierRank: true,
+      frameRateTierRank: true,
+      frameRateStutters: true,
+      gamepadTierRank: true,
+    },
+  });
+  const ratingTierRanks = performancePosts.map((post) => post.ratingTierRank);
+  const avgRatingTierRank = getAverageRatingTierRank(ratingTierRanks);
+  const frameRateTierRanks =
+    performancePosts
+        .map((post) => post.frameRateTierRank)
+        .filter((rank): rank is FrameRateTierRank => isTypeFrameRateTierRank(rank));
+  const avgFrameRateTierRank = getAverageFrameRateTierRank(frameRateTierRanks);
+  const frameRateStuttersArr = performancePosts.map((post) => post.frameRateStutters);
+  const percentPostsWhereFrameRateStutters = getPercentPostsStutters(frameRateStuttersArr);
+  const frameRateStuttersTierRank = getFrameRateStuttersTierRank(percentPostsWhereFrameRateStutters);
+  const gamepadTierRanks =
+    performancePosts
+        .map((post) => post.gamepadTierRank)
+        .filter((rank): rank is GamepadTierRank => isTypeGamepadTierRank(rank));
+  const avgGamepadTierRank = getAverageGamepadTierRank(gamepadTierRanks);
+
+  return {
+    avgRatingTierRank,
+    avgFrameRateTierRank,
+    percentPostsWhereFrameRateStutters,
+    frameRateStuttersTierRank,
+    avgGamepadTierRank,
+  };
+}
+
+function getFrameRateStuttersTierRank(percentStutters: number): TierRank {
+  let frameRateStuttersTierRank: TierRank = 'STier';
+  switch (true) {
+    case (percentStutters < 14):
+      frameRateStuttersTierRank = 'STier';
+      break;
+    case (
+      14 <= percentStutters &&
+      percentStutters < 28
+    ):
+      frameRateStuttersTierRank = 'ATier';
+      break;
+    case (
+      28 <= percentStutters &&
+        percentStutters < 42
+    ):
+      frameRateStuttersTierRank = 'BTier';
+      break;
+    case (
+      42 <= percentStutters &&
+          percentStutters < 56
+    ):
+      frameRateStuttersTierRank = 'CTier';
+      break;
+    case (
+      56 <= percentStutters &&
+            percentStutters < 70
+    ):
+      frameRateStuttersTierRank = 'DTier';
+      break;
+    case (
+      70 <= percentStutters &&
+              percentStutters < 84
+    ):
+      frameRateStuttersTierRank = 'ETier';
+      break;
+    case (84 <= percentStutters):
+      frameRateStuttersTierRank = 'FTier';
+      break;
+  }
+  return frameRateStuttersTierRank;
+}
 
 export async function findPerformancePostsBySteamAppId(
     steamAppId: PrismaPerformancePost['steamAppId'],
@@ -223,7 +307,7 @@ export async function findPerformancePostsBySteamAppId(
 
 export async function findPerformancePostsBySteamUserId(
     steamUserId64: string,
-): Promise<PerformancePostForUserProfileDisplay[]> {
+): Promise<PerformancePost[]> {
   const performancePosts = await prisma.performancePost.findMany({
     where: {
       steamUserId64: BigInt(steamUserId64),
@@ -245,6 +329,7 @@ export async function findPerformancePostsBySteamUserId(
       ratingTierRank: true,
       gamepadMetadata: {
         select: {
+          id: true,
           description: true,
         },
       },
@@ -258,6 +343,14 @@ export async function findPerformancePostsBySteamUserId(
         },
       },
       steamUserId64: true,
+      systemManufacturer: true,
+      systemModel: true,
+      systemCpuBrand: true,
+      systemOsVersion: true,
+      systemVideoDriver: true,
+      systemVideoDriverVersion: true,
+      systemVideoPrimaryVRAM: true,
+      systemMemoryRAM: true,
     },
   });
   return performancePosts.map(({
@@ -279,6 +372,14 @@ export async function findPerformancePostsBySteamUserId(
       headerImage,
     },
     steamUserId64,
+    systemManufacturer,
+    systemModel,
+    systemCpuBrand,
+    systemOsVersion,
+    systemVideoDriver,
+    systemVideoDriverVersion,
+    systemVideoPrimaryVRAM,
+    systemMemoryRAM,
   }) => ({
     performancePostId: id,
     createdAt: createdAt.toDateString(),
@@ -302,6 +403,16 @@ export async function findPerformancePostsBySteamUserId(
         isTypeGamepadTierRank(gamepadTierRank) ? gamepadTierRank : undefined,
     },
     numLikes: usersWhoLiked,
+    systemSpec: {
+      manufacturer: systemManufacturer,
+      model: systemModel,
+      cpuBrand: systemCpuBrand,
+      osVersion: systemOsVersion,
+      videoDriver: systemVideoDriver,
+      videoDriverVersion: systemVideoDriverVersion,
+      videoPrimaryVRAM: systemVideoPrimaryVRAM,
+      memoryRAM: systemMemoryRAM,
+    },
   }));
 }
 
