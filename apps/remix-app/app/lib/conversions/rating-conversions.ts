@@ -8,19 +8,19 @@ import type {
 export function convertTierRankToName(tierRank: TierRank) {
   switch (tierRank) {
     case 'STier':
-      return 'S Tier';
+      return 'S';
     case 'ATier':
-      return 'A Tier';
+      return 'A';
     case 'BTier':
-      return 'B Tier';
+      return 'B';
     case 'CTier':
-      return 'C Tier';
+      return 'C';
     case 'DTier':
-      return 'D Tier';
+      return 'D';
     case 'ETier':
-      return 'E Tier';
+      return 'E';
     case 'FTier':
-      return 'F Tier';
+      return 'F';
     default:
       throw new Error(`${tierRank} was not a valid tier rank`);
   }
@@ -29,17 +29,17 @@ export function convertTierRankToName(tierRank: TierRank) {
 export function convertRatingTierRankToDescription(ratingTierRank: RatingTierRank) {
   switch (ratingTierRank) {
     case 'STier':
-      return 'Runs [ perfect ]';
+      return 'Runs perfect';
     case 'ATier':
-      return 'Runs [ perfect after tweaks ]';
+      return 'Runs perfect after tweaks';
     case 'BTier':
-      return 'Runs [ with minor issues ]';
+      return 'Runs with minor issues';
     case 'CTier':
-      return 'Runs [ with major issues ]';
+      return 'Runs with major issues';
     case 'DTier':
-      return 'Runs [ crashes sometimes ]';
+      return 'Crashes sometimes';
     case 'ETier':
-      return 'Runs [ crashes often ]';
+      return 'Crashes often';
     case 'FTier':
       return `Doesn't Run`;
     default:
