@@ -57,13 +57,13 @@ export default function BasePerformancePostFormFields({
   );
 
   return (
-    <>
+    <div className="flex flex-col gap-6">
       <PerformancePostTextArea
         name={PerformancePostFieldNames.PostText}
         defaultValue={fields?.postText}
         fieldError={fieldErrors?.postText}
       />
-      <div className="flex flex-col gap-6 w-full max-w-md">
+      <div className="flex flex-col gap-4 w-full max-w-md">
         <div className="z-[30]">
           <RatingTierRankSelectMenu
             name={PerformancePostFieldNames.RatingTierRank}
@@ -131,6 +131,6 @@ export default function BasePerformancePostFormFields({
           defaultSystemSpecId={fields?.systemSpecId}
         />
       </div>
-    </>
+    </div>
   );
 }
