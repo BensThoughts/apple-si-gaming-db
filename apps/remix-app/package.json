@@ -24,6 +24,7 @@
     "@apple-si-gaming-db/logger": "*",
     "@apple-si-gaming-db/steam-api": "*",
     "@headlessui/react": "^1.6.6",
+    "@popperjs/core": "^2.11.7",
     "@remix-run/express": "^1.14.3",
     "@remix-run/node": "^1.14.3",
     "@remix-run/react": "^1.14.3",
@@ -45,6 +46,7 @@
     "react-device-detect": "^2.2.2",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.0",
+    "react-popper": "^2.3.0",
     "react-select": "^5.4.0",
     "react-use": "^17.4.0",
     "remix-utils": "^3.4.0"
