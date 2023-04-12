@@ -4,6 +4,7 @@ export * from './Icons/Check';
 export * from './Icons/ChevronUp';
 export * from './Icons/Edit';
 export * from './Icons/Eye';
+export * from './Icons/Gamepad';
 export * from './Icons/HardDrive';
 export * from './Icons/InformationCircle';
 export * from './Icons/Monitor';
