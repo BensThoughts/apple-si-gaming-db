@@ -4,11 +4,11 @@
 
 import { forwardRef } from 'react';
 
-type IconProps = {
+export type FeatherIconProps = {
   size?: number,
 } & React.SVGAttributes<SVGElement>
 
-const FeatherIcon = forwardRef<SVGSVGElement, IconProps>(({
+const FeatherIcon = forwardRef<SVGSVGElement, FeatherIconProps>(({
   viewBox = '0 0 24 24',
   size = 24,
   width,
@@ -21,7 +21,7 @@ const FeatherIcon = forwardRef<SVGSVGElement, IconProps>(({
   preserveAspectRatio = 'xMidYMid meet',
   children,
   ...rest
-}: IconProps, ref) => {
+}: FeatherIconProps, ref) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
