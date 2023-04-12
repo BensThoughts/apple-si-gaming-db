@@ -20,6 +20,8 @@ export default function AppInfoDescriptionCard({
           Required Age: {requiredAge}
         </div>
       }
+      {/* Probably don't need dangerouslySetInnerHTML, shortDescription always seems
+      to be a string. */}
       {shortDescription &&
           <div dangerouslySetInnerHTML={{ __html: shortDescription }} />
       }
