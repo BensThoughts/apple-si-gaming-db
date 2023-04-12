@@ -89,7 +89,7 @@ export default function SystemSpecsPopover({
             <Popover.Panel
               ref={setPopperElement}
               style={styles.popper}
-              className="absolute z-[100] max-w-fit"
+              className="absolute z-[100] min-w-max"
               onMouseEnter={() => setIsShowing(true)}
               onMouseLeave={() => setIsShowing(false)}
               static
@@ -97,7 +97,7 @@ export default function SystemSpecsPopover({
             >
               <div className="py-1">
                 <div className="flex flex-col gap-1 text-sm text-primary-faded bg-primary border-secondary-highlight
-                         border-1 rounded-md py-2 px-6">
+                         border-1 rounded-md py-2 pl-4 pr-4">
                   {manufacturer &&
                   <span>Manufacturer:&nbsp;
                     <span className="text-primary">{manufacturer}</span>
