@@ -3,7 +3,6 @@ import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpIcon } from '~/components/Icons/FeatherIcons';
 import { classNames } from '~/lib/css/classNames';
 import type { FeatherIconProps } from '~/components/Icons/FeatherIcons/FeatherIcon';
-import ToggleSwitchUncontrolled from './ToggleSwitchUncontrolled';
 
 export type SelectOption<T = string> = {
   name: string;
