@@ -62,7 +62,7 @@ export default function PerformancePostTierRankContainer({
       {(frameRateTierRank || frameRateStutters) &&
           <RankItemContainer>
             <span className="italic text-primary-faded font-light">
-              Framerate
+              Frame Rate
             </span>
             <div className="flex items-center gap-2">
               {frameRateTierRank &&
