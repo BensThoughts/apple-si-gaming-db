@@ -19,7 +19,7 @@ import PostTagMultiSelectMenu from './FormComponentsV2/PostTagMultiSelectMenu';
 import SystemSelectMenu from './FormComponentsV2/SystemSelectMenu';
 import FormRatingDisplay from './FormRatingDisplay';
 import { isTypeFrameRateTierRank, isTypeRatingTierRank } from '~/lib/form-validators/posts';
-import { SelectOption } from '~/components/FormComponents/SelectMenuWithIcon';
+// import { SelectOption } from '~/components/FormComponents/SelectMenuWithIcon';
 
 interface BasePerformancePostFormFieldsProps {
   fields?: { // used for defaultValue options
