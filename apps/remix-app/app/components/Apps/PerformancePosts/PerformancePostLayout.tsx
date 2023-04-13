@@ -14,10 +14,10 @@ export default function PerformancePostLayout({
 }: PerformancePostLayoutProps) {
   if (performancePosts.length < 1) {
     return (
-      <div className="w-full flex items-center justify-center bg-tertiary px-4 py-5 rounded-lg">
+      <div className="w-full bg-tertiary px-4 py-5 rounded-lg text-center">
         There are currently no performance posts for this app. Use the form below to
-        <strong className="font-semibold text-primary-highlight">
-          &nbsp;become the first to submit!
+        <strong className="font-semibold text-primary-highlight inline">
+          &nbsp;submit the first post!
         </strong>
       </div>
     );
