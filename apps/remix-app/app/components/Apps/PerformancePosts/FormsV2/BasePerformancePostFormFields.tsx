@@ -19,6 +19,7 @@ import PostTagMultiSelectMenu from './FormComponents/PostTagMultiSelectMenu';
 import SystemSelectMenu from './FormComponents/SystemSelectMenu';
 import FormRatingDisplay from './FormRatingDisplay';
 import { isTypeFrameRateTierRank, isTypeRatingTierRank } from '~/lib/form-validators/posts';
+import DraftEditor from './FormComponents/DraftEditor';
 // import { SelectOption } from '~/components/FormComponents/SelectMenuWithIcon';
 
 interface BasePerformancePostFormFieldsProps {
@@ -67,6 +68,7 @@ export default function BasePerformancePostFormFields({
 
   return (
     <div className="flex flex-col gap-6">
+      <DraftEditor />
       <div className="flex gap-2 items-end">
         <RatingTierRankSelectMenu
           name={PerformancePostFieldNames.RatingTierRank}
