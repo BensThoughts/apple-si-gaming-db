@@ -10,13 +10,13 @@ import type {
   PostTagOption,
 } from '~/types';
 import { PerformancePostFieldNames } from '~/lib/enums/FormFields/PerformancePost';
-import PerformancePostTextArea from './FormComponentsV2/PerformancePostTextArea';
-import RatingTierRankSelectMenu from './FormComponentsV2/RatingTierRankSelectMenu';
-import FrameRateTierRankSelectMenu from './FormComponentsV2/FrameRateTierRankSelectMenu';
-import GamepadTierRankSelectMenu from './FormComponentsV2/GamepadTierRankSelectMenu';
-import GamepadSelectMenu from './FormComponentsV2/GamepadSelectMenu';
-import PostTagMultiSelectMenu from './FormComponentsV2/PostTagMultiSelectMenu';
-import SystemSelectMenu from './FormComponentsV2/SystemSelectMenu';
+import PerformancePostTextArea from './FormComponents/PerformancePostTextArea';
+import RatingTierRankSelectMenu from './FormComponents/RatingTierRankSelectMenu';
+import FrameRateTierRankSelectMenu from './FormComponents/FrameRateTierRankSelectMenu';
+import GamepadTierRankSelectMenu from './FormComponents/GamepadTierRankSelectMenu';
+import GamepadSelectMenu from './FormComponents/GamepadSelectMenu';
+import PostTagMultiSelectMenu from './FormComponents/PostTagMultiSelectMenu';
+import SystemSelectMenu from './FormComponents/SystemSelectMenu';
 import FormRatingDisplay from './FormRatingDisplay';
 import { isTypeFrameRateTierRank, isTypeRatingTierRank } from '~/lib/form-validators/posts';
 // import { SelectOption } from '~/components/FormComponents/SelectMenuWithIcon';
