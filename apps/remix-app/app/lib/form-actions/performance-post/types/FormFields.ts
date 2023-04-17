@@ -6,6 +6,7 @@ import type {
 
 export type PerformancePostFormFieldsTyped = {
   postText?: string;
+  // postHTML?: string;
   ratingTierRank?: RatingTierRank;
   frameRateTierRank?: FrameRateTierRank;
   frameRateStutters?: boolean;
@@ -17,6 +18,7 @@ export type PerformancePostFormFieldsTyped = {
 
 export type PerformancePostFormFieldsRaw = {
   postText: string;
+  // postHTML: string;
   frameRateTierRank: string;
   frameRateStutters: boolean;
   ratingTierRank: string;
