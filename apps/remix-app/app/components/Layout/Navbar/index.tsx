@@ -31,19 +31,19 @@ export default function NavBar({
   isSearchSubmitting,
   ...rest
 }: NavBarProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isMainMenuOpen, setIsMainMenuOpen] = useState(false);
   // const authState = useSelector(selectSteamUserAuthIsLoggedIn);
 
   return (
     <>
-      <MenuDrawer isOpen={isOpen} setIsOpen={setIsOpen} title="Menu">
+      <MenuDrawer isOpen={isMainMenuOpen} setIsOpen={setIsMainMenuOpen} title="Menu">
         <div className="flex flex-col items-center w-full gap-6">
           <div className="flex flex-col justify-end content-between items-center pt-0 mt-7 w-full">
             {navMenuLinks.map((menuItem, idx) => (
               <NavLink
                 key={`${menuItem.to}-${idx}`}
                 to={menuItem.to}
-                onClick={() => setIsOpen(false)}
+                onClick={() => setIsMainMenuOpen(false)}
                 className="flex items-center justify-center w-full h-10 text-xl text-center
                            hover:bg-primary focus:outline-none focus-visible:show-ring-app-bg rounded-sm"
               >
@@ -52,7 +52,7 @@ export default function NavBar({
             ))}
             <NavLink
               to={'/profile'}
-              onClick={() => setIsOpen(false)}
+              onClick={() => setIsMainMenuOpen(false)}
               className="flex items-center justify-center w-full h-10 text-xl text-center
                          hover:bg-primary focus:outline-none focus-visible:show-ring-app-bg rounded-sm"
             >
@@ -91,7 +91,7 @@ export default function NavBar({
                 ))}
                 <NavLink
                   to={'/profile'}
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => setIsMainMenuOpen(false)}
                   className="focus-visible:show-ring-app-bg px-1 rounded-sm"
                 >
                   <AnimatedUnderline>
@@ -124,7 +124,7 @@ export default function NavBar({
               <SteamIcon size={40} className="fill-secondary stroke-0" />
             </NavLink>
             <button
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={() => setIsMainMenuOpen(!isMainMenuOpen)}
               aria-label="navigation menu"
               className="mr-3 text-sm text-primary-highlight inline-flex justify-center items-center
                          border border-transparent font-medium px-4 py-2 rounded
