@@ -32,6 +32,7 @@ Explicit (doesn't require db cleanup externally)
 
 ## Priority Medium
 
+- [ ] Update /lib/css folder name to /lib/css-utils
 - [ ] Name change interfaces folder to types
 - [x] Make animated underline animate
 - [ ] Make edit post redirect to originating page
