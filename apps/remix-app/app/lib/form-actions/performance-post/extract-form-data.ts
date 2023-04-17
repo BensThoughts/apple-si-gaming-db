@@ -16,6 +16,7 @@ export function extractFormData(formData: FormData): {
   fieldsRaw?: PerformancePostFormFieldsRaw;
 } {
   const postText = formData.get(PerformancePostFieldNames.PostText);
+  // const postHTML = formData.get(PerformancePostFieldNames.PostHTML);
   const frameRateTierRank = formData.get(PerformancePostFieldNames.FrameRateTierRank + '[value]');
   const frameRateStutters = formData.get(PerformancePostFieldNames.FrameRateStutters);
   const ratingTierRank = formData.get(PerformancePostFieldNames.RatingTierRank + '[value]');
@@ -26,6 +27,7 @@ export function extractFormData(formData: FormData): {
 
   if (
     typeof postText !== 'string' ||
+    // typeof postHTML !== 'string' ||
     typeof frameRateTierRank !== 'string' ||
     typeof ratingTierRank !== 'string' ||
     typeof systemSpecIdData !== 'string' ||
@@ -48,6 +50,7 @@ export function extractFormData(formData: FormData): {
   return {
     fieldsRaw: {
       postText,
+      // postHTML,
       frameRateTierRank,
       frameRateStutters: frameRateStutters ? true : false,
       ratingTierRank,
