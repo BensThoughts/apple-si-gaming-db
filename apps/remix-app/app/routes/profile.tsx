@@ -14,6 +14,8 @@ import { useUserSession } from '~/lib/hooks/useMatchesData';
 import type { SerializedRootLoaderData } from '~/root';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
+import { loggedInMenuLinks } from '~/components/Layout/ProfileMenu/profileMenuLinks';
+import { Fragment } from 'react';
 
 export const meta: MetaFunction = ({ parentsData }) => {
   const data = parentsData['root'] as Partial<SerializedRootLoaderData>;
@@ -77,11 +79,11 @@ export default function ProfilePage() {
         <div className="col-start-1 col-span-full md:col-start-2 md:col-span-1 row-start-1 row-span-1">
           <div className="flex flex-col gap-2 items-center w-full min-w-[15rem] bg-tertiary rounded-lg p-4">
             <h2 className="text-lg text-secondary font-bold">Account Menu</h2>
-            <MenuItem to="/profile" label="Profile" />
-            <MenuItem to="/profile/library" label="Library" />
-            <MenuItem to="/profile/systems" label="Systems" />
-            <MenuItem to="/profile/posts" label="Posts" />
-            <MenuItem to="/profile/liked-posts" label="Liked Posts" />
+            {loggedInMenuLinks.map((link) => (
+              <Fragment key={link.to}>
+                <MenuItem to={link.to} label={link.title} />
+              </Fragment>
+            ))}
           </div>
         </div>
         <div className="block col-start-1 col-span-full md:col-start-3 md:col-span-1 row-start-2 md:row-start-1 row-span-1">
