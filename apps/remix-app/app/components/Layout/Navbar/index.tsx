@@ -18,6 +18,7 @@ import { AppleLogoSolidIcon } from '~/components/Icons/FlatIcons/Solid';
 import ProfileMenu from '~/components/Layout/ProfileMenu';
 import AnimatedUnderline from '~/components/AnimatedUnderline';
 import { classNames } from '~/lib/css/classNames';
+import MainMenuDrawer from './MainMenuDrawer';
 
 type NavBarProps = {
   className?: string;
@@ -36,34 +37,10 @@ export default function NavBar({
 
   return (
     <>
-      <MenuDrawer isOpen={isMainMenuOpen} setIsOpen={setIsMainMenuOpen} title="Menu">
-        <div className="flex flex-col items-center w-full gap-6">
-          <div className="flex flex-col justify-end content-between items-center pt-0 mt-7 w-full">
-            {navMenuLinks.map((menuItem, idx) => (
-              <NavLink
-                key={`${menuItem.to}-${idx}`}
-                to={menuItem.to}
-                onClick={() => setIsMainMenuOpen(false)}
-                className="flex items-center justify-center w-full h-10 text-xl text-center
-                           hover:bg-primary focus:outline-none focus-visible:show-ring-app-bg rounded-sm"
-              >
-                {menuItem.name}
-              </NavLink>
-            ))}
-            <NavLink
-              to={'/profile'}
-              onClick={() => setIsMainMenuOpen(false)}
-              className="flex items-center justify-center w-full h-10 text-xl text-center
-                         hover:bg-primary focus:outline-none focus-visible:show-ring-app-bg rounded-sm"
-            >
-              {isLoggedIn ? 'Profile' : 'Login'}
-            </NavLink>
-          </div>
-          <div>
-            <ThemeToggle />
-          </div>
-        </div>
-      </MenuDrawer>
+      <MainMenuDrawer
+        isLoggedIn={isLoggedIn}
+        isMainMenuOpen={isMainMenuOpen}
+        setIsMainMenuOpen={setIsMainMenuOpen} />
       <NavHider>
         <div
           className={classNames(
