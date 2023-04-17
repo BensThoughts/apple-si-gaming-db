@@ -6,5 +6,6 @@ export enum PerformancePostFieldNames {
   SystemSpecId = 'performancePostSystemSpecId',
   PostTagIds = 'performancePostTags',
   GamepadId = 'performancePostGamepadId',
-  GamepadTierRank = 'performancePostGamepadTierRank'
+  GamepadTierRank = 'performancePostGamepadTierRank',
+  // PostHTML = 'performancePostHTML'
 }
