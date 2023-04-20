@@ -3,6 +3,7 @@ export * from './Icons/Bars';
 export * from './Icons/Bold';
 export * from './Icons/Check';
 export * from './Icons/ChevronUp';
+export * from './Icons/Delete';
 export * from './Icons/Edit';
 export * from './Icons/Eye';
 export * from './Icons/Gamepad';
