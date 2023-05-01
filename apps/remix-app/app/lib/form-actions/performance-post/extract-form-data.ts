@@ -3,7 +3,7 @@ import type {
 } from './types';
 
 import {
-  PerformancePostFieldNames,
+  PerformancePostFormFieldNames,
 } from '~/lib/enums/FormFields/PerformancePost';
 
 /**
@@ -15,15 +15,15 @@ export function extractFormData(formData: FormData): {
   formError?: string;
   fieldsRaw?: PerformancePostFormFieldsRaw;
 } {
-  const postText = formData.get(PerformancePostFieldNames.PostText);
-  // const postHTML = formData.get(PerformancePostFieldNames.PostHTML);
-  const frameRateTierRank = formData.get(PerformancePostFieldNames.FrameRateTierRank + '[value]');
-  const frameRateStutters = formData.get(PerformancePostFieldNames.FrameRateStutters);
-  const ratingTierRank = formData.get(PerformancePostFieldNames.RatingTierRank + '[value]');
-  const systemSpecIdData = formData.get(PerformancePostFieldNames.SystemSpecId + '[value]');
-  const postTagIdsData = formData.getAll(PerformancePostFieldNames.PostTagIds);
-  const gamepadIdData = formData.get(PerformancePostFieldNames.GamepadId + '[value]');
-  const gamepadTierRank = formData.get(PerformancePostFieldNames.GamepadTierRank + '[value]');
+  const postText = formData.get(PerformancePostFormFieldNames.PostText);
+  // const postHTML = formData.get(PerformancePostFormFieldNames.PostHTML);
+  const frameRateTierRank = formData.get(PerformancePostFormFieldNames.FrameRateTierRank + '[value]');
+  const frameRateStutters = formData.get(PerformancePostFormFieldNames.FrameRateStutters);
+  const ratingTierRank = formData.get(PerformancePostFormFieldNames.RatingTierRank + '[value]');
+  const systemSpecIdData = formData.get(PerformancePostFormFieldNames.SystemSpecId + '[value]');
+  const postTagIdsData = formData.getAll(PerformancePostFormFieldNames.PostTagIds);
+  const gamepadIdData = formData.get(PerformancePostFormFieldNames.GamepadId + '[value]');
+  const gamepadTierRank = formData.get(PerformancePostFormFieldNames.GamepadTierRank + '[value]');
 
   if (
     typeof postText !== 'string' ||

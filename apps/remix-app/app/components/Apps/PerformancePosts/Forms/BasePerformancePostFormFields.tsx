@@ -9,7 +9,7 @@ import type {
   GamepadOption,
   PostTagOption,
 } from '~/types';
-import { PerformancePostFieldNames } from '~/lib/enums/FormFields/PerformancePost';
+import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
 import PerformancePostTextArea from './FormComponents/PerformancePostTextArea';
 import RatingTierRankSelectMenu from './FormComponents/RatingTierRankSelectMenu';
 import FrameRateTierRankSelectMenu from './FormComponents/FrameRateTierRankSelectMenu';
@@ -59,14 +59,14 @@ export default function BasePerformancePostFormFields({
   return (
     <div className="flex flex-col gap-6">
       <PerformancePostTextArea
-        name={PerformancePostFieldNames.PostText}
+        name={PerformancePostFormFieldNames.PostText}
         defaultValue={fields?.postText}
         fieldError={fieldErrors?.postText}
       />
       <div className="flex flex-col gap-4 w-full max-w-md">
         <div className="z-[30]">
           <RatingTierRankSelectMenu
-            name={PerformancePostFieldNames.RatingTierRank}
+            name={PerformancePostFormFieldNames.RatingTierRank}
             defaultValue={fields?.ratingTierRank}
             fieldError={fieldErrors?.ratingTierRank}
           />
@@ -74,14 +74,14 @@ export default function BasePerformancePostFormFields({
         <div className="z-[29] flex flex-col md:flex-row gap-6 items-start md:items-center justify-center md:justify-between w-full">
           <div>
             <FrameRateTierRankSelectMenu
-              name={PerformancePostFieldNames.FrameRateTierRank}
+              name={PerformancePostFormFieldNames.FrameRateTierRank}
               defaultValue={fields?.frameRateTierRank}
               fieldError={fieldErrors?.frameRateTierRank}
             />
           </div>
           <div>
             <ToggleSwitch
-              name={PerformancePostFieldNames.FrameRateStutters}
+              name={PerformancePostFormFieldNames.FrameRateStutters}
               checked={frameRateStable}
               onChange={setFrameRateStable}
               label="Stutters"
@@ -90,7 +90,7 @@ export default function BasePerformancePostFormFields({
         </div>
         <div className="z-[28]">
           <GamepadSelectMenu
-            name={PerformancePostFieldNames.GamepadId}
+            name={PerformancePostFormFieldNames.GamepadId}
             // formId="TODO-FIX" // TODO: Change to appropriate ID
             gamepads={gamepadOptions}
             defaultGamepadId={fields?.gamepadId}
@@ -99,7 +99,7 @@ export default function BasePerformancePostFormFields({
         </div>
         <div className="z-[27]">
           <GamepadTierRankSelectMenu
-            name={PerformancePostFieldNames.GamepadTierRank}
+            name={PerformancePostFormFieldNames.GamepadTierRank}
             defaultValue={fields?.gamepadTierRank}
             fieldError={fieldErrors?.gamepadTierRank}
           />
@@ -107,7 +107,7 @@ export default function BasePerformancePostFormFields({
         <div className="z-[26]">
           <PostTagMultiSelectMenu
             formId="TODO-FIX" // TODO: Change to appropriate ID
-            name={PerformancePostFieldNames.PostTagIds}
+            name={PerformancePostFormFieldNames.PostTagIds}
             postTags={postTagOptions}
             defaultPostTagIds={fields?.postTagsIds}
             fieldError={fieldErrors?.postTags}
@@ -126,7 +126,7 @@ export default function BasePerformancePostFormFields({
             &nbsp;to easily attach system information to your post.
         </div>
         <SystemSelectMenu
-          name={PerformancePostFieldNames.SystemSpecId}
+          name={PerformancePostFormFieldNames.SystemSpecId}
           systemSpecOptions={systemSpecOptions}
           defaultSystemSpecId={fields?.systemSpecId}
         />

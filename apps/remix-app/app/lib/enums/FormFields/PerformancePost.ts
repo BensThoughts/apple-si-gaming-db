@@ -1,4 +1,4 @@
-export enum PerformancePostFieldNames {
+export enum PerformancePostFormFieldNames {
   PostText = 'performancePostText',
   FrameRateTierRank = 'performancePostFrameRateTierRank',
   FrameRateStutters = 'performancePostFrameRateStutters',
