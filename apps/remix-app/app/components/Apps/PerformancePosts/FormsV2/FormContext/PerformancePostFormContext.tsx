@@ -3,7 +3,6 @@ import type { Dispatch } from 'react';
 import type {
   RatingTierRank,
   FrameRateTierRank,
-  GamepadOption,
   GamepadTierRank,
 } from '~/types';
 
@@ -14,7 +13,8 @@ type PerformancePostFormState = {
   ratingTierRank?: RatingTierRank;
   frameRateTierRank?: FrameRateTierRank;
   frameRateStutters: boolean;
-  gamepadOption?: GamepadOption;
+  gamepadName?: string; // prop is "description" in database
+  gamepadValue?: number; // prop is "id" in database
   gamepadTierRank?: GamepadTierRank;
 }
 
@@ -49,7 +49,7 @@ type SetFrameRateStuttersAction = {
 
 type SetGamepadOptionAction = {
   type: PerformancePostFormStateActions.SET_GAMEPAD_OPTION;
-  payload: GamepadOption | undefined;
+  payload: { name: string, value: number } | undefined;
 }
 
 type SetGamepadRatingTierRankAction = {
@@ -93,7 +93,9 @@ function performancePostFormReducer(
       return { ...state, frameRateStutters: action.payload };
     }
     case PerformancePostFormStateActions.SET_GAMEPAD_OPTION: {
-      return { ...state, gamepadOption: action.payload };
+      const gamepadName = action.payload ? action.payload.name : undefined;
+      const gamepadValue = action.payload ? action.payload.value : undefined;
+      return { ...state, gamepadName, gamepadValue };
     }
     case PerformancePostFormStateActions.SET_GAMEPAD_TIER_RANK: {
       return { ...state, gamepadTierRank: action.payload };
