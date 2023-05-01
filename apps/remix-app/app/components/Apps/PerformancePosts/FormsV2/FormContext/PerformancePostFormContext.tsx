@@ -107,7 +107,7 @@ const FormRatingContext = createContext<
 
 type FormRatingsProviderProps = { children: React.ReactNode };
 
-function FormRatingProvider({ children }: FormRatingsProviderProps) {
+function PerformancePostFormProvider({ children }: FormRatingsProviderProps) {
   const [state, dispatch] = useReducer(performancePostFormReducer, initialState);
   const value = { state, dispatch };
   return (
@@ -117,7 +117,7 @@ function FormRatingProvider({ children }: FormRatingsProviderProps) {
   );
 }
 
-function useFormRatingState() {
+function usePerformancePostFormState() {
   const context = useContext(FormRatingContext);
   if (context === undefined) {
     throw new Error('useFormRatingState must be used within FormRatingProvider');
@@ -125,4 +125,4 @@ function useFormRatingState() {
   return context;
 }
 
-export { FormRatingProvider, useFormRatingState };
+export { PerformancePostFormProvider, usePerformancePostFormState };
