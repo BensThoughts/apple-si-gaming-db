@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import type { FlatIconOutlineProps } from '~/components/Icons/FlatIcons/Outline/FlatIconOutline';
+import type { BaseSvgIconProps } from '~/components/Icons/BaseSvgIcon';
 
 export default function FeatureCardsOverlapped({
   features,
@@ -7,7 +7,7 @@ export default function FeatureCardsOverlapped({
   features: {
     title: string;
     content: string;
-    Icon: React.ComponentType<FlatIconOutlineProps>;
+    Icon: React.ComponentType<BaseSvgIconProps>;
   }[]
 }) {
   return (
@@ -27,7 +27,7 @@ function FeatureCard({
   children,
 }: {
   title: string;
-  Icon: React.ComponentType<FlatIconOutlineProps>;
+  Icon: React.ComponentType<BaseSvgIconProps>;
   children: string;
 }) {
   return (
