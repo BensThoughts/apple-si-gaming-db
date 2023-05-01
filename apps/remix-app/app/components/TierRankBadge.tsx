@@ -5,11 +5,11 @@ import { convertTierRankToName } from '~/lib/conversions/rating-conversions';
 export default function TierRankBadge({
   tierRank,
   children,
-  className,
+  backgroundColor,
   includeRatingLetter = true,
 }: {
   children: string,
-  className?: string,
+  backgroundColor?: 'primary-highlight',
   tierRank: TierRank;
   includeRatingLetter?: boolean;
 }) {
@@ -61,17 +61,17 @@ export default function TierRankBadge({
   return (
     <div
       className={classNames(
-          `flex justify-center items-center select-none w-full max-w-fit h-6 px-2 py-1`,
-          `rounded-md border-1 relative z-10 after:absolute after:flex after:items-center`,
-          `after:justify-center after:w-8 after:h-6 after:left-0 after:rounded-l-md after:z-20`,
+          `relative flex justify-center items-center select-none w-full max-w-fit h-6 px-2 py-1`,
+          `rounded-md border-1 relative after:absolute after:flex after:items-center`,
+          `after:justify-center after:w-8 after:h-6 after:left-0 after:rounded-l-md`,
           `after:border-l-1 after:text-black after:font-medium`,
-          `after:text-sm shadow-md`,
+          `after:text-sm shadow-md z-0 after:z-0`,
           tierRankColorCSS,
-          className ? className : '',
+          (backgroundColor === 'primary-highlight' ? 'bg-primary-highlight' : ''),
       )}
       aria-label={`${convertTierRankToName} tier`}
     >
-      <span className="ml-8 relative inset-0 z-30 text-xs">
+      <span className="ml-8 text-xs text-primary">
         {children}
       </span>
     </div>
