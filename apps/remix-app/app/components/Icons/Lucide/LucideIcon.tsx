@@ -1,7 +1,7 @@
 import { BaseSvgIcon } from '../BaseSvgIcon';
 import type { BaseSvgIconProps } from '../BaseSvgIcon';
 
-export default function FeatherIcon({
+export default function LucideIcon({
   viewBox = '0 0 24 24',
   size = 24,
   width,

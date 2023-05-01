@@ -1,10 +1,7 @@
-import { forwardRef } from 'react';
+import { BaseSvgIcon } from '../BaseSvgIcon';
+import type { BaseSvgIconProps } from '../BaseSvgIcon';
 
-type IconProps = {
-  size?: number,
-} & React.SVGAttributes<SVGElement>
-
-const SimpleIcon = forwardRef<SVGSVGElement, IconProps>(({
+export default function SimpleIcon({
   size,
   width = 24,
   height = 24,
@@ -14,9 +11,9 @@ const SimpleIcon = forwardRef<SVGSVGElement, IconProps>(({
   viewBox = '0 0 24 24',
   children,
   ...rest
-}: IconProps, ref) => {
+}: BaseSvgIconProps) {
   return (
-    <svg
+    <BaseSvgIcon
       xmlns="http://www.w3.org/2000/svg"
       width={size ? size : width}
       height={size ? size : height}
@@ -26,14 +23,10 @@ const SimpleIcon = forwardRef<SVGSVGElement, IconProps>(({
       viewBox={viewBox}
       strokeLinecap="round"
       strokeLinejoin="round"
-      ref={ref}
       {...rest}
     >
       {children}
-    </svg>
+    </BaseSvgIcon>
   );
-});
+};
 
-SimpleIcon.displayName = 'SimpleIcon';
-
-export default SimpleIcon;

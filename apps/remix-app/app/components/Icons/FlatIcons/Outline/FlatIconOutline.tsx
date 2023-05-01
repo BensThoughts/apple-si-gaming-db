@@ -1,32 +1,24 @@
-import { forwardRef } from 'react';
+import { BaseSvgIcon } from '../../BaseSvgIcon';
+import type { BaseSvgIconProps } from '../../BaseSvgIcon';
 
-export type FlatIconOutlineProps = {
-  size?: number,
-} & React.SVGAttributes<SVGElement>
-
-const FlatIconOutline = forwardRef<SVGSVGElement, FlatIconOutlineProps>(({
+export default function FlatIconOutline({
   size = 24,
   width,
   height,
   viewBox = '0 0 60 60',
   children,
   ...rest
-}: FlatIconOutlineProps, ref) => {
+}: BaseSvgIconProps) {
   return (
-    <svg
+    <BaseSvgIcon
       xmlns="http://www.w3.org/2000/svg"
       width={size ? size : width}
       height={size ? size : height}
       viewBox={viewBox}
       preserveAspectRatio="xMidYMid meet"
-      ref={ref}
       {...rest}
     >
       {children}
-    </svg>
+    </BaseSvgIcon>
   );
-});
-
-FlatIconOutline.displayName = 'FlatIconOutline';
-
-export default FlatIconOutline;
+};

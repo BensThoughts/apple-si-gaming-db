@@ -1,11 +1,13 @@
 import { BaseSvgIcon } from '../../BaseSvgIcon';
 import type { BaseSvgIconProps } from '../../BaseSvgIcon';
 
-export default function FlatIconSolid({
+export default function FontAwesomeIconSolid({
   size = 24,
   width,
   height,
-  viewBox = '0 0 60 60',
+  fill = 'currentColor',
+  strokeWidth = 0,
+  viewBox = '0 0 512 512',
   children,
   ...rest
 }: BaseSvgIconProps) {
@@ -14,6 +16,8 @@ export default function FlatIconSolid({
       xmlns="http://www.w3.org/2000/svg"
       width={size ? size : width}
       height={size ? size : height}
+      fill={fill}
+      strokeWidth={strokeWidth}
       viewBox={viewBox}
       preserveAspectRatio="xMidYMid meet"
       {...rest}
@@ -22,3 +26,4 @@ export default function FlatIconSolid({
     </BaseSvgIcon>
   );
 };
+

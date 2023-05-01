@@ -1,10 +1,7 @@
-import { forwardRef } from 'react';
+import { BaseSvgIcon } from '../../BaseSvgIcon';
+import type { BaseSvgIconProps } from '../../BaseSvgIcon';
 
-export type FlatIconBlueLinealProps = {
-  size?: number,
-} & React.SVGAttributes<SVGElement>
-
-const FlatIconBlueLineal = forwardRef<SVGSVGElement, FlatIconBlueLinealProps>(({
+export default function FlatIconBlueLineal({
   size = 24,
   width,
   height,
@@ -14,9 +11,9 @@ const FlatIconBlueLineal = forwardRef<SVGSVGElement, FlatIconBlueLinealProps>(({
   viewBox = '0 0 60 60',
   children,
   ...rest
-}: FlatIconBlueLinealProps, ref) => {
+}: BaseSvgIconProps) {
   return (
-    <svg
+    <BaseSvgIcon
       xmlns="http://www.w3.org/2000/svg"
       width={size ? size : width}
       height={size ? size : height}
@@ -25,14 +22,9 @@ const FlatIconBlueLineal = forwardRef<SVGSVGElement, FlatIconBlueLinealProps>(({
       strokeWidth={strokeWidth}
       viewBox={viewBox}
       preserveAspectRatio="xMidYMid meet"
-      ref={ref}
       {...rest}
     >
       {children}
-    </svg>
+    </BaseSvgIcon>
   );
-});
-
-FlatIconBlueLineal.displayName = 'FlatIconBlueLineal';
-
-export default FlatIconBlueLineal;
+};
