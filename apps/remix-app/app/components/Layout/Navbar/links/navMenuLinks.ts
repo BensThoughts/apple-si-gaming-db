@@ -1,18 +1,18 @@
 export const navMenuLinks = [
   {
-    name: 'Home',
+    text: 'Home',
     to: '/',
   },
   {
-    name: 'Games',
+    text: 'Games',
     to: '/apps',
   },
   {
-    name: 'Search',
+    text: 'Search',
     to: '/search',
   },
   {
-    name: 'Contact',
+    text: 'Contact',
     to: '/contact',
   },
 ];

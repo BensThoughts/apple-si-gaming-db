@@ -1,22 +1,22 @@
 export const loggedInMenuLinks = [
   {
-    title: 'Profile',
+    text: 'Profile',
     to: '/profile',
   },
   {
-    title: 'Library',
+    text: 'Library',
     to: '/profile/library',
   },
   {
-    title: 'Systems',
+    text: 'Systems',
     to: '/profile/systems',
   },
   {
-    title: 'Posts',
+    text: 'Posts',
     to: '/profile/posts',
   },
   {
-    title: 'Liked Posts',
+    text: 'Liked Posts',
     to: '/profile/liked-posts',
   },
   // {
