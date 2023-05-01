@@ -7,7 +7,7 @@ import {
   convertRatingTierRankToDescription,
 } from '~/lib/conversions/rating-conversions';
 import { usePerformancePostFormState } from './FormContext/PerformancePostFormContext';
-import type { FrameRateTierRank, GamepadOption, GamepadTierRank, RatingTierRank } from '~/types';
+import type { FrameRateTierRank, GamepadTierRank, RatingTierRank } from '~/types';
 
 function RatingContainer({
   title,
@@ -78,30 +78,30 @@ export function FrameRateTierRankDisplay({
 }
 
 export function GamepadTierRankDisplay({
-  gamepadOption,
+  gamepadName,
   gamepadTierRank,
 }: {
-  gamepadOption?: GamepadOption;
+  gamepadName?: string;
   gamepadTierRank?: GamepadTierRank;
 }) {
   return (
     <RatingContainer title="Gamepad">
-      {(!gamepadOption && !gamepadTierRank) && (
+      {(!gamepadName && !gamepadTierRank) && (
         <TextPill>None Given</TextPill>
       )}
-      {(gamepadOption && !gamepadTierRank) && (
+      {(gamepadName && !gamepadTierRank) && (
         <TierRankBadge includeRatingLetter={false} tierRank="STier">
-          {gamepadOption.description}
+          {gamepadName}
         </TierRankBadge>
       )}
-      {(!gamepadOption && gamepadTierRank) && (
+      {(!gamepadName && gamepadTierRank) && (
         <TierRankBadge tierRank={gamepadTierRank}>
           {convertGamepadTierRankToDescription(gamepadTierRank)}
         </TierRankBadge>
       )}
-      {(gamepadOption && gamepadTierRank) && (
+      {(gamepadName && gamepadTierRank) && (
         <TierRankBadge tierRank={gamepadTierRank}>
-          {`${gamepadOption.description} - ${convertGamepadTierRankToDescription(gamepadTierRank)}`}
+          {`${gamepadName} - ${convertGamepadTierRankToDescription(gamepadTierRank)}`}
         </TierRankBadge>
       )}
     </RatingContainer>
@@ -113,7 +113,7 @@ export default function FormRatingDisplay() {
     ratingTierRank,
     frameRateTierRank,
     frameRateStutters,
-    gamepadOption,
+    gamepadName,
     gamepadTierRank,
   } } = usePerformancePostFormState();
   return (
@@ -124,7 +124,7 @@ export default function FormRatingDisplay() {
         frameRateStutters={frameRateStutters}
       />
       <GamepadTierRankDisplay
-        gamepadOption={gamepadOption}
+        gamepadName={gamepadName}
         gamepadTierRank={gamepadTierRank}
       />
     </div>
