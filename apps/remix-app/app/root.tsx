@@ -31,7 +31,7 @@ import {
 import type { SerializeFrom } from '@remix-run/node';
 import { getProfileSession, logout } from '~/lib/sessions/profile-session.server';
 // import { getBannerSession } from '~/lib/sessions/banner-session.server';
-import type { Theme } from '~/lib/context/theme-provider';
+import { Theme } from '~/lib/context/theme-provider';
 import { useTheme, ThemeProvider, NonFlashOfWrongThemeEls } from '~/lib/context/theme-provider';
 import { getThemeSession } from '~/lib/sessions/theme-session.server';
 import type {
@@ -42,6 +42,7 @@ import { useEffect } from 'react';
 import CatchDisplay from './components/Layout/CatchDisplay';
 import ErrorDisplay from './components/Layout/ErrorDisplay';
 import { updateSteamUserProfileOwnedSteamApps } from './models/Steam/steamUserProfile.server';
+import { classNames } from './lib/css/classNames';
 
 type RootLoaderData = {
   theme: Theme | null;
@@ -183,7 +184,10 @@ function Document({
         <Links />
       </head>
       <body
-        className="min-h-screen bg-app-bg max-w-[100vw] overflow-x-hidden"
+        className={classNames(
+            'min-h-screen bg-app-bg max-w-[100vw] overflow-x-hidden',
+            theme && theme === Theme.DARK ? 'dark' : '',
+        )}
         data-theme={theme ? theme : ''}
         data-gramm="false"
         data-gramm_editor="false"
