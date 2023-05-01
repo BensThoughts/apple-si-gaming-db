@@ -10,8 +10,7 @@ import type {
 export const PerformancePostFormContext = createContext(null);
 export const PerformancePostDispatchContext = createContext(null);
 
-
-type PerformancePostFormRatingState = {
+type PerformancePostFormState = {
   ratingTierRank?: RatingTierRank;
   frameRateTierRank?: FrameRateTierRank;
   frameRateStutters: boolean;
@@ -19,46 +18,52 @@ type PerformancePostFormRatingState = {
   gamepadTierRank?: GamepadTierRank;
 }
 
-const initialState: PerformancePostFormRatingState = {
+const initialState: PerformancePostFormState = {
   frameRateStutters: false,
 };
 
-export enum RatingActions {
+export enum PerformancePostFormStateActions {
   SET_RATING_TIER_RANK = 'set-rating-tier-rank',
   SET_FRAME_RATE_TIER_RANK = 'set-frame-rate-tier-rank',
   SET_FRAME_RATE_STUTTERS = 'set-frame-rate-stutters',
   SET_GAMEPAD_OPTION = 'set-gamepad-option',
   SET_GAMEPAD_TIER_RANK = 'set-gamepad-tier-rank',
-  RESET_RATING_STATE = 'reset-rating-state',
+  RESET_FORM_STATE = 'reset-form-state',
+  UPSERT_FORM_STATE = 'upsert-form-state',
 }
 
 type SetRatingTierRankAction = {
-  type: RatingActions.SET_RATING_TIER_RANK,
+  type: PerformancePostFormStateActions.SET_RATING_TIER_RANK,
   payload: RatingTierRank | undefined
 }
 
 type SetFrameRateTierRankAction = {
-  type: RatingActions.SET_FRAME_RATE_TIER_RANK,
+  type: PerformancePostFormStateActions.SET_FRAME_RATE_TIER_RANK,
   payload: FrameRateTierRank | undefined
 }
 
 type SetFrameRateStuttersAction = {
-  type: RatingActions.SET_FRAME_RATE_STUTTERS;
+  type: PerformancePostFormStateActions.SET_FRAME_RATE_STUTTERS;
   payload: boolean;
 }
 
-type SetGamepadOption = {
-  type: RatingActions.SET_GAMEPAD_OPTION;
+type SetGamepadOptionAction = {
+  type: PerformancePostFormStateActions.SET_GAMEPAD_OPTION;
   payload: GamepadOption | undefined;
 }
 
-type SetGamepadRatingTierRank = {
-  type: RatingActions.SET_GAMEPAD_TIER_RANK;
+type SetGamepadRatingTierRankAction = {
+  type: PerformancePostFormStateActions.SET_GAMEPAD_TIER_RANK;
   payload: GamepadTierRank | undefined;
 }
 
-type ResetRatingStateAction = {
-  type: RatingActions.RESET_RATING_STATE;
+type UpsertFormStateAction = {
+  type: PerformancePostFormStateActions.UPSERT_FORM_STATE;
+  payload: PerformancePostFormState;
+}
+
+type ResetFormStateAction = {
+  type: PerformancePostFormStateActions.RESET_FORM_STATE;
   payload: undefined;
 }
 
@@ -66,33 +71,37 @@ type FormRatingAction =
   | SetRatingTierRankAction
   | SetFrameRateTierRankAction
   | SetFrameRateStuttersAction
-  | SetGamepadOption
-  | SetGamepadRatingTierRank
-  | ResetRatingStateAction
+  | SetGamepadOptionAction
+  | SetGamepadRatingTierRankAction
+  | UpsertFormStateAction
+  | ResetFormStateAction
 
 type DispatchFormRatingAction = Dispatch<FormRatingAction>;
 
 function performancePostFormReducer(
-    state: PerformancePostFormRatingState,
+    state: PerformancePostFormState,
     action: FormRatingAction,
-): PerformancePostFormRatingState {
+): PerformancePostFormState {
   switch (action.type) {
-    case RatingActions.SET_RATING_TIER_RANK: {
+    case PerformancePostFormStateActions.SET_RATING_TIER_RANK: {
       return { ...state, ratingTierRank: action.payload };
     }
-    case RatingActions.SET_FRAME_RATE_TIER_RANK: {
+    case PerformancePostFormStateActions.SET_FRAME_RATE_TIER_RANK: {
       return { ...state, frameRateTierRank: action.payload };
     }
-    case RatingActions.SET_FRAME_RATE_STUTTERS: {
+    case PerformancePostFormStateActions.SET_FRAME_RATE_STUTTERS: {
       return { ...state, frameRateStutters: action.payload };
     }
-    case RatingActions.SET_GAMEPAD_OPTION: {
+    case PerformancePostFormStateActions.SET_GAMEPAD_OPTION: {
       return { ...state, gamepadOption: action.payload };
     }
-    case RatingActions.SET_GAMEPAD_TIER_RANK: {
+    case PerformancePostFormStateActions.SET_GAMEPAD_TIER_RANK: {
       return { ...state, gamepadTierRank: action.payload };
     }
-    case RatingActions.RESET_RATING_STATE: {
+    case PerformancePostFormStateActions.UPSERT_FORM_STATE: {
+      return { ...state, ...action.payload }
+    }
+    case PerformancePostFormStateActions.RESET_FORM_STATE: {
       return initialState;
     }
     default: {
@@ -102,12 +111,12 @@ function performancePostFormReducer(
 }
 
 const FormRatingContext = createContext<
-  { state: PerformancePostFormRatingState, dispatch: DispatchFormRatingAction } | undefined
+  { state: PerformancePostFormState, dispatch: DispatchFormRatingAction } | undefined
 >(undefined);
 
 type FormRatingsProviderProps = { children: React.ReactNode };
 
-function PerformancePostFormProvider({ children }: FormRatingsProviderProps) {
+function PerformancePostFormStateProvider({ children }: FormRatingsProviderProps) {
   const [state, dispatch] = useReducer(performancePostFormReducer, initialState);
   const value = { state, dispatch };
   return (
@@ -125,4 +134,4 @@ function usePerformancePostFormState() {
   return context;
 }
 
-export { PerformancePostFormProvider, usePerformancePostFormState };
+export { PerformancePostFormStateProvider, usePerformancePostFormState };

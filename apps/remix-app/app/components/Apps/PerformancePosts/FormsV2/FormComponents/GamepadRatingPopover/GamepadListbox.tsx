@@ -1,5 +1,5 @@
 import type { GamepadOption } from '~/types';
-import { RatingActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
+import { PerformancePostFormStateActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
 import { CheckIcon, ChevronUpIcon } from '~/components/Icons/FeatherIcons';
 import { Listbox, Transition } from '@headlessui/react';
 import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
@@ -33,14 +33,17 @@ export default function GamepadListbox({
   function onSelectionChange(selection: GamepadListboxOption<number>) {
     if (selection.value != -1) {
       dispatch({
-        type: RatingActions.SET_GAMEPAD_OPTION,
+        type: PerformancePostFormStateActions.SET_GAMEPAD_OPTION,
         payload: {
           description: selection.name,
           id: selection.value,
         },
       });
     } else {
-      dispatch({ type: RatingActions.SET_GAMEPAD_OPTION, payload: undefined });
+      dispatch({
+        type: PerformancePostFormStateActions.SET_GAMEPAD_OPTION,
+        payload: undefined
+      });
     }
   }
 

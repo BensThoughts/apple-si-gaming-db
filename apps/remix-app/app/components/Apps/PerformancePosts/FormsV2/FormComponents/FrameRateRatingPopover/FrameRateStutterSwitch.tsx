@@ -2,7 +2,7 @@ import { Switch } from '@headlessui/react';
 import { Fragment } from 'react';
 import { classNames } from '~/lib/css/classNames';
 import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
-import { RatingActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
+import { PerformancePostFormStateActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
 
 export default function FrameRateStutterSwitch({
   defaultChecked = false,
@@ -25,7 +25,10 @@ export default function FrameRateStutterSwitch({
         name={PerformancePostFormFieldNames.FrameRateStutters}
         as={Fragment}
         onChange={(checked) => {
-          dispatch({ type: RatingActions.SET_FRAME_RATE_STUTTERS, payload: checked });
+          dispatch({
+            type: PerformancePostFormStateActions.SET_FRAME_RATE_STUTTERS,
+            payload: checked
+          });
         }}
       >
         {({ checked }) => (

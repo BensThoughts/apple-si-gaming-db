@@ -1,7 +1,7 @@
 // import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { FrameRateTierRank } from '~/types';
 import { convertFrameRateTierRankToDescription } from '~/lib/conversions/rating-conversions';
-import { RatingActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
+import { PerformancePostFormStateActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
 import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
 import type { RadioGroupOption } from '~/components/HeadlessComponents/TailwindRadioGroup';
 import TailwindRadioGroup from '~/components/HeadlessComponents/TailwindRadioGroup';
@@ -53,9 +53,15 @@ export default function FrameRateTierRankRadioGroup({
   // }
   function onSelectionChange(selection: FrameRateRadioGroupOption) {
     if (selection.value != 'None') {
-      dispatch({ type: RatingActions.SET_FRAME_RATE_TIER_RANK, payload: selection.value });
+      dispatch({
+        type: PerformancePostFormStateActions.SET_FRAME_RATE_TIER_RANK,
+        payload: selection.value
+      });
     } else {
-      dispatch({ type: RatingActions.SET_FRAME_RATE_TIER_RANK, payload: undefined });
+      dispatch({
+        type: PerformancePostFormStateActions.SET_FRAME_RATE_TIER_RANK,
+        payload: undefined
+      });
     }
   }
 
