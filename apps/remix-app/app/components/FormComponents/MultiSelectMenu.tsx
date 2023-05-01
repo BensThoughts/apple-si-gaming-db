@@ -77,6 +77,7 @@ export default function MultiSelectMenu<T>({
   labelText,
   fieldError,
   required,
+  placeholderText = 'Select...',
 }: {
   name?: string;
   id?: string;
@@ -88,6 +89,7 @@ export default function MultiSelectMenu<T>({
   labelText?: string;
   fieldError?: string;
   required?: boolean;
+  placeholderText?: string;
 }) {
   return (
     <div>
@@ -126,6 +128,7 @@ export default function MultiSelectMenu<T>({
               defaultValue={defaultValue}
               closeMenuOnSelect={closeMenuOnSelect}
               styles={styles}
+              placeholder={placeholderText}
               theme={(theme) => ({
                 ...theme,
                 borderRadius: 8,
