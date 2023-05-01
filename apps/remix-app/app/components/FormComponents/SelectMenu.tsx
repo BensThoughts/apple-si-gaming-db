@@ -89,7 +89,7 @@ export default function SelectMenu<T = string>({
             leaveTo="opacity-0"
           >
             <Listbox.Options
-              className="overflow-auto absolute z-10 py-1 mt-1 w-full max-h-60
+              className="overflow-auto absolute z-[100] py-1 mt-1 w-full max-h-60
                          text-base rounded-md bg-primary focus:outline-none
                          focus:ring-1 focus:ring-secondary sm:text-sm"
             >
