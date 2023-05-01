@@ -58,7 +58,6 @@ export default function CreatePerformancePostForm({
   steamUserProfileOwnsApp,
 }: CreatePerformancePostFormProps) {
   const { userSession } = useUserSession();
-
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -106,22 +105,27 @@ export default function CreatePerformancePostForm({
   const formId = `${steamAppId}-CreatePerformancePost`;
   return (
     <PerformancePostFormWrapper>
-      <h2 className="text-secondary text-lg">Create Post</h2>
-      {formError && <div className="text-error">{formError}</div>}
+      {/* <h2 className="text-secondary text-lg">Create Post</h2> */}
+      {/* {formError && <div className="text-error">{formError}</div>} */}
+
       <Form
         id={formId}
         method="post"
+        // onSubmit={submitForm}
         name="performancePost"
         ref={formRef}
         className="flex flex-col items-center gap-6 w-full max-w-lg"
         action={`/apps/${steamAppId}/posts`}
+        // onSubmit={(e) => isSubmittingForm ? e.preventDefault() : null}
       >
         <input type="hidden" name="_performancePostAction" value="createPerformancePost" />
+
         <BasePerformancePostFormFields
           systemSpecOptions={systemSpecOptions}
           gamepadOptions={gamepadOptions}
           postTagOptions={postTagOptions}
           fields={fields}
+          formError={formError}
           fieldErrors={fieldErrors}
         />
         <RoundedButton type="submit" disabled={isSubmittingForm} className="focus-visible:show-ring-tertiary">
