@@ -43,9 +43,9 @@ const frameRateOptions: FrameRateRadioGroupOption[] = [
 ];
 
 export default function FrameRateTierRankRadioGroup({
-  defaultFrameRateTierRank,
+  // defaultFrameRateTierRank,
 }: {
-  defaultFrameRateTierRank?: FrameRateTierRank;
+  // defaultFrameRateTierRank?: FrameRateTierRank;
 }) {
   const { state, dispatch } = usePerformancePostFormState();
   // if (defaultFrameRateTierRank) {
