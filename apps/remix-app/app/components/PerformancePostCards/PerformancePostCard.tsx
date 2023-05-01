@@ -6,6 +6,7 @@ import PerformancePostUserBadge from './CardComponents/UserBadge';
 import LikeButton from '~/components/Buttons/LikeButton';
 import SystemSpecsPopover from '~/components/HeadlessComponents/SystemSpecPopover';
 import EditButton from '~/components/Buttons/EditButton';
+import HTMLContainer from './CardComponents/HTMLContainer';
 
 export default function PerformancePostCard({
   performancePost,
@@ -57,9 +58,7 @@ export default function PerformancePostCard({
           />
         </div>
       </div>
-      <p className="text-primary-highlight">
-        {postText}
-      </p>
+      <HTMLContainer htmlString={postText} />
       <TierRankContainer
         rating={{
           ratingTierRank,

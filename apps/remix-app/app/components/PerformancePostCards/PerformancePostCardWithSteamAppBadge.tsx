@@ -5,6 +5,7 @@ import SystemSpecsPopover from '~/components/HeadlessComponents/SystemSpecPopove
 import LikeButton from '~/components/Buttons/LikeButton';
 import PerformancePostAppBadge from '~/components/PerformancePostCards/CardComponents/AppBadge';
 import ViewButton from '~/components/Buttons/ViewButton';
+import HTMLContainer from './CardComponents/HTMLContainer';
 
 export default function PerformancePostCardWithSteamAppBadge({
   performancePost,
@@ -44,9 +45,7 @@ export default function PerformancePostCardWithSteamAppBadge({
           <SystemSpecsPopover systemSpec={systemSpec} giveButtonStyles />
         </div>
       </div>
-      <p className="text-primary-highlight">
-        {postText}
-      </p>
+      <HTMLContainer htmlString={postText} />
       <div>
         <TierRankContainer rating={rating} postTags={postTags} />
       </div>
