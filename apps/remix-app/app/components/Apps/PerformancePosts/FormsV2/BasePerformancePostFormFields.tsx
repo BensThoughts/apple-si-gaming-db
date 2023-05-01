@@ -11,9 +11,10 @@ import PostTagMultiSelectMenu from './FormComponents/PostTagMultiSelectMenu';
 import SystemSelectMenuCard from './FormComponents/SystemSelectMenuCard';
 import FormRatingDisplay from './FormRatingDisplay';
 import { Editor } from './FormComponents/LexicalEditor';
-import { FormRatingProvider } from './FormContext';
 import FrameRateRatingPopover from './FormComponents/FrameRateRatingPopover/FrameRateRatingPopover';
 import GamepadRatingPopover from './FormComponents/GamepadRatingPopover';
+import { PerformancePostFormStateActions, usePerformancePostFormState } from './FormContext/PerformancePostFormContext';
+import { useEffect } from 'react';
 
 interface BasePerformancePostFormFieldsProps {
   formError?: string;
@@ -49,11 +50,27 @@ export default function BasePerformancePostFormFields({
   gamepadOptions,
   systemSpecOptions,
 }: BasePerformancePostFormFieldsProps) {
+  const { dispatch } = usePerformancePostFormState();
+
+  useEffect(() => {
+    if (fields) {
+      dispatch({
+        type:PerformancePostFormStateActions.UPSERT_FORM_STATE,
+        payload: {
+          ratingTierRank: fields.ratingTierRank,
+          frameRateTierRank: fields.frameRateTierRank ? fields.frameRateTierRank : undefined,
+          frameRateStutters: fields.frameRateStutters ? fields.frameRateStutters : false,
+          gamepadValue: fields.gamepadId ? fields.gamepadId : undefined,
+          gamepadTierRank: fields.gamepadTierRank ? fields.gamepadTierRank : undefined,
+        }
+      });
+    }
+  }, [dispatch, fields])
+
   return (
-    <FormRatingProvider>
       <div className="flex flex-col gap-6">
         <div className="flex gap-2">
-          <RatingTierRankSelectMenu />
+          <RatingTierRankSelectMenu defaultRatingTierRank={fields?.ratingTierRank} />
           <FrameRateRatingPopover />
           <GamepadRatingPopover gamepads={gamepadOptions} />
         </div>
@@ -82,6 +99,5 @@ export default function BasePerformancePostFormFields({
           </div>
         )}
       </div>
-    </FormRatingProvider>
   );
 }
