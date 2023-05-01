@@ -1,8 +1,13 @@
 import TextPill from '~/components/TextPill';
 import TierRankBadge from '~/components/TierRankBadge';
 import TierRankPill from '~/components/TierRankPill';
-import { convertFrameRateTierRankToDescription, convertGamepadTierRankToDescription, convertRatingTierRankToDescription } from '~/lib/conversions/rating-conversions';
-import type { FrameRateTierRank, GamepadTierRank, PerformancePost, RatingTierRank } from '~/types';
+import {
+  convertFrameRateTierRankToDescription,
+  convertGamepadTierRankToDescription,
+  convertRatingTierRankToDescription,
+} from '~/lib/conversions/rating-conversions';
+import { useFormRatingState } from './FormContext';
+import type { FrameRateTierRank, GamepadOption, GamepadTierRank, RatingTierRank } from '~/types';
 
 function RatingContainer({
   title,
@@ -21,78 +26,107 @@ function RatingContainer({
   );
 }
 
-export default function FormRatingDisplay({
-  ratingTierRank,
+export function RatingTierRankDisplay({ ratingTierRank }: { ratingTierRank?: RatingTierRank}) {
+  return (
+    <RatingContainer title="Tier Rank">
+      {ratingTierRank ? (
+      <TierRankBadge tierRank={ratingTierRank}>
+        {convertRatingTierRankToDescription(ratingTierRank)}
+      </TierRankBadge>
+    ) : (
+      <TextPill>
+        None Given
+      </TextPill>
+    )}
+    </RatingContainer>
+  );
+}
+
+export function FrameRateTierRankDisplay({
   frameRateTierRank,
   frameRateStutters,
-  gamepadMetadata,
-  gamepadTierRank,
-  postTags,
+  ratingTierRank,
 }: {
-  ratingTierRank?: PerformancePost['rating']['ratingTierRank'];
-  frameRateTierRank: PerformancePost['rating']['frameRateTierRank'];
-  frameRateStutters: PerformancePost['rating']['frameRateStutters'],
-  gamepadMetadata: PerformancePost['rating']['gamepadMetadata'];
-  gamepadTierRank: PerformancePost['rating']['gamepadTierRank'];
-  postTags: PerformancePost['postTags'];
+  frameRateTierRank?: FrameRateTierRank;
+  frameRateStutters: boolean;
+  ratingTierRank?: RatingTierRank; // optional to match color of rating tier rank if
+                                   // only stutters is turned on without frame
+                                   // rate rating
 }) {
   return (
-    <div className="flex items-center gap-2">
-      <RatingContainer title="Tier Rank">
-        {ratingTierRank ? (
-          <TierRankBadge tierRank={ratingTierRank}>
-            {convertRatingTierRankToDescription(ratingTierRank)}
+    <RatingContainer title="Frame Rate">
+      {frameRateTierRank || frameRateStutters ? (
+      <div className="flex gap-1">
+        {frameRateTierRank && (
+          <TierRankBadge tierRank={frameRateTierRank}>
+            {convertFrameRateTierRankToDescription(frameRateTierRank)}
           </TierRankBadge>
-        ) : (
-          <TextPill>
-            None Given
-          </TextPill>
         )}
-      </RatingContainer>
-      <RatingContainer title="Frame Rate">
-        {frameRateTierRank || frameRateStutters ? (
-          <div className="flex gap-1">
-            {frameRateTierRank && (
-              <TierRankBadge tierRank={frameRateTierRank}>
-                {convertFrameRateTierRankToDescription(frameRateTierRank)}
-              </TierRankBadge>
-            )}
-            {frameRateStutters && (
-              <TierRankPill tierRank={frameRateTierRank ? frameRateTierRank : ratingTierRank ? ratingTierRank : 'STier'}>
-                Stutters
-              </TierRankPill>
-            )}
-          </div>
-        ) : (
-          <TextPill>
-            None Given
-          </TextPill>
+        {frameRateStutters && (
+          <TierRankPill tierRank={frameRateTierRank ? frameRateTierRank : ratingTierRank ? ratingTierRank : 'STier'}>
+            Stutters
+          </TierRankPill>
         )}
-      </RatingContainer>
-      <RatingContainer title="Gamepad">
-        {gamepadTierRank && gamepadMetadata ? (
-          <TierRankBadge tierRank={gamepadTierRank}>
-            {`${gamepadMetadata.description} - ${convertGamepadTierRankToDescription(gamepadTierRank)}`}
-          </TierRankBadge>
-        ) : (
-          <TextPill>
-            None Given
-          </TextPill>
-        )}
-      </RatingContainer>
-      <RatingContainer title="Tags">
-        {postTags.length > 1 ? (
-          <>
-            {postTags.map((tag) => (
-              <TextPill key={tag.id}>
-                {tag.description}
-              </TextPill>
-            ))}
-          </>
-        ) : (
-          <TextPill>None Given</TextPill>
-        )}
-      </RatingContainer>
+      </div>
+    ) : (
+      <TextPill>
+        None Given
+      </TextPill>
+    )}
+    </RatingContainer>
+  );
+}
+
+export function GamepadTierRankDisplay({
+  gamepadOption,
+  gamepadTierRank,
+}: {
+  gamepadOption?: GamepadOption;
+  gamepadTierRank?: GamepadTierRank;
+}) {
+  return (
+    <RatingContainer title="Gamepad">
+      {(!gamepadOption && !gamepadTierRank) && (
+        <TextPill>None Given</TextPill>
+      )}
+      {(gamepadOption && !gamepadTierRank) && (
+        <TierRankBadge includeRatingLetter={false} tierRank="STier">
+          {gamepadOption.description}
+        </TierRankBadge>
+      )}
+      {(!gamepadOption && gamepadTierRank) && (
+        <TierRankBadge tierRank={gamepadTierRank}>
+          {convertGamepadTierRankToDescription(gamepadTierRank)}
+        </TierRankBadge>
+      )}
+      {(gamepadOption && gamepadTierRank) && (
+        <TierRankBadge tierRank={gamepadTierRank}>
+          {`${gamepadOption.description} - ${convertGamepadTierRankToDescription(gamepadTierRank)}`}
+        </TierRankBadge>
+      )}
+    </RatingContainer>
+  );
+}
+
+export default function FormRatingDisplay() {
+  const { state: {
+    ratingTierRank,
+    frameRateTierRank,
+    frameRateStutters,
+    gamepadOption,
+    gamepadTierRank,
+  } } = useFormRatingState();
+  return (
+    <div className="flex items-center gap-2 flex-wrap">
+      <RatingTierRankDisplay ratingTierRank={ratingTierRank} />
+      <FrameRateTierRankDisplay
+        frameRateTierRank={frameRateTierRank}
+        frameRateStutters={frameRateStutters}
+      />
+      <GamepadTierRankDisplay
+        gamepadOption={gamepadOption}
+        gamepadTierRank={gamepadTierRank}
+      />
     </div>
   );
 }
