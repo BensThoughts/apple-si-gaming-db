@@ -12,10 +12,10 @@ type GamepadListboxOption<T = string> = {
 
 export default function GamepadListbox({
   gamepads,
-  defaultGamepadId,
+  // defaultGamepadId,
 }: {
   gamepads: GamepadOption[];
-  defaultGamepadId?: number; // defaultValue
+  // defaultGamepadId?: number; // defaultValue
 }) {
   const { state, dispatch } = usePerformancePostFormState();
 
@@ -35,8 +35,8 @@ export default function GamepadListbox({
       dispatch({
         type: PerformancePostFormStateActions.SET_GAMEPAD_OPTION,
         payload: {
-          description: selection.name,
-          id: selection.value,
+          name: selection.name,
+          value: selection.value,
         },
       });
     } else {
@@ -47,7 +47,7 @@ export default function GamepadListbox({
     }
   }
 
-  const defaultValue = gamepadOptions.find((option) => option.value === state.gamepadOption?.id);
+  const defaultValue = gamepadOptions.find((option) => option.value === state.gamepadValue);
 
   return (
     <Listbox
