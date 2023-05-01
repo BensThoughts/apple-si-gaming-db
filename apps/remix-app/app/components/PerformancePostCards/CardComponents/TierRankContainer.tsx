@@ -55,7 +55,7 @@ export default function PerformancePostTierRankContainer({
         <span className="text-primary-faded italic font-light">
               Tier Rank
         </span>
-        <TierRankBadge tierRank={ratingTierRank} className="text-primary">
+        <TierRankBadge tierRank={ratingTierRank}>
           {`${convertRatingTierRankToDescription(ratingTierRank)}`}
         </TierRankBadge>
       </RankItemContainer>
@@ -66,7 +66,7 @@ export default function PerformancePostTierRankContainer({
             </span>
             <div className="flex items-center gap-2">
               {frameRateTierRank &&
-                  <TierRankBadge tierRank={frameRateTierRank} className="text-primary">
+                  <TierRankBadge tierRank={frameRateTierRank}>
                     {convertFrameRateTierRankToDescription(frameRateTierRank)}
                   </TierRankBadge>
               }
@@ -86,7 +86,7 @@ export default function PerformancePostTierRankContainer({
             <span className="italic text-primary-faded font-light">
               Gamepad
             </span>
-            <TierRankBadge tierRank={gamepadTierRank} className="text-primary">
+            <TierRankBadge tierRank={gamepadTierRank}>
               {`${gamepadMetadata.description} - ${convertGamepadTierRankToDescription(gamepadTierRank)}`}
             </TierRankBadge>
           </RankItemContainer>
@@ -98,7 +98,7 @@ export default function PerformancePostTierRankContainer({
             </span>
             <div className="flex gap-2 flex-wrap">
               {postTags.map((tag) => (
-                <TextPill key={tag.id} className="text-primary">
+                <TextPill key={tag.id}>
                   {tag.description}
                 </TextPill>
               ))}
