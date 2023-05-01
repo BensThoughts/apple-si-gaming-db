@@ -2,14 +2,14 @@ import { Switch } from '@headlessui/react';
 import { Fragment } from 'react';
 import { classNames } from '~/lib/css/classNames';
 import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
-import { RatingActions, useFormRatingState } from '../../FormContext';
+import { RatingActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
 
 export default function FrameRateStutterSwitch({
   defaultChecked = false,
 }: {
   defaultChecked?: boolean;
 }) {
-  const { state, dispatch } = useFormRatingState();
+  const { state, dispatch } = usePerformancePostFormState();
   return (
     <Switch.Group
       as="fieldset"

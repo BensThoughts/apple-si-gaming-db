@@ -1,7 +1,7 @@
 // import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { FrameRateTierRank } from '~/types';
 import { convertFrameRateTierRankToDescription } from '~/lib/conversions/rating-conversions';
-import { RatingActions, useFormRatingState } from '../../FormContext';
+import { RatingActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
 import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
 import type { RadioGroupOption } from '~/components/HeadlessComponents/TailwindRadioGroup';
 import TailwindRadioGroup from '~/components/HeadlessComponents/TailwindRadioGroup';
@@ -47,7 +47,7 @@ export default function FrameRateTierRankRadioGroup({
 }: {
   defaultFrameRateTierRank?: FrameRateTierRank;
 }) {
-  const { state, dispatch } = useFormRatingState();
+  const { state, dispatch } = usePerformancePostFormState();
   // if (defaultFrameRateTierRank) {
   //   dispatch({ type: RatingActions.SET_FRAME_RATE_TIER_RANK, payload: defaultFrameRateTierRank });
   // }

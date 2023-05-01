@@ -3,7 +3,7 @@ import TailwindRadioGroup from '~/components/HeadlessComponents/TailwindRadioGro
 import { convertGamepadTierRankToFullText } from '~/lib/conversions/rating-conversions';
 import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
 import type { GamepadTierRank } from '~/types';
-import { RatingActions, useFormRatingState } from '../../FormContext';
+import { RatingActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
 
 type GamepadRadioGroupOption = RadioGroupOption<GamepadTierRank | 'None'>;
 
@@ -39,7 +39,7 @@ export default function GamepadTierRankRadioGroup({
 }: {
   defaultGamepadTierRank?: GamepadTierRank;
 }) {
-  const { state, dispatch } = useFormRatingState();
+  const { state, dispatch } = usePerformancePostFormState();
 
   function onSelectionChange(selection: GamepadRadioGroupOption) {
     if (selection.value != 'None') {

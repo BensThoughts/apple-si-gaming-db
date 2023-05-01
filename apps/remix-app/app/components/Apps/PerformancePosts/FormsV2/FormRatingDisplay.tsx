@@ -6,7 +6,7 @@ import {
   convertGamepadTierRankToDescription,
   convertRatingTierRankToDescription,
 } from '~/lib/conversions/rating-conversions';
-import { useFormRatingState } from './FormContext';
+import { usePerformancePostFormState } from './FormContext/PerformancePostFormContext';
 import type { FrameRateTierRank, GamepadOption, GamepadTierRank, RatingTierRank } from '~/types';
 
 function RatingContainer({
@@ -115,7 +115,7 @@ export default function FormRatingDisplay() {
     frameRateStutters,
     gamepadOption,
     gamepadTierRank,
-  } } = useFormRatingState();
+  } } = usePerformancePostFormState();
   return (
     <div className="flex items-center gap-2 flex-wrap">
       <RatingTierRankDisplay ratingTierRank={ratingTierRank} />

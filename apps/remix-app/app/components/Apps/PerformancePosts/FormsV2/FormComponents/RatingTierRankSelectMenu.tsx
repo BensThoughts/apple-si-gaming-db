@@ -4,7 +4,7 @@ import type { SelectOption } from '~/components/FormComponents/SelectMenuWithIco
 import type { RatingTierRank } from '~/types';
 import { convertRatingTierRankToFullText } from '~/lib/conversions/rating-conversions';
 import { AwardIcon } from '~/components/Icons/FeatherIcons';
-import { RatingActions, useFormRatingState } from '../FormContext';
+import { RatingActions, usePerformancePostFormState } from '../FormContext/PerformancePostFormContext';
 import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
 
 // type ArrayElement<ArrayType extends readonly unknown[]> =
@@ -51,7 +51,7 @@ export default function RatingTierRankSelectMenu({
 }: {
   defaultValue?: RatingTierRank;
 }) {
-  const { dispatch } = useFormRatingState();
+  const { dispatch } = usePerformancePostFormState();
   function onSelectionChange(selection: SelectOption<RatingTierRank | 'None'>) {
     if (selection.value != 'None') {
       dispatch({ type: RatingActions.SET_RATING_TIER_RANK, payload: selection.value });

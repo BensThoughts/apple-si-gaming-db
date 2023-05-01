@@ -1,5 +1,5 @@
 import type { GamepadOption } from '~/types';
-import { RatingActions, useFormRatingState } from '../../FormContext';
+import { RatingActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
 import { CheckIcon, ChevronUpIcon } from '~/components/Icons/FeatherIcons';
 import { Listbox, Transition } from '@headlessui/react';
 import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
@@ -17,7 +17,7 @@ export default function GamepadListbox({
   gamepads: GamepadOption[];
   defaultGamepadId?: number; // defaultValue
 }) {
-  const { state, dispatch } = useFormRatingState();
+  const { state, dispatch } = usePerformancePostFormState();
 
   const gamepadOptions: GamepadListboxOption<number>[] = gamepads.map((gamepad) => (
     {
