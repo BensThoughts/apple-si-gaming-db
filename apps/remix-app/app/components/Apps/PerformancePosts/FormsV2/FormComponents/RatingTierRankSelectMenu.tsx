@@ -47,9 +47,9 @@ export const steamAppRatingOptions: SelectOption<RatingTierRank | 'None'>[] = [
 ];
 
 export default function RatingTierRankSelectMenu({
-  defaultValue,
+  defaultRatingTierRank,
 }: {
-  defaultValue?: RatingTierRank;
+  defaultRatingTierRank?: RatingTierRank;
 }) {
   const { dispatch } = usePerformancePostFormState();
   function onSelectionChange(selection: SelectOption<RatingTierRank | 'None'>) {
@@ -65,14 +65,13 @@ export default function RatingTierRankSelectMenu({
       });
     }
   }
+
+  const defaultValue = steamAppRatingOptions.find((option) => option.value === defaultRatingTierRank);
   return (
     <div className="flex gap-2">
       <SelectMenuWithIcon
         name={PerformancePostFormFieldNames.RatingTierRank}
-        defaultValue={defaultValue ? {
-          name: convertRatingTierRankToFullText(defaultValue),
-          value: defaultValue,
-        } : steamAppRatingOptions[0]}
+        defaultValue={defaultValue ? defaultValue : steamAppRatingOptions[0]}
         options={steamAppRatingOptions}
         labelText="Tier Rank"
         PrimaryIcon={AwardIcon}
