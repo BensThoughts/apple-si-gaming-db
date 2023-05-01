@@ -1,6 +1,8 @@
 import { BaseSvgIcon } from '../../BaseSvgIcon';
 import type { BaseSvgIconProps } from '../../BaseSvgIcon';
 
+export type FlatIconSolidProps = BaseSvgIconProps;
+
 export default function FlatIconSolid({
   size = 24,
   width,
@@ -8,7 +10,7 @@ export default function FlatIconSolid({
   viewBox = '0 0 60 60',
   children,
   ...rest
-}: BaseSvgIconProps) {
+}: FlatIconSolidProps) {
   return (
     <BaseSvgIcon
       xmlns="http://www.w3.org/2000/svg"

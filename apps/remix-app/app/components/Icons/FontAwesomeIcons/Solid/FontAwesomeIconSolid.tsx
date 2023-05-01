@@ -1,6 +1,8 @@
 import { BaseSvgIcon } from '../../BaseSvgIcon';
 import type { BaseSvgIconProps } from '../../BaseSvgIcon';
 
+export type FontAwesomeSolidIconProps = BaseSvgIconProps;
+
 export default function FontAwesomeIconSolid({
   size = 24,
   width,
@@ -10,7 +12,7 @@ export default function FontAwesomeIconSolid({
   viewBox = '0 0 512 512',
   children,
   ...rest
-}: BaseSvgIconProps) {
+}: FontAwesomeSolidIconProps) {
   return (
     <BaseSvgIcon
       xmlns="http://www.w3.org/2000/svg"

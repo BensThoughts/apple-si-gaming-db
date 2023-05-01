@@ -1,14 +1,11 @@
 import SimpleIcon from '../SimpleIcon';
-
-type IconProps = {
-  size?: number,
-} & React.SVGAttributes<SVGElement>
+import type { SimpleIconProps } from '../SimpleIcon';
 
 export function RedditIcon({
   size = 24,
   fill = '#FF4500',
   ...rest
-}: IconProps) {
+}: SimpleIconProps) {
   return (
     <SimpleIcon
       size={size}

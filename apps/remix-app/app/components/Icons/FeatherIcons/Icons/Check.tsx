@@ -1,14 +1,11 @@
 import FeatherIcon from '../FeatherIcon';
-
-type IconProps = {
-  size?: number,
-} & React.SVGAttributes<SVGElement>
+import type { FeatherIconProps } from '../FeatherIcon';
 
 export function CheckIcon({
   size,
   strokeWidth = 1.5,
   ...rest
-}: IconProps) {
+}: FeatherIconProps) {
   return (
     <FeatherIcon
       size={size}

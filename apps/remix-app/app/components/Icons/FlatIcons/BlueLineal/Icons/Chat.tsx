@@ -1,7 +1,6 @@
 import FlatIconBlueLineal from '../FlatIconBlueLineal';
 import type { FlatIconBlueLinealProps } from '../FlatIconBlueLineal';
 
-
 export function ChatBlueLinealIcon({
   size = 24,
   ...rest

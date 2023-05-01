@@ -1,6 +1,8 @@
 import { BaseSvgIcon } from '../BaseSvgIcon';
 import type { BaseSvgIconProps } from '../BaseSvgIcon';
 
+export type SimpleIconProps = BaseSvgIconProps;
+
 export default function SimpleIcon({
   size,
   width = 24,
@@ -11,7 +13,7 @@ export default function SimpleIcon({
   viewBox = '0 0 24 24',
   children,
   ...rest
-}: BaseSvgIconProps) {
+}: SimpleIconProps) {
   return (
     <BaseSvgIcon
       xmlns="http://www.w3.org/2000/svg"

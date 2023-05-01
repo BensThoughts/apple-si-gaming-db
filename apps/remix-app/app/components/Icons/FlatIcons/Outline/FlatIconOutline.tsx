@@ -1,6 +1,8 @@
 import { BaseSvgIcon } from '../../BaseSvgIcon';
 import type { BaseSvgIconProps } from '../../BaseSvgIcon';
 
+export type FlatIconOutlineProps = BaseSvgIconProps;
+
 export default function FlatIconOutline({
   size = 24,
   width,
@@ -8,7 +10,7 @@ export default function FlatIconOutline({
   viewBox = '0 0 60 60',
   children,
   ...rest
-}: BaseSvgIconProps) {
+}: FlatIconOutlineProps) {
   return (
     <BaseSvgIcon
       xmlns="http://www.w3.org/2000/svg"

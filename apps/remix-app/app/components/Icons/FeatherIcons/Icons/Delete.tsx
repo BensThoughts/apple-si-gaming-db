@@ -1,14 +1,10 @@
 import FeatherIcon from '../FeatherIcon';
-
-type IconProps = {
-  size?: number,
-  color?: string,
-} & React.SVGAttributes<SVGElement>
+import type { FeatherIconProps } from '../FeatherIcon';
 
 export function DeleteIcon({
   size = 24,
   ...rest
-}: IconProps) {
+}: FeatherIconProps) {
   return (
     <FeatherIcon
       size={size}

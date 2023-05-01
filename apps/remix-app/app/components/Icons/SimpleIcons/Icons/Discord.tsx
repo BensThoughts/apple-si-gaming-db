@@ -1,14 +1,11 @@
 import SimpleIcon from '../SimpleIcon';
-
-type IconProps = {
-  size?: number,
-} & React.SVGAttributes<SVGElement>
+import type { SimpleIconProps } from '../SimpleIcon';
 
 export function DiscordIcon({
   size = 24,
   fill = '#5865F2',
   ...rest
-}: IconProps) {
+}: SimpleIconProps) {
   return (
     <SimpleIcon
       viewBox="0 0 24 24"

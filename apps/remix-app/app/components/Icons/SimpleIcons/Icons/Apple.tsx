@@ -1,13 +1,10 @@
 import SimpleIcon from '../SimpleIcon';
-
-type IconProps = {
-  size?: number,
-} & React.SVGAttributes<SVGElement>
+import type { SimpleIconProps } from '../SimpleIcon';
 
 export function AppleIcon({
   size = 24,
   ...rest
-}: IconProps) {
+}: SimpleIconProps) {
   return (
     <SimpleIcon
       size={size}

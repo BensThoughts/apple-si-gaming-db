@@ -1,14 +1,11 @@
 import FontAwesomeIconSolid from '../FontAwesomeIconSolid';
-
-type IconProps = {
-  size?: number,
-} & React.SVGAttributes<SVGElement>
+import type { FontAwesomeSolidIconProps } from '../FontAwesomeIconSolid';
 
 export function CloudMoonIcon({
   viewBox = '0 0 576 512',
   size = 24,
   ...rest
-}: IconProps) {
+}: FontAwesomeSolidIconProps) {
   return (
     <FontAwesomeIconSolid
       size={size}

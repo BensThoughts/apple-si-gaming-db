@@ -1,14 +1,10 @@
 import LucideIcon from '../LucideIcon';
-
-type IconProps = {
-  size?: number,
-  color?: string,
-} & React.SVGAttributes<SVGElement>
+import type { LucideIconProps } from '../LucideIcon';
 
 export function HeadingOneIcon({
   size = 24,
   ...rest
-}: IconProps) {
+}: LucideIconProps) {
   return (
     <LucideIcon
       size={size}

@@ -1,6 +1,8 @@
 import { BaseSvgIcon } from '../../BaseSvgIcon';
 import type { BaseSvgIconProps } from '../../BaseSvgIcon';
 
+export type FlatIconBlueLinealProps = BaseSvgIconProps;
+
 export default function FlatIconBlueLineal({
   size = 24,
   width,
@@ -11,7 +13,7 @@ export default function FlatIconBlueLineal({
   viewBox = '0 0 60 60',
   children,
   ...rest
-}: BaseSvgIconProps) {
+}: FlatIconBlueLinealProps) {
   return (
     <BaseSvgIcon
       xmlns="http://www.w3.org/2000/svg"

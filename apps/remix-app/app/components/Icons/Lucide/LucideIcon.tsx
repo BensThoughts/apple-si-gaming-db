@@ -1,6 +1,8 @@
 import { BaseSvgIcon } from '../BaseSvgIcon';
 import type { BaseSvgIconProps } from '../BaseSvgIcon';
 
+export type LucideIconProps = BaseSvgIconProps;
+
 export default function LucideIcon({
   viewBox = '0 0 24 24',
   size = 24,
@@ -14,7 +16,7 @@ export default function LucideIcon({
   preserveAspectRatio = 'xMidYMid meet',
   children,
   ...rest
-}: BaseSvgIconProps) {
+}: LucideIconProps) {
   return (
     <BaseSvgIcon
       xmlns="http://www.w3.org/2000/svg"

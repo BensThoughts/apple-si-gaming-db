@@ -1,7 +1,6 @@
 import FlatIconOutline from '../FlatIconOutline';
 import type { FlatIconOutlineProps } from '../FlatIconOutline';
 
-
 export function MonitorOutlineIcon({
   size = 24,
   ...rest

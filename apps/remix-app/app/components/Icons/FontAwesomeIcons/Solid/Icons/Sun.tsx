@@ -1,14 +1,11 @@
 import FontAwesomeIconsSolid from '../FontAwesomeIconSolid';
-
-type IconProps = {
-  size?: number,
-} & React.SVGAttributes<SVGElement>
+import type { FontAwesomeSolidIconProps } from '../FontAwesomeIconSolid';
 
 export function SunIcon({
   viewBox = '0 0 576 512',
   size = 24,
   ...rest
-}: IconProps) {
+}: FontAwesomeSolidIconProps) {
   return (
     <FontAwesomeIconsSolid
       size={size}

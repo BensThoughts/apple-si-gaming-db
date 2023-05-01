@@ -1,6 +1,8 @@
 import { BaseSvgIcon } from '../BaseSvgIcon';
 import type { BaseSvgIconProps } from '../BaseSvgIcon';
 
+export type FeatherIconProps = BaseSvgIconProps;
+
 export default function FeatherIcon({
   viewBox = '0 0 24 24',
   size = 24,
@@ -14,7 +16,7 @@ export default function FeatherIcon({
   preserveAspectRatio = 'xMidYMid meet',
   children,
   ...rest
-}: BaseSvgIconProps) {
+}: FeatherIconProps) {
   return (
     <BaseSvgIcon
       xmlns="http://www.w3.org/2000/svg"
