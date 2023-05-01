@@ -1,7 +1,7 @@
 import { NavLink } from '@remix-run/react';
-import ThemeToggle from './ThemeToggle';
-import MenuDrawer from '../MenuDrawer';
-import { navMenuLinks } from './navMenuLinks';
+import ThemeToggle from '../ThemeToggle';
+import MenuDrawer from './MenuDrawer';
+import { navMenuLinks } from '../links/navMenuLinks';
 
 export default function MainMenuDrawer({
   isLoggedIn,
@@ -13,7 +13,7 @@ export default function MainMenuDrawer({
   setIsMainMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   return (
-    <MenuDrawer isOpen={isMainMenuOpen} setIsOpen={setIsMainMenuOpen} title="Menu">
+    <MenuDrawer isOpen={isMainMenuOpen} setIsOpen={setIsMainMenuOpen} title="Main Menu">
     <div className="flex flex-col items-center w-full gap-6">
       <div className="flex flex-col justify-end content-between items-center pt-0 mt-7 w-full">
         {navMenuLinks.map((menuItem, idx) => (
@@ -24,7 +24,7 @@ export default function MainMenuDrawer({
             className="flex items-center justify-center w-full h-10 text-xl text-center
                        hover:bg-primary focus:outline-none focus-visible:show-ring-app-bg rounded-sm"
           >
-            {menuItem.name}
+            {menuItem.text}
           </NavLink>
         ))}
         <NavLink
