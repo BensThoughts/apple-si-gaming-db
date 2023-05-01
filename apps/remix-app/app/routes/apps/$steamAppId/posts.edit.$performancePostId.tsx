@@ -10,7 +10,6 @@ import { useActionData, useCatch, useLoaderData, useNavigation } from '@remix-ru
 import { findPostTags } from '~/models/SteamedApples/performancePostTag.server';
 import { findAllGamepads } from '~/models/SteamedApples/gamepadMetadata.server';
 // import { doesSteamUserOwnApp } from '~/models/steamUser.server';
-import EditPerformancePostForm from '~/components/Apps/PerformancePosts/Forms/EditPerformancePostForm';
 import PerformancePostCard from '~/components/PerformancePostCards/PerformancePostCard';
 import { editPerformancePostAction } from '~/lib/form-actions/performance-post/edit-post.server';
 import type { PostTagOption, GamepadOption } from '~/types';
@@ -19,6 +18,13 @@ import { requireUserIds } from '~/lib/sessions/profile-session.server';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
 import { EditPostURLParams } from '~/lib/enums/URLSearchParams/EditPost';
+import EditPerformancePostForm from '~/components/Apps/PerformancePosts/FormsV2/EditPerformancePostForm';
+// import EditPerformancePostForm from '~/components/Apps/PerformancePosts/FormsV2/EditPerformancePostForm';
+// import { links as draftEditorLinks } from '~/components/Apps/PerformancePosts/FormsV2/FormComponents/DraftEditor/DraftEditor';
+
+// export function links() {
+//   return [...draftEditorLinks()];
+// }
 
 type EditPostLoaderData = {
   steamAppId: number;

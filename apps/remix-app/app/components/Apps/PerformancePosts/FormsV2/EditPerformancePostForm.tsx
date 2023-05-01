@@ -104,8 +104,8 @@ export default function EditPerformancePostForm({
   }
   return (
     <PerformancePostFormWrapper>
-      <h2 className="text-secondary text-lg">Edit Post</h2>
-      {formError && <div className="text-error">{formError}</div>}
+      {/* <h2 className="text-secondary text-lg">Edit Post</h2>
+      {formError && <div className="text-error">{formError}</div>} */}
       <Form
         id={formId}
         method="post"
@@ -121,6 +121,7 @@ export default function EditPerformancePostForm({
           gamepadOptions={gamepadOptions}
           postTagOptions={postTagOptions}
           fields={fields}
+          formError={formError}
           fieldErrors={fieldErrors}
         />
         <div className="w-full flex gap-x-3 justify-around">
