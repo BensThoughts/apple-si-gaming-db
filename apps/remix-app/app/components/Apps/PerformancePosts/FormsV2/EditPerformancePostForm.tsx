@@ -16,6 +16,7 @@ import BasePerformancePostFormFields from './BasePerformancePostFormFields';
 import RoundedButtonRemixLink from '~/components/Buttons/RoundedButtonRemixLink';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
 import { EditPostURLParams } from '~/lib/enums/URLSearchParams/EditPost';
+import { PerformancePostFormStateProvider } from './FormContext/PerformancePostFormContext';
 
 interface EditPerformancePostFormProps {
   performancePostId: number;
@@ -103,43 +104,45 @@ export default function EditPerformancePostForm({
     action = action.concat(`?${params.toString()}`);
   }
   return (
-    <PerformancePostFormWrapper>
-      {/* <h2 className="text-secondary text-lg">Edit Post</h2>
-      {formError && <div className="text-error">{formError}</div>} */}
-      <Form
-        id={formId}
-        method="post"
-        name="performancePost"
-        ref={formRef}
-        className="flex flex-col items-center gap-8 w-full max-w-lg"
-        action={action}
-      >
-        <input type="hidden" name="_performancePostAction" value="editPerformancePost" />
-        <input type="hidden" name="performancePostId" value={performancePostId} />
-        <BasePerformancePostFormFields
-          systemSpecOptions={systemSpecOptions}
-          gamepadOptions={gamepadOptions}
-          postTagOptions={postTagOptions}
-          fields={fields}
-          formError={formError}
-          fieldErrors={fieldErrors}
-        />
-        <div className="w-full flex gap-x-3 justify-around">
-          <RoundedButtonRemixLink
-            to={redirectToAfterEdit ? redirectToAfterEdit : `/apps/${steamAppId}/posts/`}
-            className="focus-visible:show-ring-tertiary"
-          >
-            Cancel
-          </RoundedButtonRemixLink>
-          <RoundedButton
-            type="submit"
-            className="max-w-xs focus-visible:show-ring-tertiary"
-            disabled={isSubmittingForm}>
-            {isSubmittingForm ? 'Editing' : 'Edit'}
-          </RoundedButton>
-        </div>
-
-      </Form>
-    </PerformancePostFormWrapper>
+    <PerformancePostFormStateProvider>
+      <PerformancePostFormWrapper>
+        {/* <h2 className="text-secondary text-lg">Edit Post</h2>
+        {formError && <div className="text-error">{formError}</div>} */}
+        <Form
+          id={formId}
+          method="post"
+          name="performancePost"
+          ref={formRef}
+          className="flex flex-col items-center gap-8 w-full max-w-lg"
+          action={action}
+        >
+          <input type="hidden" name="_performancePostAction" value="editPerformancePost" />
+          <input type="hidden" name="performancePostId" value={performancePostId} />
+          <BasePerformancePostFormFields
+            systemSpecOptions={systemSpecOptions}
+            gamepadOptions={gamepadOptions}
+            postTagOptions={postTagOptions}
+            fields={fields}
+            formError={formError}
+            fieldErrors={fieldErrors}
+          />
+          <div className="w-full flex gap-x-3 justify-around">
+            <RoundedButtonRemixLink
+              to={redirectToAfterEdit ? redirectToAfterEdit : `/apps/${steamAppId}/posts/`}
+              className="focus-visible:show-ring-tertiary"
+            >
+              Cancel
+            </RoundedButtonRemixLink>
+            <RoundedButton
+              type="submit"
+              className="max-w-xs focus-visible:show-ring-tertiary"
+              disabled={isSubmittingForm}>
+              {isSubmittingForm ? 'Editing' : 'Edit'}
+            </RoundedButton>
+          </div>
+  
+        </Form>
+      </PerformancePostFormWrapper>
+    </PerformancePostFormStateProvider>
   );
 }
