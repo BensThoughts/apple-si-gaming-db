@@ -17,12 +17,14 @@ type SystemSpecsPopoverProps = {
     memoryRAM: SystemSpec['memoryRAM'];
   };
   children?: React.ReactNode;
+  paddingY: 4 | 8;
   giveButtonStyles?: boolean;
 }
 
 export default function SystemSpecsPopover({
   systemSpec,
   children,
+  paddingY,
   giveButtonStyles = false,
 }: SystemSpecsPopoverProps) {
   const [isShowing, setIsShowing] = useState(false);
@@ -31,7 +33,15 @@ export default function SystemSpecsPopover({
   // const [arrowElement, setArrowElement] = useState(null);
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
     placement: 'bottom-start',
-    // modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
+    modifiers: [
+      {
+        name: 'offset',
+        options: {
+          offset: [0, paddingY],
+        },
+      },
+      // { name: 'arrow', options: { element: arrowElement } }
+    ],
   });
 
   if (!Object.values(systemSpec).some(Boolean)) {
@@ -95,50 +105,51 @@ export default function SystemSpecsPopover({
               static
               {...attributes.popper}
             >
-              <div className="py-1">
-                <div className="flex flex-col gap-1 text-sm text-primary-faded bg-primary border-secondary-highlight
-                         border-1 rounded-md py-2 pl-4 pr-4">
-                  {manufacturer &&
-                  <span>Manufacturer:&nbsp;
-                    <span className="text-primary">{manufacturer}</span>
-                  </span>
-                  }
-                  {model &&
-                  <span>Model:&nbsp;
-                    <span className="text-primary">{model}</span>
-                  </span>
-                  }
-                  {osVersion &&
-                  <span>OS Version:&nbsp;
-                    <span className="text-primary">{osVersion}</span>
-                  </span>
-                  }
-                  {cpuBrand &&
-                  <span>CPU Brand:&nbsp;
-                    <span className="text-primary">{cpuBrand}</span>
-                  </span>
-                  }
-                  {videoDriver&&
-                  <span>Video Driver:&nbsp;
-                    <span className="text-primary">{videoDriver}</span>
-                  </span>
-                  }
-                  {videoDriverVersion &&
-                  <span>Video Driver Version:&nbsp;
-                    <span className="text-primary">{videoDriverVersion}</span>
-                  </span>
-                  }
-                  {videoPrimaryVRAM &&
-                  <span>Video VRAM:&nbsp;
-                    <span className="text-primary">{videoPrimaryVRAM}</span>
-                  </span>
-                  }
-                  {memoryRAM &&
-                  <span>RAM:&nbsp;
-                    <span className="text-primary">{memoryRAM}</span>
-                  </span>
-                  }
-                </div>
+              <div
+                className="flex flex-col gap-1 text-sm text-primary-faded
+                           bg-primary border-secondary-highlight
+                           border-1 rounded-md py-2 pl-4 pr-4"
+              >
+                {manufacturer &&
+                <span>Manufacturer:&nbsp;
+                  <span className="text-primary">{manufacturer}</span>
+                </span>
+                }
+                {model &&
+                <span>Model:&nbsp;
+                  <span className="text-primary">{model}</span>
+                </span>
+                }
+                {osVersion &&
+                <span>OS Version:&nbsp;
+                  <span className="text-primary">{osVersion}</span>
+                </span>
+                }
+                {cpuBrand &&
+                <span>CPU Brand:&nbsp;
+                  <span className="text-primary">{cpuBrand}</span>
+                </span>
+                }
+                {videoDriver&&
+                <span>Video Driver:&nbsp;
+                  <span className="text-primary">{videoDriver}</span>
+                </span>
+                }
+                {videoDriverVersion &&
+                <span>Video Driver Version:&nbsp;
+                  <span className="text-primary">{videoDriverVersion}</span>
+                </span>
+                }
+                {videoPrimaryVRAM &&
+                <span>Video VRAM:&nbsp;
+                  <span className="text-primary">{videoPrimaryVRAM}</span>
+                </span>
+                }
+                {memoryRAM &&
+                <span>RAM:&nbsp;
+                  <span className="text-primary">{memoryRAM}</span>
+                </span>
+                }
               </div>
             </Popover.Panel>
           )}
