@@ -22,7 +22,7 @@ export default function TailwindPopover({
       {
         name: 'offset',
         options: {
-          offset: [0, 0],
+          offset: [0, 10],
         },
       },
     ],
@@ -48,7 +48,7 @@ export default function TailwindPopover({
           aria-hidden="true"
         />
       </Popover.Button>
-      <Transition
+      {/* <Transition
         as={Fragment}
         enter="transition ease-out duration-100"
         enterFrom="transform opacity-0 scale-95"
@@ -56,17 +56,17 @@ export default function TailwindPopover({
         leave="transition ease-in duration-75"
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
-      >
+      > */}
         <Popover.Panel
           ref={setPopperElement}
           style={styles.popper}
-          className="my-2 w-full min-w-max isolate z-[100] border-1 border-secondary-highlight
+          className="w-full min-w-max isolate z-[100] border-1 border-secondary-highlight
                      rounded-md bg-primary shadow-lg focus:outline-none"
           {...attributes.popper}
         >
           {children}
         </Popover.Panel>
-      </Transition>
+      {/* </Transition> */}
     </Popover>
   );
 }
