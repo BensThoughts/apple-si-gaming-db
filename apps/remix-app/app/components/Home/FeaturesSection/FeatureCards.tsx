@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import type { FlatIconOutlineProps } from '~/components/Icons/FlatIcons/Outline/FlatIconOutline';
+import type { BaseSvgIconProps } from '~/components/Icons/BaseSvgIcon';
 import { NavLink } from '@remix-run/react';
 
 export default function FeatureCards({
@@ -9,7 +9,7 @@ export default function FeatureCards({
     title: string;
     content: string;
     to: string;
-    Icon: React.ComponentType<FlatIconOutlineProps>;
+    Icon: React.ComponentType<BaseSvgIconProps>;
   }[]
 }) {
   return (
@@ -33,7 +33,7 @@ function FeatureCard({
 }: {
   title: string;
   to: string;
-  Icon: React.ComponentType<FlatIconOutlineProps>;
+  Icon: React.ComponentType<BaseSvgIconProps>;
   children: string;
 }) {
   return (
