@@ -1,19 +1,20 @@
 import { Menu, Transition } from '@headlessui/react';
 import {
   NavLink,
-  useFetcher,
 } from '@remix-run/react';
 import { Fragment } from 'react';
 import { SteamIcon } from '~/components/Icons/FontAwesomeIcons/Solid';
 import { classNames } from '~/lib/css/classNames';
-import { loggedInMenuLinks } from './profileMenuLinks';
+import { loggedInMenuLinks } from './links/profileMenuLinks';
+import { useLogout } from '~/lib/hooks/useLogout';
 
 export default function ProfileMenu({
   isLoggedIn,
 }: {
   isLoggedIn: boolean;
 }) {
-  const fetcher = useFetcher();
+  const logout = useLogout();
+
   return (
     <div className="flex items-center text-right">
       <Menu as="div" className="relative inline-block text-left">
@@ -52,7 +53,7 @@ export default function ProfileMenu({
                                 : 'text-primary',
                           )}
                         >
-                          {link.title}
+                          {link.text}
                         </NavLink>
                       )}
                     </Menu.Item>
@@ -60,7 +61,7 @@ export default function ProfileMenu({
                   <Menu.Item>
                     {({ active }) => (
                       <button
-                        onClick={() => fetcher.submit({}, { action: '/actions/logout', method: 'post' })}
+                        onClick={logout}
                         // href="/api/auth/steam/logout"
                         className={classNames(
                             'flex w-full items-center rounded-md px-2 py-2 text-base',
