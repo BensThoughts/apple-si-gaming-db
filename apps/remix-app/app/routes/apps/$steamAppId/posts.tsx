@@ -11,12 +11,21 @@ import { createPerformancePostAction } from '~/lib/form-actions/performance-post
 import type {
   PerformancePost,
 } from '~/types';
-import CreatePerformancePostForm from '~/components/Apps/PerformancePosts/Forms/CreatePerformancePostForm';
 import type { PostTagOption, GamepadOption } from '~/types';
 import type { CreatePerformancePostActionData } from '~/lib/form-actions/performance-post/types';
 import { getIsLoggedIn, getUserIds, requireUserIds } from '~/lib/sessions/profile-session.server';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
+import CreatePerformancePostForm from '~/components/Apps/PerformancePosts/FormsV2/CreatePerformancePostForm';
+// import CreatePerformancePostForm from '~/components/Apps/PerformancePosts/FormsV2/CreatePerformancePostForm';
+// import { links as draftEditorLinks } from '~/components/Apps/PerformancePosts/FormsV2/FormComponents/DraftEditor/DraftEditor';
+
+// export const links: LinksFunction = () => {
+//   return [
+//     // { rel: 'canonical', href: '' },
+//     // ...draftEditorLinks(),
+//   ];
+// }
 
 interface PerformancePostLoaderData {
   steamAppId: number;
