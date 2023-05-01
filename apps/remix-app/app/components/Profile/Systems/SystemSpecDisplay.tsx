@@ -139,6 +139,7 @@ export default function SystemSpecDisplay({
           <div className="flex items-center justify-center gap-2">
             <div className="mt-[.33rem]">
               <SystemSpecsPopover
+                paddingY={4}
                 systemSpec={{
                   manufacturer,
                   model,
@@ -150,7 +151,7 @@ export default function SystemSpecDisplay({
                   memoryRAM,
                 }}
               >
-                <div className="flex justify-center items-center p-1 pb-2 h-[34px]">
+                <div className="flex justify-center items-center px-1 py-0 h-[34px]">
                   <InformationCircleIcon size={24} />
                 </div>
               </SystemSpecsPopover>

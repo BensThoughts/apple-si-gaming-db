@@ -42,7 +42,7 @@ export default function PerformancePostCardWithSteamAppBadge({
             performancePostId={performancePostId}
             userWhoCreated={{ steamUserId64 }}
           />
-          <SystemSpecsPopover systemSpec={systemSpec} giveButtonStyles />
+          <SystemSpecsPopover systemSpec={systemSpec} paddingY={8} giveButtonStyles />
         </div>
       </div>
       <HTMLContainer htmlString={postText} />

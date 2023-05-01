@@ -43,7 +43,7 @@ export default function PerformancePostCard({
       <div className="flex flex-col gap-6 lg:flex-row lg:gap-0 lg:items-center lg:justify-between">
         <div className="flex items-center gap-2">
           <LikeButton performancePostId={performancePostId} numLikes={numLikes} />
-          <SystemSpecsPopover systemSpec={systemSpec} giveButtonStyles />
+          <SystemSpecsPopover systemSpec={systemSpec} paddingY={8} giveButtonStyles />
           <EditButton
             steamAppId={steamAppId}
             performancePostId={performancePostId}
