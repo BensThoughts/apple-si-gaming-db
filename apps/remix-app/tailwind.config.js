@@ -9,6 +9,7 @@ const generateColorClass = (variable) => {
 
 module.exports = {
   content: ['./app/**/*.{ts,tsx,jsx,js}'],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -122,5 +123,6 @@ module.exports = {
   plugins: [
     require('@tailwindcss/line-clamp'),
     require('@tailwindcss/container-queries'),
+    require('@tailwindcss/typography'),
   ],
 };
