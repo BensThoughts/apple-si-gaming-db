@@ -77,7 +77,7 @@ export default function PerformancePostVerticalCard({
               <span className="text-primary-faded italic text-sm">
                 Rating
               </span>
-              <TierRankBadge tierRank={ratingTierRank} className="bg-primary-highlight">
+              <TierRankBadge tierRank={ratingTierRank} backgroundColor="primary-highlight">
                 {convertRatingTierRankToDescription(ratingTierRank)}
               </TierRankBadge>
             </div>
@@ -87,7 +87,7 @@ export default function PerformancePostVerticalCard({
                   Framerate
                 </span>
                 {(frameRateTierRank) && (
-                  <TierRankBadge className="bg-primary-highlight" tierRank={frameRateTierRank}>
+                  <TierRankBadge backgroundColor="primary-highlight" tierRank={frameRateTierRank}>
                     {`${convertFrameRateTierRankToDescription(frameRateTierRank)}`}
                   </TierRankBadge>
                 )}
@@ -106,7 +106,7 @@ export default function PerformancePostVerticalCard({
                 <span className="text-primary-faded italic text-sm">
                   Gamepad
                 </span>
-                <TierRankBadge className="bg-primary-highlight text-xs" tierRank={gamepadTierRank}>
+                <TierRankBadge backgroundColor="primary-highlight" tierRank={gamepadTierRank}>
                   {`${gamepadMetadata.description} - ${convertGamepadTierRankToDescription(gamepadTierRank)}`}
                 </TierRankBadge>
               </div>
