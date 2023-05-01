@@ -1,13 +1,13 @@
-import { useFetcher } from '@remix-run/react';
 import RoundedButton from '~/components/Buttons/RoundedButton';
+import { useLogout } from '~/lib/hooks/useLogout';
 
 export default function LogoutButton() {
-  const fetcher = useFetcher();
+  const logout = useLogout();
 
   return (
     <RoundedButton
       className="w-full max-w-[6rem] focus-visible:show-ring-tertiary"
-      onClick={() => fetcher.submit({}, { action: '/actions/logout', method: 'post' })}
+      onClick={logout}
     >
       Logout
     </RoundedButton>
