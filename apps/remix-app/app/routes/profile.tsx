@@ -14,7 +14,7 @@ import { useUserSession } from '~/lib/hooks/useMatchesData';
 import type { SerializedRootLoaderData } from '~/root';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
-import { loggedInMenuLinks } from '~/components/Layout/ProfileMenu/profileMenuLinks';
+import { loggedInMenuLinks } from '~/components/Layout/Navbar/links/profileMenuLinks';
 import { Fragment } from 'react';
 
 export const meta: MetaFunction = ({ parentsData }) => {
@@ -81,7 +81,7 @@ export default function ProfilePage() {
             <h2 className="text-lg text-secondary font-bold">Account Menu</h2>
             {loggedInMenuLinks.map((link) => (
               <Fragment key={link.to}>
-                <MenuItem to={link.to} label={link.title} />
+                <MenuItem to={link.to} label={link.text} />
               </Fragment>
             ))}
           </div>
