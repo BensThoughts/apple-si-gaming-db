@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpIcon } from '~/components/Icons/FeatherIcons';
 import { classNames } from '~/lib/css/classNames';
-import type { FeatherIconProps } from '~/components/Icons/FeatherIcons/FeatherIcon';
+import type { BaseSvgIconProps } from '../Icons/BaseSvgIcon';
 
 export type SelectOption<T = string> = {
   name: string;
@@ -14,14 +14,16 @@ export default function SelectMenuWithIcon<T = string>({
   name,
   defaultValue,
   labelText,
-  Icon,
+  PrimaryIcon,
+  SecondaryIcon,
   onChange,
 }: {
   options: SelectOption<T>[];
   name: string;
   defaultValue: SelectOption<T>;
   labelText?: string;
-  Icon: React.ComponentType<FeatherIconProps>;
+  PrimaryIcon: React.ComponentType<BaseSvgIconProps>;
+  SecondaryIcon?: React.ComponentType<BaseSvgIconProps>;
   onChange?(e: SelectOption<T>): void;
 }) {
   function onSelectionChange(selection: SelectOption<T>) {
@@ -37,22 +39,29 @@ export default function SelectMenuWithIcon<T = string>({
       onChange={onSelectionChange}
     >
       <div>
-        {labelText &&
+        {/* {labelText &&
           <Listbox.Label className="text-primary sr-only">
             {labelText}
           </Listbox.Label>
-        }
+        } */}
         {/* TODO: Should we be setting width here with w- (or in each component individually with max-w) */}
-        <div className={`relative mt-1.5`}>
+        <div className={`relative`}>
           <Listbox.Button
-            className="relative p-2 text-left rounded-lg
-                        cursor-default text-neutral-lightest bg-neutral-medium
-                        focus-visible:show-ring-tertiary sm:text-sm bg-primary"
+            className="relative p-2 text-left rounded-lg cursor-pointer
+                       focus-visible:show-ring-tertiary bg-primary
+                       hover:bg-primary-highlight h-[38px] flex items-center"
           >
             {({ value }: { value: SelectOption<T> }) => (
               <>
                 <span className="flex gap-2 items-center pointer-events-none">
-                  <Icon />
+                  {/* TODO: Is it ok to have the label inside the button? */}
+                  {labelText && (
+                    <Listbox.Label>
+                      {labelText}
+                    </Listbox.Label>
+                  )}
+                  <PrimaryIcon />
+                  {SecondaryIcon && <SecondaryIcon />}
                   {/* <AwardIcon /> */}
                   <ChevronUpIcon
                     className="rotate-180 w-5 h-5 text-gray-400 pr-2 border-r-1 border-r-secondary-highlight"
@@ -61,24 +70,35 @@ export default function SelectMenuWithIcon<T = string>({
                 </span>
               </>
             )}
-
           </Listbox.Button>
           <Transition
             as="div"
-            leave="transition ease-in duration-100"
+            leave="transition ease-in duration-[0ms]"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
+            className={classNames(
+                'absolute z-[100] py-1 mt-2',
+                'text-base rounded-md bg-primary',
+                'sm:text-sm w-fit border-1 border-secondary-highlight',
+                // 'focus-within:ring-secondary focus-within:outline-none focus-within:ring-1',
+            )}
           >
+
             <Listbox.Options
-              className="overflow-auto absolute z-10 py-1 mt-1 max-h-60
-                         text-base rounded-md bg-primary focus:outline-none
-                         focus:ring-1 focus:ring-secondary sm:text-sm w-fit"
+              className={classNames(
+                  'max-h-60 sm:max-h-fit overflow-auto focus:outline-none',
+                  // 'focus:ring-secondary focus:outline-none rounded-b-md',
+              )}
+              // className="overflow-auto absolute z-10 py-1 mt-1 sm:max-h-60
+              //            text-base rounded-md bg-primary focus:outline-none
+              //            focus:ring-1 focus:ring-secondary sm:text-sm w-fit"
             >
-              {options.map((option, optionIdx) => (
+
+              {options.map((option, idx) => (
                 <Listbox.Option
-                  key={`${option}-${optionIdx}`}
+                  key={`${option}-${idx}`}
                   className={({ active }) => `${active ? 'text-neutral-lightest bg-secondary' : 'text-neutral-lighter'}
-                      cursor-default select-none relative py-2 pl-10 pr-4
+                      cursor-pointer select-none relative py-2 pl-10 pr-4
                   `}
                   value={option}
                 >
