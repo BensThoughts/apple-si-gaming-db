@@ -4,9 +4,6 @@ import { useEffect, useRef } from 'react';
 import { showToast } from '~/components/Toasts';
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
 import type {
-  RatingTierRank,
-  FrameRateTierRank,
-  GamepadTierRank,
   PostTagOption,
   GamepadOption,
   SystemSpecOption,
@@ -17,30 +14,14 @@ import RoundedButtonRemixLink from '~/components/Buttons/RoundedButtonRemixLink'
 import { useUserSession } from '~/lib/hooks/useMatchesData';
 import { EditPostURLParams } from '~/lib/enums/URLSearchParams/EditPost';
 import { PerformancePostFormStateProvider } from './FormContext/PerformancePostFormContext';
+import type { CreateOrEditPerformancePostActionData } from '~/lib/form-actions/performance-post/types';
 
 interface EditPerformancePostFormProps {
   performancePostId: number;
   steamAppId: number;
-  formError?: string;
-  fields?: { // used for defaultValue options
-    postText?: string;
-    frameRateTierRank?: FrameRateTierRank | null;
-    frameRateStutters?: boolean;
-    ratingTierRank?: RatingTierRank;
-    postTagsIds?: number[];
-    gamepadId?: number;
-    gamepadTierRank?: GamepadTierRank | null;
-    systemSpecId?: number;
-  };
-  fieldErrors?: {
-    postText?: string;
-    frameRateTierRank?: string;
-    ratingTierRank?: string;
-    systemName?: string;
-    postTags?: string;
-    gamepadId?: string;
-    gamepadTierRank?: string;
-  };
+  formError?: CreateOrEditPerformancePostActionData['formError'];
+  fields?: CreateOrEditPerformancePostActionData['fields'] // used for defaultValue options
+  fieldErrors?: CreateOrEditPerformancePostActionData['fieldErrors'];
   isSubmittingForm: boolean;
   postTagOptions: PostTagOption[];
   gamepadOptions: GamepadOption[];
@@ -119,12 +100,14 @@ export default function EditPerformancePostForm({
           <input type="hidden" name="_performancePostAction" value="editPerformancePost" />
           <input type="hidden" name="performancePostId" value={performancePostId} />
           <BasePerformancePostFormFields
-            systemSpecOptions={systemSpecOptions}
-            gamepadOptions={gamepadOptions}
-            postTagOptions={postTagOptions}
+            formId={formId}
             fields={fields}
             formError={formError}
             fieldErrors={fieldErrors}
+            systemSpecOptions={systemSpecOptions}
+            gamepadOptions={gamepadOptions}
+            postTagOptions={postTagOptions}
+            editorPlaceholderText="Edit Post..."
           />
           <div className="w-full flex gap-x-3 justify-around">
             <RoundedButtonRemixLink
@@ -140,7 +123,7 @@ export default function EditPerformancePostForm({
               {isSubmittingForm ? 'Editing' : 'Edit'}
             </RoundedButton>
           </div>
-  
+
         </Form>
       </PerformancePostFormWrapper>
     </PerformancePostFormStateProvider>

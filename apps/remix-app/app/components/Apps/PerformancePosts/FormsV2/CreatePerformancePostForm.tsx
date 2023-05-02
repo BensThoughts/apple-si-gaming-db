@@ -4,38 +4,19 @@ import { useEffect, useRef } from 'react';
 import { showToast } from '~/components/Toasts';
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
 import type {
-  RatingTierRank,
-  FrameRateTierRank,
-  GamepadTierRank,
   SystemSpecOption,
 } from '~/types';
 import PerformancePostFormWrapper from './PerformancePostFormWrapper';
 import BasePerformancePostFormFields from './BasePerformancePostFormFields';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
 import { PerformancePostFormStateProvider } from './FormContext/PerformancePostFormContext';
+import type { CreateOrEditPerformancePostActionData } from '~/lib/form-actions/performance-post/types';
 
 interface CreatePerformancePostFormProps {
   steamAppId: number;
-  fields?: { // used for defaultValue options
-    postText?: string;
-    frameRateTierRank?: FrameRateTierRank | null;
-    frameRateStutters?: boolean;
-    ratingTierRank?: RatingTierRank;
-    // systemName?: string;
-    postTagsIds?: number[];
-    gamepadId?: number;
-    gamepadTierRank?: GamepadTierRank | null;
-  };
-  fieldErrors?: {
-    postText?: string;
-    frameRateTierRank?: string;
-    ratingTierRank?: string;
-    systemName?: string;
-    postTags?: string;
-    gamepadId?: string;
-    gamepadTierRank?: string;
-  };
-  formError?: string;
+  formError?: CreateOrEditPerformancePostActionData['formError'];
+  fieldErrors?: CreateOrEditPerformancePostActionData['fieldErrors'];
+  fields?: CreateOrEditPerformancePostActionData['fields']; // used for defaultValue options
   isSubmittingForm: boolean;
   postTagOptions: {
     id: number;
@@ -109,7 +90,7 @@ export default function CreatePerformancePostForm({
       <PerformancePostFormWrapper>
         {/* <h2 className="text-secondary text-lg">Create Post</h2> */}
         {/* {formError && <div className="text-error">{formError}</div>} */}
-  
+
         <Form
           id={formId}
           method="post"
@@ -121,14 +102,16 @@ export default function CreatePerformancePostForm({
           // onSubmit={(e) => isSubmittingForm ? e.preventDefault() : null}
         >
           <input type="hidden" name="_performancePostAction" value="createPerformancePost" />
-  
+
           <BasePerformancePostFormFields
-            systemSpecOptions={systemSpecOptions}
-            gamepadOptions={gamepadOptions}
-            postTagOptions={postTagOptions}
+            formId={formId}
             fields={fields}
             formError={formError}
             fieldErrors={fieldErrors}
+            systemSpecOptions={systemSpecOptions}
+            gamepadOptions={gamepadOptions}
+            postTagOptions={postTagOptions}
+            editorPlaceholderText="Create Post..."
           />
           <RoundedButton type="submit" disabled={isSubmittingForm} className="focus-visible:show-ring-tertiary">
             {isSubmittingForm ? 'Creating' : 'Create'}
