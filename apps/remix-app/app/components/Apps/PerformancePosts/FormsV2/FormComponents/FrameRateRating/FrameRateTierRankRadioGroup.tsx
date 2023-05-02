@@ -9,64 +9,53 @@ import TailwindRadioGroup from '~/components/HeadlessComponents/TailwindRadioGro
 //   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
 
-type FrameRateRadioGroupOption = RadioGroupOption<FrameRateTierRank | 'None'>;
+export type FrameRateTierRankOption = RadioGroupOption<FrameRateTierRank | 'None'>;
 
-const frameRateOptions: FrameRateRadioGroupOption[] = [
+const frameRateOptions: FrameRateTierRankOption[] = [
   {
     name: 'Not Sure',
     value: 'None',
   },
   {
-    name: convertFrameRateTierRankToDescription('FTier'),
-    value: 'FTier',
-  },
-  {
-    name: convertFrameRateTierRankToDescription('DTier'),
-    value: 'DTier',
-  },
-  {
-    name: convertFrameRateTierRankToDescription('CTier'),
-    value: 'CTier',
-  },
-  {
-    name: convertFrameRateTierRankToDescription('BTier'),
-    value: 'BTier',
+    name: convertFrameRateTierRankToDescription('STier'),
+    value: 'STier',
   },
   {
     name: convertFrameRateTierRankToDescription('ATier'),
     value: 'ATier',
   },
   {
-    name: convertFrameRateTierRankToDescription('STier'),
-    value: 'STier',
+    name: convertFrameRateTierRankToDescription('BTier'),
+    value: 'BTier',
+  },
+  {
+    name: convertFrameRateTierRankToDescription('CTier'),
+    value: 'CTier',
+  },
+  {
+    name: convertFrameRateTierRankToDescription('DTier'),
+    value: 'DTier',
+  },
+  {
+    name: convertFrameRateTierRankToDescription('FTier'),
+    value: 'FTier',
   },
 ];
 
-export default function FrameRateTierRankRadioGroup({
-  // defaultFrameRateTierRank,
-}: {
-  // defaultFrameRateTierRank?: FrameRateTierRank;
-}) {
+export default function FrameRateTierRankRadioGroup() {
   const { state, dispatch } = usePerformancePostFormState();
   // if (defaultFrameRateTierRank) {
   //   dispatch({ type: RatingActions.SET_FRAME_RATE_TIER_RANK, payload: defaultFrameRateTierRank });
   // }
-  function onSelectionChange(selection: FrameRateRadioGroupOption) {
-    if (selection.value != 'None') {
-      dispatch({
-        type: PerformancePostFormStateActions.SET_FRAME_RATE_TIER_RANK,
-        payload: selection.value
-      });
-    } else {
-      dispatch({
-        type: PerformancePostFormStateActions.SET_FRAME_RATE_TIER_RANK,
-        payload: undefined
-      });
-    }
+  function onSelectionChange(selection: FrameRateTierRankOption) {
+    dispatch({
+      type: PerformancePostFormStateActions.SET_FRAME_RATE_TIER_RANK,
+      payload: selection.value,
+    });
   }
 
-  const { frameRateTierRank } = state;
-  const defaultValue = frameRateOptions.find((option) => option.value === frameRateTierRank);
+  const { frameRateTierRankValue } = state;
+  const defaultValue = frameRateOptions.find((option) => option.value === frameRateTierRankValue);
 
   return (
     <TailwindRadioGroup

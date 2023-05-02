@@ -5,9 +5,9 @@ import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/Performanc
 import { PerformancePostFormStateActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
 
 export default function FrameRateStutterSwitch({
-  defaultChecked = false,
+  // defaultChecked = false,
 }: {
-  defaultChecked?: boolean;
+  // defaultChecked?: boolean;
 }) {
   const { state, dispatch } = usePerformancePostFormState();
   return (
@@ -21,7 +21,7 @@ export default function FrameRateStutterSwitch({
       <Switch
         // defaultChecked={state.frameRateStutters ? state.frameRateStutters :
         // defaultChecked}
-        checked={state.frameRateStutters}
+        checked={state.frameRateStuttersValue}
         name={PerformancePostFormFieldNames.FrameRateStutters}
         as={Fragment}
         onChange={(checked) => {
