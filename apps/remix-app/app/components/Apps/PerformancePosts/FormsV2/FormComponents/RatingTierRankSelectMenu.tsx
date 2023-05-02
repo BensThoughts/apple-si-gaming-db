@@ -10,7 +10,9 @@ import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/Performanc
 // type ArrayElement<ArrayType extends readonly unknown[]> =
 //   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
-export const steamAppRatingOptions: SelectOption<RatingTierRank | 'None'>[] = [
+export type RatingTierRankSelectOption = SelectOption<RatingTierRank | 'None'>;
+
+export const steamAppRatingOptions: RatingTierRankSelectOption[] = [
   {
     name: 'None',
     value: 'None',
@@ -52,18 +54,11 @@ export default function RatingTierRankSelectMenu({
   defaultRatingTierRank?: RatingTierRank;
 }) {
   const { dispatch } = usePerformancePostFormState();
-  function onSelectionChange(selection: SelectOption<RatingTierRank | 'None'>) {
-    if (selection.value != 'None') {
-      dispatch({
-        type: PerformancePostFormStateActions.SET_RATING_TIER_RANK,
-        payload: selection.value
-      });
-    } else {
-      dispatch({
-        type: PerformancePostFormStateActions.SET_RATING_TIER_RANK,
-        payload: undefined
-      });
-    }
+  function onSelectionChange(selection: RatingTierRankSelectOption) {
+    dispatch({
+      type: PerformancePostFormStateActions.SET_RATING_TIER_RANK,
+      payload: selection.value,
+    });
   }
 
   const defaultValue = steamAppRatingOptions.find((option) => option.value === defaultRatingTierRank);
