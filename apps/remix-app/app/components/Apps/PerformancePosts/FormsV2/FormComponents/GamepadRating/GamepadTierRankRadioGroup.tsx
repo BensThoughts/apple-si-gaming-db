@@ -5,9 +5,9 @@ import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/Performanc
 import type { GamepadTierRank } from '~/types';
 import { PerformancePostFormStateActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
 
-type GamepadRadioGroupOption = RadioGroupOption<GamepadTierRank | 'None'>;
+export type GamepadTierRankOption = RadioGroupOption<GamepadTierRank | 'None'>;
 
-export const gamepadTierRankOptions: GamepadRadioGroupOption[] = [
+export const gamepadTierRankOptions: GamepadTierRankOption[] = [
   {
     name: 'None',
     value: 'None',
@@ -35,21 +35,20 @@ export const gamepadTierRankOptions: GamepadRadioGroupOption[] = [
 ];
 
 export default function GamepadTierRankRadioGroup({
-  defaultGamepadTierRank,
+  // defaultGamepadTierRank,
 }: {
-  defaultGamepadTierRank?: GamepadTierRank;
+  // defaultGamepadTierRank?: GamepadTierRank;
 }) {
   const { state, dispatch } = usePerformancePostFormState();
 
-  function onSelectionChange(selection: GamepadRadioGroupOption) {
-    if (selection.value != 'None') {
-      dispatch({ type: PerformancePostFormStateActions.SET_GAMEPAD_TIER_RANK, payload: selection.value });
-    } else {
-      dispatch({ type: PerformancePostFormStateActions.SET_GAMEPAD_TIER_RANK, payload: undefined });
-    }
+  function onSelectionChange(selection: GamepadTierRankOption) {
+      dispatch({
+        type: PerformancePostFormStateActions.SET_GAMEPAD_TIER_RANK,
+        payload: selection.value
+      });
   }
-  const { gamepadTierRank } = state;
-  const defaultValue = gamepadTierRankOptions.find((option) => option.value === gamepadTierRank);
+  const { gamepadTierRankValue } = state;
+  const defaultValue = gamepadTierRankOptions.find((option) => option.value === gamepadTierRankValue);
   return (
     <div className="flex flex-col gap-2">
       {/* <div className="flex w-full bg-primary-highlight px-3 py-2">

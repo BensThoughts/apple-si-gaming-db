@@ -6,10 +6,10 @@ import GamepadListbox from './GamepadListbox';
 
 export default function GamepadRatingPopover({
   gamepads,
-  defaultGamepadId,
+  // defaultGamepadId,
 }: {
   gamepads: GamepadOption[];
-  defaultGamepadId?: number; // defaultValue
+  // defaultGamepadId?: number; // defaultValue
 }) {
   return (
     <TailwindPopover buttonText="Gamepad" Icon={GamepadIcon}>

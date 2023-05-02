@@ -5,9 +5,9 @@ import { Listbox, Transition } from '@headlessui/react';
 import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
 import { classNames } from '~/lib/css/classNames';
 
-type GamepadListboxOption<T = string> = {
+export type GamepadListboxOption = {
   name: string;
-  value: T;
+  value: number;
 }
 
 export default function GamepadListbox({
@@ -19,7 +19,7 @@ export default function GamepadListbox({
 }) {
   const { state, dispatch } = usePerformancePostFormState();
 
-  const gamepadOptions: GamepadListboxOption<number>[] = gamepads.map((gamepad) => (
+  const gamepadOptions: GamepadListboxOption[] = gamepads.map((gamepad) => (
     {
       name: gamepad.description,
       value: gamepad.id,
@@ -30,8 +30,7 @@ export default function GamepadListbox({
     value: -1,
   });
 
-  function onSelectionChange(selection: GamepadListboxOption<number>) {
-    if (selection.value != -1) {
+  function onSelectionChange(selection: GamepadListboxOption) {
       dispatch({
         type: PerformancePostFormStateActions.SET_GAMEPAD_OPTION,
         payload: {
@@ -39,12 +38,6 @@ export default function GamepadListbox({
           value: selection.value,
         },
       });
-    } else {
-      dispatch({
-        type: PerformancePostFormStateActions.SET_GAMEPAD_OPTION,
-        payload: undefined
-      });
-    }
   }
 
   const defaultValue = gamepadOptions.find((option) => option.value === state.gamepadValue);
@@ -52,7 +45,7 @@ export default function GamepadListbox({
   return (
     <Listbox
       defaultValue={defaultValue ? defaultValue : gamepadOptions[0]}
-      name={PerformancePostFormFieldNames.GamepadId}
+      // name={PerformancePostFormFieldNames.GamepadId}
       onChange={onSelectionChange}
     >
       <div className="flex flex-col gap-2">
@@ -63,8 +56,8 @@ export default function GamepadListbox({
         <div className="relative">
           <Listbox.Button
             className="relative py-2 pr-10 pl-3 w-full max-w-xs text-left rounded-md
-                       cursor-pointer text-neutral-lightest bg-neutral-medium
-                       focus-visible:show-ring-tertiary bg-primary border-1
+                       cursor-pointer bg-primary hover:bg-primary-highlight
+                       focus-visible:show-ring-tertiary border-1
                        border-secondary-highlight"
           >
             {({ value }: { value?: GamepadListboxOption }) => (
