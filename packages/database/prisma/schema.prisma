@@ -111,7 +111,9 @@ model PerformancePost {
   steamUserId64    BigInt
   steamUserProfile SteamUserProfile @relation(fields: [steamUserId64], references: [steamUserId64]) // onDelete: Restrict
 
-  postText String
+  postText                     String
+  postHTML                     String?
+  serializedLexicalEditorState String?
 
   ratingMedal    RatingMedal?
   ratingTierRank TierRank     @default(STier)
