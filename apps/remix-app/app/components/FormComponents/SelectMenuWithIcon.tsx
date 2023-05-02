@@ -78,7 +78,7 @@ export default function SelectMenuWithIcon<T = string>({
             leaveTo="opacity-0"
             className={classNames(
                 'absolute z-[100] py-1 mt-2',
-                'text-base rounded-md bg-primary',
+                'text-base rounded-md bg-primary shadow-lg',
                 'sm:text-sm w-fit border-1 border-secondary-highlight',
                 // 'focus-within:ring-secondary focus-within:outline-none focus-within:ring-1',
             )}
@@ -97,7 +97,7 @@ export default function SelectMenuWithIcon<T = string>({
               {options.map((option, idx) => (
                 <Listbox.Option
                   key={`${option}-${idx}`}
-                  className={({ active }) => `${active ? 'text-neutral-lightest bg-secondary' : 'text-neutral-lighter'}
+                  className={({ active }) => `${active ? 'text-primary-highlight bg-secondary' : 'text-primary'}
                       cursor-pointer select-none relative py-2 pl-10 pr-4
                   `}
                   value={option}
