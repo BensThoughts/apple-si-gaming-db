@@ -1,25 +1,29 @@
 import { createContext, useContext, useReducer } from 'react';
 import type { Dispatch } from 'react';
-import type {
-  RatingTierRank,
-  FrameRateTierRank,
-  GamepadTierRank,
-} from '~/types';
+import type { GamepadTierRankOption } from '../FormComponents/GamepadRating/GamepadTierRankRadioGroup';
+import type { FrameRateTierRankOption } from '../FormComponents/FrameRateRating/FrameRateTierRankRadioGroup';
+import type { RatingTierRankSelectOption } from '../FormComponents/RatingTierRankSelectMenu';
+import type { GamepadListboxOption } from '../FormComponents/GamepadRating/GamepadListbox';
 
 export const PerformancePostFormContext = createContext(null);
 export const PerformancePostDispatchContext = createContext(null);
 
 type PerformancePostFormState = {
-  ratingTierRank?: RatingTierRank;
-  frameRateTierRank?: FrameRateTierRank;
-  frameRateStutters: boolean;
-  gamepadName?: string; // prop is "description" in database
-  gamepadValue?: number; // prop is "id" in database
-  gamepadTierRank?: GamepadTierRank;
+  ratingTierRankValue: RatingTierRankSelectOption['value'];
+  frameRateTierRankValue: FrameRateTierRankOption['value'];
+  frameRateStuttersValue: boolean;
+  gamepadName: GamepadListboxOption['name']; // prop is "description" in database
+  gamepadValue: GamepadListboxOption['value']; // prop is "id" in database
+  gamepadTierRankValue: GamepadTierRankOption['value'];
 }
 
 const initialState: PerformancePostFormState = {
-  frameRateStutters: false,
+  ratingTierRankValue: 'None',
+  frameRateTierRankValue: 'None',
+  frameRateStuttersValue: false,
+  gamepadName: '',
+  gamepadValue: -1,
+  gamepadTierRankValue: 'None',
 };
 
 export enum PerformancePostFormStateActions {
@@ -34,12 +38,12 @@ export enum PerformancePostFormStateActions {
 
 type SetRatingTierRankAction = {
   type: PerformancePostFormStateActions.SET_RATING_TIER_RANK,
-  payload: RatingTierRank | undefined
+  payload: RatingTierRankSelectOption['value']
 }
 
 type SetFrameRateTierRankAction = {
   type: PerformancePostFormStateActions.SET_FRAME_RATE_TIER_RANK,
-  payload: FrameRateTierRank | undefined
+  payload: FrameRateTierRankOption['value']
 }
 
 type SetFrameRateStuttersAction = {
@@ -54,7 +58,7 @@ type SetGamepadOptionAction = {
 
 type SetGamepadRatingTierRankAction = {
   type: PerformancePostFormStateActions.SET_GAMEPAD_TIER_RANK;
-  payload: GamepadTierRank | undefined;
+  payload: GamepadTierRankOption['value'];
 }
 
 type UpsertFormStateAction = {
@@ -84,24 +88,24 @@ function performancePostFormReducer(
 ): PerformancePostFormState {
   switch (action.type) {
     case PerformancePostFormStateActions.SET_RATING_TIER_RANK: {
-      return { ...state, ratingTierRank: action.payload };
+      return { ...state, ratingTierRankValue: action.payload };
     }
     case PerformancePostFormStateActions.SET_FRAME_RATE_TIER_RANK: {
-      return { ...state, frameRateTierRank: action.payload };
+      return { ...state, frameRateTierRankValue: action.payload };
     }
     case PerformancePostFormStateActions.SET_FRAME_RATE_STUTTERS: {
-      return { ...state, frameRateStutters: action.payload };
+      return { ...state, frameRateStuttersValue: action.payload };
     }
     case PerformancePostFormStateActions.SET_GAMEPAD_OPTION: {
-      const gamepadName = action.payload ? action.payload.name : undefined;
-      const gamepadValue = action.payload ? action.payload.value : undefined;
+      const gamepadName = action.payload ? action.payload.name : '';
+      const gamepadValue = action.payload ? action.payload.value : -1;
       return { ...state, gamepadName, gamepadValue };
     }
     case PerformancePostFormStateActions.SET_GAMEPAD_TIER_RANK: {
-      return { ...state, gamepadTierRank: action.payload };
+      return { ...state, gamepadTierRankValue: action.payload };
     }
     case PerformancePostFormStateActions.UPSERT_FORM_STATE: {
-      return { ...state, ...action.payload }
+      return { ...state, ...action.payload };
     }
     case PerformancePostFormStateActions.RESET_FORM_STATE: {
       return initialState;
