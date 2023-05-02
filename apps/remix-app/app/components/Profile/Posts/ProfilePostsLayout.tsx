@@ -18,8 +18,9 @@ export default function UsersPostsLayout({
   function searchNames(performancePosts: PerformancePost[]) {
     return performancePosts.filter(
         (post) =>
-          (post.steamApp.name.toString().toLowerCase().includes(nameQuery.toLowerCase())))
-        .sort((a, b) => ((new Date(a.createdAt)) > new Date(b.createdAt)) ? 1 : -1);
+          (post.steamApp.name.toString().toLowerCase().includes(nameQuery.toLowerCase())));
+    // sort is done on the server, this sort isn't as accurate, no time stamp on date
+    // .sort((a, b) => ((new Date(a.createdAt)) < new Date(b.createdAt)) ? 1 : -1);
   }
 
   const filteredPosts = searchNames(steamUsersPosts);
