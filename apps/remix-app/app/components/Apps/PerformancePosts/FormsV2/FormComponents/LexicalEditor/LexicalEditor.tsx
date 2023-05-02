@@ -9,13 +9,10 @@ import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import { TRANSFORMERS } from '@lexical/markdown';
 import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin';
 import { classNames } from '~/lib/css/classNames';
-// import { LocalStoragePlugin } from './LocalStoragePlugin';
-import { useEffect, useState, useMemo } from 'react';
 import { ToolbarPlugin } from './Plugins/ToolbarPlugin';
-import { $generateHtmlFromNodes } from '@lexical/html';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { LocalStoragePlugin } from './Plugins/LocalStoragePlugin';
+import { HiddenInputPlugin } from './Plugins/HiddenInputPlugin';
+// import { $createParagraphNode, $createTextNode, $getRoot } from 'lexical';
 
 const EDITOR_NODES = [
   CodeNode,
@@ -30,9 +27,21 @@ type LexicalEditorProps = {
   config: Parameters<typeof LexicalComposer>['0']['initialConfig'];
 };
 
-export function LexicalEditor(props: LexicalEditorProps) {
+export function LexicalEditor({
+  defaultState,
+  placeholderText,
+  lexicalEditorProps: { config },
+}: {
+  defaultState: {
+    postText: string;
+    postHTML?: string;
+    serializedLexicalEditorState?: string;
+  }
+  placeholderText?: string;
+  lexicalEditorProps: LexicalEditorProps;
+}) {
   return (
-    <LexicalComposer initialConfig={props.config}>
+    <LexicalComposer initialConfig={config}>
       <ToolbarPlugin />
       <RichTextPlugin
         contentEditable={
@@ -40,11 +49,14 @@ export function LexicalEditor(props: LexicalEditorProps) {
             // className="relative"
           />
         }
-        placeholder={<Placeholder />}
+        placeholder={<Placeholder placeholderText={placeholderText} />}
         // placeholder={(isEditable) => isEditable ? <Placeholder /> : null}
         ErrorBoundary={LexicalErrorBoundary}
       />
-      <LocalStoragePlugin namespace={props.config.namespace} />
+      <HiddenInputPlugin
+        defaultState={defaultState}
+        // namespace={config.namespace}
+      />
       <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
       <OnChangePlugin onChange={(editorState) => {
 
@@ -53,17 +65,31 @@ export function LexicalEditor(props: LexicalEditorProps) {
   );
 }
 
-const Placeholder = () => {
+const Placeholder = ({
+  placeholderText = 'Create Post...',
+}: {
+  placeholderText?: string;
+}) => {
   return (
     <div className="absolute z-1 top-[63px] left-4 opacity-50 pointer-events-none overflow-hidden overflow-ellipsis select-none inline-block">
-      Create Post...
+      {placeholderText}
     </div>
   );
 };
 
 const EDITOR_NAMESPACE = 'lexical-editor';
 
-export function Editor() {
+export function Editor({
+  defaultState,
+  placeholderText,
+}: {
+  defaultState: {
+    postText: string;
+    postHTML?: string;
+    serializedLexicalEditorState?: string;
+  };
+  placeholderText?: string;
+}) {
   // const [content, setContent] = useState<string | null>(null);
 
   // useEffect(() => {
@@ -74,6 +100,20 @@ export function Editor() {
 
   // console.log(content);
 
+  // const createInitialEditorState = () => {
+  //   if (defaultState.serializedLexicalEditorState) return defaultState.serializedLexicalEditorState;
+  //   const paragraph = $createParagraphNode();
+  //   const text = $createTextNode(defaultState.postText);
+  //   paragraph.append(text);
+  //   const root = $getRoot().append(paragraph);
+  //   root.selectEnd();
+  // };
+
+  // TODO: Change to programmatically create editor state when only postText exists
+  const initialEditorState = defaultState.serializedLexicalEditorState
+    ? defaultState.serializedLexicalEditorState
+    : `{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"${defaultState.postText}","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`;
+
   return (
     <div
       id="editor-wrapper"
@@ -81,29 +121,35 @@ export function Editor() {
           'prose prose-slate dark:prose-invert prose-p:my-0',
           'prose-headings:mb-4 prose-headings:mt-2',
           '[&_s]:line-through [&_u]:underline',
+          '[&_h1]:text-2xl [&_h2]:text-xl',
           'border-slate-500 bg-primary border-2 rounded-md focus-within:outline-none',
           'focus-within:border-slate-900 dark:focus-within:border-slate-400',
           'w-full relative z-0 isolate',
       )}
     >
       <LexicalEditor
-        config={{
-          namespace: EDITOR_NAMESPACE,
-          // editorState: content,
-          nodes: EDITOR_NODES,
-          theme: {
-            root: 'p-4 h-full min-h-[200px] focus:outline-none',
-            link: 'cursor-pointer',
-            text: {
-              bold: 'font-semibold',
-              underline: 'underline',
-              italic: 'italic',
-              strikethrough: 'line-through',
-              underlineStrikethrough: '[text-decoration:underline_line-through]',
+        defaultState={defaultState}
+        placeholderText={placeholderText}
+        lexicalEditorProps={{
+          config: {
+            namespace: EDITOR_NAMESPACE,
+            editorState: initialEditorState,
+            // editorState: content,
+            nodes: EDITOR_NODES,
+            theme: {
+              root: 'p-4 h-full min-h-[200px] focus:outline-none',
+              link: 'cursor-pointer',
+              text: {
+                bold: 'font-semibold',
+                underline: 'underline',
+                italic: 'italic',
+                strikethrough: 'line-through',
+                underlineStrikethrough: '[text-decoration:underline_line-through]',
+              },
             },
-          },
-          onError: (error) => {
-            console.log(error);
+            onError: (error) => {
+              console.log(error);
+            },
           },
         }}
       />
