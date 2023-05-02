@@ -17,6 +17,8 @@ export type PerformancePost = {
   performancePostId: number;
   createdAt: string;
   postText: string;
+  postHTML?: string | null;
+  serializedLexicalEditorState?: string | null;
   rating: {
     ratingTierRank: RatingTierRank;
     frameRateTierRank?: FrameRateTierRank | null;
