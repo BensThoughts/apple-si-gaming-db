@@ -1,15 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin';
-import type {
-  LexicalEditor,
-  ElementNode,
-  ParagraphNode,
-} from 'lexical';
 import {
   $getSelection,
   $isRangeSelection,
-  $isParagraphNode,
   $createParagraphNode,
   CLEAR_EDITOR_COMMAND,
   FORMAT_TEXT_COMMAND,
@@ -18,26 +12,20 @@ import { DeleteIcon } from '~/components/Icons/FeatherIcons';
 import { IconButton } from '../LexicalIconButton';
 import {
   $isListNode,
-  $isListItemNode,
-  $handleListInsertParagraph,
   $createListNode,
-  $createListItemNode,
   ListNode,
 } from '@lexical/list';
 import { $getNearestNodeOfType } from '@lexical/utils';
-import type { ListNodeTagType } from '@lexical/list/LexicalListNode';
 import { $createHeadingNode, $isHeadingNode } from '@lexical/rich-text';
-import type { HeadingTagType } from '@lexical/rich-text';
 import { $setBlocksType } from '@lexical/selection';
-// import { $ } from '@lexical/selection';
 
-type ToolbarProps = {
-  editor: LexicalEditor;
-  isBold: boolean;
-  isItalic: boolean;
-  isStrikethrough: boolean;
-  isUnderline: boolean;
-};
+// type ToolbarProps = {
+//   editor: LexicalEditor;
+//   isBold: boolean;
+//   isItalic: boolean;
+//   isStrikethrough: boolean;
+//   isUnderline: boolean;
+// };
 
 export function ToolbarPlugin() {
   const [isBold, setIsBold] = useState(false);
@@ -45,7 +33,7 @@ export function ToolbarPlugin() {
   const [isUnderline, setIsUnderline] = useState(false);
   const [isStrikethrough, setIsStrikethrough] = useState(false);
   const [blockType, setBlockType] = useState('paragraph');
-  const [selectedElementKey, setSelectedElementKey] = useState<string | null>(null);
+  // const [selectedElementKey, setSelectedElementKey] = useState<string | null>(null);
 
   const [editor] = useLexicalComposerContext();
 
@@ -55,7 +43,7 @@ export function ToolbarPlugin() {
       const selection = $getSelection();
 
       if ($isRangeSelection(selection)) {
-        const nodes = selection.getNodes();
+        // const nodes = selection.getNodes();
         const anchorNode = selection.anchor.getNode();
         const element = anchorNode.getKey() === 'root'
           ? anchorNode
@@ -63,7 +51,7 @@ export function ToolbarPlugin() {
         const elementKey = element.getKey();
         const elementDom = editor.getElementByKey(elementKey);
         if (elementDom != null) {
-          setSelectedElementKey(elementKey);
+          // setSelectedElementKey(elementKey);
           if ($isListNode(element)) {
             const parentList = $getNearestNodeOfType(anchorNode, ListNode);
             const type = parentList ? parentList.getTag() : element.getTag();
