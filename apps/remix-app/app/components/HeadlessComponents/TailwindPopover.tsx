@@ -1,5 +1,5 @@
-import { Popover, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { Popover } from '@headlessui/react';
+import { useState } from 'react';
 import type { ComponentType, ReactNode } from 'react';
 import type { BaseSvgIconProps } from '../Icons/BaseSvgIcon';
 import { ChevronUpIcon } from '~/components/Icons/FeatherIcons';
@@ -57,15 +57,15 @@ export default function TailwindPopover({
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       > */}
-        <Popover.Panel
-          ref={setPopperElement}
-          style={styles.popper}
-          className="w-full min-w-max isolate z-[100] border-1 border-secondary-highlight
+      <Popover.Panel
+        ref={setPopperElement}
+        style={styles.popper}
+        className="w-max max-w-[100vw] isolate z-[100] border-1 border-secondary-highlight
                      rounded-md bg-primary shadow-lg focus:outline-none"
-          {...attributes.popper}
-        >
-          {children}
-        </Popover.Panel>
+        {...attributes.popper}
+      >
+        {children}
+      </Popover.Panel>
       {/* </Transition> */}
     </Popover>
   );
