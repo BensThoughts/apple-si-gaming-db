@@ -64,8 +64,8 @@ export default function SelectMenu<T = string>({
         <div className={`relative mt-1.5 ${menuSize === 'medium' ? 'w-72' : 'w-80'}`}>
           <Listbox.Button
             className="relative py-2 pr-10 pl-3 w-full text-left rounded-lg
-                        cursor-default text-neutral-lightest bg-neutral-medium
-                        focus-visible:show-ring-tertiary sm:text-sm bg-primary"
+                       cursor-pointer focus-visible:show-ring-tertiary
+                       sm:text-sm bg-primary hover:bg-primary-highlight"
           >
             {({ value }: { value: SelectOption<T> }) => (
               <>
@@ -96,8 +96,8 @@ export default function SelectMenu<T = string>({
               {options.map((option, optionIdx) => (
                 <Listbox.Option
                   key={`${option}-${optionIdx}`}
-                  className={({ active }) => `${active ? 'text-neutral-lightest bg-secondary' : 'text-neutral-lighter'}
-                      cursor-default select-none relative py-2 pl-10 pr-4
+                  className={({ active }) => `${active ? 'text-primary-highlight bg-secondary' : 'text-primary'}
+                      cursor-pointer select-none relative py-2 pl-10 pr-4
                   `}
                   value={option}
                 >
