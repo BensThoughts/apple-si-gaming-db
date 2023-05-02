@@ -18,6 +18,7 @@ export default function PerformancePostCardWithSteamAppBadge({
     userWhoCreated: { steamUserId64 },
     numLikes,
     postText,
+    postHTML,
     steamApp: {
       steamAppId,
       headerImage,
@@ -45,7 +46,7 @@ export default function PerformancePostCardWithSteamAppBadge({
           <SystemSpecsPopover systemSpec={systemSpec} paddingY={8} giveButtonStyles />
         </div>
       </div>
-      <HTMLContainer htmlString={postText} />
+      <HTMLContainer htmlString={postHTML ? postHTML : postText} />
       <div>
         <TierRankContainer rating={rating} postTags={postTags} />
       </div>

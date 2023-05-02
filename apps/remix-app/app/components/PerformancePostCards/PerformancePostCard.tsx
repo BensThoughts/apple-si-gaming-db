@@ -17,6 +17,7 @@ export default function PerformancePostCard({
     performancePostId,
     createdAt,
     postText,
+    postHTML,
     userWhoCreated: {
       steamUserId64,
       avatarMedium,
@@ -58,7 +59,7 @@ export default function PerformancePostCard({
           />
         </div>
       </div>
-      <HTMLContainer htmlString={postText} />
+      <HTMLContainer htmlString={postHTML ? postHTML : postText} />
       <TierRankContainer
         rating={{
           ratingTierRank,
