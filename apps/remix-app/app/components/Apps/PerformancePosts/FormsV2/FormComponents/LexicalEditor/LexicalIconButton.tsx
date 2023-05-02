@@ -41,8 +41,8 @@ export function IconButton({
           props.disabled
             ? `bg-primary text-primary-faded`
             : active
-            ? `bg-primary-highlight text-primary-highlight hover:bg-primary hover:text-primary cursor-pointer`
-            : `bg-primary text-primary hover:bg-primary-highlight hover:text-primary-highlight cursor-pointer`
+              ? `bg-primary-highlight text-primary hover:text-primary-highlight cursor-pointer`
+              : `bg-primary text-primary hover:bg-primary-highlight hover:text-primary-highlight cursor-pointer`
           ,
         className ? className : '',
       )}
