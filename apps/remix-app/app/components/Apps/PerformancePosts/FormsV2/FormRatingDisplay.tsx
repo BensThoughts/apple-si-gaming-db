@@ -11,6 +11,7 @@ import type { RatingTierRankSelectOption } from './FormComponents/RatingTierRank
 import type { FrameRateTierRankOption } from './FormComponents/FrameRateRating/FrameRateTierRankRadioGroup';
 import { isTypeFrameRateTierRank, isTypeGamepadTierRank, isTypeRatingTierRank } from '~/lib/form-validators/posts';
 import type { GamepadTierRankOption } from './FormComponents/GamepadRating/GamepadTierRankRadioGroup';
+import { initialGamepadOption } from './FormContext/initialValues';
 
 function RatingContainer({
   title,
@@ -32,7 +33,7 @@ function RatingContainer({
 export function RatingTierRankDisplay({ ratingTierRank }: { ratingTierRank: RatingTierRankSelectOption['value']}) {
   return (
     <RatingContainer title="Tier Rank">
-      {ratingTierRank != 'None' ? (
+      {isTypeRatingTierRank(ratingTierRank) ? (
       <TierRankBadge tierRank={ratingTierRank}>
         {convertRatingTierRankToDescription(ratingTierRank)}
       </TierRankBadge>
@@ -58,7 +59,7 @@ export function FrameRateTierRankDisplay({
 }) {
   return (
     <RatingContainer title="Frame Rate">
-      {frameRateTierRank != 'None' || frameRateStutters ? (
+      {isTypeFrameRateTierRank(frameRateTierRank) || frameRateStutters ? (
       <div className="flex gap-1">
         {isTypeFrameRateTierRank(frameRateTierRank) && (
           <TierRankBadge tierRank={frameRateTierRank}>
@@ -92,25 +93,38 @@ export function GamepadTierRankDisplay({
   gamepadName,
   gamepadTierRank,
 }: {
-  gamepadName?: string;
-  gamepadTierRank?: GamepadTierRankOption['value'];
+  gamepadName: string;
+  gamepadTierRank: GamepadTierRankOption['value'];
 }) {
+  const gamepadNoneOptionName = initialGamepadOption.name;
   return (
     <RatingContainer title="Gamepad">
-      {(!gamepadName && !isTypeGamepadTierRank(gamepadTierRank)) && (
+      {(
+        (gamepadName === gamepadNoneOptionName) &&
+        !isTypeGamepadTierRank(gamepadTierRank)
+      ) && (
         <TextPill>None Given</TextPill>
       )}
-      {(gamepadName && !isTypeGamepadTierRank(gamepadTierRank)) && (
+      {(
+        (gamepadName != gamepadNoneOptionName) &&
+        !isTypeGamepadTierRank(gamepadTierRank)
+      ) && (
         <TierRankBadge includeRatingLetter={false} tierRank="STier">
           {gamepadName}
         </TierRankBadge>
       )}
-      {(!gamepadName && isTypeGamepadTierRank(gamepadTierRank)) && (
+      {(
+        (gamepadName === gamepadNoneOptionName) &&
+        isTypeGamepadTierRank(gamepadTierRank)
+      ) && (
         <TierRankBadge tierRank={gamepadTierRank}>
           {convertGamepadTierRankToDescription(gamepadTierRank)}
         </TierRankBadge>
       )}
-      {(gamepadName && isTypeGamepadTierRank(gamepadTierRank)) && (
+      {(
+        (gamepadName != gamepadNoneOptionName) &&
+        isTypeGamepadTierRank(gamepadTierRank)
+      ) && (
         <TierRankBadge tierRank={gamepadTierRank}>
           {`${gamepadName} - ${convertGamepadTierRankToDescription(gamepadTierRank)}`}
         </TierRankBadge>
@@ -121,23 +135,23 @@ export function GamepadTierRankDisplay({
 
 export default function FormRatingDisplay() {
   const { state: {
-    ratingTierRankValue,
-    frameRateTierRankValue,
+    ratingTierRankSelectedOption,
+    frameRateTierRankSelectedOption,
     frameRateStuttersValue,
-    gamepadName,
-    gamepadTierRankValue,
+    gamepadSelectedOption,
+    gamepadTierRankSelectedOption,
   } } = usePerformancePostFormState();
   return (
     <div className="flex items-center gap-2 flex-wrap">
-      <RatingTierRankDisplay ratingTierRank={ratingTierRankValue} />
+      <RatingTierRankDisplay ratingTierRank={ratingTierRankSelectedOption.value} />
       <FrameRateTierRankDisplay
-        frameRateTierRank={frameRateTierRankValue}
+        frameRateTierRank={frameRateTierRankSelectedOption.value}
         frameRateStutters={frameRateStuttersValue}
-        ratingTierRank={ratingTierRankValue}
+        ratingTierRank={ratingTierRankSelectedOption.value}
       />
       <GamepadTierRankDisplay
-        gamepadName={gamepadName}
-        gamepadTierRank={gamepadTierRankValue}
+        gamepadName={gamepadSelectedOption.name}
+        gamepadTierRank={gamepadTierRankSelectedOption.value}
       />
     </div>
   );
