@@ -25,6 +25,8 @@ export async function createPerformancePost({
   steamUserId64,
   steamAppId,
   postText,
+  postHTML,
+  serializedLexicalEditorState,
   frameRateTierRank,
   frameRateStutters,
   ratingTierRank,
@@ -36,6 +38,8 @@ export async function createPerformancePost({
   steamUserId64: string;
   steamAppId: PrismaSteamApp['steamAppId'];
   postText: PrismaPerformancePost['postText'];
+  postHTML: PrismaPerformancePost['postHTML'];
+  serializedLexicalEditorState: PrismaPerformancePost['serializedLexicalEditorState'];
   frameRateTierRank?: FrameRateTierRank;
   frameRateStutters: boolean;
   ratingTierRank: RatingTierRank;
@@ -56,6 +60,8 @@ export async function createPerformancePost({
       },
     },
     postText,
+    postHTML,
+    serializedLexicalEditorState,
     frameRateTierRank,
     frameRateStutters,
     ratingTierRank,
@@ -208,6 +214,7 @@ export async function findPerformancePostsBySteamAppId(
         },
       },
       postText: true,
+      postHTML: true,
       ratingTierRank: true,
       frameRateTierRank: true,
       frameRateStutters: true,
@@ -254,6 +261,7 @@ export async function findPerformancePostsBySteamAppId(
       avatarMedium,
     },
     postText,
+    postHTML,
     ratingTierRank,
     frameRateTierRank,
     frameRateStutters,
@@ -271,6 +279,7 @@ export async function findPerformancePostsBySteamAppId(
   }) => ({
     performancePostId: id,
     postText,
+    postHTML: postHTML ? postHTML : undefined,
     createdAt: createdAt.toDateString(),
     steamApp: {
       steamAppId,
@@ -278,15 +287,15 @@ export async function findPerformancePostsBySteamAppId(
     },
     userWhoCreated: {
       steamUserId64: steamUserId64.toString(),
-      displayName,
-      avatarMedium,
+      displayName: displayName ? displayName : undefined,
+      avatarMedium: avatarMedium ? avatarMedium : undefined,
     },
     rating: {
       ratingTierRank,
       frameRateTierRank:
         isTypeFrameRateTierRank(frameRateTierRank) ? frameRateTierRank : undefined,
       frameRateStutters,
-      gamepadMetadata,
+      gamepadMetadata: gamepadMetadata ? gamepadMetadata : undefined,
       gamepadTierRank:
         isTypeGamepadTierRank(gamepadTierRank) ? gamepadTierRank : undefined,
     },
@@ -319,6 +328,7 @@ export async function findPerformancePostsBySteamUserId(
       id: true,
       createdAt: true,
       postText: true,
+      postHTML: true,
       _count: {
         select: {
           usersWhoLiked: true,
@@ -357,6 +367,7 @@ export async function findPerformancePostsBySteamUserId(
     id,
     createdAt,
     postText,
+    postHTML,
     _count: {
       usersWhoLiked,
     },
@@ -384,6 +395,7 @@ export async function findPerformancePostsBySteamUserId(
     performancePostId: id,
     createdAt: createdAt.toDateString(),
     postText,
+    postHTML: postHTML ? postHTML : undefined,
     postTags,
     userWhoCreated: {
       steamUserId64: steamUserId64.toString(),
@@ -391,14 +403,14 @@ export async function findPerformancePostsBySteamUserId(
     steamApp: {
       steamAppId,
       name,
-      headerImage,
+      headerImage: headerImage ? headerImage : undefined,
     },
     rating: {
       ratingTierRank,
       frameRateTierRank:
         isTypeFrameRateTierRank(frameRateTierRank) ? frameRateTierRank : undefined,
       frameRateStutters,
-      gamepadMetadata,
+      gamepadMetadata: gamepadMetadata ? gamepadMetadata : undefined,
       gamepadTierRank:
         isTypeGamepadTierRank(gamepadTierRank) ? gamepadTierRank : undefined,
     },
@@ -490,7 +502,7 @@ export async function findNewestPerformancePosts(
 export async function didSteamUserProfileCreatePerformancePost(
     steamUserId64: string,
     performancePostId: number,
-) {
+): Promise<boolean> {
   const performancePost = await prisma.performancePost.findUnique({
     where: {
       id: performancePostId,
@@ -521,6 +533,8 @@ export async function deletePerformancePost(performancePostId: PrismaPerformance
 export async function updatePerformancePost({
   performancePostId,
   postText,
+  postHTML,
+  serializedLexicalEditorState,
   frameRateTierRank,
   frameRateStutters,
   ratingTierRank,
@@ -531,6 +545,8 @@ export async function updatePerformancePost({
 }: {
   performancePostId: PrismaPerformancePost['id'];
   postText: PrismaPerformancePost['postText'];
+  postHTML?: PrismaPerformancePost['postHTML'];
+  serializedLexicalEditorState?: PrismaPerformancePost['serializedLexicalEditorState'];
   frameRateTierRank?: FrameRateTierRank;
   frameRateStutters: boolean;
   ratingTierRank: RatingTierRank;
@@ -553,6 +569,8 @@ export async function updatePerformancePost({
 
   const performancePostData: Prisma.PerformancePostUpdateInput = {
     postText,
+    postHTML,
+    serializedLexicalEditorState,
     ratingTierRank,
     frameRateTierRank: frameRateTierRank ? frameRateTierRank : null,
     frameRateStutters,
@@ -650,6 +668,8 @@ export async function findPerformancePostById(
       },
       gamepadTierRank: true,
       postText: true,
+      postHTML: true,
+      serializedLexicalEditorState: true,
       postTags: {
         select: {
           id: true,
@@ -693,6 +713,8 @@ export async function findPerformancePostById(
       avatarMedium,
     },
     postText,
+    postHTML,
+    serializedLexicalEditorState,
     postTags,
     ratingTierRank,
     frameRateTierRank,
@@ -713,26 +735,28 @@ export async function findPerformancePostById(
     performancePostId: id,
     createdAt: createdAt.toDateString(),
     postText,
+    postHTML: postHTML ? postHTML : undefined,
+    serializedLexicalEditorState: serializedLexicalEditorState ? serializedLexicalEditorState : undefined,
     steamApp: {
       steamAppId,
       name,
     },
     userWhoCreated: {
       steamUserId64: steamUserId64.toString(),
-      displayName,
-      avatarMedium,
+      displayName: displayName ? displayName : undefined,
+      avatarMedium: avatarMedium ? avatarMedium : undefined,
     },
     rating: {
       ratingTierRank,
       frameRateTierRank:
         isTypeFrameRateTierRank(frameRateTierRank) ? frameRateTierRank : undefined,
       frameRateStutters,
-      gamepadMetadata,
+      gamepadMetadata: gamepadMetadata ? gamepadMetadata : undefined,
       gamepadTierRank:
         isTypeGamepadTierRank(gamepadTierRank) ? gamepadTierRank : undefined,
     },
     systemSpec: {
-      systemSpecId: userSystemSpecId,
+      systemSpecId: userSystemSpecId ? userSystemSpecId : undefined,
       manufacturer: systemManufacturer,
       model: systemModel,
       osVersion: systemOsVersion,
