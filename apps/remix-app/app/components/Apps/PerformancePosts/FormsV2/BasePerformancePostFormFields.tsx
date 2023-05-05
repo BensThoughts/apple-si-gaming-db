@@ -15,7 +15,14 @@ import { useEffect } from 'react';
 import type {
   CreateOrEditPerformancePostActionData,
 } from '~/lib/form-actions/performance-post/types';
-import { initialFrameRateTierRankSelectOption, initialGamepadOption, initialGamepadTierRankOption, initialRatingTierRankSelectOption, initialSystemSpecOption } from './FormContext/initialValues';
+import {
+  initialFrameRateStuttersValue,
+  initialFrameRateTierRankSelectOption,
+  initialGamepadOption,
+  initialGamepadTierRankOption,
+  initialRatingTierRankSelectOption,
+  initialSystemSpecOption,
+} from './FormContext/initialFormOptions';
 import { frameRateAverageOptions } from '../Forms/FormComponents/FrameRateTierRankSelectMenu';
 import { gamepadTierRankOptions } from './FormComponents/GamepadRating/GamepadTierRankRadioGroup';
 
@@ -59,19 +66,27 @@ export default function BasePerformancePostFormFields({
       dispatch({
         type: PerformancePostFormStateActions.UPSERT_FORM_STATE,
         payload: {
-          ratingTierRankSelectedOption: defaultRatingTierRankOption ? defaultRatingTierRankOption : initialRatingTierRankSelectOption,
-          frameRateTierRankSelectedOption: defaultFrameRateTierRankOption ? defaultFrameRateTierRankOption : initialFrameRateTierRankSelectOption,
-          frameRateStuttersValue: fields.frameRateStutters ? fields.frameRateStutters : false,
+          ratingTierRankSelectedOption: defaultRatingTierRankOption
+            ? defaultRatingTierRankOption
+            : initialRatingTierRankSelectOption,
+          frameRateTierRankSelectedOption: defaultFrameRateTierRankOption
+            ? defaultFrameRateTierRankOption
+            : initialFrameRateTierRankSelectOption,
+          frameRateStuttersValue: fields.frameRateStutters
+            ? fields.frameRateStutters
+            : initialFrameRateStuttersValue,
           gamepadSelectedOption: defaultGamepadOption
             ? { name: defaultGamepadOption.description, value: defaultGamepadOption.id }
             : initialGamepadOption,
-          gamepadTierRankSelectedOption: defaultGamepadTierRankOption ? defaultGamepadTierRankOption : initialGamepadTierRankOption,
+          gamepadTierRankSelectedOption: defaultGamepadTierRankOption
+            ? defaultGamepadTierRankOption
+            : initialGamepadTierRankOption,
           systemSpecSelectedOption: defaultSystemSpecOption
             ? { name: defaultSystemSpecOption.systemName, value: defaultSystemSpecOption.id }
             : initialSystemSpecOption,
         },
       });
-    } else if (isSubmittingForm) {
+    } else if (isSubmittingForm) { // TODO: maybe no if, just reset state if not fields
       dispatch({
         type: PerformancePostFormStateActions.RESET_FORM_STATE,
         payload: undefined,
