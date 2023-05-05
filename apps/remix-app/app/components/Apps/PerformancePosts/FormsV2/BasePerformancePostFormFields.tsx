@@ -86,13 +86,16 @@ export default function BasePerformancePostFormFields({
             : initialSystemSpecOption,
         },
       });
-    } else if (isSubmittingForm) { // TODO: maybe no if, just reset state if not fields
+    } else {
+      // TODO: is this safe? fields is not present on initial load
+      // TODO: which is fine because we want a blank (reset) form on initial load
+      // TODO: anyway
       dispatch({
         type: PerformancePostFormStateActions.RESET_FORM_STATE,
         payload: undefined,
       });
     }
-  }, [dispatch, fields, gamepadOptions, systemSpecOptions, isSubmittingForm]);
+  }, [dispatch, fields, gamepadOptions, systemSpecOptions]);
 
   return (
     <div className="flex flex-col gap-6">
