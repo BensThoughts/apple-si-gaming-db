@@ -9,22 +9,15 @@ import { didSteamUserProfileCreatePerformancePost, findPerformancePostById } fro
 import { useActionData, useCatch, useLoaderData, useNavigation } from '@remix-run/react';
 import { findPostTags } from '~/models/SteamedApples/performancePostTag.server';
 import { findAllGamepads } from '~/models/SteamedApples/gamepadMetadata.server';
-// import { doesSteamUserOwnApp } from '~/models/steamUser.server';
 import PerformancePostCard from '~/components/PerformancePostCards/PerformancePostCard';
 import { editPerformancePostAction } from '~/lib/form-actions/performance-post/edit-post.server';
 import type { PostTagOption, GamepadOption } from '~/types';
-import type { EditPerformancePostActionData } from '~/lib/form-actions/performance-post/types';
 import { requireUserIds } from '~/lib/sessions/profile-session.server';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
 import { EditPostURLParams } from '~/lib/enums/URLSearchParams/EditPost';
 import EditPerformancePostForm from '~/components/Apps/PerformancePosts/FormsV2/EditPerformancePostForm';
-// import EditPerformancePostForm from '~/components/Apps/PerformancePosts/FormsV2/EditPerformancePostForm';
-// import { links as draftEditorLinks } from '~/components/Apps/PerformancePosts/FormsV2/FormComponents/DraftEditor/DraftEditor';
-
-// export function links() {
-//   return [...draftEditorLinks()];
-// }
+import { convertRawToTypedPerformancePostFormFields, extractFormData } from '~/lib/form-actions/performance-post/extract-form-data';
 
 type EditPostLoaderData = {
   steamAppId: number;
@@ -101,6 +94,8 @@ export default function EditPerformancePostRoute() {
   const {
     performancePostId,
     postText,
+    postHTML,
+    serializedLexicalEditorState,
     rating,
     postTags,
     systemSpec: {
@@ -108,8 +103,14 @@ export default function EditPerformancePostRoute() {
     },
   } = performancePost;
 
-  const actionData = useActionData<EditPerformancePostActionData>();
+  const actionData = useActionData<typeof action>();
   const navigation = useNavigation();
+  const performancePostNavigationFormData = navigation.formData
+    ? extractFormData(navigation.formData).fieldsRaw
+    : undefined;
+  const optimisticPerformancePost = performancePostNavigationFormData
+    ? convertRawToTypedPerformancePostFormFields(performancePostNavigationFormData)
+    : undefined;
   const isSubmittingEditPerformancePost =
     navigation.state === 'submitting' &&
     navigation.formData.get('_performancePostAction') === 'editPerformancePost';
@@ -123,16 +124,24 @@ export default function EditPerformancePostRoute() {
         steamAppId={steamAppId}
         formError={actionData?.formError}
         fieldErrors={actionData?.fieldErrors}
-        fields={actionData?.fields ? actionData.fields : {
-          postText,
-          ratingTierRank: rating.ratingTierRank,
-          frameRateTierRank: rating.frameRateTierRank,
-          frameRateStutters: rating.frameRateStutters ? rating.frameRateStutters : false,
-          gamepadId: rating.gamepadMetadata?.id,
-          gamepadTierRank: rating.gamepadTierRank,
-          postTagsIds: postTags.map((tag) => tag.id),
-          systemSpecId: systemSpecId ? systemSpecId : undefined,
-        }}
+        fields={optimisticPerformancePost
+            ? optimisticPerformancePost
+            : actionData?.fields
+              ? actionData.fields
+              : {
+                postText,
+                postHTML,
+                serializedLexicalEditorState,
+                ...performancePost.rating,
+                ratingTierRank: rating.ratingTierRank,
+                frameRateTierRank: rating.frameRateTierRank,
+                frameRateStutters: rating.frameRateStutters ? rating.frameRateStutters : false,
+                gamepadId: rating.gamepadMetadata?.id,
+                gamepadTierRank: rating.gamepadTierRank,
+                postTagIds: postTags.map((tag) => tag.id),
+                systemSpecId: systemSpecId,
+              }
+        }
         isSubmittingForm={isSubmittingEditPerformancePost}
         postTagOptions={postTagOptions}
         gamepadOptions={gamepadOptions}

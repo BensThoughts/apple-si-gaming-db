@@ -12,20 +12,20 @@ import type {
   PerformancePost,
 } from '~/types';
 import type { PostTagOption, GamepadOption } from '~/types';
-import type { CreatePerformancePostActionData } from '~/lib/form-actions/performance-post/types';
 import { getIsLoggedIn, getUserIds, requireUserIds } from '~/lib/sessions/profile-session.server';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
 import CreatePerformancePostForm from '~/components/Apps/PerformancePosts/FormsV2/CreatePerformancePostForm';
+import { convertRawToTypedPerformancePostFormFields, extractFormData } from '~/lib/form-actions/performance-post/extract-form-data';
 // import CreatePerformancePostForm from '~/components/Apps/PerformancePosts/FormsV2/CreatePerformancePostForm';
 // import { links as draftEditorLinks } from '~/components/Apps/PerformancePosts/FormsV2/FormComponents/DraftEditor/DraftEditor';
 
-// export const links: LinksFunction = () => {
-//   return [
-//     // { rel: 'canonical', href: '' },
-//     // ...draftEditorLinks(),
-//   ];
-// }
+// // export const links: LinksFunction = () => {
+// //   return [
+// // { rel: 'canonical', href: '' },
+// // ...draftEditorLinks(),
+// //   ];
+// // }
 
 interface PerformancePostLoaderData {
   steamAppId: number;
@@ -91,8 +91,14 @@ export default function PerformancePostsRoute() {
     gamepadOptions,
   } = useLoaderData<PerformancePostLoaderData>();
 
-  const actionData = useActionData<CreatePerformancePostActionData>();
+  const actionData = useActionData<typeof action>();
   const navigation = useNavigation();
+  const performancePostNavigationFormData = navigation.formData
+    ? extractFormData(navigation.formData).fieldsRaw
+    : undefined;
+  const optimisticPerformancePost = performancePostNavigationFormData
+    ? convertRawToTypedPerformancePostFormFields(performancePostNavigationFormData)
+    : undefined;
   const isSubmittingCreatePerformancePost =
     navigation.state === 'submitting' &&
     navigation.formData.get('_performancePostAction') === 'createPerformancePost';
@@ -105,7 +111,7 @@ export default function PerformancePostsRoute() {
         steamUserProfileOwnsApp={steamUserProfileOwnsApp}
         formError={actionData?.formError}
         fieldErrors={actionData?.fieldErrors}
-        fields={actionData?.fields}
+        fields={optimisticPerformancePost ? optimisticPerformancePost : actionData?.fields}
         isSubmittingForm={isSubmittingCreatePerformancePost}
         postTagOptions={postTagOptions}
         gamepadOptions={gamepadOptions}
