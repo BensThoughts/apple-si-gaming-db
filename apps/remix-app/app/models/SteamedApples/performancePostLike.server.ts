@@ -145,7 +145,7 @@ export async function findUserProfileLikedPosts(
       frameRateTierRank:
         isTypeFrameRateTierRank(frameRateTierRank) ? frameRateTierRank : undefined,
       frameRateStutters,
-      gamepadMetadata,
+      gamepadMetadata: gamepadMetadata ? gamepadMetadata : undefined,
       gamepadTierRank:
         isTypeGamepadTierRank(gamepadTierRank) ? gamepadTierRank : undefined,
     },
@@ -154,12 +154,12 @@ export async function findUserProfileLikedPosts(
     steamApp: {
       steamAppId,
       name,
-      headerImage,
+      headerImage: headerImage ? headerImage : undefined,
     },
     userWhoCreated: {
       steamUserId64: steamUserId64.toString(),
-      displayName,
-      avatarMedium,
+      displayName: displayName ? displayName : undefined,
+      avatarMedium: avatarMedium ? avatarMedium : undefined,
     },
     systemSpec: {
       manufacturer: systemManufacturer,
