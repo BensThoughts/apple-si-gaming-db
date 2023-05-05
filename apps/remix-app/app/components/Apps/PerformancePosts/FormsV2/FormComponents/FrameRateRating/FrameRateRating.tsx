@@ -9,12 +9,12 @@ export default function FrameRateRating() {
       <input
         type="hidden"
         name={PerformancePostFormFieldNames.FrameRateStutters}
-        value={state.frameRateStuttersValue ? 'true' : 'false'}
+        value={state.frameRateStuttersValue === true ? 'true' : 'false'}
       />
       <input
         type="hidden"
         name={PerformancePostFormFieldNames.FrameRateTierRank}
-        value={state.frameRateTierRankValue}
+        value={state.frameRateTierRankSelectedOption.value}
       />
       <FrameRateRatingPopover />
     </>

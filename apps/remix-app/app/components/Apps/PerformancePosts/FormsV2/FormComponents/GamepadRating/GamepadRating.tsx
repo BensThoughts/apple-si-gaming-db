@@ -1,7 +1,7 @@
 import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
 import { usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
 import GamepadRatingPopover from './GamepadRatingPopover';
-import { GamepadOption } from '~/types';
+import type { GamepadOption } from '~/types';
 
 export default function GamepadRating({
   gamepads,
@@ -14,12 +14,12 @@ export default function GamepadRating({
       <input
         type="hidden"
         name={PerformancePostFormFieldNames.GamepadId}
-        value={state.gamepadValue}
+        value={state.gamepadSelectedOption.value}
       />
       <input
         type="hidden"
         name={PerformancePostFormFieldNames.GamepadTierRank}
-        value={state.gamepadTierRankValue}
+        value={state.gamepadTierRankSelectedOption.value}
       />
       <GamepadRatingPopover gamepads={gamepads} />
     </>
