@@ -17,28 +17,28 @@ export type PerformancePost = {
   performancePostId: number;
   createdAt: string;
   postText: string;
-  postHTML?: string | null;
-  serializedLexicalEditorState?: string | null;
+  postHTML?: string;
+  serializedLexicalEditorState?: string;
   rating: {
     ratingTierRank: RatingTierRank;
-    frameRateTierRank?: FrameRateTierRank | null;
-    frameRateStutters?: boolean | null;
-    gamepadTierRank?: GamepadTierRank | null;
+    frameRateTierRank?: FrameRateTierRank;
+    frameRateStutters?: boolean;
+    gamepadTierRank?: GamepadTierRank;
     gamepadMetadata?: {
       id: number;
       description: string;
-    } | null;
+    };
   };
   userWhoCreated: {
     steamUserId64: string;
-    displayName?: string | null;
-    avatarMedium?: string | null;
-    avatarFull?: string | null;
+    displayName?: string;
+    avatarMedium?: string;
+    avatarFull?: string;
   };
   steamApp: {
     steamAppId: number;
     name: string;
-    headerImage?: string | null;
+    headerImage?: string;
   };
   postTags: {
     id: number;
@@ -53,7 +53,7 @@ export type PerformancePost = {
     videoDriverVersion: SystemSpec['videoDriverVersion'];
     videoPrimaryVRAM: SystemSpec['videoPrimaryVRAM'];
     memoryRAM: SystemSpec['memoryRAM'];
-    systemSpecId?: SystemSpec['systemSpecId'] | null; // used for editing posts to pre-fill form
+    systemSpecId?: SystemSpec['systemSpecId']; // used for editing posts to pre-fill form
   };
   numLikes: number;
 }
