@@ -1,17 +1,15 @@
 import type { RadioGroupOption } from '~/components/HeadlessComponents/TailwindRadioGroup';
 import TailwindRadioGroup from '~/components/HeadlessComponents/TailwindRadioGroup';
 import { convertGamepadTierRankToFullText } from '~/lib/conversions/rating-conversions';
-import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
+// import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
 import type { GamepadTierRank } from '~/types';
 import { PerformancePostFormStateActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
+import { initialGamepadTierRankOption } from '../../FormContext/initialValues';
 
 export type GamepadTierRankOption = RadioGroupOption<GamepadTierRank | 'None'>;
 
 export const gamepadTierRankOptions: GamepadTierRankOption[] = [
-  {
-    name: 'None',
-    value: 'None',
-  },
+  initialGamepadTierRankOption,
   {
     name: convertGamepadTierRankToFullText('STier'),
     value: 'STier',
@@ -34,33 +32,26 @@ export const gamepadTierRankOptions: GamepadTierRankOption[] = [
   },
 ];
 
-export default function GamepadTierRankRadioGroup({
-  // defaultGamepadTierRank,
-}: {
-  // defaultGamepadTierRank?: GamepadTierRank;
-}) {
+export default function GamepadTierRankRadioGroup() {
   const { state, dispatch } = usePerformancePostFormState();
 
   function onSelectionChange(selection: GamepadTierRankOption) {
-      dispatch({
-        type: PerformancePostFormStateActions.SET_GAMEPAD_TIER_RANK,
-        payload: selection.value
-      });
+    dispatch({
+      type: PerformancePostFormStateActions.SET_GAMEPAD_TIER_RANK,
+      payload: selection,
+    });
   }
-  const { gamepadTierRankValue } = state;
-  const defaultValue = gamepadTierRankOptions.find((option) => option.value === gamepadTierRankValue);
   return (
     <div className="flex flex-col gap-2">
       {/* <div className="flex w-full bg-primary-highlight px-3 py-2">
         Tier Rank
       </div> */}
-        <TailwindRadioGroup
-          name={PerformancePostFormFieldNames.GamepadTierRank}
-          options={gamepadTierRankOptions}
-          defaultValue={defaultValue ? defaultValue : gamepadTierRankOptions[0]}
-          labelText="Gamepad Tier Rank"
-          onChange={onSelectionChange}
-        />
+      <TailwindRadioGroup
+        options={gamepadTierRankOptions}
+        value={state.gamepadTierRankSelectedOption}
+        labelText="Gamepad Tier Rank"
+        onChange={onSelectionChange}
+      />
     </div>
   );
 }

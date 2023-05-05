@@ -6,17 +6,12 @@ import { convertRatingTierRankToFullText } from '~/lib/conversions/rating-conver
 import { AwardIcon } from '~/components/Icons/FeatherIcons';
 import { PerformancePostFormStateActions, usePerformancePostFormState } from '../FormContext/PerformancePostFormContext';
 import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
-
-// type ArrayElement<ArrayType extends readonly unknown[]> =
-//   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
+import { initialRatingTierRankSelectOption } from '../FormContext/initialValues';
 
 export type RatingTierRankSelectOption = SelectOption<RatingTierRank | 'None'>;
 
-export const steamAppRatingOptions: RatingTierRankSelectOption[] = [
-  {
-    name: 'None',
-    value: 'None',
-  },
+export const ratingTierRankOptions: RatingTierRankSelectOption[] = [
+  initialRatingTierRankSelectOption,
   {
     name: convertRatingTierRankToFullText('STier'),
     value: 'STier',
@@ -45,29 +40,24 @@ export const steamAppRatingOptions: RatingTierRankSelectOption[] = [
     name: convertRatingTierRankToFullText('FTier'),
     value: 'FTier',
   },
-
 ];
 
-export default function RatingTierRankSelectMenu({
-  defaultRatingTierRank,
-}: {
-  defaultRatingTierRank?: RatingTierRank;
-}) {
-  const { dispatch } = usePerformancePostFormState();
+export default function RatingTierRankSelectMenu() {
+  const { state, dispatch } = usePerformancePostFormState();
+
   function onSelectionChange(selection: RatingTierRankSelectOption) {
     dispatch({
       type: PerformancePostFormStateActions.SET_RATING_TIER_RANK,
-      payload: selection.value,
+      payload: selection,
     });
   }
 
-  const defaultValue = steamAppRatingOptions.find((option) => option.value === defaultRatingTierRank);
   return (
     <div className="flex gap-2">
       <SelectMenuWithIcon
         name={PerformancePostFormFieldNames.RatingTierRank}
-        defaultValue={defaultValue ? defaultValue : steamAppRatingOptions[0]}
-        options={steamAppRatingOptions}
+        value={state.ratingTierRankSelectedOption}
+        options={ratingTierRankOptions}
         labelText="Tier Rank"
         PrimaryIcon={AwardIcon}
         onChange={onSelectionChange}

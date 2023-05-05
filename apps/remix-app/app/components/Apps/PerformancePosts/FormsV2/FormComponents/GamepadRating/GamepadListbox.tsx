@@ -2,8 +2,8 @@ import type { GamepadOption } from '~/types';
 import { PerformancePostFormStateActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
 import { CheckIcon, ChevronUpIcon } from '~/components/Icons/FeatherIcons';
 import { Listbox, Transition } from '@headlessui/react';
-import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
 import { classNames } from '~/lib/css/classNames';
+import { initialGamepadOption } from '../../FormContext/initialValues';
 
 export type GamepadListboxOption = {
   name: string;
@@ -25,27 +25,23 @@ export default function GamepadListbox({
       value: gamepad.id,
     }
   ));
-  gamepadOptions.unshift({
-    name: 'None',
-    value: -1,
-  });
+  gamepadOptions.unshift(initialGamepadOption);
 
   function onSelectionChange(selection: GamepadListboxOption) {
-      dispatch({
-        type: PerformancePostFormStateActions.SET_GAMEPAD_OPTION,
-        payload: {
-          name: selection.name,
-          value: selection.value,
-        },
-      });
+    dispatch({
+      type: PerformancePostFormStateActions.SET_GAMEPAD_OPTION,
+      payload: {
+        name: selection.name,
+        value: selection.value,
+      },
+    });
   }
 
-  const defaultValue = gamepadOptions.find((option) => option.value === state.gamepadValue);
+  // const defaultValue = gamepadOptions.find((option) => option.value === state.gamepadValue);
 
   return (
     <Listbox
-      defaultValue={defaultValue ? defaultValue : gamepadOptions[0]}
-      // name={PerformancePostFormFieldNames.GamepadId}
+      value={state.gamepadSelectedOption}
       onChange={onSelectionChange}
     >
       <div className="flex flex-col gap-2">
