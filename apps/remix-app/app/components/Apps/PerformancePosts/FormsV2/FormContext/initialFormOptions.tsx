@@ -9,6 +9,8 @@ export const initialRatingTierRankSelectOption: RatingTierRankSelectOption = {
   value: 'None',
 };
 
+export const initialFrameRateStuttersValue: boolean = false;
+
 export const initialFrameRateTierRankSelectOption: FrameRateTierRankOption = {
   name: 'Not Sure',
   value: 'None',
