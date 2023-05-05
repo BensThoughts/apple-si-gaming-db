@@ -5,25 +5,28 @@ import type { FrameRateTierRankOption } from '../FormComponents/FrameRateRating/
 import type { RatingTierRankSelectOption } from '../FormComponents/RatingTierRankSelectMenu';
 import type { GamepadListboxOption } from '../FormComponents/GamepadRating/GamepadListbox';
 
+import { initialFrameRateTierRankSelectOption, initialGamepadOption, initialGamepadTierRankOption, initialRatingTierRankSelectOption, initialSystemSpecOption } from './initialValues';
+import type { SystemSpecSelectOption } from '../FormComponents/SystemSelectMenuCard/SystemSelectMenu';
+
 export const PerformancePostFormContext = createContext(null);
 export const PerformancePostDispatchContext = createContext(null);
 
 type PerformancePostFormState = {
-  ratingTierRankValue: RatingTierRankSelectOption['value'];
-  frameRateTierRankValue: FrameRateTierRankOption['value'];
+  ratingTierRankSelectedOption: RatingTierRankSelectOption;
+  frameRateTierRankSelectedOption: FrameRateTierRankOption;
   frameRateStuttersValue: boolean;
-  gamepadName: GamepadListboxOption['name']; // prop is "description" in database
-  gamepadValue: GamepadListboxOption['value']; // prop is "id" in database
-  gamepadTierRankValue: GamepadTierRankOption['value'];
+  gamepadSelectedOption: GamepadListboxOption; // prop is { "description": string, "id": number } in database
+  gamepadTierRankSelectedOption: GamepadTierRankOption;
+  systemSpecSelectedOption: SystemSpecSelectOption;
 }
 
 const initialState: PerformancePostFormState = {
-  ratingTierRankValue: 'None',
-  frameRateTierRankValue: 'None',
+  ratingTierRankSelectedOption: initialRatingTierRankSelectOption,
+  frameRateTierRankSelectedOption: initialFrameRateTierRankSelectOption,
   frameRateStuttersValue: false,
-  gamepadName: '',
-  gamepadValue: -1,
-  gamepadTierRankValue: 'None',
+  gamepadSelectedOption: initialGamepadOption,
+  gamepadTierRankSelectedOption: initialGamepadTierRankOption,
+  systemSpecSelectedOption: initialSystemSpecOption,
 };
 
 export enum PerformancePostFormStateActions {
@@ -32,18 +35,19 @@ export enum PerformancePostFormStateActions {
   SET_FRAME_RATE_STUTTERS = 'set-frame-rate-stutters',
   SET_GAMEPAD_OPTION = 'set-gamepad-option',
   SET_GAMEPAD_TIER_RANK = 'set-gamepad-tier-rank',
+  SET_SYSTEM_SPEC_OPTION = 'set-system-spec-option',
   RESET_FORM_STATE = 'reset-form-state',
   UPSERT_FORM_STATE = 'upsert-form-state',
 }
 
 type SetRatingTierRankAction = {
   type: PerformancePostFormStateActions.SET_RATING_TIER_RANK,
-  payload: RatingTierRankSelectOption['value']
+  payload: RatingTierRankSelectOption;
 }
 
 type SetFrameRateTierRankAction = {
   type: PerformancePostFormStateActions.SET_FRAME_RATE_TIER_RANK,
-  payload: FrameRateTierRankOption['value']
+  payload: FrameRateTierRankOption;
 }
 
 type SetFrameRateStuttersAction = {
@@ -53,12 +57,17 @@ type SetFrameRateStuttersAction = {
 
 type SetGamepadOptionAction = {
   type: PerformancePostFormStateActions.SET_GAMEPAD_OPTION;
-  payload: { name: string, value: number } | undefined;
+  payload: GamepadListboxOption;
 }
 
-type SetGamepadRatingTierRankAction = {
+type SetGamepadTierRankAction = {
   type: PerformancePostFormStateActions.SET_GAMEPAD_TIER_RANK;
-  payload: GamepadTierRankOption['value'];
+  payload: GamepadTierRankOption;
+}
+
+type SetSystemSpecOptionAction = {
+  type: PerformancePostFormStateActions.SET_SYSTEM_SPEC_OPTION;
+  payload: SystemSpecSelectOption;
 }
 
 type UpsertFormStateAction = {
@@ -76,7 +85,8 @@ type FormRatingAction =
   | SetFrameRateTierRankAction
   | SetFrameRateStuttersAction
   | SetGamepadOptionAction
-  | SetGamepadRatingTierRankAction
+  | SetGamepadTierRankAction
+  | SetSystemSpecOptionAction
   | UpsertFormStateAction
   | ResetFormStateAction
 
@@ -88,21 +98,25 @@ function performancePostFormReducer(
 ): PerformancePostFormState {
   switch (action.type) {
     case PerformancePostFormStateActions.SET_RATING_TIER_RANK: {
-      return { ...state, ratingTierRankValue: action.payload };
+      return {
+        ...state,
+        ratingTierRankSelectedOption: action.payload,
+      };
     }
     case PerformancePostFormStateActions.SET_FRAME_RATE_TIER_RANK: {
-      return { ...state, frameRateTierRankValue: action.payload };
+      return { ...state, frameRateTierRankSelectedOption: action.payload };
     }
     case PerformancePostFormStateActions.SET_FRAME_RATE_STUTTERS: {
       return { ...state, frameRateStuttersValue: action.payload };
     }
     case PerformancePostFormStateActions.SET_GAMEPAD_OPTION: {
-      const gamepadName = action.payload ? action.payload.name : '';
-      const gamepadValue = action.payload ? action.payload.value : -1;
-      return { ...state, gamepadName, gamepadValue };
+      return { ...state, gamepadSelectedOption: action.payload };
     }
     case PerformancePostFormStateActions.SET_GAMEPAD_TIER_RANK: {
-      return { ...state, gamepadTierRankValue: action.payload };
+      return { ...state, gamepadTierRankSelectedOption: action.payload };
+    }
+    case PerformancePostFormStateActions.SET_SYSTEM_SPEC_OPTION: {
+      return { ...state, systemSpecSelectedOption: action.payload };
     }
     case PerformancePostFormStateActions.UPSERT_FORM_STATE: {
       return { ...state, ...action.payload };
