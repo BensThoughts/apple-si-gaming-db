@@ -1,6 +1,6 @@
 import { Form } from '@remix-run/react';
 import RoundedButton from '~/components/Buttons/RoundedButton';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { showToast } from '~/components/Toasts';
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
 import type {
@@ -40,13 +40,6 @@ export default function CreatePerformancePostForm({
   steamUserProfileOwnsApp,
 }: CreatePerformancePostFormProps) {
   const { userSession } = useUserSession();
-  const formRef = useRef<HTMLFormElement>(null);
-
-  useEffect(() => {
-    if (isSubmittingForm) {
-      formRef.current?.reset();
-    }
-  }, [isSubmittingForm]);
 
   useEffect(() => {
     if (formError) {
@@ -88,21 +81,14 @@ export default function CreatePerformancePostForm({
   return (
     <PerformancePostFormStateProvider>
       <PerformancePostFormWrapper>
-        {/* <h2 className="text-secondary text-lg">Create Post</h2> */}
-        {/* {formError && <div className="text-error">{formError}</div>} */}
-
         <Form
           id={formId}
           method="post"
-          // onSubmit={submitForm}
           name="performancePost"
-          ref={formRef}
           className="flex flex-col items-center gap-6 w-full max-w-lg"
           action={`/apps/${steamAppId}/posts`}
-          // onSubmit={(e) => isSubmittingForm ? e.preventDefault() : null}
         >
           <input type="hidden" name="_performancePostAction" value="createPerformancePost" />
-
           <BasePerformancePostFormFields
             formId={formId}
             fields={fields}
@@ -112,6 +98,7 @@ export default function CreatePerformancePostForm({
             gamepadOptions={gamepadOptions}
             postTagOptions={postTagOptions}
             editorPlaceholderText="Create Post..."
+            isSubmittingForm={isSubmittingForm}
           />
           <RoundedButton type="submit" disabled={isSubmittingForm} className="focus-visible:show-ring-tertiary">
             {isSubmittingForm ? 'Creating' : 'Create'}

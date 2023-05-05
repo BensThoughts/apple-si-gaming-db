@@ -1,6 +1,6 @@
 import { Form } from '@remix-run/react';
 import RoundedButton from '~/components/Buttons/RoundedButton';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { showToast } from '~/components/Toasts';
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
 import type {
@@ -41,14 +41,6 @@ export default function EditPerformancePostForm({
 }: EditPerformancePostFormProps) {
   const { userSession } = useUserSession();
 
-  const formRef = useRef<HTMLFormElement>(null);
-
-  useEffect(() => {
-    if (isSubmittingForm) {
-      formRef.current?.reset();
-    }
-  }, [isSubmittingForm]);
-
   useEffect(() => {
     if (formError) {
       showToast.error(formError);
@@ -87,13 +79,10 @@ export default function EditPerformancePostForm({
   return (
     <PerformancePostFormStateProvider>
       <PerformancePostFormWrapper>
-        {/* <h2 className="text-secondary text-lg">Edit Post</h2>
-        {formError && <div className="text-error">{formError}</div>} */}
         <Form
           id={formId}
           method="post"
           name="performancePost"
-          ref={formRef}
           className="flex flex-col items-center gap-8 w-full max-w-lg"
           action={action}
         >
@@ -108,6 +97,7 @@ export default function EditPerformancePostForm({
             gamepadOptions={gamepadOptions}
             postTagOptions={postTagOptions}
             editorPlaceholderText="Edit Post..."
+            isSubmittingForm={isSubmittingForm}
           />
           <div className="w-full flex gap-x-3 justify-around">
             <RoundedButtonRemixLink
@@ -123,7 +113,6 @@ export default function EditPerformancePostForm({
               {isSubmittingForm ? 'Editing' : 'Edit'}
             </RoundedButton>
           </div>
-
         </Form>
       </PerformancePostFormWrapper>
     </PerformancePostFormStateProvider>
