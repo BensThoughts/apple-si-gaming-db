@@ -21,10 +21,7 @@ export default function SystemSelectMenuCard({
         </RemixUnderlineLink>
       &nbsp;to easily attach system information to your post.
       </div>
-      <SystemSelectMenu
-        systemSpecOptions={systemSpecOptions}
-        defaultSystemSpecId={defaultSystemSpecId}
-      />
+      <SystemSelectMenu systemSpecOptions={systemSpecOptions} />
     </div>
   );
 }
