@@ -4,9 +4,15 @@ import type { GamepadTierRankOption } from '../FormComponents/GamepadRating/Game
 import type { FrameRateTierRankOption } from '../FormComponents/FrameRateRating/FrameRateTierRankRadioGroup';
 import type { RatingTierRankSelectOption } from '../FormComponents/RatingTierRankSelectMenu';
 import type { GamepadListboxOption } from '../FormComponents/GamepadRating/GamepadListbox';
-
-import { initialFrameRateTierRankSelectOption, initialGamepadOption, initialGamepadTierRankOption, initialRatingTierRankSelectOption, initialSystemSpecOption } from './initialValues';
 import type { SystemSpecSelectOption } from '../FormComponents/SystemSelectMenuCard/SystemSelectMenu';
+import {
+  initialFrameRateStuttersValue,
+  initialFrameRateTierRankSelectOption,
+  initialGamepadOption,
+  initialGamepadTierRankOption,
+  initialRatingTierRankSelectOption,
+  initialSystemSpecOption,
+} from './initialFormOptions';
 
 export const PerformancePostFormContext = createContext(null);
 export const PerformancePostDispatchContext = createContext(null);
@@ -23,7 +29,7 @@ type PerformancePostFormState = {
 const initialState: PerformancePostFormState = {
   ratingTierRankSelectedOption: initialRatingTierRankSelectOption,
   frameRateTierRankSelectedOption: initialFrameRateTierRankSelectOption,
-  frameRateStuttersValue: false,
+  frameRateStuttersValue: initialFrameRateStuttersValue,
   gamepadSelectedOption: initialGamepadOption,
   gamepadTierRankSelectedOption: initialGamepadTierRankOption,
   systemSpecSelectedOption: initialSystemSpecOption,
