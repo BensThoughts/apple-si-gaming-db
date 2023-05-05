@@ -4,7 +4,7 @@ import { convertFrameRateTierRankToDescription } from '~/lib/conversions/rating-
 import { PerformancePostFormStateActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
 import type { RadioGroupOption } from '~/components/HeadlessComponents/TailwindRadioGroup';
 import TailwindRadioGroup from '~/components/HeadlessComponents/TailwindRadioGroup';
-import { initialFrameRateTierRankSelectOption } from '../../FormContext/initialValues';
+import { initialFrameRateTierRankSelectOption } from '../../FormContext/initialFormOptions';
 // type ArrayElement<ArrayType extends readonly unknown[]> =
 //   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 

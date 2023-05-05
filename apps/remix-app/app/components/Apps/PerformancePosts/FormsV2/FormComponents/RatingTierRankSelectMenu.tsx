@@ -6,7 +6,7 @@ import { convertRatingTierRankToFullText } from '~/lib/conversions/rating-conver
 import { AwardIcon } from '~/components/Icons/FeatherIcons';
 import { PerformancePostFormStateActions, usePerformancePostFormState } from '../FormContext/PerformancePostFormContext';
 import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
-import { initialRatingTierRankSelectOption } from '../FormContext/initialValues';
+import { initialRatingTierRankSelectOption } from '../FormContext/initialFormOptions';
 
 export type RatingTierRankSelectOption = SelectOption<RatingTierRank | 'None'>;
 

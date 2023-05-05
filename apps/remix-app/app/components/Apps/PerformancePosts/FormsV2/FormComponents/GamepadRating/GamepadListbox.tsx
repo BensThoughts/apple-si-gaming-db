@@ -3,7 +3,7 @@ import { PerformancePostFormStateActions, usePerformancePostFormState } from '..
 import { CheckIcon, ChevronUpIcon } from '~/components/Icons/FeatherIcons';
 import { Listbox, Transition } from '@headlessui/react';
 import { classNames } from '~/lib/css/classNames';
-import { initialGamepadOption } from '../../FormContext/initialValues';
+import { initialGamepadOption } from '../../FormContext/initialFormOptions';
 
 export type GamepadListboxOption = {
   name: string;

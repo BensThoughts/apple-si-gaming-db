@@ -4,7 +4,7 @@ import { convertGamepadTierRankToFullText } from '~/lib/conversions/rating-conve
 // import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
 import type { GamepadTierRank } from '~/types';
 import { PerformancePostFormStateActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
-import { initialGamepadTierRankOption } from '../../FormContext/initialValues';
+import { initialGamepadTierRankOption } from '../../FormContext/initialFormOptions';
 
 export type GamepadTierRankOption = RadioGroupOption<GamepadTierRank | 'None'>;
 

@@ -11,7 +11,7 @@ import type { RatingTierRankSelectOption } from './FormComponents/RatingTierRank
 import type { FrameRateTierRankOption } from './FormComponents/FrameRateRating/FrameRateTierRankRadioGroup';
 import { isTypeFrameRateTierRank, isTypeGamepadTierRank, isTypeRatingTierRank } from '~/lib/form-validators/posts';
 import type { GamepadTierRankOption } from './FormComponents/GamepadRating/GamepadTierRankRadioGroup';
-import { initialGamepadOption } from './FormContext/initialValues';
+import { initialGamepadOption } from './FormContext/initialFormOptions';
 
 function RatingContainer({
   title,
