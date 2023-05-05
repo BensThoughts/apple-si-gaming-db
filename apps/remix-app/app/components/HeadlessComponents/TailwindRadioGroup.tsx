@@ -13,12 +13,14 @@ export default function TailwindRadioGroup<T = string>({
   name,
   options,
   defaultValue,
+  value,
   labelText,
   onChange,
 }: {
-  name: string;
+  name?: string;
   options: RadioGroupOption<T>[];
   defaultValue?: RadioGroupOption<T>;
+  value?: RadioGroupOption<T>;
   labelText: string;
   onChange?(e: RadioGroupOption<T>): void;
 }) {
@@ -32,6 +34,7 @@ export default function TailwindRadioGroup<T = string>({
       name={name}
       by="value"
       defaultValue={defaultValue}
+      value={value}
       onChange={onSelectionChange}
       as="div"
       className="flex flex-col gap-2 w-full max-w-[26rem]"

@@ -13,14 +13,16 @@ export default function SelectMenuWithIcon<T = string>({
   options,
   name,
   defaultValue,
+  value,
   labelText,
   PrimaryIcon,
   SecondaryIcon,
   onChange,
 }: {
   options: SelectOption<T>[];
-  name: string;
-  defaultValue: SelectOption<T>;
+  name?: string;
+  defaultValue?: SelectOption<T>;
+  value?: SelectOption<T>;
   labelText?: string;
   PrimaryIcon: React.ComponentType<BaseSvgIconProps>;
   SecondaryIcon?: React.ComponentType<BaseSvgIconProps>;
@@ -34,7 +36,9 @@ export default function SelectMenuWithIcon<T = string>({
 
   return (
     <Listbox
-      defaultValue={defaultValue}
+      // defaultValue={defaultValue}
+      value={value}
+      by="value"
       name={name}
       onChange={onSelectionChange}
     >
@@ -51,25 +55,25 @@ export default function SelectMenuWithIcon<T = string>({
                        focus-visible:show-ring-tertiary bg-primary
                        hover:bg-primary-highlight h-[38px] flex items-center"
           >
-            {({ value }: { value: SelectOption<T> }) => (
-              <>
-                <span className="flex gap-2 items-center pointer-events-none">
-                  {/* TODO: Is it ok to have the label inside the button? */}
-                  {labelText && (
-                    <Listbox.Label>
-                      {labelText}
-                    </Listbox.Label>
-                  )}
-                  <PrimaryIcon />
-                  {SecondaryIcon && <SecondaryIcon />}
-                  {/* <AwardIcon /> */}
-                  <ChevronUpIcon
-                    className="rotate-180 w-5 h-5 text-gray-400 pr-2 border-r-1 border-r-secondary-highlight"
-                    aria-hidden="true"
-                  />
-                </span>
-              </>
-            )}
+            {/* {({ value }: { value: SelectOption<T> }) => ( */}
+            <>
+              <span className="flex gap-2 items-center pointer-events-none">
+                {/* TODO: Is it ok to have the label inside the button? */}
+                {labelText && (
+                  <Listbox.Label>
+                    {labelText}
+                  </Listbox.Label>
+                )}
+                <PrimaryIcon />
+                {SecondaryIcon && <SecondaryIcon />}
+                {/* <AwardIcon /> */}
+                <ChevronUpIcon
+                  className="rotate-180 w-5 h-5 text-gray-400 pr-2 border-r-1 border-r-secondary-highlight"
+                  aria-hidden="true"
+                />
+              </span>
+            </>
+            {/* )} */}
           </Listbox.Button>
           <Transition
             as="div"

@@ -13,6 +13,7 @@ export default function SelectMenu<T = string>({
   onChange,
   name,
   defaultValue,
+  value,
   labelText,
   fieldError,
   required = false,
@@ -21,7 +22,8 @@ export default function SelectMenu<T = string>({
   options: SelectOption<T>[];
   onChange?(e: SelectOption<T>): void;
   name: string;
-  defaultValue: SelectOption<T>;
+  defaultValue?: SelectOption<T>;
+  value?: SelectOption<T>;
   labelText?: string;
   fieldError?: string;
   required?: boolean;
@@ -36,8 +38,10 @@ export default function SelectMenu<T = string>({
   return (
     <Listbox
       defaultValue={defaultValue}
+      value={value}
       onChange={onSelectionChange}
       name={name}
+      by="value"
     >
       <div>
         {labelText &&
