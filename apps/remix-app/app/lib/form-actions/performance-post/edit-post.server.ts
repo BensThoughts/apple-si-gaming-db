@@ -1,5 +1,5 @@
 import { redirect, json } from '@remix-run/node';
-import type { EditPerformancePostActionData } from './types';
+import type { CreateOrEditPerformancePostActionData } from './types';
 import {
   validatePostText,
   isTypeFrameRateTierRank,
@@ -17,7 +17,7 @@ import { extractFormData } from './extract-form-data';
 import { safeRedirect } from '~/lib/utils.server';
 
 
-const badRequest = (data: EditPerformancePostActionData) => json(data, { status: 400 });
+const badRequest = (data: CreateOrEditPerformancePostActionData) => json(data, { status: 400 });
 
 export async function editPerformancePostAction({
   steamAppId,
@@ -39,6 +39,8 @@ export async function editPerformancePostAction({
   }
   const {
     postText,
+    postHTML,
+    serializedLexicalEditorState,
     ratingTierRank,
     frameRateTierRank,
     frameRateStutters,
@@ -60,6 +62,15 @@ export async function editPerformancePostAction({
   };
   const fields = {
     postText,
+    postHTML: postHTML ? postHTML : undefined,
+    serializedLexicalEditorState: serializedLexicalEditorState ? serializedLexicalEditorState : undefined,
+    ratingTierRank: isTypeRatingTierRank(ratingTierRank) ? ratingTierRank : undefined,
+    frameRateTierRank: isTypeFrameRateTierRank(frameRateTierRank) ? frameRateTierRank : undefined,
+    frameRateStutters,
+    gamepadId,
+    gamepadTierRank: isTypeGamepadTierRank(gamepadTierRank) ? gamepadTierRank : undefined,
+    postTagIds,
+    systemSpecId,
   };
 
   if (Object.values(fieldErrors).some(Boolean)) {
@@ -90,6 +101,8 @@ export async function editPerformancePostAction({
   await updatePerformancePost({
     performancePostId,
     postText,
+    postHTML,
+    serializedLexicalEditorState,
     frameRateTierRank: frameRateTierRank === 'None' ? undefined : frameRateTierRank,
     frameRateStutters,
     ratingTierRank,
