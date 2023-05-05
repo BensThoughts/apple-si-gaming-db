@@ -12,10 +12,10 @@ import {
   validateSystemSpecIdForPost,
 } from '~/lib/form-validators/posts';
 import { createPerformancePost } from '~/models/SteamedApples/performancePost.server';
-import type { CreatePerformancePostActionData } from './types';
+import type { CreateOrEditPerformancePostActionData } from './types';
 import { extractFormData } from './extract-form-data';
 
-export const badRequest = (data: CreatePerformancePostActionData) => json(data, { status: 400 });
+export const badRequest = (data: CreateOrEditPerformancePostActionData) => json(data, { status: 400 });
 
 export async function createPerformancePostAction({
   steamAppId,
@@ -35,6 +35,8 @@ export async function createPerformancePostAction({
   }
   const {
     postText,
+    postHTML,
+    serializedLexicalEditorState,
     ratingTierRank,
     frameRateTierRank,
     frameRateStutters,
@@ -55,40 +57,44 @@ export async function createPerformancePostAction({
   };
   const fields = {
     postText,
-    // ratingTierRank,
-    // gamepadId,
-    // gamepadTierRank,
-    // postTagIds,
-    // frameRateTierRank,
-    // frameRateStutters,
-    // systemSpecId,
+    postHTML: postHTML ? postHTML : undefined,
+    serializedLexicalEditorState: serializedLexicalEditorState ? serializedLexicalEditorState : undefined,
+    ratingTierRank: isTypeRatingTierRank(ratingTierRank) ? ratingTierRank : undefined,
+    frameRateTierRank: isTypeFrameRateTierRank(frameRateTierRank) ? frameRateTierRank : undefined,
+    frameRateStutters,
+    gamepadId,
+    gamepadTierRank: isTypeGamepadTierRank(gamepadTierRank) ? gamepadTierRank : undefined,
+    postTagIds,
+    systemSpecId,
   };
   if (Object.values(fieldErrors).some(Boolean)) {
     return badRequest({ fieldErrors, fields });
   }
   // Used for Typescript type validation, should never return true by this point
   if (!isTypeRatingTierRank(ratingTierRank)) {
-    return { fieldErrors, fields };
+    return badRequest({ fieldErrors, fields });
   }
   // Used for Typescript type validation, should never return true by this point
   if (
     frameRateTierRank !== 'None' &&
     !isTypeFrameRateTierRank(frameRateTierRank)
   ) {
-    return { fieldErrors, fields };
+    return badRequest({ fieldErrors, fields });
   }
   // Used for Typescript type validation, should never return true by this point
   if (
     gamepadTierRank !== 'None' &&
     !isTypeGamepadTierRank(gamepadTierRank)
   ) {
-    return { fieldErrors, fields };
+    return badRequest({ fieldErrors, fields });
   }
 
   await createPerformancePost({
     steamUserId64,
     steamAppId,
     postText,
+    postHTML,
+    serializedLexicalEditorState,
     ratingTierRank,
     frameRateTierRank: frameRateTierRank === 'None' ? undefined : frameRateTierRank,
     frameRateStutters,
