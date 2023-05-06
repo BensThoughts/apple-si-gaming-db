@@ -4,12 +4,14 @@ import type { GamepadTierRankOption } from '../FormComponents/GamepadRating/Game
 import type { FrameRateTierRankOption } from '../FormComponents/FrameRateRating/FrameRateTierRankRadioGroup';
 import type { RatingTierRankSelectOption } from '../FormComponents/RatingTierRankSelectMenu';
 import type { GamepadListboxOption } from '../FormComponents/GamepadRating/GamepadListbox';
+import type { PostTagMultiSelectOption } from '../FormComponents/PostTagMultiSelectMenu';
 import type { SystemSpecSelectOption } from '../FormComponents/SystemSelectMenuCard/SystemSelectMenu';
 import {
   initialFrameRateStuttersValue,
   initialFrameRateTierRankSelectOption,
   initialGamepadOption,
   initialGamepadTierRankOption,
+  initialPostTagMultiSelectOption,
   initialRatingTierRankSelectOption,
   initialSystemSpecOption,
 } from './initialFormOptions';
@@ -23,6 +25,7 @@ type PerformancePostFormState = {
   frameRateStuttersValue: boolean;
   gamepadSelectedOption: GamepadListboxOption; // prop is { "description": string, "id": number } in database
   gamepadTierRankSelectedOption: GamepadTierRankOption;
+  postTagMultiSelectOption: PostTagMultiSelectOption[];
   systemSpecSelectedOption: SystemSpecSelectOption;
 }
 
@@ -33,6 +36,7 @@ const initialState: PerformancePostFormState = {
   gamepadSelectedOption: initialGamepadOption,
   gamepadTierRankSelectedOption: initialGamepadTierRankOption,
   systemSpecSelectedOption: initialSystemSpecOption,
+  postTagMultiSelectOption: initialPostTagMultiSelectOption,
 };
 
 export enum PerformancePostFormStateActions {
@@ -41,6 +45,7 @@ export enum PerformancePostFormStateActions {
   SET_FRAME_RATE_STUTTERS = 'set-frame-rate-stutters',
   SET_GAMEPAD_OPTION = 'set-gamepad-option',
   SET_GAMEPAD_TIER_RANK = 'set-gamepad-tier-rank',
+  SET_POST_TAG_MULTI_SELECT = 'set-post-tag-multi-select',
   SET_SYSTEM_SPEC_OPTION = 'set-system-spec-option',
   RESET_FORM_STATE = 'reset-form-state',
   UPSERT_FORM_STATE = 'upsert-form-state',
@@ -71,6 +76,11 @@ type SetGamepadTierRankAction = {
   payload: GamepadTierRankOption;
 }
 
+type SetPostTagMultiSelectOptionAction = {
+  type: PerformancePostFormStateActions.SET_POST_TAG_MULTI_SELECT;
+  payload: PostTagMultiSelectOption[];
+}
+
 type SetSystemSpecOptionAction = {
   type: PerformancePostFormStateActions.SET_SYSTEM_SPEC_OPTION;
   payload: SystemSpecSelectOption;
@@ -92,6 +102,7 @@ type FormRatingAction =
   | SetFrameRateStuttersAction
   | SetGamepadOptionAction
   | SetGamepadTierRankAction
+  | SetPostTagMultiSelectOptionAction
   | SetSystemSpecOptionAction
   | UpsertFormStateAction
   | ResetFormStateAction
@@ -120,6 +131,11 @@ function performancePostFormReducer(
     }
     case PerformancePostFormStateActions.SET_GAMEPAD_TIER_RANK: {
       return { ...state, gamepadTierRankSelectedOption: action.payload };
+    }
+    case PerformancePostFormStateActions.SET_POST_TAG_MULTI_SELECT: {
+      return {
+        ...state,
+        postTagMultiSelectOption: action.payload };
     }
     case PerformancePostFormStateActions.SET_SYSTEM_SPEC_OPTION: {
       return { ...state, systemSpecSelectedOption: action.payload };
