@@ -1,6 +1,7 @@
 import type { FrameRateTierRankOption } from '../FormComponents/FrameRateRating/FrameRateTierRankRadioGroup';
 import type { GamepadListboxOption } from '../FormComponents/GamepadRating/GamepadListbox';
 import type { GamepadTierRankOption } from '../FormComponents/GamepadRating/GamepadTierRankRadioGroup';
+import type { PostTagMultiSelectOption } from '../FormComponents/PostTagMultiSelectMenu';
 import type { RatingTierRankSelectOption } from '../FormComponents/RatingTierRankSelectMenu';
 import type { SystemSpecSelectOption } from '../FormComponents/SystemSelectMenuCard/SystemSelectMenu';
 
@@ -30,3 +31,5 @@ export const initialSystemSpecOption: SystemSpecSelectOption = {
   name: 'None',
   value: -1,
 };
+
+export const initialPostTagMultiSelectOption: PostTagMultiSelectOption[] = [];
