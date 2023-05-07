@@ -18,16 +18,20 @@ export default function SelectMenu<T = string>({
   fieldError,
   required = false,
   menuSize = 'medium',
+  outlineStyle = false,
+  showLabel = true,
 }: {
   options: SelectOption<T>[];
   onChange?(e: SelectOption<T>): void;
-  name: string;
+  name?: string;
   defaultValue?: SelectOption<T>;
   value?: SelectOption<T>;
   labelText?: string;
   fieldError?: string;
   required?: boolean;
   menuSize?: 'medium' | 'large';
+  outlineStyle?: boolean;
+  showLabel?: boolean;
 }) {
   function onSelectionChange(selection: SelectOption<T>) {
     if (onChange) {
@@ -46,11 +50,11 @@ export default function SelectMenu<T = string>({
       <div>
         {labelText &&
           <Listbox.Label>
-            <span className="text-primary">
+            <span className={`text-primary ${!showLabel ? 'sr-only' : ''}`}>
               {labelText}
             </span>
             {required &&
-              <span className="text-error">
+              <span className={`text-primary ${!showLabel ? 'sr-only' : ''}`}>
                 *
               </span>
             }
@@ -67,9 +71,12 @@ export default function SelectMenu<T = string>({
         {/* TODO: Should we be setting width here with w- (or in each component individually with max-w) */}
         <div className={`relative mt-1.5 ${menuSize === 'medium' ? 'w-72' : 'w-80'}`}>
           <Listbox.Button
-            className="relative py-2 pr-10 pl-3 w-full text-left rounded-lg
-                       cursor-pointer focus-visible:show-ring-tertiary
-                       sm:text-sm bg-primary hover:bg-primary-highlight"
+            className={classNames(
+                'relative py-2 pr-10 pl-3 w-full text-left rounded-lg',
+                'cursor-pointer focus-visible:show-ring-tertiary',
+                'sm:text-sm bg-primary hover:bg-primary-highlight',
+                outlineStyle ? 'border-1 border-secondary-highlight' : '',
+            )}
           >
             {({ value }: { value: SelectOption<T> }) => (
               <>
@@ -94,8 +101,9 @@ export default function SelectMenu<T = string>({
           >
             <Listbox.Options
               className="overflow-auto absolute z-[100] py-1 mt-1 w-full max-h-60
-                         text-base rounded-md bg-primary focus:outline-none
-                         focus:ring-1 focus:ring-secondary sm:text-sm"
+                         sm:max-h-fit text-base rounded-md bg-primary
+                         focus:outline-none focus:ring-1 focus:ring-secondary
+                         sm:text-sm"
             >
               {options.map((option, optionIdx) => (
                 <Listbox.Option
