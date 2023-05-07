@@ -7,12 +7,12 @@ export type {
   SteamUserProfile as PrismaSteamUserProfile,
 
   UserProfile as PrismaUserProfile,
-  UserSystemSpec as PrismaUserSystemSpec,
   UserStats as PrismaUserStats,
+  UserSystemSpec as PrismaUserSystemSpec,
 
-  // PerformancePost,
   PerformancePost as PrismaPerformancePost,
   PerformancePostTag as PrismaPerformancePostTag,
   GamepadMetadata as PrismaGamepadMetadata,
+
   TierRank,
 } from '@apple-si-gaming-db/database';
