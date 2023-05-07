@@ -77,7 +77,7 @@ export function validatePostTagIds(postTagIds: number[]) {
     }
     return false;
   })) {
-    return `${invalidTag} is not a valid tagId`;
+    return `${invalidTag} is not a valid tagId for post tags`;
   }
 }
 
