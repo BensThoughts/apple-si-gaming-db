@@ -3,7 +3,7 @@ import { Link } from '@remix-run/react';
 import { classNames } from '~/lib/css/classNames';
 
 type RoundedButtonRemixLinkProps = {
-  width: 'wide' | 'regular',
+  width?: 'wide' | 'regular',
 } & RemixLinkProps;
 
 export default function RoundedButtonRemixLink({
