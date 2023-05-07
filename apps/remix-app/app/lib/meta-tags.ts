@@ -16,3 +16,26 @@ export const metaTags = {
   'twitter:description': 'Read and write performance reviews about Steam games running on Apple computers',
   'twitter:image': 'https://res.cloudinary.com/bensthoughts/image/upload/v1664943160/apple-silicon-gaming-db/og-images/og-image-home_yxvlgi.png',
 };
+
+// type MetaTag = {
+//   name?: string;
+//   property?: string;
+//   content: string;
+// }
+
+// export const metaTags: MetaTag[] = [
+//   // { title: SITE_TITLE },
+//   { property: 'og:image', content: SITE_IMAGE_URL },
+//   { property: 'og:url', content: SITE_URL },
+//   { property: 'og:type', content: 'website' },
+//   { property: 'og:title', content: SITE_TITLE },
+//   { property: 'og:description', content: SITE_DESCRIPTION },
+//   { name: 'twitter:card', content: 'summary_large_image' },
+//   { name: 'twitter:domain', content: 'steamedapples.com' },
+//   { name: 'twitter:url', content: SITE_URL },
+//   { name: 'twitter:creator', content: '@bensthoughts' },
+//   { name: 'twitter:site', content: '@bensthoughts' },
+//   { name: 'twitter:title', content: SITE_TITLE },
+//   { name: 'twitter:description', content: SITE_DESCRIPTION },
+//   { name: 'twitter:image', content: SITE_IMAGE_URL },
+// ];
