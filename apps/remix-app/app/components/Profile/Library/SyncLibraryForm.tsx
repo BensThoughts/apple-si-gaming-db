@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { SyncOutlineIcon } from '~/components/Icons/FlatIcons/Outline';
 import RoundedButton from '~/components/Buttons/RoundedButton';
 import { showToast } from '~/components/Toasts';
-import type { LibraryActionData } from '~/routes/profile/library';
+import type { LibraryActionData } from '~/routes/profile.library';
 
 export default function SyncLibraryForm() {
   const fetcher = useFetcher<LibraryActionData>();
