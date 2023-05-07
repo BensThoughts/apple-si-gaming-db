@@ -8,6 +8,9 @@ processes = []
 [deploy]
   release_command = "yarn run db:migrate:deploy"
 
+# [build]
+  # image = "registry.fly.io/steamed-apples-staging-remix-app@sha256:eb1ff8db59322487301229c1c09cf44c331beb402d540357f8245e6d35c0cc11"
+
 [env]
   NODE_ENV = "production"
   REMIX_APP_PORT = "8080"
