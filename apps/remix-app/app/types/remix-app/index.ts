@@ -11,6 +11,7 @@ export type { TierRank };
 export * from './AppLoadContext';
 export * from './PassportSteamUser';
 export * from './PerformancePost';
+export * from './SearchFormState';
 export * from './SteamApp';
 export * from './UserSession';
 export * from './SystemSpec';

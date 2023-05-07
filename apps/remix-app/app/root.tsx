@@ -179,6 +179,17 @@ function Document({
     >
       <head>
         {title ? <title>{title}</title> : null}
+        {/* <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        {theme && <meta name="color-scheme" content={theme === Theme.LIGHT ? 'light dark' : 'dark light'} />}
+        {metaTags.map((metaTag, idx) => (
+          <meta
+            key={`${metaTag.content}_${idx}`}
+            property={metaTag.property ? metaTag.property : undefined}
+            name={metaTag.name ? metaTag.name : undefined}
+            content={metaTag.content}
+          />
+        ))} */}
         <script src="https://outstanding-phone.steamedapples.com/script.js" data-spa="auto" data-site="OXJZWIXK" defer></script>
         <Meta />
         <Links />
