@@ -1,3 +1,4 @@
+// @ts-nocheck
 import MultiSelectMenu from '~/components/FormComponents/MultiSelectMenu';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
 import type { PostTagOption } from '~/types/remix-app';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import TextArea from '~/components/FormComponents/TextArea';
 
 export default function PerformancePostTextArea({

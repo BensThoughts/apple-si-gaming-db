@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Form } from '@remix-run/react';
 import RoundedButton from '~/components/Buttons/RoundedButton';
 import { useEffect, useRef } from 'react';
@@ -7,29 +8,23 @@ import type {
   RatingTierRank,
   FrameRateTierRank,
   GamepadTierRank,
-  PostTagOption,
-  GamepadOption,
   SystemSpecOption,
 } from '~/types/remix-app';
 import PerformancePostFormWrapper from './PerformancePostFormWrapper';
 import BasePerformancePostFormFields from './BasePerformancePostFormFields';
-import RoundedButtonRemixLink from '~/components/Buttons/RoundedButtonRemixLink';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
-import { EditPostURLParams } from '~/lib/enums/URLSearchParams/EditPost';
 
-interface EditPerformancePostFormProps {
-  performancePostId: number;
+interface CreatePerformancePostFormProps {
   steamAppId: number;
-  formError?: string;
   fields?: { // used for defaultValue options
     postText?: string;
     frameRateTierRank?: FrameRateTierRank | null;
     frameRateStutters?: boolean;
     ratingTierRank?: RatingTierRank;
+    // systemName?: string;
     postTagsIds?: number[];
     gamepadId?: number;
     gamepadTierRank?: GamepadTierRank | null;
-    systemSpecId?: number;
   };
   fieldErrors?: {
     postText?: string;
@@ -40,14 +35,20 @@ interface EditPerformancePostFormProps {
     gamepadId?: string;
     gamepadTierRank?: string;
   };
+  formError?: string;
   isSubmittingForm: boolean;
-  postTagOptions: PostTagOption[];
-  gamepadOptions: GamepadOption[];
-  redirectToAfterEdit: string | null;
+  postTagOptions: {
+    id: number;
+    description: string;
+  }[];
+  gamepadOptions: {
+    id: number;
+    description: string;
+  }[];
+  steamUserProfileOwnsApp: boolean;
 }
 
-export default function EditPerformancePostForm({
-  performancePostId,
+export default function CreatePerformancePostForm({
   steamAppId,
   fields,
   formError,
@@ -55,8 +56,8 @@ export default function EditPerformancePostForm({
   isSubmittingForm,
   postTagOptions,
   gamepadOptions,
-  redirectToAfterEdit,
-}: EditPerformancePostFormProps) {
+  steamUserProfileOwnsApp,
+}: CreatePerformancePostFormProps) {
   const { userSession } = useUserSession();
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -73,17 +74,15 @@ export default function EditPerformancePostForm({
     }
   }, [formError]);
 
-  // This should never trigger, the server redirects
-  // on the route that shows this form if this is the case
   if (!userSession) {
     return (
       <PerformancePostFormWrapper>
         <div>
-          You are not logged in. You must&nbsp;
+          You are not logged in with Steam. You must&nbsp;
           <RemixUnderlineLink to="/profile">
             login
           </RemixUnderlineLink>
-          &nbsp;to edit a performance review.
+          &nbsp;to post a performance review for this app.
         </div>
       </PerformancePostFormWrapper>
     );
@@ -91,31 +90,34 @@ export default function EditPerformancePostForm({
 
   const { userProfile } = userSession;
 
+  if (!steamUserProfileOwnsApp) {
+    return (
+      <PerformancePostFormWrapper>
+        <div className="w-full">
+          It looks like you do not own this app yet. Please add it to your steam library to leave a
+          performance review. (You may need to re-sync library as well)
+        </div>
+      </PerformancePostFormWrapper>
+    );
+  }
+
   const systemSpecOptions: SystemSpecOption[] = userProfile.systemSpecs
       .map(({ systemSpecId, systemName }) => ({ id: systemSpecId, systemName }));
 
-  const formId = `${steamAppId}-EditPerformancePost`;
-  let action = `/apps/${steamAppId}/posts/edit/${performancePostId}`;
-  if (redirectToAfterEdit) {
-    const params = new URLSearchParams([
-      [EditPostURLParams.REDIRECT_TO_AFTER_EDIT, redirectToAfterEdit],
-    ]);
-    action = action.concat(`?${params.toString()}`);
-  }
+  const formId = `${steamAppId}-CreatePerformancePost`;
   return (
     <PerformancePostFormWrapper>
-      <h2 className="text-secondary text-lg">Edit Post</h2>
+      <h2 className="text-secondary text-lg">Create Post</h2>
       {formError && <div className="text-error">{formError}</div>}
       <Form
         id={formId}
         method="post"
         name="performancePost"
         ref={formRef}
-        className="flex flex-col items-center gap-8 w-full max-w-lg"
-        action={action}
+        className="flex flex-col items-center gap-6 w-full max-w-lg"
+        action={`/apps/${steamAppId}/posts`}
       >
-        <input type="hidden" name="_performancePostAction" value="editPerformancePost" />
-        <input type="hidden" name="performancePostId" value={performancePostId} />
+        <input type="hidden" name="_performancePostAction" value="createPerformancePost" />
         <BasePerformancePostFormFields
           systemSpecOptions={systemSpecOptions}
           gamepadOptions={gamepadOptions}
@@ -123,21 +125,9 @@ export default function EditPerformancePostForm({
           fields={fields}
           fieldErrors={fieldErrors}
         />
-        <div className="w-full flex gap-x-3 justify-around">
-          <RoundedButtonRemixLink
-            to={redirectToAfterEdit ? redirectToAfterEdit : `/apps/${steamAppId}/posts/`}
-            className="focus-visible:show-ring-tertiary"
-          >
-            Cancel
-          </RoundedButtonRemixLink>
-          <RoundedButton
-            type="submit"
-            className="max-w-xs focus-visible:show-ring-tertiary"
-            disabled={isSubmittingForm}>
-            {isSubmittingForm ? 'Editing' : 'Edit'}
-          </RoundedButton>
-        </div>
-
+        <RoundedButton type="submit" disabled={isSubmittingForm} className="focus-visible:show-ring-tertiary">
+          {isSubmittingForm ? 'Creating' : 'Create'}
+        </RoundedButton>
       </Form>
     </PerformancePostFormWrapper>
   );

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { SelectOption } from '~/components/FormComponents/SelectMenu';
 import { convertFrameRateTierRankToDescription } from '~/lib/conversions/rating-conversions';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState } from 'react';
 import ToggleSwitch from '~/components/FormComponents/ToggleSwitch';
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
