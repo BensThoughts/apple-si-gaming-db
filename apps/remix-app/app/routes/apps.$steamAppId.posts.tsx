@@ -10,8 +10,8 @@ import { findAllGamepads } from '~/models/SteamedApples/gamepadMetadata.server';
 import { createPerformancePostAction } from '~/lib/form-actions/performance-post/create-post.server';
 import type {
   PerformancePost,
-} from '~/types';
-import type { PostTagOption, GamepadOption } from '~/types';
+} from '~/types/remix-app';
+import type { PostTagOption, GamepadOption } from '~/types/remix-app';
 import { getIsLoggedIn, getUserIds, requireUserIds } from '~/lib/sessions/profile-session.server';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';

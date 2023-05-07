@@ -1,7 +1,7 @@
 import TierRankContainer from './CardComponents/TierRankContainer';
 import type {
   PerformancePost,
-} from '~/types';
+} from '~/types/remix-app';
 import PerformancePostUserBadge from './CardComponents/UserBadge';
 import LikeButton from '~/components/Buttons/LikeButton';
 import SystemSpecsPopover from '~/components/HeadlessComponents/SystemSpecPopover';

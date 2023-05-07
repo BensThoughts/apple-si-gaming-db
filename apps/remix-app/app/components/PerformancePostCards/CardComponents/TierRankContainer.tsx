@@ -1,6 +1,6 @@
 import type {
   PerformancePost,
-} from '~/types';
+} from '~/types/remix-app';
 import {
   convertFrameRateTierRankToDescription,
   convertGamepadTierRankToDescription,

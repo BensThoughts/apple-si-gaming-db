@@ -1,4 +1,4 @@
-import type { FrameRateTierRank, GamepadTierRank, RatingTierRank } from '~/types';
+import type { FrameRateTierRank, GamepadTierRank, RatingTierRank } from '~/types/remix-app';
 import {
   convertFrameRateTierRankToNumber,
   convertGamepadTierRankToNumber,

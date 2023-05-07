@@ -1,7 +1,7 @@
 import PerformancePostCard from '~/components/PerformancePostCards/PerformancePostCard';
 import type {
   PerformancePost,
-} from '~/types';
+} from '~/types/remix-app';
 import { Fragment } from 'react';
 
 type PerformancePostLayoutProps = {

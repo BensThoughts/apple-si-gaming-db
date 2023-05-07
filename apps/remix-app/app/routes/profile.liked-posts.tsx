@@ -5,7 +5,7 @@ import { useLoaderData } from '@remix-run/react';
 import LikedPostsLayout from '~/components/Profile/LikedPosts/LikedPostsLayout';
 import type {
   PerformancePost,
-} from '~/types';
+} from '~/types/remix-app';
 import { requireUserIds } from '~/lib/sessions/profile-session.server';
 
 interface ProfilePostsRouteLoaderData {

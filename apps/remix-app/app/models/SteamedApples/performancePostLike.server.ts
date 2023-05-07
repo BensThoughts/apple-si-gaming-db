@@ -1,7 +1,7 @@
 import prisma from '~/lib/database/db.server';
 import type {
   PerformancePost,
-} from '~/types';
+} from '~/types/remix-app';
 import { isTypeFrameRateTierRank, isTypeGamepadTierRank } from '~/lib/form-validators/posts';
 
 

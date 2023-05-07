@@ -5,7 +5,7 @@ import type {
   FrameRateTierRank,
   GamepadTierRank,
   AveragePerformancePostRating,
-} from '~/types';
+} from '~/types/remix-app';
 import type {
   PrismaPerformancePost,
   PrismaSteamApp,

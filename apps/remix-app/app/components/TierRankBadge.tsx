@@ -1,5 +1,5 @@
 import { classNames } from '~/lib/css/classNames';
-import type { TierRank } from '~/types';
+import type { TierRank } from '~/types/remix-app';
 import { convertTierRankToName } from '~/lib/conversions/rating-conversions';
 
 export default function TierRankBadge({

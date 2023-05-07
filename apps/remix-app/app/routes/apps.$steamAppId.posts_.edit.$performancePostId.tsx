@@ -3,7 +3,7 @@ import type { ActionArgs } from '@remix-run/node';
 import type { LoaderArgs } from '@remix-run/node';
 import type {
   PerformancePost,
-} from '~/types';
+} from '~/types/remix-app';
 import { validatePerformancePostId, validateSteamAppId } from '~/lib/loader-functions/params-validators.server';
 import { didSteamUserProfileCreatePerformancePost, findPerformancePostById } from '~/models/SteamedApples/performancePost.server';
 import { useActionData, useCatch, useLoaderData, useNavigation } from '@remix-run/react';
@@ -11,7 +11,7 @@ import { findPostTags } from '~/models/SteamedApples/performancePostTag.server';
 import { findAllGamepads } from '~/models/SteamedApples/gamepadMetadata.server';
 import PerformancePostCard from '~/components/PerformancePostCards/PerformancePostCard';
 import { editPerformancePostAction } from '~/lib/form-actions/performance-post/edit-post.server';
-import type { PostTagOption, GamepadOption } from '~/types';
+import type { PostTagOption, GamepadOption } from '~/types/remix-app';
 import { requireUserIds } from '~/lib/sessions/profile-session.server';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';

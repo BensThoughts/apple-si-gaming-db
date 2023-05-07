@@ -1,6 +1,6 @@
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
 import SystemSelectMenu from './SystemSelectMenu';
-import type { SystemSpecOption } from '~/types';
+import type { SystemSpecOption } from '~/types/remix-app';
 
 export default function SystemSelectMenuCard({
   systemSpecOptions,

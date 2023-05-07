@@ -1,7 +1,7 @@
 // import SelectMenu from '~/components/FormComponents/SelectMenu';
 import SelectMenuWithIcon from '~/components/FormComponents/SelectMenuWithIcon';
 import type { SelectOption } from '~/components/FormComponents/SelectMenuWithIcon';
-import type { RatingTierRank } from '~/types';
+import type { RatingTierRank } from '~/types/remix-app';
 import { convertRatingTierRankToFullText } from '~/lib/conversions/rating-conversions';
 import { AwardIcon } from '~/components/Icons/FeatherIcons';
 import { PerformancePostFormStateActions, usePerformancePostFormState } from '../FormContext/PerformancePostFormContext';

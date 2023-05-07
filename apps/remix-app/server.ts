@@ -7,7 +7,7 @@ import type { GetLoadContextFunction } from '@remix-run/express';
 import passport from 'passport';
 import SteamStrategy from 'passport-steam';
 import session from 'cookie-session';
-import type { ExtendedAppLoadContext, PassportSteamUser } from '~/types';
+import type { ExtendedAppLoadContext, PassportSteamUser } from '~/types/remix-app';
 import {
   convertPassportSteamUserToAppLoadContextSteamUser,
 } from '~/lib/data-utils/appLoadContext.server';

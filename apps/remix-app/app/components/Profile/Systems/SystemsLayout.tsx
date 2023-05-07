@@ -5,7 +5,7 @@ import type {
 } from '~/lib/form-actions/profile/interfaces';
 import CreateSystemForm from './CreateSystemForm';
 import SystemSpecDisplay from './SystemSpecDisplay';
-import type { SystemSpec } from '~/types';
+import type { SystemSpec } from '~/types/remix-app';
 
 interface SystemSpecLayoutProps {
   systemSpecs: SystemSpec[];

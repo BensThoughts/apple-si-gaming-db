@@ -1,5 +1,5 @@
 import type { PrismaUserSystemSpec } from '~/types/database';
-import type { SteamSystemSpec } from '~/types';
+import type { SteamSystemSpec } from '~/types/remix-app';
 import prisma from '~/lib/database/db.server';
 import type { UserSystemSpec } from '@apple-si-gaming-db/database';
 

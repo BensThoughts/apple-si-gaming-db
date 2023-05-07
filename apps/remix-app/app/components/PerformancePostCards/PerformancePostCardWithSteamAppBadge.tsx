@@ -1,4 +1,4 @@
-import type { PerformancePost } from '~/types';
+import type { PerformancePost } from '~/types/remix-app';
 import TierRankContainer from '~/components/PerformancePostCards/CardComponents/TierRankContainer';
 import EditButton from '~/components/Buttons/EditButton';
 import SystemSpecsPopover from '~/components/HeadlessComponents/SystemSpecPopover';

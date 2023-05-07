@@ -1,6 +1,6 @@
 import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { SelectOption } from '~/components/FormComponents/SelectMenu';
-import type { RatingTierRank } from '~/types';
+import type { RatingTierRank } from '~/types/remix-app';
 import { convertRatingTierRankToFullText } from '~/lib/conversions/rating-conversions';
 
 // type ArrayElement<ArrayType extends readonly unknown[]> =

@@ -1,4 +1,4 @@
-import type { TrendingSteamApp } from '~/types';
+import type { TrendingSteamApp } from '~/types/remix-app';
 import TrendingSteamAppCard from './TrendingSteamAppCard';
 
 export default function TrendingSteamAppsSection({

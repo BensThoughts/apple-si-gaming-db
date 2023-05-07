@@ -1,5 +1,5 @@
 // import SelectMenu from '~/components/FormComponents/SelectMenu';
-import type { FrameRateTierRank } from '~/types';
+import type { FrameRateTierRank } from '~/types/remix-app';
 import { convertFrameRateTierRankToDescription } from '~/lib/conversions/rating-conversions';
 import { PerformancePostFormStateActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
 import type { RadioGroupOption } from '~/components/HeadlessComponents/TailwindRadioGroup';

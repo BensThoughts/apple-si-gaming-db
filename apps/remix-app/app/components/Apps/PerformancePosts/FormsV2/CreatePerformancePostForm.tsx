@@ -5,7 +5,7 @@ import { showToast } from '~/components/Toasts';
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
 import type {
   SystemSpecOption,
-} from '~/types';
+} from '~/types/remix-app';
 import PerformancePostFormWrapper from './PerformancePostFormWrapper';
 import BasePerformancePostFormFields from './BasePerformancePostFormFields';
 import { useUserSession } from '~/lib/hooks/useMatchesData';

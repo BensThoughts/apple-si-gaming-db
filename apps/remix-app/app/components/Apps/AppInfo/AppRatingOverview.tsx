@@ -1,4 +1,4 @@
-import type { AveragePerformancePostRating } from '~/types';
+import type { AveragePerformancePostRating } from '~/types/remix-app';
 import {
   convertFrameRateTierRankToDescription,
   convertGamepadTierRankToDescription,

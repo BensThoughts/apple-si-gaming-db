@@ -1,7 +1,7 @@
 import { Popover } from '@headlessui/react';
 import { usePopper } from 'react-popper';
 import { useState } from 'react';
-import type { SystemSpec } from '~/types';
+import type { SystemSpec } from '~/types/remix-app';
 import { classNames } from '~/lib/css/classNames';
 import { HardDriveIcon } from '~/components/Icons/FeatherIcons';
 

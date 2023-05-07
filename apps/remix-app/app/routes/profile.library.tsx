@@ -7,7 +7,7 @@ import {
   updateSteamUserProfileOwnedSteamApps,
 } from '~/models/Steam/steamUserProfile.server';
 import { requireUserIds } from '~/lib/sessions/profile-session.server';
-import type { SteamAppForSmallAppsGridLayout } from '~/types';
+import type { SteamAppForSmallAppsGridLayout } from '~/types/remix-app';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
 

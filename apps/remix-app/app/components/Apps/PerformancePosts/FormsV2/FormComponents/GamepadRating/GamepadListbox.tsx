@@ -1,4 +1,4 @@
-import type { GamepadOption } from '~/types';
+import type { GamepadOption } from '~/types/remix-app';
 import { PerformancePostFormStateActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
 import { CheckIcon, ChevronUpIcon } from '~/components/Icons/FeatherIcons';
 import { Listbox, Transition } from '@headlessui/react';

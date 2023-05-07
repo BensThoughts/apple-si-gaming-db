@@ -8,7 +8,7 @@ import MultiSelectMenu from '~/components/FormComponents/MultiSelectMenu';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
 import type {
   SearchFormState,
-} from '~/routes/search/index';
+} from '~/types/remix-app';
 import { SearchFormURLParams } from '~/lib/enums/URLSearchParams/Search';
 
 const FORM_NAME = 'game-search-form';

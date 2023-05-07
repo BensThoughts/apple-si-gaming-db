@@ -1,7 +1,7 @@
 import MultiSelectMenu from '~/components/FormComponents/MultiSelectMenu';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
 import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
-import type { PostTagOption } from '~/types';
+import type { PostTagOption } from '~/types/remix-app';
 import { PerformancePostFormStateActions, usePerformancePostFormState } from '../FormContext/PerformancePostFormContext';
 import type { ActionMeta } from 'react-select';
 

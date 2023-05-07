@@ -1,4 +1,4 @@
-import type { PerformancePost } from '~/types';
+import type { PerformancePost } from '~/types/remix-app';
 import { useState } from 'react';
 import PerformancePostVerticalCard from '~/components/PerformancePostCards/PerformancePostVerticalCard';
 import MaterialInputOutlined from '~/components/FormComponents/MaterialInputOutlined';

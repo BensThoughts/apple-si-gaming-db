@@ -2,7 +2,7 @@ import type {
   SystemSpecOption,
   GamepadOption,
   PostTagOption,
-} from '~/types';
+} from '~/types/remix-app';
 import RatingTierRankSelectMenu, { ratingTierRankOptions } from './FormComponents/RatingTierRankSelectMenu';
 import PostTagMultiSelectMenu from './FormComponents/PostTagMultiSelectMenu';
 import SystemSelectMenuCard from './FormComponents/SystemSelectMenuCard';

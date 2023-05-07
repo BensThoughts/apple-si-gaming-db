@@ -1,6 +1,6 @@
 import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { SelectOption } from '~/components/FormComponents/SelectMenu';
-import type { SystemSpecOption } from '~/types';
+import type { SystemSpecOption } from '~/types/remix-app';
 
 export default function SystemSelectMenu({
   name,

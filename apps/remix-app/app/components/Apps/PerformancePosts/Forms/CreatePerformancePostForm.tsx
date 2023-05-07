@@ -8,7 +8,7 @@ import type {
   FrameRateTierRank,
   GamepadTierRank,
   SystemSpecOption,
-} from '~/types';
+} from '~/types/remix-app';
 import PerformancePostFormWrapper from './PerformancePostFormWrapper';
 import BasePerformancePostFormFields from './BasePerformancePostFormFields';
 import { useUserSession } from '~/lib/hooks/useMatchesData';

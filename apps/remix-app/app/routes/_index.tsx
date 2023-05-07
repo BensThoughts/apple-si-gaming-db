@@ -6,7 +6,7 @@ import PageWrapper from '~/components/Layout/PageWrapper';
 import type {
   TrendingSteamApp,
   PerformancePostForNewPostsCard,
-} from '~/types';
+} from '~/types/remix-app';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
 import FeaturesSection from '~/components/Home/FeaturesSection';

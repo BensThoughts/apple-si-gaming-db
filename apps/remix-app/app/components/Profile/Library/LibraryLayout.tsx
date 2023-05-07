@@ -1,5 +1,5 @@
 import SmallAppsGridLayout from '~/components/SmallAppsGridLayout';
-import type { SteamAppForSmallAppsGridLayout } from '~/types';
+import type { SteamAppForSmallAppsGridLayout } from '~/types/remix-app';
 import SyncLibraryForm from './SyncLibraryForm';
 
 type LibraryLayoutProps = {

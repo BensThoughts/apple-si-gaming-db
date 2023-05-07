@@ -3,7 +3,7 @@ import type {
   AppLoadContextSteamUser,
   ExtendedAppLoadContext,
   PassportSteamUser,
-} from '~/types';
+} from '~/types/remix-app';
 
 export function extractAppLoadContext(context: AppLoadContext): ExtendedAppLoadContext {
   const steamUser = context.steamUser ? context.steamUser as AppLoadContextSteamUser : null;

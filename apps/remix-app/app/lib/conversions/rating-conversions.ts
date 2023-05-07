@@ -3,7 +3,7 @@ import type {
   FrameRateTierRank,
   GamepadTierRank,
   TierRank,
-} from '~/types';
+} from '~/types/remix-app';
 
 export function convertTierRankToName(tierRank: TierRank) {
   switch (tierRank) {

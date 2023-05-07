@@ -15,7 +15,7 @@ import type {
   SteamAppForSmallAppsGridLayout,
   SteamAppForSearchPage,
   SteamApp,
-} from '~/types';
+} from '~/types/remix-app';
 
 import prisma from '~/lib/database/db.server';
 import { logger } from '~/lib/logger/logger.server';

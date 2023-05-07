@@ -1,5 +1,5 @@
 import { classNames } from '~/lib/css/classNames';
-import type { TierRank } from '~/types';
+import type { TierRank } from '~/types/remix-app';
 
 export default function TierRankPill({
   tierRank,

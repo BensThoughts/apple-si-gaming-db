@@ -4,7 +4,7 @@ import ProfilePostsLayout from '~/components/Profile/Posts/ProfilePostsLayout';
 import { useLoaderData } from '@remix-run/react';
 import type {
   PerformancePost,
-} from '~/types';
+} from '~/types/remix-app';
 import { findPerformancePostsBySteamUserId } from '~/models/SteamedApples/performancePost.server';
 import { requireUserIds } from '~/lib/sessions/profile-session.server';
 interface ProfilePostsRouteLoaderData {

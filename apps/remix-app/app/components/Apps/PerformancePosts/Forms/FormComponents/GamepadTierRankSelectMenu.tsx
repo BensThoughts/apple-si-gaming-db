@@ -1,7 +1,7 @@
 import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { SelectOption } from '~/components/FormComponents/SelectMenu';
 import { convertGamepadTierRankToFullText } from '~/lib/conversions/rating-conversions';
-import type { GamepadTierRank } from '~/types';
+import type { GamepadTierRank } from '~/types/remix-app';
 
 export const gamepadRatingOptions: SelectOption<GamepadTierRank | 'None'>[] = [
   {

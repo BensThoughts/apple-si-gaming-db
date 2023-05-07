@@ -1,4 +1,4 @@
-import type { PerformancePostForNewPostsCard } from '~/types';
+import type { PerformancePostForNewPostsCard } from '~/types/remix-app';
 import { Link } from '@remix-run/react';
 import AvatarImage from '~/components/ImageWrappers/AvatarImage';
 import { useState } from 'react';

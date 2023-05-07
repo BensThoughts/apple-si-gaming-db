@@ -1,4 +1,4 @@
-import type { SteamSystemSpec } from '~/types';
+import type { SteamSystemSpec } from '~/types/remix-app';
 
 // TODO: duplicate code between profile and post
 export function validateSystemSpecIdForProfile(systemSpecId: number) {

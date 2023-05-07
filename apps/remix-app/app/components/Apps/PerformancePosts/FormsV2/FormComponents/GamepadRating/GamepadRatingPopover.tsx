@@ -1,6 +1,6 @@
 import TailwindPopover from '~/components/HeadlessComponents/TailwindPopover';
 import { GamepadIcon } from '~/components/Icons/FeatherIcons';
-import type { GamepadOption } from '~/types';
+import type { GamepadOption } from '~/types/remix-app';
 import GamepadTierRankRadioGroup from './GamepadTierRankRadioGroup';
 import GamepadListbox from './GamepadListbox';
 

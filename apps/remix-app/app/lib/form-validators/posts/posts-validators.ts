@@ -2,7 +2,7 @@ import type {
   RatingTierRank,
   FrameRateTierRank,
   GamepadTierRank,
-} from '~/types';
+} from '~/types/remix-app';
 
 
 export function isTypeFrameRateTierRank(

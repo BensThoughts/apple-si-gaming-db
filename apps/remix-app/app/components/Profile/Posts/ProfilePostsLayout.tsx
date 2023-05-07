@@ -1,7 +1,7 @@
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
 import type {
   PerformancePost,
-} from '~/types';
+} from '~/types/remix-app';
 import { Fragment, useState } from 'react';
 import PerformancePostCardWithSteamAppBadge from '~/components/PerformancePostCards/PerformancePostCardWithSteamAppBadge';
 import MaterialInputOutlined from '~/components/FormComponents/MaterialInputOutlined';

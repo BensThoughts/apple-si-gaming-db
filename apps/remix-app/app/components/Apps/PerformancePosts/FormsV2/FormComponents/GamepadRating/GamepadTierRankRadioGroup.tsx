@@ -2,7 +2,7 @@ import type { RadioGroupOption } from '~/components/HeadlessComponents/TailwindR
 import TailwindRadioGroup from '~/components/HeadlessComponents/TailwindRadioGroup';
 import { convertGamepadTierRankToFullText } from '~/lib/conversions/rating-conversions';
 // import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
-import type { GamepadTierRank } from '~/types';
+import type { GamepadTierRank } from '~/types/remix-app';
 import { PerformancePostFormStateActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
 import { initialGamepadTierRankOption } from '../../FormContext/initialFormOptions';
 

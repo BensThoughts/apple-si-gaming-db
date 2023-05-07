@@ -1,7 +1,7 @@
 import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { SelectOption } from '~/components/FormComponents/SelectMenu';
 import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
-import type { SystemSpecOption } from '~/types';
+import type { SystemSpecOption } from '~/types/remix-app';
 import { initialSystemSpecOption } from '../../FormContext/initialFormOptions';
 import { PerformancePostFormStateActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
 

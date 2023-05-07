@@ -1,7 +1,7 @@
 import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
 import { usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
 import GamepadRatingPopover from './GamepadRatingPopover';
-import type { GamepadOption } from '~/types';
+import type { GamepadOption } from '~/types/remix-app';
 
 export default function GamepadRating({
   gamepads,
