@@ -1,12 +1,12 @@
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
 import SystemSelectMenu from './SystemSelectMenu';
-import type { SystemSpecOption } from '~/types/remix-app';
+import type { SystemSpecSelectOption } from './SystemSelectMenu';
 
 export default function SystemSelectMenuCard({
   systemSpecOptions,
   defaultSystemSpecId,
 }: {
-  systemSpecOptions: SystemSpecOption[];
+  systemSpecOptions: SystemSpecSelectOption[];
   defaultSystemSpecId?: number;
 }) {
   return (

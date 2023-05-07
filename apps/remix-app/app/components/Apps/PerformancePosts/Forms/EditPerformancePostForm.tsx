@@ -3,11 +3,6 @@ import RoundedButton from '~/components/Buttons/RoundedButton';
 import { useEffect } from 'react';
 import { showToast } from '~/components/Toasts';
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
-import type {
-  PostTagOption,
-  GamepadOption,
-  SystemSpecOption,
-} from '~/types/remix-app';
 import PerformancePostFormWrapper from './PerformancePostFormWrapper';
 import BasePerformancePostFormFields from './BasePerformancePostFormFields';
 import RoundedButtonRemixLink from '~/components/Buttons/RoundedButtonRemixLink';
@@ -15,6 +10,9 @@ import { useUserSession } from '~/lib/hooks/useMatchesData';
 import { EditPostURLParams } from '~/lib/enums/URLSearchParams/EditPost';
 import { PerformancePostFormStateProvider } from './FormContext/PerformancePostFormContext';
 import type { CreateOrEditPerformancePostActionData } from '~/lib/form-actions/performance-post/types';
+import type { PostTagMultiSelectOption } from './FormComponents/PostTagMultiSelectMenu';
+import type { GamepadSelectOption } from './FormComponents/GamepadRating/GamepadSelectMenu';
+import type { SystemSpecSelectOption } from './FormComponents/SystemSelectMenuCard/SystemSelectMenu';
 
 interface EditPerformancePostFormProps {
   performancePostId: number;
@@ -23,8 +21,8 @@ interface EditPerformancePostFormProps {
   fields?: CreateOrEditPerformancePostActionData['fields'] // used for defaultValue options
   fieldErrors?: CreateOrEditPerformancePostActionData['fieldErrors'];
   isSubmittingForm: boolean;
-  postTagOptions: PostTagOption[];
-  gamepadOptions: GamepadOption[];
+  postTagOptions: PostTagMultiSelectOption[];
+  gamepadOptions: GamepadSelectOption[];
   redirectToAfterEdit: string | null;
 }
 
@@ -65,8 +63,8 @@ export default function EditPerformancePostForm({
 
   const { userProfile } = userSession;
 
-  const systemSpecOptions: SystemSpecOption[] = userProfile.systemSpecs
-      .map(({ systemSpecId, systemName }) => ({ id: systemSpecId, systemName }));
+  const systemSpecOptions: SystemSpecSelectOption[] = userProfile.systemSpecs
+      .map(({ systemSpecId, systemName }) => ({ name: systemName, value: systemSpecId }));
 
   const formId = `${steamAppId}-EditPerformancePost`;
   let action = `/apps/${steamAppId}/posts/edit/${performancePostId}`;

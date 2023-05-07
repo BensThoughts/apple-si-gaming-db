@@ -3,29 +3,22 @@ import RoundedButton from '~/components/Buttons/RoundedButton';
 import { useEffect } from 'react';
 import { showToast } from '~/components/Toasts';
 import RemixUnderlineLink from '~/components/RemixUnderlineLink';
-import type {
-  SystemSpecOption,
-} from '~/types/remix-app';
 import PerformancePostFormWrapper from './PerformancePostFormWrapper';
 import BasePerformancePostFormFields from './BasePerformancePostFormFields';
 import { useUserSession } from '~/lib/hooks/useMatchesData';
 import { PerformancePostFormStateProvider } from './FormContext/PerformancePostFormContext';
 import type { CreateOrEditPerformancePostActionData } from '~/lib/form-actions/performance-post/types';
-
+import type { SystemSpecSelectOption } from './FormComponents/SystemSelectMenuCard/SystemSelectMenu';
+import type { GamepadSelectOption } from './FormComponents/GamepadRating/GamepadSelectMenu';
+import type { PostTagMultiSelectOption } from './FormComponents/PostTagMultiSelectMenu';
 interface CreatePerformancePostFormProps {
   steamAppId: number;
   formError?: CreateOrEditPerformancePostActionData['formError'];
   fieldErrors?: CreateOrEditPerformancePostActionData['fieldErrors'];
   fields?: CreateOrEditPerformancePostActionData['fields']; // used for defaultValue options
   isSubmittingForm: boolean;
-  postTagOptions: {
-    id: number;
-    description: string;
-  }[];
-  gamepadOptions: {
-    id: number;
-    description: string;
-  }[];
+  postTagOptions: PostTagMultiSelectOption[];
+  gamepadOptions: GamepadSelectOption[];
   steamUserProfileOwnsApp: boolean;
 }
 
@@ -74,8 +67,8 @@ export default function CreatePerformancePostForm({
     );
   }
 
-  const systemSpecOptions: SystemSpecOption[] = userProfile.systemSpecs
-      .map(({ systemSpecId, systemName }) => ({ id: systemSpecId, systemName }));
+  const systemSpecOptions: SystemSpecSelectOption[] = userProfile.systemSpecs
+      .map(({ systemSpecId, systemName }) => ({ name: systemName, value: systemSpecId }));
 
   const formId = `${steamAppId}-CreatePerformancePost`;
   return (

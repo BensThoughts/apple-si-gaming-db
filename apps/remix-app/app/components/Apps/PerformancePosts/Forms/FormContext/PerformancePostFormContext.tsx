@@ -3,7 +3,7 @@ import type { Dispatch } from 'react';
 import type { GamepadTierRankOption } from '../FormComponents/GamepadRating/GamepadTierRankRadioGroup';
 import type { FrameRateTierRankOption } from '../FormComponents/FrameRateRating/FrameRateTierRankRadioGroup';
 import type { RatingTierRankSelectOption } from '../FormComponents/RatingTierRankSelectMenu';
-import type { GamepadListboxOption } from '../FormComponents/GamepadRating/GamepadListbox';
+import type { GamepadListboxOption } from '../FormComponents/GamepadRating/GamepadSelectMenu';
 import type { PostTagMultiSelectOption } from '../FormComponents/PostTagMultiSelectMenu';
 import type { SystemSpecSelectOption } from '../FormComponents/SystemSelectMenuCard/SystemSelectMenu';
 import {

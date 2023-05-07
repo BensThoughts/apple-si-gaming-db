@@ -11,19 +11,20 @@ import { findPostTags } from '~/models/SteamedApples/performancePostTag.server';
 import { findAllGamepads } from '~/models/SteamedApples/gamepadMetadata.server';
 import PerformancePostCard from '~/components/PerformancePostCards/PerformancePostCard';
 import { editPerformancePostAction } from '~/lib/form-actions/performance-post/edit-post.server';
-import type { PostTagOption, GamepadOption } from '~/types/remix-app';
 import { requireUserIds } from '~/lib/sessions/profile-session.server';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
 import { EditPostURLParams } from '~/lib/enums/URLSearchParams/EditPost';
 import EditPerformancePostForm from '~/components/Apps/PerformancePosts/Forms/EditPerformancePostForm';
 import { convertRawToTypedPerformancePostFormFields, extractFormData } from '~/lib/form-actions/performance-post/extract-form-data';
+import type { GamepadSelectOption } from '~/components/Apps/PerformancePosts/Forms/FormComponents/GamepadRating/GamepadSelectMenu';
+import type { PostTagMultiSelectOption } from '~/components/Apps/PerformancePosts/Forms/FormComponents/PostTagMultiSelectMenu';
 
 type EditPostLoaderData = {
   steamAppId: number;
   performancePost: PerformancePost;
-  postTagOptions: PostTagOption[];
-  gamepadOptions: GamepadOption[];
+  postTagOptions: PostTagMultiSelectOption[];
+  gamepadOptions: GamepadSelectOption[];
   redirectToAfterEdit: string | null;
 }
 
@@ -38,8 +39,12 @@ export async function loader({ params, request }: LoaderArgs) {
     return redirect(`/apps/${steamAppId}/posts/`);
   }
 
-  const postTagOptions: PostTagOption[] = await findPostTags();
-  const gamepadOptions: GamepadOption[] = await findAllGamepads();
+  const postTags = await findPostTags();
+  const postTagOptions: PostTagMultiSelectOption[] =
+    postTags.map((tag) => ({ label: tag.description, value: tag.id }));
+  const gamepads = await findAllGamepads();
+  const gamepadOptions: GamepadSelectOption[] =
+    gamepads.map((gamepad) => ({ name: gamepad.description, value: gamepad.id }));
   const performancePost = await findPerformancePostById(performancePostId);
   if (!performancePost) {
     return redirect(`/apps/${steamAppId}/posts`);

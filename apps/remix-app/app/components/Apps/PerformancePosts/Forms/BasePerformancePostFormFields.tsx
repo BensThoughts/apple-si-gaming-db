@@ -1,10 +1,6 @@
-import type {
-  SystemSpecOption,
-  GamepadOption,
-  PostTagOption,
-} from '~/types/remix-app';
 import RatingTierRankSelectMenu, { ratingTierRankOptions } from './FormComponents/RatingTierRankSelectMenu';
 import PostTagMultiSelectMenu from './FormComponents/PostTagMultiSelectMenu';
+import type { PostTagMultiSelectOption } from './FormComponents/PostTagMultiSelectMenu';
 import SystemSelectMenuCard from './FormComponents/SystemSelectMenuCard';
 import FormRatingDisplay from './FormRatingDisplay';
 import { Editor } from './FormComponents/LexicalEditor';
@@ -25,7 +21,9 @@ import {
   initialSystemSpecOption,
 } from './FormContext/initialFormOptions';
 import { frameRateTierRankOptions } from './FormComponents/FrameRateRating/FrameRateTierRankRadioGroup';
+import type { GamepadSelectOption } from './FormComponents/GamepadRating/GamepadSelectMenu';
 import { gamepadTierRankOptions } from './FormComponents/GamepadRating/GamepadTierRankRadioGroup';
+import type { SystemSpecSelectOption } from './FormComponents/SystemSelectMenuCard/SystemSelectMenu';
 
 interface BasePerformancePostFormFieldsProps {
   formId: string;
@@ -33,9 +31,9 @@ interface BasePerformancePostFormFieldsProps {
   fieldErrors?: CreateOrEditPerformancePostActionData['fieldErrors'];
   fields?: CreateOrEditPerformancePostActionData['fields']; // used for defaultValue options
   editorPlaceholderText: string;
-  postTagOptions: PostTagOption[];
-  gamepadOptions: GamepadOption[];
-  systemSpecOptions: SystemSpecOption[];
+  postTagOptions: PostTagMultiSelectOption[];
+  gamepadOptions: GamepadSelectOption[];
+  systemSpecOptions: SystemSpecSelectOption[];
   isSubmittingForm: boolean;
 }
 
@@ -59,11 +57,11 @@ export default function BasePerformancePostFormFields({
       const defaultFrameRateTierRankOption = frameRateTierRankOptions
           .find((option) => option.value === fields.frameRateTierRank);
       const defaultGamepadOption = gamepadOptions
-          .find((option) => option.id === fields.gamepadId);
+          .find((option) => option.value === fields.gamepadId);
       const defaultGamepadTierRankOption = gamepadTierRankOptions
           .find((option) => option.value === fields.gamepadTierRank);
       const defaultSystemSpecOption = systemSpecOptions
-          .find((option) => option.id === fields.systemSpecId);
+          .find((option) => option.value === fields.systemSpecId);
       dispatch({
         type: PerformancePostFormStateActions.UPSERT_FORM_STATE,
         payload: {
@@ -77,18 +75,18 @@ export default function BasePerformancePostFormFields({
             ? fields.frameRateStutters
             : initialFrameRateStuttersValue,
           gamepadSelectedOption: defaultGamepadOption
-            ? { name: defaultGamepadOption.description, value: defaultGamepadOption.id }
+            ? { name: defaultGamepadOption.name, value: defaultGamepadOption.value }
             : initialGamepadOption,
           gamepadTierRankSelectedOption: defaultGamepadTierRankOption
             ? defaultGamepadTierRankOption
             : initialGamepadTierRankOption,
           postTagMultiSelectOption: fields.postTagIds
             ? postTagOptions
-                .filter((option) => fields.postTagIds?.includes(option.id))
-                .map((option) => ({ label: option.description, value: option.id }))
+                .filter((option) => fields.postTagIds?.includes(option.value))
+                .map((option) => ({ label: option.label, value: option.value }))
             : initialPostTagMultiSelectOption,
           systemSpecSelectedOption: defaultSystemSpecOption
-            ? { name: defaultSystemSpecOption.systemName, value: defaultSystemSpecOption.id }
+            ? { name: defaultSystemSpecOption.name, value: defaultSystemSpecOption.value }
             : initialSystemSpecOption,
         },
       });
@@ -121,7 +119,7 @@ export default function BasePerformancePostFormFields({
       <FormRatingDisplay />
       <PostTagMultiSelectMenu
         formId={formId} // TODO: Change to appropriate ID
-        postTags={postTagOptions}
+        postTagOptions={postTagOptions}
       />
       <SystemSelectMenuCard
         systemSpecOptions={systemSpecOptions}

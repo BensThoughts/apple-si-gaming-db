@@ -11,7 +11,8 @@ import { createPerformancePostAction } from '~/lib/form-actions/performance-post
 import type {
   PerformancePost,
 } from '~/types/remix-app';
-import type { PostTagOption, GamepadOption } from '~/types/remix-app';
+import type { PostTagMultiSelectOption } from '~/components/Apps/PerformancePosts/Forms/FormComponents/PostTagMultiSelectMenu';
+import type { GamepadSelectOption } from '~/components/Apps/PerformancePosts/Forms/FormComponents/GamepadRating/GamepadSelectMenu';
 import { getIsLoggedIn, getUserIds, requireUserIds } from '~/lib/sessions/profile-session.server';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
@@ -31,8 +32,8 @@ interface PerformancePostLoaderData {
   steamAppId: number;
   steamUserProfileOwnsApp: boolean;
   performancePosts: PerformancePost[];
-  postTagOptions: PostTagOption[];
-  gamepadOptions: GamepadOption[];
+  postTagOptions: PostTagMultiSelectOption[];
+  gamepadOptions: GamepadSelectOption[];
 }
 
 export async function loader({ params, request }: LoaderArgs) {
@@ -41,12 +42,14 @@ export async function loader({ params, request }: LoaderArgs) {
   const isLoggedIn = await getIsLoggedIn(request);
   const { steamUserId64 } = await getUserIds(request);
   let steamUserProfileOwnsApp = false;
-  let postTagOptions: PostTagOption[] = [];
-  let gamepadOptions: GamepadOption[] = [];
+  let postTagOptions: PostTagMultiSelectOption[] = [];
+  let gamepadOptions: GamepadSelectOption[] = [];
   if (isLoggedIn && steamUserId64) {
     steamUserProfileOwnsApp = await doesSteamUserOwnApp(steamUserId64, steamAppId);
-    postTagOptions = await findPostTags();
-    gamepadOptions = await findAllGamepads();
+    const postTags = await findPostTags();
+    postTagOptions = postTags.map((tag) => ({ label: tag.description, value: tag.id }));
+    const gamepads = await findAllGamepads();
+    gamepadOptions = gamepads.map((gamepad) => ({ name: gamepad.description, value: gamepad.id }));
   }
   return json<PerformancePostLoaderData>({
     steamAppId,

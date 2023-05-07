@@ -1,7 +1,6 @@
 import SelectMenu from '~/components/FormComponents/SelectMenu';
 import type { SelectOption } from '~/components/FormComponents/SelectMenu';
 import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
-import type { SystemSpecOption } from '~/types/remix-app';
 import { initialSystemSpecOption } from '../../FormContext/initialFormOptions';
 import { PerformancePostFormStateActions, usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
 
@@ -10,16 +9,9 @@ export type SystemSpecSelectOption = SelectOption<number>;
 export default function SystemSelectMenu({
   systemSpecOptions,
 }: {
-  systemSpecOptions: SystemSpecOption[];
+  systemSpecOptions: SystemSpecSelectOption[];
 }) {
   const { state, dispatch } = usePerformancePostFormState();
-  const systemNameOptions: SystemSpecSelectOption[] = systemSpecOptions.map((option) => (
-    {
-      name: option.systemName,
-      value: option.id,
-    }
-  ));
-  systemNameOptions.unshift(initialSystemSpecOption);
 
   function onSelectionChange(selection: SystemSpecSelectOption) {
     dispatch({
@@ -32,7 +24,7 @@ export default function SystemSelectMenu({
     <SelectMenu
       name={PerformancePostFormFieldNames.SystemSpecId}
       value={state.systemSpecSelectedOption}
-      options={systemNameOptions}
+      options={[initialSystemSpecOption, ...systemSpecOptions]}
       labelText="System"
       onChange={onSelectionChange}
     />

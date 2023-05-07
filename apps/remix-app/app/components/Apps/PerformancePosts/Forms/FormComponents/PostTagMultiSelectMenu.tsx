@@ -1,7 +1,6 @@
 import MultiSelectMenu from '~/components/FormComponents/MultiSelectMenu';
 import type { MultiSelectOption } from '~/components/FormComponents/MultiSelectMenu';
 import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
-import type { PostTagOption } from '~/types/remix-app';
 import { PerformancePostFormStateActions, usePerformancePostFormState } from '../FormContext/PerformancePostFormContext';
 import type { ActionMeta } from 'react-select';
 
@@ -28,11 +27,11 @@ function isTypePostTagMultiSelectOptionArray(option: unknown): option is PostTag
 
 export default function PostTagMultiSelectMenu({
   formId,
-  postTags,
+  postTagOptions,
   // defaultPostTagIds,
 }: {
   formId: string;
-  postTags: PostTagOption[];
+  postTagOptions: PostTagMultiSelectOption[];
 }) {
   const { state, dispatch } = usePerformancePostFormState();
 
@@ -45,13 +44,6 @@ export default function PostTagMultiSelectMenu({
     }
   };
 
-  const postTagOptions: PostTagMultiSelectOption[] = postTags.map((tag) => (
-    {
-      label: tag.description,
-      value: tag.id,
-    }
-  ));
-  // const defaultValue = postTagOptions.filter((option) => defaultPostTagIds?.includes(option.value));
   return (
     <MultiSelectMenu
       name={PerformancePostFormFieldNames.PostTagIds}

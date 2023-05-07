@@ -1,5 +1,5 @@
 import type { FrameRateTierRankOption } from '../FormComponents/FrameRateRating/FrameRateTierRankRadioGroup';
-import type { GamepadListboxOption } from '../FormComponents/GamepadRating/GamepadListbox';
+import type { GamepadListboxOption } from '../FormComponents/GamepadRating/GamepadSelectMenu';
 import type { GamepadTierRankOption } from '../FormComponents/GamepadRating/GamepadTierRankRadioGroup';
 import type { PostTagMultiSelectOption } from '../FormComponents/PostTagMultiSelectMenu';
 import type { RatingTierRankSelectOption } from '../FormComponents/RatingTierRankSelectMenu';
