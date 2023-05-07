@@ -134,7 +134,6 @@ export default function SearchForm({
                 // defaultValue={fields ? fields.searchGenreIds : undefined}
                 openMenuOnFocus={false}
                 closeMenuOnSelect={true}
-                isMulti
               />
             </div>
             <div className="w-full">
@@ -148,7 +147,6 @@ export default function SearchForm({
                 // defaultValue={fields ? fields.searchCategoryIds : undefined}
                 openMenuOnFocus={false}
                 closeMenuOnSelect={true}
-                isMulti
               />
             </div>
           </div>
