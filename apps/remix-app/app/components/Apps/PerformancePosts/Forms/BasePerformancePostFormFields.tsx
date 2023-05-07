@@ -24,7 +24,7 @@ import {
   initialRatingTierRankSelectOption,
   initialSystemSpecOption,
 } from './FormContext/initialFormOptions';
-import { frameRateAverageOptions } from '../Forms/FormComponents/FrameRateTierRankSelectMenu';
+import { frameRateTierRankOptions } from './FormComponents/FrameRateRating/FrameRateTierRankRadioGroup';
 import { gamepadTierRankOptions } from './FormComponents/GamepadRating/GamepadTierRankRadioGroup';
 
 interface BasePerformancePostFormFieldsProps {
@@ -56,7 +56,7 @@ export default function BasePerformancePostFormFields({
     if (fields) {
       const defaultRatingTierRankOption = ratingTierRankOptions
           .find((option) => option.value === fields.ratingTierRank);
-      const defaultFrameRateTierRankOption = frameRateAverageOptions
+      const defaultFrameRateTierRankOption = frameRateTierRankOptions
           .find((option) => option.value === fields.frameRateTierRank);
       const defaultGamepadOption = gamepadOptions
           .find((option) => option.id === fields.gamepadId);

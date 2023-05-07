@@ -11,7 +11,7 @@ import { initialFrameRateTierRankSelectOption } from '../../FormContext/initialF
 
 export type FrameRateTierRankOption = RadioGroupOption<FrameRateTierRank | 'None'>;
 
-const frameRateOptions: FrameRateTierRankOption[] = [
+export const frameRateTierRankOptions: FrameRateTierRankOption[] = [
   initialFrameRateTierRankSelectOption,
   {
     name: convertFrameRateTierRankToDescription('STier'),
@@ -53,7 +53,7 @@ export default function FrameRateTierRankRadioGroup() {
 
   return (
     <TailwindRadioGroup
-      options={frameRateOptions}
+      options={frameRateTierRankOptions}
       labelText="Frame Rate Tier Rank"
       value={state.frameRateTierRankSelectedOption}
       onChange={onSelectionChange}
