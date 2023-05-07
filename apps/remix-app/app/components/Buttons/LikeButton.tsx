@@ -23,7 +23,7 @@ export default function LikeButton({
 
   const isSubmittingLike =
     fetcher.state === 'submitting' &&
-    fetcher.submission.action === '/actions/like-post';
+    fetcher.formAction === '/actions/like-post';
 
   function onLikeClick() {
     if (isUserProfileLoggedIn) {
