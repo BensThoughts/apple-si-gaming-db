@@ -15,7 +15,7 @@ import type { PostTagOption, GamepadOption } from '~/types/remix-app';
 import { getIsLoggedIn, getUserIds, requireUserIds } from '~/lib/sessions/profile-session.server';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
-import CreatePerformancePostForm from '~/components/Apps/PerformancePosts/FormsV2/CreatePerformancePostForm';
+import CreatePerformancePostForm from '~/components/Apps/PerformancePosts/Forms/CreatePerformancePostForm';
 import { convertRawToTypedPerformancePostFormFields, extractFormData } from '~/lib/form-actions/performance-post/extract-form-data';
 // import CreatePerformancePostForm from '~/components/Apps/PerformancePosts/FormsV2/CreatePerformancePostForm';
 // import { links as draftEditorLinks } from '~/components/Apps/PerformancePosts/FormsV2/FormComponents/DraftEditor/DraftEditor';

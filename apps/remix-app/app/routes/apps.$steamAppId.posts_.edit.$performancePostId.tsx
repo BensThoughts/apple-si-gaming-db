@@ -16,7 +16,7 @@ import { requireUserIds } from '~/lib/sessions/profile-session.server';
 import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
 import { EditPostURLParams } from '~/lib/enums/URLSearchParams/EditPost';
-import EditPerformancePostForm from '~/components/Apps/PerformancePosts/FormsV2/EditPerformancePostForm';
+import EditPerformancePostForm from '~/components/Apps/PerformancePosts/Forms/EditPerformancePostForm';
 import { convertRawToTypedPerformancePostFormFields, extractFormData } from '~/lib/form-actions/performance-post/extract-form-data';
 
 type EditPostLoaderData = {
