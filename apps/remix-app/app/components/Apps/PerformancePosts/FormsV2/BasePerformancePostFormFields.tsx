@@ -20,6 +20,7 @@ import {
   initialFrameRateTierRankSelectOption,
   initialGamepadOption,
   initialGamepadTierRankOption,
+  initialPostTagMultiSelectOption,
   initialRatingTierRankSelectOption,
   initialSystemSpecOption,
 } from './FormContext/initialFormOptions';
@@ -29,8 +30,8 @@ import { gamepadTierRankOptions } from './FormComponents/GamepadRating/GamepadTi
 interface BasePerformancePostFormFieldsProps {
   formId: string;
   formError?: CreateOrEditPerformancePostActionData['formError'];
-  fields?: CreateOrEditPerformancePostActionData['fields']; // used for defaultValue options
   fieldErrors?: CreateOrEditPerformancePostActionData['fieldErrors'];
+  fields?: CreateOrEditPerformancePostActionData['fields']; // used for defaultValue options
   editorPlaceholderText: string;
   postTagOptions: PostTagOption[];
   gamepadOptions: GamepadOption[];
@@ -81,6 +82,11 @@ export default function BasePerformancePostFormFields({
           gamepadTierRankSelectedOption: defaultGamepadTierRankOption
             ? defaultGamepadTierRankOption
             : initialGamepadTierRankOption,
+          postTagMultiSelectOption: fields.postTagIds
+            ? postTagOptions
+                .filter((option) => fields.postTagIds?.includes(option.id))
+                .map((option) => ({ label: option.description, value: option.id }))
+            : initialPostTagMultiSelectOption,
           systemSpecSelectedOption: defaultSystemSpecOption
             ? { name: defaultSystemSpecOption.systemName, value: defaultSystemSpecOption.id }
             : initialSystemSpecOption,
@@ -95,7 +101,7 @@ export default function BasePerformancePostFormFields({
         payload: undefined,
       });
     }
-  }, [dispatch, fields, gamepadOptions, systemSpecOptions]);
+  }, [dispatch, fields, gamepadOptions, systemSpecOptions, postTagOptions]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -116,8 +122,6 @@ export default function BasePerformancePostFormFields({
       <PostTagMultiSelectMenu
         formId={formId} // TODO: Change to appropriate ID
         postTags={postTagOptions}
-        defaultPostTagIds={fields?.postTagIds}
-        fieldError={fieldErrors?.postTagIds}
       />
       <SystemSelectMenuCard
         systemSpecOptions={systemSpecOptions}
