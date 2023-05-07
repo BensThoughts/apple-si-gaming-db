@@ -4,6 +4,7 @@ import type {
   StylesConfig,
   // Props,
   InputProps,
+  ActionMeta,
 } from 'react-select';
 import Select, { components } from 'react-select';
 
@@ -40,7 +41,7 @@ const styles: StylesConfig = {
   valueContainer: (styles) => ({ ...styles }),
 };
 
-export interface MultiSelectOption<T = string | number> {
+export interface MultiSelectOption<T = number> {
   label: string;
   value: T;
 }
@@ -66,12 +67,13 @@ const Input = ({ children, ...props }: InputProps) => {
   );
 };
 
-export default function MultiSelectMenu<T>({
+export default function MultiSelectMenu<T = number>({
   name,
   id,
   options,
   defaultValue,
-  isMulti = false,
+  value,
+  onChange,
   openMenuOnFocus = false,
   closeMenuOnSelect = true,
   labelText,
@@ -83,7 +85,8 @@ export default function MultiSelectMenu<T>({
   id?: string;
   options: MultiSelectOption<T>[];
   defaultValue?: MultiSelectOption<T>[]; // This is only good on multiSelect
-  isMulti?: boolean;
+  value?: MultiSelectOption<T>[]; // This is only good on multiSelect
+  onChange?: ((newValue: unknown, actionMeta: ActionMeta<unknown>) => void) | undefined
   openMenuOnFocus?: boolean;
   closeMenuOnSelect?: boolean;
   labelText?: string;
@@ -91,6 +94,11 @@ export default function MultiSelectMenu<T>({
   required?: boolean;
   placeholderText?: string;
 }) {
+  const onSelectionChange = (newValue: unknown, actionMeta: ActionMeta<unknown>) => {
+    if (onChange) {
+      onChange(newValue, actionMeta);
+    }
+  };
   return (
     <div>
       {labelText && (
@@ -122,10 +130,12 @@ export default function MultiSelectMenu<T>({
               instanceId={`instanceId-${id}`}
               inputId={`inputId-${id}`}
               openMenuOnFocus={openMenuOnFocus}
-              isMulti={isMulti}
+              isMulti={true}
               name={name}
               options={options}
               defaultValue={defaultValue}
+              value={value}
+              onChange={onSelectionChange}
               closeMenuOnSelect={closeMenuOnSelect}
               styles={styles}
               placeholder={placeholderText}
