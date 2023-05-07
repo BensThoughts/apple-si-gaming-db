@@ -72,21 +72,6 @@ export type PerformancePostForNewPostsCard = {
   }
 }
 
-export interface GamepadOption {
-  id: number;
-  description: string;
-}
-
-export interface PostTagOption {
-  id: number;
-  description: string;
-}
-
-export interface SystemSpecOption {
-  id: number;
-  systemName: string;
-}
-
 export type AveragePerformancePostRating = {
   avgRatingTierRank?: RatingTierRank;
   avgFrameRateTierRank?: FrameRateTierRank;
