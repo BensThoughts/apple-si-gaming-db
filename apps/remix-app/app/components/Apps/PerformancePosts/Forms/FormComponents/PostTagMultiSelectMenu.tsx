@@ -30,7 +30,6 @@ export default function PostTagMultiSelectMenu({
       options={postTagOptions}
       defaultValue={defaultValue}
       fieldError={fieldError}
-      isMulti={true}
       closeMenuOnSelect={false}
     />
   );
