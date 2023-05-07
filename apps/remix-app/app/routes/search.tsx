@@ -168,7 +168,7 @@ function PageButtons({
     <div className="flex justify-between w-full">
       {page > 1 &&
         <RoundedButtonRemixLink
-          width="long"
+          width="wide"
           to={`/search?${prevPageSearchParams.toString()}`}
           className="w-32"
         >
@@ -177,7 +177,7 @@ function PageButtons({
       }
       {hasNextPage &&
         <RoundedButtonRemixLink
-          width="long"
+          width="wide"
           to={`/search?${nextPageSearchParams.toString()}`}
           className="ml-auto w-32"
         >
