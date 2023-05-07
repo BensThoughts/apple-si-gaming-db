@@ -29,7 +29,7 @@ export default function EditButton({
     ? matches[matches.length - 1]
     : undefined;
   const currentlyOnEditPage =
-    deepestMatch && deepestMatch.id === 'routes/apps/$steamAppId/posts.edit.$performancePostId'
+    deepestMatch && deepestMatch.id === 'routes/apps.$steamAppId.posts_.edit.$performancePostId'
       ? true
       : false;
   if (currentlyOnEditPage) {
