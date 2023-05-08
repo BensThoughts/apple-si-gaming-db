@@ -20,9 +20,11 @@ export type PerformancePostFormFieldErrors ={
 }
 
 export type PerformancePostFormFieldsTyped = {
-  postText?: string;
-  postHTML?: string;
-  serializedLexicalEditorState?: string;
+  postContent?: {
+    postText: string;
+    postHTML?: string;
+    serializedLexicalEditorState: string;
+  }
   ratingTierRank?: RatingTierRank;
   frameRateTierRank?: FrameRateTierRank;
   frameRateStutters?: boolean;
@@ -34,9 +36,11 @@ export type PerformancePostFormFieldsTyped = {
 
 // This is from FormData (with some casting to number in a few cases)
 export type PerformancePostFormFieldsRaw = {
-  postText: string;
-  postHTML: string;
-  serializedLexicalEditorState: string;
+  postContent: {
+    postText: string;
+    postHTML: string;
+    serializedLexicalEditorState: string;
+  }
   ratingTierRank: string;
   frameRateTierRank: string;
   frameRateStutters: boolean;
