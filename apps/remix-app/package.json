@@ -25,6 +25,7 @@
     "@apple-si-gaming-db/steam-api": "*",
     "@headlessui/react": "^1.7.14",
     "@lexical/code": "^0.10.0",
+    "@lexical/headless": "^0.10.0",
     "@lexical/html": "^0.10.0",
     "@lexical/link": "^0.10.0",
     "@lexical/list": "^0.10.0",
