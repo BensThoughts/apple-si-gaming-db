@@ -109,11 +109,14 @@ export default function BasePerformancePostFormFields({
         <GamepadRating gamepads={gamepadOptions} />
       </div>
       <Editor
-        defaultState={{
-          postText: fields?.postText ? fields.postText : '',
-          postHTML: fields?.postHTML,
-          serializedLexicalEditorState: fields?.serializedLexicalEditorState,
-        }}
+        defaultState={
+          fields &&
+          fields.postContent
+            ? {
+              postText: fields.postContent.postText,
+              postHTML: fields.postContent.postHTML,
+              serializedLexicalEditorState: fields.postContent.serializedLexicalEditorState,
+            } : undefined}
         placeholderText={editorPlaceholderText}
       />
       <FormRatingDisplay />
