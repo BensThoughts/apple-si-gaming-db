@@ -1,5 +1,5 @@
 import type { FrameRateTierRankOption } from '../FormComponents/FrameRateRating/FrameRateTierRankRadioGroup';
-import type { GamepadListboxOption } from '../FormComponents/GamepadRating/GamepadSelectMenu';
+import type { GamepadSelectOption } from '../FormComponents/GamepadRating/GamepadSelectMenu';
 import type { GamepadTierRankOption } from '../FormComponents/GamepadRating/GamepadTierRankRadioGroup';
 import type { PostTagMultiSelectOption } from '../FormComponents/PostTagMultiSelectMenu';
 import type { RatingTierRankSelectOption } from '../FormComponents/RatingTierRankSelectMenu';
@@ -17,7 +17,7 @@ export const initialFrameRateTierRankSelectOption: FrameRateTierRankOption = {
   value: 'None',
 };
 
-export const initialGamepadOption: GamepadListboxOption = {
+export const initialGamepadOption: GamepadSelectOption = {
   name: 'None',
   value: -1,
 };

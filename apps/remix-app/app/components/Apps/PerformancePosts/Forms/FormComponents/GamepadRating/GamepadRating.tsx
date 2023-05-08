@@ -1,12 +1,12 @@
 import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
 import { usePerformancePostFormState } from '../../FormContext/PerformancePostFormContext';
 import GamepadRatingPopover from './GamepadRatingPopover';
-import type { GamepadOption } from '~/types/remix-app';
+import type { GamepadSelectOption } from './GamepadSelectMenu';
 
 export default function GamepadRating({
   gamepads,
 }: {
-  gamepads: GamepadOption[];
+  gamepads: GamepadSelectOption[];
 }) {
   const { state } = usePerformancePostFormState();
   return (

@@ -3,7 +3,7 @@ import type { Dispatch } from 'react';
 import type { GamepadTierRankOption } from '../FormComponents/GamepadRating/GamepadTierRankRadioGroup';
 import type { FrameRateTierRankOption } from '../FormComponents/FrameRateRating/FrameRateTierRankRadioGroup';
 import type { RatingTierRankSelectOption } from '../FormComponents/RatingTierRankSelectMenu';
-import type { GamepadListboxOption } from '../FormComponents/GamepadRating/GamepadSelectMenu';
+import type { GamepadSelectOption } from '../FormComponents/GamepadRating/GamepadSelectMenu';
 import type { PostTagMultiSelectOption } from '../FormComponents/PostTagMultiSelectMenu';
 import type { SystemSpecSelectOption } from '../FormComponents/SystemSelectMenuCard/SystemSelectMenu';
 import {
@@ -23,7 +23,7 @@ type PerformancePostFormState = {
   ratingTierRankSelectedOption: RatingTierRankSelectOption;
   frameRateTierRankSelectedOption: FrameRateTierRankOption;
   frameRateStuttersValue: boolean;
-  gamepadSelectedOption: GamepadListboxOption; // prop is { "description": string, "id": number } in database
+  gamepadSelectedOption: GamepadSelectOption; // prop is { "description": string, "id": number } in database
   gamepadTierRankSelectedOption: GamepadTierRankOption;
   postTagMultiSelectOption: PostTagMultiSelectOption[];
   systemSpecSelectedOption: SystemSpecSelectOption;
@@ -68,7 +68,7 @@ type SetFrameRateStuttersAction = {
 
 type SetGamepadOptionAction = {
   type: PerformancePostFormStateActions.SET_GAMEPAD_OPTION;
-  payload: GamepadListboxOption;
+  payload: GamepadSelectOption;
 }
 
 type SetGamepadTierRankAction = {
