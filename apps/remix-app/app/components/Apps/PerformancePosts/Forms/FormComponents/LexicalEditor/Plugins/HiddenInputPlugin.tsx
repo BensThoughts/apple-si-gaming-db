@@ -8,24 +8,12 @@ import { $generateHtmlFromNodes } from '@lexical/html';
 import { PerformancePostFormFieldNames } from '~/lib/enums/FormFields/PerformancePost';
 import { $getRoot } from 'lexical';
 
-export function debounce<F extends(...params: any[]) => void>(
-    fn: F,
-    delay: number,
-) {
-  let timeoutID: number | undefined;
-  return function(this: any, ...args: any[]) {
-    clearTimeout(timeoutID);
-    // eslint-disable-next-line no-invalid-this
-    timeoutID = window.setTimeout(() => fn.apply(this, args), delay);
-  } as F;
-}
-
 type HiddenInputPluginProps = {
   // namespace: string;
   defaultState: {
     postText: string;
     postHTML?: string;
-    serializedLexicalEditorState?: string;
+    serializedLexicalEditorState: string;
   }
 };
 
@@ -38,24 +26,22 @@ export function HiddenInputPlugin({
   },
 }: HiddenInputPluginProps) {
   const [editor] = useLexicalComposerContext();
-  const [editorState, setEditorState] = useState(serializedLexicalEditorState ? serializedLexicalEditorState : '{}');
+  const [editorState, setEditorState] = useState(serializedLexicalEditorState);
   const [editorHTML, setEditorHTML] = useState(postHTML ? postHTML : '');
   const [editorText, setEditorText] = useState(postText);
 
-  // const saveEditorState = useCallback(
-  //     (serializedState: string) => {
-  //       setEditorState(serializedState);
-  //       localStorage.setItem(namespace, serializedState);
-  //     },
-  //     [namespace],
-  // );
-
-  // const debouncedSaveEditorState = debounce(saveEditorState, 500);
+  useEffect(() => {
+    return editor.update(() => {
+      const htmlString = $generateHtmlFromNodes(editor);
+      setEditorHTML(htmlString);
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     return editor.registerUpdateListener(
         ({ editorState, dirtyElements, dirtyLeaves }) => {
-        // Don't update if nothing changed
+          // Don't update if nothing changed
           if (dirtyElements.size === 0 && dirtyLeaves.size === 0) return;
 
           const serializedState = JSON.stringify(editorState);
@@ -94,3 +80,25 @@ export function HiddenInputPlugin({
     </>
   );
 }
+
+// export function debounce<F extends(...params: any[]) => void>(
+//     fn: F,
+//     delay: number,
+// ) {
+//   let timeoutID: number | undefined;
+//   return function(this: any, ...args: any[]) {
+//     clearTimeout(timeoutID);
+//     // eslint-disable-next-line no-invalid-this
+//     timeoutID = window.setTimeout(() => fn.apply(this, args), delay);
+//   } as F;
+// }
+
+// const saveEditorState = useCallback(
+//     (serializedState: string) => {
+//       setEditorState(serializedState);
+//       localStorage.setItem(namespace, serializedState);
+//     },
+//     [namespace],
+// );
+
+// const debouncedSaveEditorState = debounce(saveEditorState, 500);
