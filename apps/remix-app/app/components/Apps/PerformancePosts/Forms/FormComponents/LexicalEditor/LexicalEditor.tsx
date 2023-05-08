@@ -12,7 +12,6 @@ import { classNames } from '~/lib/css/classNames';
 import { ToolbarPlugin } from './Plugins/ToolbarPlugin';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { HiddenInputPlugin } from './Plugins/HiddenInputPlugin';
-// import { $createParagraphNode, $createTextNode, $getRoot } from 'lexical';
 
 const EDITOR_NODES = [
   CodeNode,
@@ -35,7 +34,7 @@ export function LexicalEditor({
   defaultState: {
     postText: string;
     postHTML?: string;
-    serializedLexicalEditorState?: string;
+    serializedLexicalEditorState: string;
   }
   placeholderText?: string;
   lexicalEditorProps: LexicalEditorProps;
@@ -53,10 +52,8 @@ export function LexicalEditor({
         // placeholder={(isEditable) => isEditable ? <Placeholder /> : null}
         ErrorBoundary={LexicalErrorBoundary}
       />
-      <HiddenInputPlugin
-        defaultState={defaultState}
-        // namespace={config.namespace}
-      />
+      <HiddenInputPlugin defaultState={defaultState} />
+
       <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
       <OnChangePlugin onChange={(editorState) => {
 
@@ -78,41 +75,22 @@ const Placeholder = ({
 };
 
 const EDITOR_NAMESPACE = 'lexical-editor';
+const BLANK_SERIALIZED_EDITOR_STATE = `{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`;
 
 export function Editor({
   defaultState,
   placeholderText,
 }: {
-  defaultState: {
+  defaultState?: {
     postText: string;
     postHTML?: string;
-    serializedLexicalEditorState?: string;
+    serializedLexicalEditorState: string;
   };
   placeholderText?: string;
 }) {
-  // const [content, setContent] = useState<string | null>(null);
-
-  // useEffect(() => {
-  //   if (localStorage && !content) {
-  //     setContent(localStorage.getItem(EDITOR_NAMESPACE));
-  //   }
-  // }, [content]);
-
-  // console.log(content);
-
-  // const createInitialEditorState = () => {
-  //   if (defaultState.serializedLexicalEditorState) return defaultState.serializedLexicalEditorState;
-  //   const paragraph = $createParagraphNode();
-  //   const text = $createTextNode(defaultState.postText);
-  //   paragraph.append(text);
-  //   const root = $getRoot().append(paragraph);
-  //   root.selectEnd();
-  // };
-
-  // TODO: Change to programmatically create editor state when only postText exists
-  const initialEditorState = defaultState.serializedLexicalEditorState
+  const initialSerializedEditorState = defaultState
     ? defaultState.serializedLexicalEditorState
-    : `{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"${defaultState.postText}","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`;
+    : BLANK_SERIALIZED_EDITOR_STATE;
 
   return (
     <div
@@ -128,12 +106,16 @@ export function Editor({
       )}
     >
       <LexicalEditor
-        defaultState={defaultState}
+        defaultState={defaultState ? defaultState : {
+          postText: '',
+          postHTML: undefined,
+          serializedLexicalEditorState: initialSerializedEditorState,
+        }}
         placeholderText={placeholderText}
         lexicalEditorProps={{
           config: {
             namespace: EDITOR_NAMESPACE,
-            editorState: initialEditorState,
+            editorState: initialSerializedEditorState,
             // editorState: content,
             nodes: EDITOR_NODES,
             theme: {
@@ -156,3 +138,22 @@ export function Editor({
     </div>
   );
 }
+
+// const [content, setContent] = useState<string | null>(null);
+
+// useEffect(() => {
+//   if (localStorage && !content) {
+//     setContent(localStorage.getItem(EDITOR_NAMESPACE));
+//   }
+// }, [content]);
+
+// console.log(content);
+
+// const createInitialEditorState = () => {
+//   if (defaultState.serializedLexicalEditorState) return defaultState.serializedLexicalEditorState;
+//   const paragraph = $createParagraphNode();
+//   const text = $createTextNode(defaultState.postText);
+//   paragraph.append(text);
+//   const root = $getRoot().append(paragraph);
+//   root.selectEnd();
+// };
