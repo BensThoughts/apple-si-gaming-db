@@ -4,10 +4,8 @@ import type { SystemSpecSelectOption } from './SystemSelectMenu';
 
 export default function SystemSelectMenuCard({
   systemSpecOptions,
-  defaultSystemSpecId,
 }: {
   systemSpecOptions: SystemSpecSelectOption[];
-  defaultSystemSpecId?: number;
 }) {
   return (
     <div
@@ -15,7 +13,7 @@ export default function SystemSelectMenuCard({
                md:border-1 md:border-secondary-highlight p-4"
     >
       <div className="text-primary-faded">
-      You can choose to select a system from your&nbsp;
+      You can select a system from your&nbsp;
         <RemixUnderlineLink to="/profile/systems">
         profile
         </RemixUnderlineLink>
