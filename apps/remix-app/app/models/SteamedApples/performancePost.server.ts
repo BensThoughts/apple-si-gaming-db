@@ -5,6 +5,7 @@ import type {
   FrameRateTierRank,
   GamepadTierRank,
   AveragePerformancePostRating,
+  PerformancePostForEditRoute,
 } from '~/types/remix-app';
 import type {
   PrismaPerformancePost,
@@ -19,6 +20,7 @@ import prisma from '~/lib/database/db.server';
 import { isTypeFrameRateTierRank, isTypeGamepadTierRank } from '~/lib/form-validators/posts';
 import { findSystemSpecForPostBySystemSpecId } from './userSystemSpecs.server';
 import { getAverageFrameRateTierRank, getAverageGamepadTierRank, getAverageRatingTierRank, getPercentPostsStutters } from '~/lib/conversions/rating-averages';
+import { plainTextToLexicalState } from '~/lib/form-actions/performance-post/plaintTextToLexicalState.server';
 
 
 export async function createPerformancePost({
@@ -638,7 +640,7 @@ export async function updatePerformancePost({
 
 export async function findPerformancePostById(
     performancePostId: number,
-): Promise<PerformancePost | undefined> {
+): Promise<PerformancePostForEditRoute | undefined> {
   const performancePost = await prisma.performancePost.findUnique({
     where: {
       id: performancePostId,
@@ -731,12 +733,15 @@ export async function findPerformancePostById(
     systemVideoPrimaryVRAM,
     systemMemoryRAM,
   } = performancePost;
+  const serializedEditorState = serializedLexicalEditorState
+    ? serializedLexicalEditorState
+    : await plainTextToLexicalState(postText);
   return {
     performancePostId: id,
     createdAt: createdAt.toDateString(),
     postText,
     postHTML: postHTML ? postHTML : undefined,
-    serializedLexicalEditorState: serializedLexicalEditorState ? serializedLexicalEditorState : undefined,
+    serializedLexicalEditorState: serializedEditorState,
     steamApp: {
       steamAppId,
       name,
