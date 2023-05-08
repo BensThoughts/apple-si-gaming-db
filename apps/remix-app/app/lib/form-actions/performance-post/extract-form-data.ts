@@ -56,9 +56,11 @@ export function extractFormData(formData: FormData): {
 
   return {
     fieldsRaw: {
-      postText,
-      postHTML: DOMPurify.sanitize(postHTML), // TODO: is this computationally intensive?
-      serializedLexicalEditorState,
+      postContent: {
+        postText,
+        postHTML: DOMPurify.sanitize(postHTML), // TODO: is this computationally intensive?
+        serializedLexicalEditorState,
+      },
       frameRateTierRank,
       frameRateStutters: frameRateStutters === 'true' ? true : false,
       ratingTierRank,
