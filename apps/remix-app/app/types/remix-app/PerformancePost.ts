@@ -12,13 +12,11 @@ import type {
 
 //  type Expand<T> = T extends infer O ? { [K in keyof O]: O[K] } : never;
 
-
 export type PerformancePost = {
   performancePostId: number;
   createdAt: string;
   postText: string;
   postHTML?: string;
-  serializedLexicalEditorState?: string;
   rating: {
     ratingTierRank: RatingTierRank;
     frameRateTierRank?: FrameRateTierRank;
@@ -58,6 +56,9 @@ export type PerformancePost = {
   numLikes: number;
 }
 
+export type PerformancePostForEditRoute = PerformancePost & {
+  serializedLexicalEditorState: string;
+}
 
 export type PerformancePostForNewPostsCard = {
   performancePostId: number;
