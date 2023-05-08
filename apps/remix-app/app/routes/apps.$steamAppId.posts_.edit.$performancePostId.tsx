@@ -2,7 +2,7 @@ import { json, redirect } from '@remix-run/node';
 import type { ActionArgs } from '@remix-run/node';
 import type { LoaderArgs } from '@remix-run/node';
 import type {
-  PerformancePost,
+  PerformancePostForEditRoute,
 } from '~/types/remix-app';
 import { validatePerformancePostId, validateSteamAppId } from '~/lib/loader-functions/params-validators.server';
 import { didSteamUserProfileCreatePerformancePost, findPerformancePostById } from '~/models/SteamedApples/performancePost.server';
@@ -22,7 +22,7 @@ import type { PostTagMultiSelectOption } from '~/components/Apps/PerformancePost
 
 type EditPostLoaderData = {
   steamAppId: number;
-  performancePost: PerformancePost;
+  performancePost: PerformancePostForEditRoute;
   postTagOptions: PostTagMultiSelectOption[];
   gamepadOptions: GamepadSelectOption[];
   redirectToAfterEdit: string | null;
@@ -107,7 +107,6 @@ export default function EditPerformancePostRoute() {
       systemSpecId,
     },
   } = performancePost;
-
   const actionData = useActionData<typeof action>();
   const navigation = useNavigation();
   const performancePostNavigationFormData = navigation.formData
@@ -134,9 +133,11 @@ export default function EditPerformancePostRoute() {
             : actionData?.fields
               ? actionData.fields
               : {
-                postText,
-                postHTML,
-                serializedLexicalEditorState,
+                postContent: {
+                  postText,
+                  postHTML,
+                  serializedLexicalEditorState,
+                },
                 ...performancePost.rating,
                 ratingTierRank: rating.ratingTierRank,
                 frameRateTierRank: rating.frameRateTierRank,
