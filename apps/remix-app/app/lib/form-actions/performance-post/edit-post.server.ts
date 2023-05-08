@@ -16,7 +16,6 @@ import { updatePerformancePost } from '~/models/SteamedApples/performancePost.se
 import { extractFormData } from './extract-form-data';
 import { safeRedirect } from '~/lib/utils.server';
 
-
 const badRequest = (data: CreateOrEditPerformancePostActionData) => json(data, { status: 400 });
 
 export async function editPerformancePostAction({
@@ -38,9 +37,11 @@ export async function editPerformancePostAction({
     return badRequest({ formError });
   }
   const {
-    postText,
-    postHTML,
-    serializedLexicalEditorState,
+    postContent: {
+      postText,
+      postHTML,
+      serializedLexicalEditorState,
+    },
     ratingTierRank,
     frameRateTierRank,
     frameRateStutters,
@@ -62,8 +63,8 @@ export async function editPerformancePostAction({
   };
   const fields = {
     postText,
-    postHTML: postHTML ? postHTML : undefined,
-    serializedLexicalEditorState: serializedLexicalEditorState ? serializedLexicalEditorState : undefined,
+    postHTML,
+    serializedLexicalEditorState,
     ratingTierRank: isTypeRatingTierRank(ratingTierRank) ? ratingTierRank : undefined,
     frameRateTierRank: isTypeFrameRateTierRank(frameRateTierRank) ? frameRateTierRank : undefined,
     frameRateStutters,

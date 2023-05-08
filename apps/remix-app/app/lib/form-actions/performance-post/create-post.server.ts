@@ -34,9 +34,11 @@ export async function createPerformancePostAction({
     return badRequest({ formError });
   }
   const {
-    postText,
-    postHTML,
-    serializedLexicalEditorState,
+    postContent: {
+      postHTML,
+      postText,
+      serializedLexicalEditorState,
+    },
     ratingTierRank,
     frameRateTierRank,
     frameRateStutters,
@@ -57,8 +59,8 @@ export async function createPerformancePostAction({
   };
   const fields = {
     postText,
-    postHTML: postHTML ? postHTML : undefined,
-    serializedLexicalEditorState: serializedLexicalEditorState ? serializedLexicalEditorState : undefined,
+    postHTML,
+    serializedLexicalEditorState,
     ratingTierRank: isTypeRatingTierRank(ratingTierRank) ? ratingTierRank : undefined,
     frameRateTierRank: isTypeFrameRateTierRank(frameRateTierRank) ? frameRateTierRank : undefined,
     frameRateStutters,
