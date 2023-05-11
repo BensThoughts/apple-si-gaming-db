@@ -25,7 +25,7 @@ export function extractFormData(formData: FormData): {
   const frameRateTierRank = formData.get(PerformancePostFormFieldNames.FrameRateTierRank);
   const frameRateStutters = formData.get(PerformancePostFormFieldNames.FrameRateStutters);
   const ratingTierRank = formData.get(PerformancePostFormFieldNames.RatingTierRank + '[value]');
-  const systemSpecIdData = formData.get(PerformancePostFormFieldNames.SystemSpecId + '[value]');
+  const systemSpecIdData = formData.get(PerformancePostFormFieldNames.SystemSpecId);
   const postTagIdsData = formData.getAll(PerformancePostFormFieldNames.PostTagIds);
   const gamepadIdData = formData.get(PerformancePostFormFieldNames.GamepadId);
   const gamepadTierRank = formData.get(PerformancePostFormFieldNames.GamepadTierRank);
