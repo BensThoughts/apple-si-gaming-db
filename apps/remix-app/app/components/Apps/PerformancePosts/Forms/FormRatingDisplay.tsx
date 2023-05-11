@@ -11,7 +11,7 @@ import type { RatingTierRankSelectOption } from './FormComponents/RatingTierRank
 import type { FrameRateTierRankOption } from './FormComponents/FrameRateRating/FrameRateTierRankRadioGroup';
 import { isTypeFrameRateTierRank, isTypeGamepadTierRank, isTypeRatingTierRank } from '~/lib/form-validators/posts';
 import type { GamepadTierRankOption } from './FormComponents/GamepadRating/GamepadTierRankRadioGroup';
-import { initialGamepadOption } from './FormContext/initialFormOptions';
+import { initialGamepadOption, initialSystemSpecOption } from './FormContext/initialFormOptions';
 
 function RatingContainer({
   title,
@@ -133,6 +133,23 @@ export function GamepadTierRankDisplay({
   );
 }
 
+function SystemSpecDisplay({
+  systemName,
+}: {
+  systemName: string;
+}) {
+  const systemNoneOptionName = initialSystemSpecOption.name;
+  return (
+    <RatingContainer title="System">
+      {systemName === systemNoneOptionName ? (
+        <TextPill>None Given</TextPill>
+      ) : (
+        <TextPill>{systemName}</TextPill>
+      )}
+    </RatingContainer>
+  );
+}
+
 export default function FormRatingDisplay() {
   const { state: {
     ratingTierRankSelectedOption,
@@ -140,9 +157,10 @@ export default function FormRatingDisplay() {
     frameRateStuttersValue,
     gamepadSelectedOption,
     gamepadTierRankSelectedOption,
+    systemSpecSelectedOption,
   } } = usePerformancePostFormState();
   return (
-    <div className="flex items-center gap-2 flex-wrap">
+    <div className="flex items-center gap-x-3 gap-y-4 flex-wrap">
       <RatingTierRankDisplay ratingTierRank={ratingTierRankSelectedOption.value} />
       <FrameRateTierRankDisplay
         frameRateTierRank={frameRateTierRankSelectedOption.value}
@@ -153,6 +171,7 @@ export default function FormRatingDisplay() {
         gamepadName={gamepadSelectedOption.name}
         gamepadTierRank={gamepadTierRankSelectedOption.value}
       />
+      <SystemSpecDisplay systemName={systemSpecSelectedOption.name} />
     </div>
   );
 }
