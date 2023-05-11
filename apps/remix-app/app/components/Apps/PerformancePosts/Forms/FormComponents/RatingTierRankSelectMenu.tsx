@@ -58,7 +58,7 @@ export default function RatingTierRankSelectMenu() {
         name={PerformancePostFormFieldNames.RatingTierRank}
         value={state.ratingTierRankSelectedOption}
         options={ratingTierRankOptions}
-        labelText="Tier Rank"
+        labelText="Rank"
         PrimaryIcon={AwardIcon}
         onChange={onSelectionChange}
       />
