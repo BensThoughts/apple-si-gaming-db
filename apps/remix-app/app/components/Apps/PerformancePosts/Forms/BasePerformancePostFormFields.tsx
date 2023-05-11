@@ -1,7 +1,7 @@
 import RatingTierRankSelectMenu, { ratingTierRankOptions } from './FormComponents/RatingTierRankSelectMenu';
 import PostTagMultiSelectMenu from './FormComponents/PostTagMultiSelectMenu';
 import type { PostTagMultiSelectOption } from './FormComponents/PostTagMultiSelectMenu';
-import SystemSelectMenuCard from './FormComponents/SystemSelectMenuCard';
+// import SystemSelectMenuCard from './FormComponents/SystemSelectMenuCard';
 import FormRatingDisplay from './FormRatingDisplay';
 import { Editor } from './FormComponents/LexicalEditor';
 import FrameRateRating from './FormComponents/FrameRateRating';
@@ -24,6 +24,7 @@ import { frameRateTierRankOptions } from './FormComponents/FrameRateRating/Frame
 import type { GamepadSelectOption } from './FormComponents/GamepadRating/GamepadSelectMenu';
 import { gamepadTierRankOptions } from './FormComponents/GamepadRating/GamepadTierRankRadioGroup';
 import type { SystemSpecSelectOption } from './FormComponents/SystemSelectMenuCard/SystemSelectMenu';
+import SystemSelect from './FormComponents/SystemSelect';
 
 interface BasePerformancePostFormFieldsProps {
   formId: string;
@@ -34,7 +35,7 @@ interface BasePerformancePostFormFieldsProps {
   postTagOptions: PostTagMultiSelectOption[];
   gamepadOptions: GamepadSelectOption[];
   systemSpecOptions: SystemSpecSelectOption[];
-  isSubmittingForm: boolean;
+  wasSubmittedSuccessfully: boolean;
 }
 
 export default function BasePerformancePostFormFields({
@@ -46,7 +47,7 @@ export default function BasePerformancePostFormFields({
   postTagOptions,
   gamepadOptions,
   systemSpecOptions,
-  isSubmittingForm,
+  wasSubmittedSuccessfully,
 }: BasePerformancePostFormFieldsProps) {
   const { dispatch } = usePerformancePostFormState();
 
@@ -90,23 +91,28 @@ export default function BasePerformancePostFormFields({
             : initialSystemSpecOption,
         },
       });
-    } else {
-      // TODO: is this safe? fields is not present on initial load
-      // TODO: which is fine because we want a blank (reset) form on initial load
-      // TODO: anyway
+    } else if (wasSubmittedSuccessfully) {
       dispatch({
         type: PerformancePostFormStateActions.RESET_FORM_STATE,
         payload: undefined,
       });
     }
-  }, [dispatch, fields, gamepadOptions, systemSpecOptions, postTagOptions]);
+  }, [
+    dispatch,
+    fields,
+    gamepadOptions,
+    systemSpecOptions,
+    postTagOptions,
+    wasSubmittedSuccessfully,
+  ]);
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex gap-x-2 gap-y-4 justify-between flex-wrap">
+    <div className="flex flex-col gap-4 w-full max-w-xl">
+      <div className="flex gap-x-4 gap-y-4 lg:justify-between flex-wrap">
         <RatingTierRankSelectMenu />
         <FrameRateRating />
         <GamepadRating gamepads={gamepadOptions} />
+        <SystemSelect systemSpecOptions={systemSpecOptions} />
       </div>
       <Editor
         defaultState={
@@ -118,16 +124,16 @@ export default function BasePerformancePostFormFields({
               serializedLexicalEditorState: fields.postContent.serializedLexicalEditorState,
             } : undefined}
         placeholderText={editorPlaceholderText}
+        resetEditorState={wasSubmittedSuccessfully}
       />
       <FormRatingDisplay />
       <PostTagMultiSelectMenu
         formId={formId} // TODO: Change to appropriate ID
         postTagOptions={postTagOptions}
       />
-      <SystemSelectMenuCard
+      {/* <SystemSelectMenuCard
         systemSpecOptions={systemSpecOptions}
-        defaultSystemSpecId={fields?.systemSpecId}
-      />
+      /> */}
       {(formError || fieldErrors) && (
         <div className="w-full flex flex-col gap-2 items-center">
           {formError && <div className="text-error">{formError}</div>}

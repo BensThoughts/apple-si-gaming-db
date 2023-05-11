@@ -20,6 +20,7 @@ interface CreatePerformancePostFormProps {
   postTagOptions: PostTagMultiSelectOption[];
   gamepadOptions: GamepadSelectOption[];
   steamUserProfileOwnsApp: boolean;
+  wasSubmittedSuccessfully: boolean;
 }
 
 export default function CreatePerformancePostForm({
@@ -31,6 +32,7 @@ export default function CreatePerformancePostForm({
   postTagOptions,
   gamepadOptions,
   steamUserProfileOwnsApp,
+  wasSubmittedSuccessfully,
 }: CreatePerformancePostFormProps) {
   const { userSession } = useUserSession();
 
@@ -78,7 +80,7 @@ export default function CreatePerformancePostForm({
           id={formId}
           method="post"
           name="performancePost"
-          className="flex flex-col items-center gap-6 w-full max-w-lg"
+          className="flex flex-col items-center gap-6 w-full max-w-xl"
           action={`/apps/${steamAppId}/posts`}
         >
           <input type="hidden" name="_performancePostAction" value="createPerformancePost" />
@@ -91,7 +93,7 @@ export default function CreatePerformancePostForm({
             gamepadOptions={gamepadOptions}
             postTagOptions={postTagOptions}
             editorPlaceholderText="Create Post..."
-            isSubmittingForm={isSubmittingForm}
+            wasSubmittedSuccessfully={wasSubmittedSuccessfully}
           />
           <RoundedButton type="submit" disabled={isSubmittingForm} className="focus-visible:show-ring-tertiary">
             {isSubmittingForm ? 'Creating' : 'Create'}

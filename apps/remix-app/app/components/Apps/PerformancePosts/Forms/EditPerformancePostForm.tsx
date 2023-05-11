@@ -24,6 +24,7 @@ interface EditPerformancePostFormProps {
   postTagOptions: PostTagMultiSelectOption[];
   gamepadOptions: GamepadSelectOption[];
   redirectToAfterEdit: string | null;
+  wasSubmittedSuccessfully: boolean;
 }
 
 export default function EditPerformancePostForm({
@@ -36,6 +37,7 @@ export default function EditPerformancePostForm({
   postTagOptions,
   gamepadOptions,
   redirectToAfterEdit,
+  wasSubmittedSuccessfully,
 }: EditPerformancePostFormProps) {
   const { userSession } = useUserSession();
 
@@ -81,7 +83,7 @@ export default function EditPerformancePostForm({
           id={formId}
           method="post"
           name="performancePost"
-          className="flex flex-col items-center gap-8 w-full max-w-lg"
+          className="flex flex-col items-center gap-8 w-full max-w-xl"
           action={action}
         >
           <input type="hidden" name="_performancePostAction" value="editPerformancePost" />
@@ -95,7 +97,7 @@ export default function EditPerformancePostForm({
             gamepadOptions={gamepadOptions}
             postTagOptions={postTagOptions}
             editorPlaceholderText="Edit Post..."
-            isSubmittingForm={isSubmittingForm}
+            wasSubmittedSuccessfully={wasSubmittedSuccessfully}
           />
           <div className="w-full flex gap-x-3 justify-around">
             <RoundedButtonRemixLink
