@@ -18,15 +18,8 @@ import ErrorDisplay from '~/components/Layout/ErrorDisplay';
 import CatchDisplay from '~/components/Layout/CatchDisplay';
 import CreatePerformancePostForm from '~/components/Apps/PerformancePosts/Forms/CreatePerformancePostForm';
 import { convertRawToTypedPerformancePostFormFields, extractFormData } from '~/lib/form-actions/performance-post/extract-form-data';
-// import CreatePerformancePostForm from '~/components/Apps/PerformancePosts/FormsV2/CreatePerformancePostForm';
-// import { links as draftEditorLinks } from '~/components/Apps/PerformancePosts/FormsV2/FormComponents/DraftEditor/DraftEditor';
+import { getPerformancePostFormSession } from '~/lib/sessions/performance-post-form-session.server';
 
-// // export const links: LinksFunction = () => {
-// //   return [
-// // { rel: 'canonical', href: '' },
-// // ...draftEditorLinks(),
-// //   ];
-// // }
 
 interface PerformancePostLoaderData {
   steamAppId: number;
@@ -34,6 +27,7 @@ interface PerformancePostLoaderData {
   performancePosts: PerformancePost[];
   postTagOptions: PostTagMultiSelectOption[];
   gamepadOptions: GamepadSelectOption[];
+  successfullySubmittedPost: boolean;
 }
 
 export async function loader({ params, request }: LoaderArgs) {
@@ -51,12 +45,21 @@ export async function loader({ params, request }: LoaderArgs) {
     const gamepads = await findAllGamepads();
     gamepadOptions = gamepads.map((gamepad) => ({ name: gamepad.description, value: gamepad.id }));
   }
+  const performancePostFormSession = await getPerformancePostFormSession(request);
+  const wasPostSubmittedSuccessfully = performancePostFormSession.getWasSubmittedSuccessfully();
   return json<PerformancePostLoaderData>({
     steamAppId,
     steamUserProfileOwnsApp,
     performancePosts,
     postTagOptions,
     gamepadOptions,
+    successfullySubmittedPost: wasPostSubmittedSuccessfully
+      ? true
+      : false,
+  }, {
+    headers: {
+      'Set-Cookie': await performancePostFormSession.commit(),
+    },
   });
 }
 
@@ -76,6 +79,7 @@ export async function action({
         steamAppId,
         steamUserId64,
         formData,
+        request,
       });
     }
     default: {
@@ -92,7 +96,8 @@ export default function PerformancePostsRoute() {
     performancePosts,
     postTagOptions,
     gamepadOptions,
-  } = useLoaderData<PerformancePostLoaderData>();
+    successfullySubmittedPost,
+  } = useLoaderData<typeof loader>();
 
   const actionData = useActionData<typeof action>();
   const navigation = useNavigation();
@@ -118,6 +123,7 @@ export default function PerformancePostsRoute() {
         isSubmittingForm={isSubmittingCreatePerformancePost}
         postTagOptions={postTagOptions}
         gamepadOptions={gamepadOptions}
+        wasSubmittedSuccessfully={successfullySubmittedPost}
       />
     </div>
   );
