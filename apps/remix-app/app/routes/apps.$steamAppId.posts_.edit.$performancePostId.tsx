@@ -83,6 +83,7 @@ export async function action({
     performancePostId,
     formData,
     redirectToAfterEdit,
+    request,
   });
 }
 
@@ -126,6 +127,7 @@ export default function EditPerformancePostRoute() {
       <EditPerformancePostForm
         performancePostId={performancePostId}
         steamAppId={steamAppId}
+        wasSubmittedSuccessfully={false}
         formError={actionData?.formError}
         fieldErrors={actionData?.fieldErrors}
         fields={optimisticPerformancePost
