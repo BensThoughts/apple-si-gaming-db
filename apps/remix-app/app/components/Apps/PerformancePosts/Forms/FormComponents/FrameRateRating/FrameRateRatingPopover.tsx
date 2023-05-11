@@ -7,7 +7,7 @@ import TailwindPopover from '~/components/HeadlessComponents/TailwindPopover';
 export default function FrameRateRatingPopover() {
   return (
     <TailwindPopover
-      buttonText="Frame Rate"
+      buttonText="FPS"
       Icon={MonitorIcon}
     >
       <div className="w-full flex flex-col gap-4 p-3">
