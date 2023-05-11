@@ -14,17 +14,20 @@ import {
 import { createPerformancePost } from '~/models/SteamedApples/performancePost.server';
 import type { CreateOrEditPerformancePostActionData } from './types';
 import { extractFormData } from './extract-form-data';
+import { getPerformancePostFormSession } from '~/lib/sessions/performance-post-form-session.server';
 
-export const badRequest = (data: CreateOrEditPerformancePostActionData) => json(data, { status: 400 });
+export const badRequest = (data: CreateOrEditPerformancePostActionData) => json({ success: false, ...data }, { status: 400 });
 
 export async function createPerformancePostAction({
   steamAppId,
   steamUserId64,
   formData,
+  request,
 } : {
   steamAppId: number;
   steamUserId64: string;
   formData: FormData;
+  request: Request;
 }) {
   const {
     formError,
@@ -106,5 +109,11 @@ export async function createPerformancePostAction({
     gamepadTierRank: gamepadTierRank === 'None' ? undefined : gamepadTierRank,
   });
 
-  return redirect(`/apps/${steamAppId}/posts`);
+  const performancePostFormSession = await getPerformancePostFormSession(request);
+  performancePostFormSession.setWasSubmittedSuccessfully(true);
+  return redirect(`/apps/${steamAppId}/posts`, {
+    headers: {
+      'Set-Cookie': await performancePostFormSession.commit(),
+    },
+  });
 }

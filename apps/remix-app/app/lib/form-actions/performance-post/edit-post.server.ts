@@ -15,6 +15,7 @@ import {
 import { updatePerformancePost } from '~/models/SteamedApples/performancePost.server';
 import { extractFormData } from './extract-form-data';
 import { safeRedirect } from '~/lib/utils.server';
+import { getPerformancePostFormSession } from '~/lib/sessions/performance-post-form-session.server';
 
 const badRequest = (data: CreateOrEditPerformancePostActionData) => json(data, { status: 400 });
 
@@ -23,11 +24,13 @@ export async function editPerformancePostAction({
   performancePostId,
   formData,
   redirectToAfterEdit,
+  request,
 } : {
   steamAppId: number;
   performancePostId: number;
   formData: FormData;
   redirectToAfterEdit: string | null;
+  request: Request;
 }) {
   const {
     formError,
@@ -117,5 +120,11 @@ export async function editPerformancePostAction({
     ? safeRedirect(redirectToAfterEdit)
     : `/apps/${steamAppId}/posts`;
 
-  return redirect(redirectTo);
+  const performancePostFormSession = await getPerformancePostFormSession(request);
+  performancePostFormSession.setWasSubmittedSuccessfully(true);
+  return redirect(redirectTo, {
+    headers: {
+      'Set-Cookie': await performancePostFormSession.commit(),
+    },
+  });
 }
