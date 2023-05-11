@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin';
 import {
   $getSelection,
   $isRangeSelection,
@@ -138,18 +137,13 @@ export function ToolbarPlugin() {
     });
   });
 
-  const MandatoryPlugins = useMemo(() => {
-    return <ClearEditorPlugin />;
-  }, []);
-
   return (
     <>
-      {MandatoryPlugins}
       <div
         className="flex items-center flex-wrap justify-between bg-tertiary-highlight
                    rounded-t-md rounded-b-none border-b-1 border-b-gray p-2 gap-1"
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <IconButton
             icon="bold"
             aria-label="format text as bold"
