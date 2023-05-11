@@ -12,6 +12,9 @@ import { classNames } from '~/lib/css/classNames';
 import { ToolbarPlugin } from './Plugins/ToolbarPlugin';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { HiddenInputPlugin } from './Plugins/HiddenInputPlugin';
+import ResetEditorPlugin from './Plugins/ResetEditorPlugin';
+import { useMemo } from 'react';
+import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin';
 
 const EDITOR_NODES = [
   CodeNode,
@@ -29,6 +32,7 @@ type LexicalEditorProps = {
 export function LexicalEditor({
   defaultState,
   placeholderText,
+  resetEditorState,
   lexicalEditorProps: { config },
 }: {
   defaultState: {
@@ -37,10 +41,16 @@ export function LexicalEditor({
     serializedLexicalEditorState: string;
   }
   placeholderText?: string;
+  resetEditorState: boolean;
   lexicalEditorProps: LexicalEditorProps;
 }) {
+  const MandatoryPlugins = useMemo(() => {
+    return <ClearEditorPlugin />;
+  }, []);
+
   return (
     <LexicalComposer initialConfig={config}>
+      {MandatoryPlugins}
       <ToolbarPlugin />
       <RichTextPlugin
         contentEditable={
@@ -53,11 +63,11 @@ export function LexicalEditor({
         ErrorBoundary={LexicalErrorBoundary}
       />
       <HiddenInputPlugin defaultState={defaultState} />
-
       <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
       <OnChangePlugin onChange={(editorState) => {
 
       }} />
+      <ResetEditorPlugin resetEditorState={resetEditorState} />
     </LexicalComposer>
   );
 }
@@ -80,6 +90,7 @@ const BLANK_SERIALIZED_EDITOR_STATE = `{"root":{"children":[{"children":[{"detai
 export function Editor({
   defaultState,
   placeholderText,
+  resetEditorState,
 }: {
   defaultState?: {
     postText: string;
@@ -87,6 +98,7 @@ export function Editor({
     serializedLexicalEditorState: string;
   };
   placeholderText?: string;
+  resetEditorState: boolean;
 }) {
   const initialSerializedEditorState = defaultState
     ? defaultState.serializedLexicalEditorState
@@ -112,6 +124,7 @@ export function Editor({
           serializedLexicalEditorState: initialSerializedEditorState,
         }}
         placeholderText={placeholderText}
+        resetEditorState={resetEditorState}
         lexicalEditorProps={{
           config: {
             namespace: EDITOR_NAMESPACE,
