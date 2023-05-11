@@ -10,7 +10,7 @@ export default function SystemSelectMenuCard({
   return (
     <div
       className="flex flex-col gap-2 justify-center items-center rounded-md
-               md:border-1 md:border-secondary-highlight p-4"
+                 md:border-1 md:border-secondary-highlight p-4"
     >
       <div className="text-primary-faded">
       You can select a system from your&nbsp;
