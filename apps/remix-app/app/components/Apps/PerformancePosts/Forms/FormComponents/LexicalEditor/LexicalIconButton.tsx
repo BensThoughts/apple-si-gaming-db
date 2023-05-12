@@ -37,7 +37,7 @@ export function IconButton({
       {...props}
       type="button"
       className={classNames(
-          `py-[1px] px-1 rounded-sm`,
+          `py-[1px] px-1 rounded-sm focus:outline-none focus-visible:show-ring-tertiary-highlight`,
           props.disabled
             ? `bg-primary text-primary-faded`
             : active
