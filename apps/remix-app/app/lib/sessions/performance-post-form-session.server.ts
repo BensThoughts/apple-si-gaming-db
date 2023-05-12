@@ -5,7 +5,7 @@ export type PerformancePostFormSessionData = {
   wasSubmittedSuccessfully: boolean;
 };
 
-const ONE_YEAR = 1000 * 60 * 60 * 24 * 365;
+// const ONE_YEAR = 1000 * 60 * 60 * 24 * 365;
 
 const { REMIX_APP_PERFORMANCE_POST_FORM_SESSION_SECRET } = process.env;
 invariant(typeof REMIX_APP_PERFORMANCE_POST_FORM_SESSION_SECRET === 'string', 'REMIX_APP_PERFORMANCE_POST_FORM_SESSION_SECRET env var not set');
@@ -16,7 +16,8 @@ export const { commitSession, getSession } = createCookieSessionStorage<Performa
     path: '/',
     // httpOnly: true,
     sameSite: 'lax',
-    expires: new Date(Date.now() + ONE_YEAR),
+    // expires: new Date(Date.now() + ONE_YEAR),
+    maxAge: 60 * 60 * 24 * 30, // 30 days
     secrets: [REMIX_APP_PERFORMANCE_POST_FORM_SESSION_SECRET],
     secure: process.env.NODE_ENV === 'production' ? true : false,
   },
