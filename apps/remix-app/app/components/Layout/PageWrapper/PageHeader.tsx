@@ -19,7 +19,7 @@ export default function PageHeader({
     >
       <h1
         className={classNames(
-            'text-2xl md:text-3xl text-secondary',
+            'text-2xl md:text-3xl text-secondary break-word text-ellipsis overflow-hidden',
             titlePosition === 'left' ? 'text-left' : 'text-center',
         )}
       >
