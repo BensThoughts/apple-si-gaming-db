@@ -99,7 +99,7 @@ export default function EditPerformancePostForm({
             editorPlaceholderText="Edit Post..."
             wasSubmittedSuccessfully={wasSubmittedSuccessfully}
           />
-          <div className="w-full flex gap-x-3 justify-around">
+          <div className="w-full flex gap-x-6 justify-end">
             <RoundedButtonRemixLink
               to={redirectToAfterEdit ? redirectToAfterEdit : `/apps/${steamAppId}/posts/`}
               className="focus-visible:show-ring-tertiary"

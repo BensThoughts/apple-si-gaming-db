@@ -95,9 +95,11 @@ export default function CreatePerformancePostForm({
             editorPlaceholderText="Create Post..."
             wasSubmittedSuccessfully={wasSubmittedSuccessfully}
           />
-          <RoundedButton type="submit" disabled={isSubmittingForm} className="focus-visible:show-ring-tertiary">
-            {isSubmittingForm ? 'Creating' : 'Create'}
-          </RoundedButton>
+          <div className="flex w-full justify-end">
+            <RoundedButton type="submit" disabled={isSubmittingForm} className="focus-visible:show-ring-tertiary">
+              {isSubmittingForm ? 'Creating' : 'Create'}
+            </RoundedButton>
+          </div>
         </Form>
       </PerformancePostFormWrapper>
     </PerformancePostFormStateProvider>
