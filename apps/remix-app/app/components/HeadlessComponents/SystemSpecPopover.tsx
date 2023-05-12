@@ -1,6 +1,6 @@
 import { Popover } from '@headlessui/react';
 import { usePopper } from 'react-popper';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { SystemSpec } from '~/types/remix-app';
 import { classNames } from '~/lib/css/classNames';
 import { HardDriveIcon } from '~/components/Icons/FeatherIcons';
@@ -28,6 +28,21 @@ export default function SystemSpecsPopover({
   giveButtonStyles = false,
 }: SystemSpecsPopoverProps) {
   const [isShowing, setIsShowing] = useState(false);
+  const [hoverState, setHoverState] = useState<'idle' | 'enter' | 'leave'>('idle');
+
+  useEffect(() => {
+    if (hoverState === 'leave') {
+      const timeoutId = setTimeout(() => {
+        setIsShowing(false);
+        setHoverState('idle');
+      }, 250);
+      return () => clearTimeout(timeoutId);
+    }
+    if (hoverState === 'enter') {
+      setIsShowing(true);
+    }
+  }, [hoverState]);
+
   const [referenceElement, setReferenceElement] = useState<HTMLButtonElement | null>(null);
   const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
   // const [arrowElement, setArrowElement] = useState(null);
@@ -63,10 +78,10 @@ export default function SystemSpecsPopover({
         <>
           <Popover.Button
             ref={setReferenceElement}
-            onMouseEnter={() => setIsShowing(true)}
-            onMouseLeave={() => setIsShowing(false)}
+            onMouseEnter={() => setHoverState('enter')}
+            onMouseLeave={() => setHoverState('leave')}
             className={classNames(
-                'text-primary select-none outline-none',
+                'text-primary select-none focus:outline-none',
                 'focus-visible:show-ring-tertiary rounded-sm',
                 giveButtonStyles
                   ? classNames(
@@ -100,8 +115,8 @@ export default function SystemSpecsPopover({
               ref={setPopperElement}
               style={styles.popper}
               className="absolute z-[100] min-w-max"
-              onMouseEnter={() => setIsShowing(true)}
-              onMouseLeave={() => setIsShowing(false)}
+              onMouseEnter={() => setHoverState('enter')}
+              onMouseLeave={() => setHoverState('leave')}
               static
               {...attributes.popper}
             >
