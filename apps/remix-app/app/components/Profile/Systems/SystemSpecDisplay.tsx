@@ -151,7 +151,7 @@ export default function SystemSpecDisplay({
                   memoryRAM,
                 }}
               >
-                <div className="flex justify-center items-center px-1 py-0 h-[34px]">
+                <div className="flex justify-center items-center px-1 pt-0 pb-1.5 h-[34px]">
                   <InformationCircleIcon size={24} />
                 </div>
               </SystemSpecsPopover>
