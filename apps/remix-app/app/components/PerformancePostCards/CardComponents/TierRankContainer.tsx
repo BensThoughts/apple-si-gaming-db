@@ -46,7 +46,7 @@ export default function PerformancePostTierRankContainer({
   return (
     <div
       className={classNames(
-          'flex flex-col gap-2 items-start justify-start flex-wrap',
+          'flex flex-col gap-x-2 gap-y-4 items-start justify-start flex-wrap',
           'rounded-sm w-full text-sm text-primary-faded',
           'lg:gap-4 lg:flex-row lg:items-center lg:justify-start',
       )}
