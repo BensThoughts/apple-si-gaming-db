@@ -144,62 +144,66 @@ export function ToolbarPlugin() {
                    rounded-t-md rounded-b-none border-b-1 border-b-gray p-2 gap-1"
       >
         <div className="flex items-center gap-2 flex-wrap">
-          <IconButton
-            icon="bold"
-            aria-label="format text as bold"
-            active={isBold}
-            onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
-            }}
-          />
-          <IconButton
-            icon="italic"
-            aria-label="format text as italic"
-            active={isItalic}
-            onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic');
-            }}
-          />
-          <IconButton
-            icon="underline"
-            aria-label="format text as underline"
-            active={isUnderline}
-            onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');
-            }}
-          />
-          <IconButton
-            icon="strike"
-            aria-label="format text as strikethrough"
-            active={isStrikethrough}
-            onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough');
-            }}
-          />
-          <IconButton
-            icon="headingOne"
-            aria-label="format block as heading 1"
-            active={blockType === 'h1'}
-            onClick={formatHeadingOne}
-          />
-          <IconButton
-            icon="headingTwo"
-            aria-label="format block as heading 2"
-            active={blockType === 'h2'}
-            onClick={formatHeadingTwo}
-          />
-          <IconButton
-            icon="list"
-            aria-label="format block as unordered list"
-            active={blockType === 'ul'}
-            onClick={() => formatList('ul')}
-          />
-          <IconButton
-            icon="listOrdered"
-            aria-label="format block as ordered list"
-            active={blockType === 'ol'}
-            onClick={() => formatList('ol')}
-          />
+          <div className="flex items-center gap-2 flex-wrap">
+            <IconButton
+              icon="bold"
+              aria-label="format text as bold"
+              active={isBold}
+              onClick={() => {
+                editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
+              }}
+            />
+            <IconButton
+              icon="italic"
+              aria-label="format text as italic"
+              active={isItalic}
+              onClick={() => {
+                editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic');
+              }}
+            />
+            <IconButton
+              icon="underline"
+              aria-label="format text as underline"
+              active={isUnderline}
+              onClick={() => {
+                editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');
+              }}
+            />
+            <IconButton
+              icon="strike"
+              aria-label="format text as strikethrough"
+              active={isStrikethrough}
+              onClick={() => {
+                editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough');
+              }}
+            />
+          </div>
+          <div className="flex items-center gap-2 flex-wrap">
+            <IconButton
+              icon="headingOne"
+              aria-label="format block as heading 1"
+              active={blockType === 'h1'}
+              onClick={formatHeadingOne}
+            />
+            <IconButton
+              icon="headingTwo"
+              aria-label="format block as heading 2"
+              active={blockType === 'h2'}
+              onClick={formatHeadingTwo}
+            />
+            <IconButton
+              icon="list"
+              aria-label="format block as unordered list"
+              active={blockType === 'ul'}
+              onClick={() => formatList('ul')}
+            />
+            <IconButton
+              icon="listOrdered"
+              aria-label="format block as ordered list"
+              active={blockType === 'ol'}
+              onClick={() => formatList('ol')}
+            />
+          </div>
         </div>
         <IconButton
           icon="clear"
