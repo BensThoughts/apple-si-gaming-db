@@ -100,9 +100,13 @@ export function Editor({
   placeholderText?: string;
   resetEditorState: boolean;
 }) {
-  const initialSerializedEditorState = defaultState
-    ? defaultState.serializedLexicalEditorState
-    : BLANK_SERIALIZED_EDITOR_STATE;
+  const initialEditorState = defaultState
+    ? defaultState
+    : {
+      postText: '',
+      postHTML: undefined,
+      serializedLexicalEditorState: BLANK_SERIALIZED_EDITOR_STATE,
+    };
 
   return (
     <div
@@ -118,17 +122,13 @@ export function Editor({
       )}
     >
       <LexicalEditor
-        defaultState={defaultState ? defaultState : {
-          postText: '',
-          postHTML: undefined,
-          serializedLexicalEditorState: initialSerializedEditorState,
-        }}
+        defaultState={initialEditorState}
         placeholderText={placeholderText}
         resetEditorState={resetEditorState}
         lexicalEditorProps={{
           config: {
             namespace: EDITOR_NAMESPACE,
-            editorState: initialSerializedEditorState,
+            editorState: initialEditorState.serializedLexicalEditorState,
             // editorState: content,
             nodes: EDITOR_NODES,
             theme: {
@@ -143,7 +143,7 @@ export function Editor({
               },
             },
             onError: (error) => {
-              console.log(error);
+              console.error(error);
             },
           },
         }}
