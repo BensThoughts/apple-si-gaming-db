@@ -52,16 +52,19 @@ export function LexicalEditor({
     <LexicalComposer initialConfig={config}>
       {MandatoryPlugins}
       <ToolbarPlugin />
-      <RichTextPlugin
-        contentEditable={
-          <ContentEditable
-            // className="relative"
-          />
-        }
-        placeholder={<Placeholder placeholderText={placeholderText} />}
-        // placeholder={(isEditable) => isEditable ? <Placeholder /> : null}
-        ErrorBoundary={LexicalErrorBoundary}
-      />
+      <div className="relative">
+        <RichTextPlugin
+          contentEditable={
+            <ContentEditable
+              ariaLabel={placeholderText}
+              // className="relative"
+            />
+          }
+          placeholder={<Placeholder placeholderText={placeholderText} />}
+          // placeholder={(isEditable) => isEditable ? <Placeholder /> : null}
+          ErrorBoundary={LexicalErrorBoundary}
+        />
+      </div>
       <HiddenInputPlugin defaultState={defaultState} />
       <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
       <OnChangePlugin onChange={(editorState) => {
@@ -78,7 +81,10 @@ const Placeholder = ({
   placeholderText?: string;
 }) => {
   return (
-    <div className="absolute z-1 top-[63px] left-4 opacity-50 pointer-events-none overflow-hidden overflow-ellipsis select-none inline-block">
+    <div
+      className="absolute z-1 top-4 left-4 opacity-50 pointer-events-none
+                 overflow-hidden overflow-ellipsis select-none inline-bloc"
+    >
       {placeholderText}
     </div>
   );
