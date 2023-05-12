@@ -37,12 +37,12 @@ export function IconButton({
       {...props}
       type="button"
       className={classNames(
-          `py-[1px] px-1 rounded-sm focus:outline-none focus-visible:show-ring-tertiary-highlight`,
+          `py-[1px] px-1 rounded-md focus:outline-none focus-visible:show-ring-tertiary-highlight`,
           props.disabled
             ? `bg-primary text-primary-faded`
             : active
-              ? `bg-primary-highlight text-primary hover:text-primary-highlight cursor-pointer`
-              : `bg-primary text-primary hover:bg-primary-highlight hover:text-primary-highlight cursor-pointer`
+              ? `bg-primary-highlight border-1 border-secondary-highlight text-primary hover:text-primary-highlight cursor-pointer`
+              : `bg-primary border-1 border-transparent text-primary hover:bg-primary-highlight hover:text-primary-highlight cursor-pointer`
           ,
         className ? className : '',
       )}
