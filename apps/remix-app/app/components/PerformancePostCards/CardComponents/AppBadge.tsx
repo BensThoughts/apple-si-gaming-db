@@ -17,8 +17,8 @@ export default function PerformancePostAppBadge({
         name={name}
         className="object-cover w-auto h-[44px]"
       />
-      <div className="flex flex-col gap-0">
-        <span className="font-semibold">{name}</span>
+      <div className="flex flex-col gap-0 w-full">
+        <span className="font-semibold break-all">{name}</span>
         <i className="italic text-sm">{createdAt}</i>
         {/* <SystemSpecsPopover systemSpec={systemSpec}>
           <span className="text-xs">
