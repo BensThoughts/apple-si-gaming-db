@@ -144,7 +144,7 @@ function SystemSpecDisplay({
       {systemName === systemNoneOptionName ? (
         <TextPill>None Given</TextPill>
       ) : (
-        <TextPill>{systemName}</TextPill>
+         <TextPill className="bg-primary-highlight">{systemName}</TextPill>
       )}
     </RatingContainer>
   );
