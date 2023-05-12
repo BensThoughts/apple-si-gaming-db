@@ -140,7 +140,7 @@ export function ToolbarPlugin() {
   return (
     <>
       <div
-        className="flex items-center flex-wrap justify-between bg-tertiary-highlight
+        className="flex items-start justify-between bg-tertiary-highlight
                    rounded-t-md rounded-b-none border-b-1 border-b-gray p-2 gap-1"
       >
         <div className="flex items-center gap-2 flex-wrap">
@@ -203,13 +203,13 @@ export function ToolbarPlugin() {
         </div>
         <IconButton
           icon="clear"
-          className="hidden lg:block"
           onClick={() => {
             editor.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
           }}
         >
           <DeleteIcon />
         </IconButton>
+
 
       </div>
     </>
