@@ -22,7 +22,7 @@
     "db:seed": "turbo run db:seed",
     "dev": "turbo run dev --parallel",
     "dev:remix": "turbo run dev --filter=@apple-si-gaming-db/remix-app",
-    "dev:backend-ops": "turbo run dev --filter=@apple-si-gaming-db/backend-ops",
+    "dev:backend-ops:stage": "turbo run dev --filter=@apple-si-gaming-db/backend-ops -- stage",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "generate": "turbo run generate",
     "lint": "turbo run lint",
