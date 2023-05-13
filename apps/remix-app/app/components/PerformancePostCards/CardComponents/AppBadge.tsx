@@ -11,20 +11,15 @@ export default function PerformancePostAppBadge({
 }) {
   return (
     <div className="flex gap-2 items-center justify-center rounded-md border-0
-                    border-secondary-highlight max-w-fit">
+                    border-secondary-highlight">
       <AppHeaderImage
         headerImageSrc={headerImage}
         name={name}
         className="object-cover w-auto h-[44px]"
       />
       <div className="flex flex-col gap-0 w-full">
-        <span className="font-semibold break-all">{name}</span>
+        <span className="font-semibold break-normal text-ellipsis overflow-hidden">{name}</span>
         <i className="italic text-sm">{createdAt}</i>
-        {/* <SystemSpecsPopover systemSpec={systemSpec}>
-          <span className="text-xs">
-            System
-          </span>
-        </SystemSpecsPopover> */}
       </div>
     </div>
   );
