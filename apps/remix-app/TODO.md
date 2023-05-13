@@ -6,6 +6,9 @@ Explicit (doesn't require db cleanup externally)
 
 ## Priority Most User Requested
 
+- [ ] Make creating a system more clear (dropdown starts down)
+- [ ] Find out why Steam API doesn't return some free games (1808800 Duck
+      Simulator 2 for example)
 - [ ] Add tags/icons for controller support
 - [ ] Add tags for aspect ration support
 - [x] Add options to leave fps in performance review
