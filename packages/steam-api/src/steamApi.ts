@@ -27,10 +27,7 @@ const filterAxiosResponse = (response: AxiosResponse) => {
     xsrfHeaderName,
     method,
   } = config;
-  const {
-    key,
-    ...restParams
-  } = params;
+  if (params && params.key) delete params.key; // remove Steam API key from logs
   const info = {
     headers: response.headers,
     status: response.status,
@@ -39,9 +36,7 @@ const filterAxiosResponse = (response: AxiosResponse) => {
     config: {
       url,
       headers,
-      params: {
-        ...restParams,
-      },
+      params,
       responseType,
       responseEncoding,
       xsrfCookieName,
