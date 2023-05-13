@@ -2,8 +2,7 @@ import {
   getSteamAppDetailsRequest,
 } from '@apple-si-gaming-db/steam-api';
 
-import type {
-  Prisma } from '@apple-si-gaming-db/database';
+import type { Prisma } from '@apple-si-gaming-db/database';
 import {
   convertSteamApiDataToPrisma,
   updateSteamApp,
