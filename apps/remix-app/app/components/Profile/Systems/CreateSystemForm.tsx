@@ -29,7 +29,7 @@ export default function CreateSystemForm({
   const systemNameErrorMessage = validateNewSystemName(systemNameValue, currentSystemNames);
   const systemInfoErrorMessage = validateSystemInfo(systemInfoValue);
   const displayNameError = touchedNameField && Boolean(systemNameErrorMessage);
-  const displaySystemInfoError = touchedSystemInfoField && Boolean(systemInfoErrorMessage);
+  const displaySystemInfoError = (createSystemSpecActionData?.fieldErrors || touchedSystemInfoField) && Boolean(systemInfoErrorMessage);
 
   const isSubmittingCreateSystemForm =
     navigation.state === 'submitting' &&
@@ -38,19 +38,19 @@ export default function CreateSystemForm({
   useEffect(() => {
     if (createSystemSpecActionData) {
       const {
-        fieldErrors,
+        // fieldErrors,
         fields,
         formError,
       } = createSystemSpecActionData;
       if (formError) {
         showToast.error(formError);
       }
-      if (fieldErrors && fieldErrors.systemName) {
-        showToast.error(fieldErrors.systemName);
-      }
-      if (fieldErrors && fieldErrors.systemInfo) {
-        showToast.error(fieldErrors.systemInfo);
-      }
+      // if (fieldErrors && fieldErrors.systemName) {
+      //   showToast.error(fieldErrors.systemName);
+      // }
+      // if (fieldErrors && fieldErrors.systemInfo) {
+      //   showToast.error(fieldErrors.systemInfo);
+      // }
       if (fields) {
         setSystemNameValue(fields.systemName);
         setSystemInfoValue(fields.systemInfo);
