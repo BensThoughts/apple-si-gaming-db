@@ -73,7 +73,7 @@ export default function CreateSystemForm({
   return (
     <div className="flex flex-col gap-6 justify-center items-center w-full  max-w-lg bg-tertiary rounded-lg p-6">
       <h3 className="text-secondary text-lg">Create a New System</h3>
-      <TailwindDisclosure title="How to Create a System" defaultOpen={false}>
+      <TailwindDisclosure title="How to Create a System" defaultOpen={true}>
         <div className="p-3 bg-primary rounded-b-lg">
           <CreateSystemInstructions />
         </div>
