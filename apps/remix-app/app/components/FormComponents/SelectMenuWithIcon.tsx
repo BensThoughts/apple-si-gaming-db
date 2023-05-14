@@ -64,7 +64,7 @@ export default function SelectMenuWithIcon<T = string>({
                     {labelText}
                   </Listbox.Label>
                 )}
-                <PrimaryIcon />
+                <PrimaryIcon className="stroke-1 stroke-text-primary-highlight" />
                 {SecondaryIcon && <SecondaryIcon />}
                 {/* <AwardIcon /> */}
                 <ChevronUpIcon
